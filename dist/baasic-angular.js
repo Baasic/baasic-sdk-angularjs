@@ -1,22 +1,3 @@
-﻿(function (BaasicApi) {
-
-    var dependencies = [
-        "HALParser"
-    ];
-
-    BaasicApi.module = angular.module("baasic.baasicApi", dependencies)
-                    .config(BaasicApi.configDefinition)
-                    .constant("baasicApiConfig", BaasicApi.apiConfig)
-                    .constant("systemApiConfig", BaasicApi.systemApiConfig)
-                    .value("baasicApiKey", "")
-                    .service("baasicSystemApp", BaasicApi.baasicSystemAppServiceDefinition)
-                    .service("baasicSystemApiHttp", BaasicApi.baasicSystemApiHttpDefinition)
-                    .service("baasicApp", BaasicApi.baasicAppServiceDefinition)
-                    .service("baasicApiHttp", BaasicApi.baasicApiHttpDefinition);
-
-})(MonoSoftware.BaasicApi);
-
-            
 ﻿MonoSoftware = MonoSoftware || {};
 MonoSoftware.BaasicApi = {};
 ﻿(function (BaasicApi) {
@@ -24,90 +5,85 @@ MonoSoftware.BaasicApi = {};
     BaasicApi.configDefinition = ["$provide", config];
 
     function config($provide) {
+		if (browserSupportCredentialsWithCookies()) {
+			$provide.decorator("$httpBackend", ["$delegate", "$q", "$rootScope", "$window", "$document", "baasicApp", function initBaasicProxy($delegate, $q, $rootScope, $window, $document, baasicApp) {
+				var apiUrl = baasicApp.get_apiUrl();
 
-        $provide.decorator("$httpBackend", ["$delegate", "$q", "$rootScope", "$window", "$document", "baasicApp", function initApiKey($delegate, $q, $rootScope, $window, $document, baasicApp) {
-            if (browserSupportCredentialsWithCookies()) {
-                return $delegate;
-            } else {
-                var apiUrl = baasicApp.get_apiUrl();
+				var proxyFrame = [];
+				var requestHash = new Object();
+				var nextRequestId = 0;
+				var sendMessage = sendMessageToQueue;
+				
+				var injectFrame = angular.element('<div style="display:none"><iframe src="' + apiUrl + 'proxy/angular"></iframe></div>');
+				injectFrame.find("iframe").bind("load", function () {
+					var queue = proxyFrame;
+					
+					proxyFrame = this;
+					sendMessage = sendMessageToProxy;
+					
+					while (queue.length > 0) {
+						sendMessage(queue.pop());
+					}
+				});
+				$document.find("body").append(injectFrame);
 
-                var proxyFrame = null;
-                var requestHash = new Object();
-                var nextRequestId = 0;
+				angular.element($window).bind("message", function readMessageFromProxy (e) {
+					var event = e.originalEvent || e;
+					if (event.source == proxyFrame.contentWindow) {
+						var response = JSON.parse(event.data);
+						var request = requestHash[response.requestId];
+						if (request) {
+							delete requestHash[response.requestId];
 
-                var injectFrame = angular.element('<div style="display:none"><iframe src="' + apiUrl + 'proxy/angular"></iframe></div>');
-                injectFrame.find("iframe").bind("load", function () {
-                    proxyFrame = this;
-                    flush();
-                });
-                $document.find("body").append(injectFrame);
+							request.callback(response.status, response.response, response.headersString);
+						}
+					}
+				});
 
-                angular.element($window).bind("message", function (e) {
-                    var event = e.originalEvent || e;
-                    if (event.source == proxyFrame.contentWindow) {
-                        var response = JSON.parse(event.data);
-                        var request = requestHash[response.requestId];
-                        if (request) {
-                            delete requestHash[response.requestId];
+				return function (method, url, post, callback, headers, timeout, withCredentials, responseType) {
+					if (url.indexOf(apiUrl) == 0) {
 
-                            request.callback(response.status, response.response, response.headersString);
-                        }
-                    }
-                });
+						sendNewMessage({
+							method: method,
+							url: url,
+							post: post,
+							headers: headers,
+							timeout: timeout,
+							withCredentials: withCredentials,
+							responseType: responseType
+						}, callback);
+						
+					} else {
+						$delegate(method, url, post, callback, headers, timeout, withCredentials, responseType);
+					}
+				};
 
-                return function (method, url, post, callback, headers, timeout, withCredentials, responseType) {
-                    if (url.indexOf(apiUrl) == 0) {
+				function sendNewMessage(message, callback) {
 
-                        sendNewMessage({
-                            method: method,
-                            url: url,
-                            post: post,
-                            headers: headers,
-                            timeout: timeout,
-                            withCredentials: withCredentials,
-                            responseType: responseType
-                        }, callback);
-                        
-                    } else {
-                        $delegate(method, url, post, callback, headers, timeout, withCredentials, responseType);
-                    }
-                };
+					message.requestId = nextRequestId;
 
-                function sendNewMessage(message, callback) {
+					var request = {
+						callback: callback,
+						message: message,
+						posted: false
+					};
 
-                    message.requestId = nextRequestId;
+					requestHash[message.requestId] = request;
 
-                    var request = {
-                        callback: callback,
-                        message: message,
-                        posted: false
-                    };
+					sendMessage(request);
 
-                    requestHash[message.requestId] = request;
+					nextRequestId += 1;
+				}
 
-                    sendMessage(request);
-
-                    nextRequestId += 1;
-                }
-
-                function flush() {
-                    for (var requestId in requestHash) {
-                        var request = requestHash[requestId];
-                        if (!request.posted) {
-                            sendMessage(request)
-                        }
-                    }
-                }
-
-                function sendMessage(request) {
-                    if (proxyFrame) {
-                        proxyFrame.contentWindow.postMessage(JSON.stringify(request.message), apiUrl);
-                        request.posted = true;
-                    }
-                }
-            }
-        }]);
-
+				function sendMessageToProxy(request) {
+					proxyFrame.contentWindow.postMessage(JSON.stringify(request.message), apiUrl);
+				}
+				
+				function sendMessageToQueue(request) {
+					proxyFrame.push[request];
+				}
+			}]);
+		}
     };
 
     function browserSupportCredentialsWithCookies() {
@@ -283,3 +259,22 @@ MonoSoftware.BaasicApi = {};
     };
 
 })(MonoSoftware.BaasicApi);
+﻿(function (BaasicApi) {
+
+    var dependencies = [
+        "HALParser"
+    ];
+
+    BaasicApi.module = angular.module("baasic.baasicApi", dependencies)
+                    .config(BaasicApi.configDefinition)
+                    .constant("baasicApiConfig", BaasicApi.apiConfig)
+                    .constant("systemApiConfig", BaasicApi.systemApiConfig)
+                    .value("baasicApiKey", "")
+                    .service("baasicSystemApp", BaasicApi.baasicSystemAppServiceDefinition)
+                    .service("baasicSystemApiHttp", BaasicApi.baasicSystemApiHttpDefinition)
+                    .service("baasicApp", BaasicApi.baasicAppServiceDefinition)
+                    .service("baasicApiHttp", BaasicApi.baasicApiHttpDefinition);
+
+})(MonoSoftware.BaasicApi);
+
+            

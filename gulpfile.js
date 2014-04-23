@@ -1,8 +1,5 @@
 var gulp = require('gulp');
-
-var concat = require('gulp-concat');
-var uglify = require('gulp-uglify');
-var rename = require('gulp-rename');
+var plugins = require('gulp-load-plugins')();
 
 var paths = {
   scripts: ['src/**/*.js']
@@ -10,11 +7,11 @@ var paths = {
 
 gulp.task('scripts', function() {
   return gulp.src(paths.scripts)
-    //.pipe(uglify())
-    .pipe(concat('baasic-angular.js'))
+    .pipe(plugins.order(["*.moduleInit.js", "!*.moduleDefinition.js", "*.js", "*.moduleDefinition.js"]))
+	.pipe(plugins.concat('baasic-angular.js'))
     .pipe(gulp.dest('dist'))
-	.pipe(uglify())
-	.pipe(rename('baasic-angular.min.js'))
+	.pipe(plugins.uglify())
+	.pipe(plugins.rename('baasic-angular.min.js'))
 	.pipe(gulp.dest('dist'));
 });
 
