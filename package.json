@@ -1,0 +1,12 @@
+{
+  "name": "baasic-angular",
+  "version": "0.0.1",
+  "devDependencies": {
+    "gulp": ">3.4.0",
+	"gulp-uglify": ">0.0.21",
+    "gulp-concat": ">2.1.7",
+    "gulp-jshint": ">1.4.2",
+	"gulp-rename": "1.2.0"
+  },
+  "dependencies": {}
+}
