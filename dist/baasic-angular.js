@@ -12,8 +12,6 @@
                 }
 
                 var apiUrlRegex = new RegExp("^" + apiUrlRegexPattern.substring(1));
-				
-				var apiUrl = baasicApp.get().get_apiUrl();
 
                 var proxyFrame = [];
                 var requestHash = {};
