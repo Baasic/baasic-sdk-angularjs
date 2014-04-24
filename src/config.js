@@ -1,8 +1,15 @@
 ﻿module.config(["$provide",
 	function config($provide) {
-		if (browserSupportCredentialsWithCookies()) {
+		if (!browserSupportCredentialsWithCookies()) {
 			$provide.decorator("$httpBackend", ["$delegate", "$q", "$rootScope", "$window", "$document", "baasicApp", function initBaasicProxy($delegate, $q, $rootScope, $window, $document, baasicApp) {
-				var apiUrl = baasicApp.get_apiUrl();
+				var apps = baasicApp.all();
+				
+				var apiUrlRegexPattern = "";
+				for (var i=0;i<apps.length;i++) {
+					apiUrlRegexPattern += "|" + regExpEscape(apps[i].get_apiUrl());
+				}
+				
+				var apiUrlRegex = new RegExp("^" + apiUrlRegexPattern.substring(1));
 
 				var proxyFrame = [];
 				var requestHash = {};
@@ -36,7 +43,7 @@
 				});
 
 				return function (method, url, post, callback, headers, timeout, withCredentials, responseType) {
-					if (url.indexOf(apiUrl) == 0) {
+					if (apiUrlRegex.test(url)) {
 
 						sendNewMessage({
 							method: method,
@@ -77,11 +84,18 @@
 					proxyFrame.push[request];
 				}
 				
-				function browserSupportCredentialsWithCookies() {
-					return ('withCredentials' in new XMLHttpRequest())
-						&& !(window.ActiveXObject || "ActiveXObject" in window);
-				}
+				
 			}]);
 		}
+		
+		function browserSupportCredentialsWithCookies() {
+			return ('withCredentials' in new XMLHttpRequest())
+				&& !(window.ActiveXObject || "ActiveXObject" in window);
+		};
+		
+		// copied from http://stackoverflow.com/questions/3561493/is-there-a-regexp-escape-function-in-javascript
+		function regExpEscape(s) {
+			return s.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+		};
 	}
 ]);

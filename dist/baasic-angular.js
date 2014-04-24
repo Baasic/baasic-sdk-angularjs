@@ -2,9 +2,18 @@
     var module = angular.module("baasic.baasicApi", ["HALParser"]);
 
     ﻿module.config(["$provide", function config($provide) {
-        if (browserSupportCredentialsWithCookies()) {
+        if (!browserSupportCredentialsWithCookies()) {
             $provide.decorator("$httpBackend", ["$delegate", "$q", "$rootScope", "$window", "$document", "baasicApp", function initBaasicProxy($delegate, $q, $rootScope, $window, $document, baasicApp) {
-                var apiUrl = baasicApp.get_apiUrl();
+                var apps = baasicApp.all();
+
+                var apiUrlRegexPattern = "";
+                for (var i = 0; i < apps.length; i++) {
+                    apiUrlRegexPattern += "|" + regExpEscape(apps[i].get_apiUrl());
+                }
+
+                var apiUrlRegex = new RegExp("^" + apiUrlRegexPattern.substring(1));
+				
+				var apiUrl = baasicApp.get().get_apiUrl();
 
                 var proxyFrame = [];
                 var requestHash = {};
@@ -38,7 +47,7 @@
                 });
 
                 return function (method, url, post, callback, headers, timeout, withCredentials, responseType) {
-                    if (url.indexOf(apiUrl) == 0) {
+                    if (apiUrlRegex.test(url)) {
 
                         sendNewMessage({
                             method: method,
@@ -79,27 +88,38 @@
                     proxyFrame.push[request];
                 }
 
-                function browserSupportCredentialsWithCookies() {
-                    return ('withCredentials' in new XMLHttpRequest()) && !(window.ActiveXObject || "ActiveXObject" in window);
-                }
+
             }]);
         }
+
+        function browserSupportCredentialsWithCookies() {
+            return ('withCredentials' in new XMLHttpRequest()) && !(window.ActiveXObject || "ActiveXObject" in window);
+        };
+
+        // copied from http://stackoverflow.com/questions/3561493/is-there-a-regexp-escape-function-in-javascript
+
+        function regExpEscape(s) {
+            return s.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+        };
     }]);
 
-    ﻿module.constant("baasicApiConfig", {
-        apiRootUrl: "api.baasic.local",
-        apiVersion: "beta"
-    });
-
     ﻿ (function (angular, module, undefined) {
-        module.service("baasicApiHttp", ["$q", "$http", "HALParser", "baasicApp", baasicApiHttp]);
-        module.service("baasicSystemApiHttp", ["$q", "$http", "HALParser", "baasicSystemApp", baasicSystemApiHttp]);
+        module.service("baasicApiHttp", ["$http", "HALParser", "baasicApp", function baasicApiHttp($http, HALParser, baasicApp) {
+            var parser = new HALParser();
+
+            var proxy = proxyFactory($http, parser, baasicApp.get());
+
+            proxy.createNew = function (app) {
+                return proxyFactory($http, parser, app);
+            };
+
+            return proxy;
+        }]);
 
         var extend = angular.extend;
 
-        var proxyFactory = function proxyFactory($q, $http, HALParser, baasicApp, func) {
-            var parser = new HALParser();
-            var apiUrl = baasicApp.get_apiUrl();
+        var proxyFactory = function proxyFactory($http, parser, app) {
+            var apiUrl = app.get_apiUrl();
 
             var proxyMethod = function (config) {
                 if (config) {
@@ -115,7 +135,7 @@
                         headers["Accept"] = "application/hal+json; charset=UTF-8";
                     }
 
-                    var token = baasicApp.get_accessToken();
+                    var token = app.get_accessToken();
                     if (token) {
                         headers["AUTHORIZATION"] = token.token_type + ' ' + token.access_token;
                     }
@@ -124,30 +144,22 @@
                 var promise = $http(config);
 
                 promise = extend(promise.then(function (response) {
-                    if (response.data && response.data._links) {
-                        response.data = parser.parse(response.data);
+                    if (response.headers) {
+                        var contentType = response.headers["Content-Type"];
+                        if (contentType && contentType.toLowerCase().indexOf("application/hal+json") != -1) {
+                            response.data = parser.parse(response.data);
+                        }
                     }
                 }), promise);
 
                 return promise;
             }
 
-            var proxy;
-            if (func) {
-                proxy = function (config) {
-                    func(config);
+            createShortMethods(proxyMethod, "get", "delete", "head", "jsonp");
+            createShortMethodsWithData(proxyMethod, "post", "put");
 
-                    return proxyMethod(config);
-                }
-            } else {
-                proxy = proxyMethod;
-            }
-
-            createShortMethods(proxy, "get", "delete", "head", "jsonp");
-            createShortMethodsWithData(proxy, "post", "put");
-
-            return proxy;
-        };
+            return proxyMethod;
+        }
 
         function createShortMethods(proxy) {
             _.each(_.rest(arguments, 1), function (name) {
@@ -172,70 +184,91 @@
             });
         }
 
-        function baasicSystemApiHttp($q, $http, HALParser, baasicSystemApp) {
-            return proxyFactory($q, $http, HALParser, baasicSystemApp);
-        }
+        // proxy.createMockDefer = function () {
+        // var deferrd = defer();
 
-        function baasicApiHttp($q, $http, HALParser, baasicApp) {
-            var proxy = proxyFactory($q, $http, HALParser, baasicApp);
+        // var resolve = deferrd.resolve;
+        // var reject = deferrd.reject;
 
-            proxy.createMockDefer = function () {
-                var deferrd = defer();
+        // deferrd.resolve = function (obj) {
+        // resolve({
+        // data: obj
+        // });
+        // };
 
-                var resolve = deferrd.resolve;
-                var reject = deferrd.reject;
+        // deferrd.reject = function (obj) {
+        // reject({
+        // data: obj
+        // });
+        // };
 
-                deferrd.resolve = function (obj) {
-                    resolve({
-                        data: obj
-                    });
-                };
+        // return deferrd;
+        // };
 
-                deferrd.reject = function (obj) {
-                    reject({
-                        data: obj
-                    });
-                };
+        // return proxy;
 
-                return deferrd;
-            };
+        // function defer() {
+        // var deferred = $q.defer();
+        // var promise = deferred.promise;
 
-            return proxy;
+        // promise.success = function (fn) {
+        // promise.then(function (response) {
+        // fn(response.data, response.status, response.headers, response.config);
+        // });
+        // return promise;
+        // };
 
-            function defer() {
-                var deferred = $q.defer();
-                var promise = deferred.promise;
+        // promise.error = function (fn) {
+        // promise.then(null, function (response) {
+        // fn(response.data, response.status, response.headers, response.config);
+        // });
+        // return promise;
+        // };
 
-                promise.success = function (fn) {
-                    promise.then(function (response) {
-                        fn(response.data, response.status, response.headers, response.config);
-                    });
-                    return promise;
-                };
+        // return deferred;
+        // }
 
-                promise.error = function (fn) {
-                    promise.then(null, function (response) {
-                        fn(response.data, response.status, response.headers, response.config);
-                    });
-                    return promise;
-                };
-
-                return deferred;
-            }
-        }
     })(angular, module);
 
-    ﻿module.service("baasicApp", ["baasicApiConfig", function baasicAppService(baasicApiConfig) {
-        return MonoSoftware.Baasic.Application.init(baasicApiConfig.apiKey, baasicApiConfig);
-    }]);
+    ﻿module.provider("baasicApp", function baasicAppService() {
+        var apps = {};
+        var defaultApp;
 
-    ﻿module.service("baasicSystemApp", ["systemApiConfig", function baasicSystemAppService(systemApiConfig) {
-        return MonoSoftware.Baasic.Application.init("system", systemApiConfig);
-    }]);
+        this.create = function create(apiKey, config) {
+            var defaultConfig = {
+                apiRootUrl: "api.baasic.local",
+                apiVersion: "beta"
+            };
 
-    ﻿module.constant("systemApiConfig", {
-        apiRootUrl: "api.baasic.local",
-        apiVersion: "beta"
+            var app = MonoSoftware.Baasic.Application.init(apiKey, angular.extend(defaultConfig, config));
+
+            apps[apiKey] = app;
+            if (!defaultApp) {
+                defaultApp = app;
+            }
+
+            return app;
+        }
+
+        this.$get = function () {
+            return {
+                all: function () {
+                    var list = [];
+                    for (var key in apps) {
+                        list.push(apps[key]);
+                    }
+
+                    return list;
+                },
+                get: function getBaasicApplication(apiKey) {
+                    if (apiKey) {
+                        return apps[apiKey];
+                    } else {
+                        return defaultApp;
+                    }
+                }
+            };
+        };
     });
 
 })(angular);

@@ -1,12 +1,21 @@
 ﻿(function (angular, module, undefined) {
-	module.service("baasicApiHttp", ["$q", "$http", "HALParser", "baasicApp", baasicApiHttp]);
-	module.service("baasicSystemApiHttp", ["$q", "$http", "HALParser", "baasicSystemApp", baasicSystemApiHttp]);
-
+	module.service("baasicApiHttp", ["$http", "HALParser", "baasicApp", function baasicApiHttp($http, HALParser, baasicApp) {
+			var parser = new HALParser();
+			
+			var proxy = proxyFactory($http, parser, baasicApp.get());
+			
+			proxy.createNew = function (app) {
+				return proxyFactory($http, parser, app);
+			};
+			
+			return proxy;
+		}
+	]);
+	
 	var extend = angular.extend;
-
-	var proxyFactory = function proxyFactory($q, $http, HALParser, baasicApp, func) {
-		var parser = new HALParser();
-		var apiUrl = baasicApp.get_apiUrl();
+	
+	var proxyFactory = function proxyFactory($http, parser, app) {
+		var apiUrl = app.get_apiUrl();
 
 		var proxyMethod = function (config) {
 			if (config) {
@@ -22,7 +31,7 @@
 					headers["Accept"] = "application/hal+json; charset=UTF-8";
 				}
 
-				var token = baasicApp.get_accessToken();
+				var token = app.get_accessToken();
 				if (token) {
 					headers["AUTHORIZATION"] = token.token_type + ' ' + token.access_token;
 				}
@@ -31,30 +40,22 @@
 			var promise = $http(config);
 
 			promise = extend(promise.then(function (response) {
-				if (response.data && response.data._links) {
-					response.data = parser.parse(response.data);
+				if (response.headers) {
+					var contentType = response.headers["Content-Type"];
+					if (contentType && contentType.toLowerCase().indexOf("application/hal+json") != -1) {
+						response.data = parser.parse(response.data);
+					}
 				}
 			}), promise);
 
 			return promise;
 		}
 
-		var proxy;
-		if (func) {
-			proxy = function (config) {
-				func(config);
+		createShortMethods(proxyMethod, "get", "delete", "head", "jsonp");
+		createShortMethodsWithData(proxyMethod, "post", "put");
 
-				return proxyMethod(config);
-			}
-		} else {
-			proxy = proxyMethod;
-		}
-
-		createShortMethods(proxy, "get", "delete", "head", "jsonp");
-		createShortMethodsWithData(proxy, "post", "put");
-
-		return proxy;
-	};
+		return proxyMethod;
+	}
 
 	function createShortMethods(proxy) {
 		_.each(_.rest(arguments, 1), function (name) {
@@ -78,56 +79,49 @@
 			};
 		});
 	}
+	
+	// proxy.createMockDefer = function () {
+		// var deferrd = defer();
 
-	function baasicSystemApiHttp($q, $http, HALParser, baasicSystemApp) {
-		return proxyFactory($q, $http, HALParser, baasicSystemApp);
-	}
+		// var resolve = deferrd.resolve;
+		// var reject = deferrd.reject;
 
-	function baasicApiHttp($q, $http, HALParser, baasicApp) {
-		var proxy = proxyFactory($q, $http, HALParser, baasicApp);
+		// deferrd.resolve = function (obj) {
+			// resolve({
+				// data: obj
+			// });
+		// };
 
-		proxy.createMockDefer = function () {
-			var deferrd = defer();
+		// deferrd.reject = function (obj) {
+			// reject({
+				// data: obj
+			// });
+		// };
 
-			var resolve = deferrd.resolve;
-			var reject = deferrd.reject;
+		// return deferrd;
+	// };
 
-			deferrd.resolve = function (obj) {
-				resolve({
-					data: obj
-				});
-			};
+	// return proxy;
 
-			deferrd.reject = function (obj) {
-				reject({
-					data: obj
-				});
-			};
+	// function defer() {
+		// var deferred = $q.defer();
+		// var promise = deferred.promise;
 
-			return deferrd;
-		};
+		// promise.success = function (fn) {
+			// promise.then(function (response) {
+				// fn(response.data, response.status, response.headers, response.config);
+			// });
+			// return promise;
+		// };
 
-		return proxy;
+		// promise.error = function (fn) {
+			// promise.then(null, function (response) {
+				// fn(response.data, response.status, response.headers, response.config);
+			// });
+			// return promise;
+		// };
 
-		function defer() {
-			var deferred = $q.defer();
-			var promise = deferred.promise;
-
-			promise.success = function (fn) {
-				promise.then(function (response) {
-					fn(response.data, response.status, response.headers, response.config);
-				});
-				return promise;
-			};
-
-			promise.error = function (fn) {
-				promise.then(null, function (response) {
-					fn(response.data, response.status, response.headers, response.config);
-				});
-				return promise;
-			};
-
-			return deferred;
-		}
-	}
+		// return deferred;
+	// }
+	
 })(angular, module);
