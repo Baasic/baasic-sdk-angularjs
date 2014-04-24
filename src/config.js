@@ -1,8 +1,5 @@
-﻿(function (BaasicApi) {
-
-    BaasicApi.configDefinition = ["$provide", config];
-
-    function config($provide) {
+﻿module.config(["$provide",
+	function config($provide) {
 		if (browserSupportCredentialsWithCookies()) {
 			$provide.decorator("$httpBackend", ["$delegate", "$q", "$rootScope", "$window", "$document", "baasicApp", function initBaasicProxy($delegate, $q, $rootScope, $window, $document, baasicApp) {
 				var apiUrl = baasicApp.get_apiUrl();
@@ -79,13 +76,12 @@
 				function sendMessageToQueue(request) {
 					proxyFrame.push[request];
 				}
+				
+				function browserSupportCredentialsWithCookies() {
+					return ('withCredentials' in new XMLHttpRequest())
+						&& !(window.ActiveXObject || "ActiveXObject" in window);
+				}
 			}]);
 		}
-    };
-
-    function browserSupportCredentialsWithCookies() {
-        return ('withCredentials' in new XMLHttpRequest())
-            && !(window.ActiveXObject || "ActiveXObject" in window);
-    }
-
-})(MonoSoftware.BaasicApi);
+	}
+]);

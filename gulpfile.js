@@ -7,8 +7,11 @@ var paths = {
 
 gulp.task('scripts', function() {
   return gulp.src(paths.scripts)
-    .pipe(plugins.order(["*.moduleInit.js", "!*.moduleDefinition.js", "*.js", "*.moduleDefinition.js"]))
+    .pipe(plugins.order(["*.moduleDefinition.js", "*.js"]))
 	.pipe(plugins.concat('baasic-angular.js'))
+	.pipe(plugins.header('(function (angular, undefined) {\n'))
+	.pipe(plugins.footer('\n})(angular);'))
+	.pipe(plugins.beautify({ preserveNewlines: true }))
     .pipe(gulp.dest('dist'))
 	.pipe(plugins.uglify())
 	.pipe(plugins.rename('baasic-angular.min.js'))

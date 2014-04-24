@@ -1,8 +1,4 @@
-﻿(function (BaasicApi) {
-
-    BaasicApi.apiConfig = {
-        apiRootUrl: "api.baasic.local",
-        apiVersion: "beta"
-    };
-
-})(MonoSoftware.BaasicApi);
+﻿module.constant("baasicApiConfig", {
+	apiRootUrl: "api.baasic.local",
+	apiVersion: "beta"
+});

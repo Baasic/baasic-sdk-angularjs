@@ -1,2 +1,0 @@
-﻿MonoSoftware = MonoSoftware || {};
-MonoSoftware.BaasicApi = {};

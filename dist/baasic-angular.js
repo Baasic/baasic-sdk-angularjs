@@ -1,280 +1,241 @@
-﻿MonoSoftware = MonoSoftware || {};
-MonoSoftware.BaasicApi = {};
-﻿(function (BaasicApi) {
+(function (angular, undefined) {﻿
+    var module = angular.module("baasic.baasicApi", ["HALParser"]);
 
-    BaasicApi.configDefinition = ["$provide", config];
+    ﻿module.config(["$provide", function config($provide) {
+        if (browserSupportCredentialsWithCookies()) {
+            $provide.decorator("$httpBackend", ["$delegate", "$q", "$rootScope", "$window", "$document", "baasicApp", function initBaasicProxy($delegate, $q, $rootScope, $window, $document, baasicApp) {
+                var apiUrl = baasicApp.get_apiUrl();
 
-    function config($provide) {
-		if (browserSupportCredentialsWithCookies()) {
-			$provide.decorator("$httpBackend", ["$delegate", "$q", "$rootScope", "$window", "$document", "baasicApp", function initBaasicProxy($delegate, $q, $rootScope, $window, $document, baasicApp) {
-				var apiUrl = baasicApp.get_apiUrl();
+                var proxyFrame = [];
+                var requestHash = {};
+                var nextRequestId = 0;
+                var sendMessage = sendMessageToQueue;
 
-				var proxyFrame = [];
-				var requestHash = new Object();
-				var nextRequestId = 0;
-				var sendMessage = sendMessageToQueue;
-				
-				var injectFrame = angular.element('<div style="display:none"><iframe src="' + apiUrl + 'proxy/angular"></iframe></div>');
-				injectFrame.find("iframe").bind("load", function () {
-					var queue = proxyFrame;
-					
-					proxyFrame = this;
-					sendMessage = sendMessageToProxy;
-					
-					while (queue.length > 0) {
-						sendMessage(queue.pop());
-					}
-				});
-				$document.find("body").append(injectFrame);
+                var injectFrame = angular.element('<iframe src="' + apiUrl + 'proxy/angular" style="display:none"></iframe>');
+                injectFrame.bind("load", function () {
+                    var queue = proxyFrame;
 
-				angular.element($window).bind("message", function readMessageFromProxy (e) {
-					var event = e.originalEvent || e;
-					if (event.source == proxyFrame.contentWindow) {
-						var response = JSON.parse(event.data);
-						var request = requestHash[response.requestId];
-						if (request) {
-							delete requestHash[response.requestId];
+                    proxyFrame = this;
+                    sendMessage = sendMessageToProxy;
 
-							request.callback(response.status, response.response, response.headersString);
-						}
-					}
-				});
+                    while (queue.length > 0) {
+                        sendMessage(queue.shift());
+                    }
+                });
+                $document.find("body").append(injectFrame);
 
-				return function (method, url, post, callback, headers, timeout, withCredentials, responseType) {
-					if (url.indexOf(apiUrl) == 0) {
+                angular.element($window).bind("message", function readMessageFromProxy(e) {
+                    var event = e.originalEvent || e;
+                    if (event.source == proxyFrame.contentWindow) {
+                        var response = JSON.parse(event.data);
+                        var request = requestHash[response.requestId];
+                        if (request) {
+                            delete requestHash[response.requestId];
 
-						sendNewMessage({
-							method: method,
-							url: url,
-							post: post,
-							headers: headers,
-							timeout: timeout,
-							withCredentials: withCredentials,
-							responseType: responseType
-						}, callback);
-						
-					} else {
-						$delegate(method, url, post, callback, headers, timeout, withCredentials, responseType);
-					}
-				};
+                            request.callback(response.status, response.response, response.headersString);
+                        }
+                    }
+                });
 
-				function sendNewMessage(message, callback) {
+                return function (method, url, post, callback, headers, timeout, withCredentials, responseType) {
+                    if (url.indexOf(apiUrl) == 0) {
 
-					message.requestId = nextRequestId;
+                        sendNewMessage({
+                            method: method,
+                            url: url,
+                            post: post,
+                            headers: headers,
+                            timeout: timeout,
+                            withCredentials: withCredentials,
+                            responseType: responseType
+                        }, callback);
 
-					var request = {
-						callback: callback,
-						message: message,
-						posted: false
-					};
+                    } else {
+                        $delegate(method, url, post, callback, headers, timeout, withCredentials, responseType);
+                    }
+                };
 
-					requestHash[message.requestId] = request;
+                function sendNewMessage(message, callback) {
 
-					sendMessage(request);
+                    message.requestId = nextRequestId;
 
-					nextRequestId += 1;
-				}
+                    var request = {
+                        callback: callback,
+                        message: message
+                    };
 
-				function sendMessageToProxy(request) {
-					proxyFrame.contentWindow.postMessage(JSON.stringify(request.message), apiUrl);
-				}
-				
-				function sendMessageToQueue(request) {
-					proxyFrame.push[request];
-				}
-			}]);
-		}
-    };
+                    requestHash[message.requestId] = request;
 
-    function browserSupportCredentialsWithCookies() {
-        return ('withCredentials' in new XMLHttpRequest())
-            && !(window.ActiveXObject || "ActiveXObject" in window);
-    }
+                    sendMessage(request);
 
-})(MonoSoftware.BaasicApi);
-﻿(function (BaasicApi) {
+                    nextRequestId += 1;
+                }
 
-    BaasicApi.apiConfig = {
+                function sendMessageToProxy(request) {
+                    proxyFrame.contentWindow.postMessage(JSON.stringify(request.message), apiUrl);
+                }
+
+                function sendMessageToQueue(request) {
+                    proxyFrame.push[request];
+                }
+
+                function browserSupportCredentialsWithCookies() {
+                    return ('withCredentials' in new XMLHttpRequest()) && !(window.ActiveXObject || "ActiveXObject" in window);
+                }
+            }]);
+        }
+    }]);
+
+    ﻿module.constant("baasicApiConfig", {
         apiRootUrl: "api.baasic.local",
         apiVersion: "beta"
-    };
+    });
 
-})(MonoSoftware.BaasicApi);
-﻿(function (BaasicApi) {
-    BaasicApi.baasicApiHttpDefinition = ["$q", "$http", "HALParser", "baasicApp", baasicApiHttp];
-    BaasicApi.baasicSystemApiHttpDefinition = ["$q", "$http", "HALParser", "baasicSystemApp", baasicSystemApiHttp];
+    ﻿ (function (angular, module, undefined) {
+        module.service("baasicApiHttp", ["$q", "$http", "HALParser", "baasicApp", baasicApiHttp]);
+        module.service("baasicSystemApiHttp", ["$q", "$http", "HALParser", "baasicSystemApp", baasicSystemApiHttp]);
 
-    var extend = angular.extend;
+        var extend = angular.extend;
 
-    var proxyFactory = function proxyFactory($q, $http, HALParser, baasicApp, func) {
-        var parser = new HALParser();
-        var apiUrl = baasicApp.get_apiUrl();
+        var proxyFactory = function proxyFactory($q, $http, HALParser, baasicApp, func) {
+            var parser = new HALParser();
+            var apiUrl = baasicApp.get_apiUrl();
 
-        var proxyMethod = function (config) {
-            if (config) {
-                config.withCredentials = true;
-                config.url = apiUrl + config.url;
+            var proxyMethod = function (config) {
+                if (config) {
+                    config.withCredentials = true;
+                    config.url = apiUrl + config.url;
 
-                var headers = config.headers || (config.headers = {});
+                    var headers = config.headers || (config.headers = {});
 
-                if (!headers["Content-Type"]) {
-                    headers["Content-Type"] = "application/json; charset=UTF-8";
+                    if (!headers["Content-Type"]) {
+                        headers["Content-Type"] = "application/json; charset=UTF-8";
+                    }
+                    if (!headers["Accept"]) {
+                        headers["Accept"] = "application/hal+json; charset=UTF-8";
+                    }
+
+                    var token = baasicApp.get_accessToken();
+                    if (token) {
+                        headers["AUTHORIZATION"] = token.token_type + ' ' + token.access_token;
+                    }
                 }
-                if (!headers["Accept"]) {
-                    headers["Accept"] = "application/hal+json; charset=UTF-8";
-                }
 
-                var token = baasicApp.get_accessToken();
-                if (token) {
-                    headers["AUTHORIZATION"] = token.token_type + ' ' + token.access_token;
-                }
+                var promise = $http(config);
+
+                promise = extend(promise.then(function (response) {
+                    if (response.data && response.data._links) {
+                        response.data = parser.parse(response.data);
+                    }
+                }), promise);
+
+                return promise;
             }
 
-            var promise = $http(config);
+            var proxy;
+            if (func) {
+                proxy = function (config) {
+                    func(config);
 
-            promise = extend(promise.then(function (response) {
-                if (response.data && response.data._links) {
-                    response.data = parser.parse(response.data);
+                    return proxyMethod(config);
                 }
-            }), promise);
-
-            return promise;
-        }
-
-        var proxy;
-        if (func) {
-            proxy = function (config) {
-                func(config);
-
-                return proxyMethod(config);
+            } else {
+                proxy = proxyMethod;
             }
-        } else {
-            proxy = proxyMethod;
-        }
 
-        createShortMethods(proxy, "get", "delete", "head", "jsonp");
-        createShortMethodsWithData(proxy, "post", "put");
+            createShortMethods(proxy, "get", "delete", "head", "jsonp");
+            createShortMethodsWithData(proxy, "post", "put");
 
-        return proxy;
-    };
-
-    function createShortMethods(proxy) {
-        _.each(_.rest(arguments, 1), function (name) {
-            proxy[name] = function (url, config) {
-                return proxy(extend(config || {}, {
-                    method: name,
-                    url: url
-                }));
-            };
-        });
-    }
-
-    function createShortMethodsWithData(proxy) {
-        _.each(_.rest(arguments, 1), function (name) {
-            proxy[name] = function (url, data, config) {
-                return proxy(extend(config || {}, {
-                    method: name,
-                    url: url,
-                    data: data
-                }));
-            };
-        });
-    }
-
-    function baasicSystemApiHttp($q, $http, HALParser, baasicSystemApp) {
-        return proxyFactory($q, $http, HALParser, baasicSystemApp);
-    }
-
-    function baasicApiHttp($q, $http, HALParser, baasicApp) {
-        var proxy = proxyFactory($q, $http, HALParser, baasicApp);
-
-        proxy.createMockDefer = function () {
-            var deferrd = defer();
-
-            var resolve = deferrd.resolve;
-            var reject = deferrd.reject;
-
-            deferrd.resolve = function (obj) {
-                resolve({
-                    data: obj
-                });
-            };
-
-            deferrd.reject = function (obj) {
-                reject({
-                    data: obj
-                });
-            };
-
-            return deferrd;
+            return proxy;
         };
 
-        return proxy;
-
-        function defer() {
-            var deferred = $q.defer();
-            var promise = deferred.promise;
-
-            promise.success = function (fn) {
-                promise.then(function (response) {
-                    fn(response.data, response.status, response.headers, response.config);
-                });
-                return promise;
-            };
-
-            promise.error = function (fn) {
-                promise.then(null, function (response) {
-                    fn(response.data, response.status, response.headers, response.config);
-                });
-                return promise;
-            };
-
-            return deferred;
+        function createShortMethods(proxy) {
+            _.each(_.rest(arguments, 1), function (name) {
+                proxy[name] = function (url, config) {
+                    return proxy(extend(config || {}, {
+                        method: name,
+                        url: url
+                    }));
+                };
+            });
         }
-    }
-})(MonoSoftware.BaasicApi);
-﻿(function (BaasicApi) {
 
-    BaasicApi.baasicAppServiceDefinition = ["baasicApiKey", "baasicApiConfig", baasicAppService];
+        function createShortMethodsWithData(proxy) {
+            _.each(_.rest(arguments, 1), function (name) {
+                proxy[name] = function (url, data, config) {
+                    return proxy(extend(config || {}, {
+                        method: name,
+                        url: url,
+                        data: data
+                    }));
+                };
+            });
+        }
 
-    function baasicAppService(baasicApiKey, baasicApiConfig) {
-        return MonoSoftware.Baasic.Application.init(baasicApiKey, baasicApiConfig);
-    };
+        function baasicSystemApiHttp($q, $http, HALParser, baasicSystemApp) {
+            return proxyFactory($q, $http, HALParser, baasicSystemApp);
+        }
 
-})(MonoSoftware.BaasicApi);
-﻿(function (BaasicApi) {
+        function baasicApiHttp($q, $http, HALParser, baasicApp) {
+            var proxy = proxyFactory($q, $http, HALParser, baasicApp);
 
-    BaasicApi.baasicSystemAppServiceDefinition = ["systemApiConfig", baasicSystemAppService];
+            proxy.createMockDefer = function () {
+                var deferrd = defer();
 
-    function baasicSystemAppService(systemApiConfig) {
+                var resolve = deferrd.resolve;
+                var reject = deferrd.reject;
+
+                deferrd.resolve = function (obj) {
+                    resolve({
+                        data: obj
+                    });
+                };
+
+                deferrd.reject = function (obj) {
+                    reject({
+                        data: obj
+                    });
+                };
+
+                return deferrd;
+            };
+
+            return proxy;
+
+            function defer() {
+                var deferred = $q.defer();
+                var promise = deferred.promise;
+
+                promise.success = function (fn) {
+                    promise.then(function (response) {
+                        fn(response.data, response.status, response.headers, response.config);
+                    });
+                    return promise;
+                };
+
+                promise.error = function (fn) {
+                    promise.then(null, function (response) {
+                        fn(response.data, response.status, response.headers, response.config);
+                    });
+                    return promise;
+                };
+
+                return deferred;
+            }
+        }
+    })(angular, module);
+
+    ﻿module.service("baasicApp", ["baasicApiConfig", function baasicAppService(baasicApiConfig) {
+        return MonoSoftware.Baasic.Application.init(baasicApiConfig.apiKey, baasicApiConfig);
+    }]);
+
+    ﻿module.service("baasicSystemApp", ["systemApiConfig", function baasicSystemAppService(systemApiConfig) {
         return MonoSoftware.Baasic.Application.init("system", systemApiConfig);
-    };
+    }]);
 
-})(MonoSoftware.BaasicApi);
-﻿(function (BaasicApi) {
-
-    BaasicApi.systemApiConfig = {
+    ﻿module.constant("systemApiConfig", {
         apiRootUrl: "api.baasic.local",
         apiVersion: "beta"
-    };
+    });
 
-})(MonoSoftware.BaasicApi);
-﻿(function (BaasicApi) {
-
-    var dependencies = [
-        "HALParser"
-    ];
-
-    BaasicApi.module = angular.module("baasic.baasicApi", dependencies)
-                    .config(BaasicApi.configDefinition)
-                    .constant("baasicApiConfig", BaasicApi.apiConfig)
-                    .constant("systemApiConfig", BaasicApi.systemApiConfig)
-                    .value("baasicApiKey", "")
-                    .service("baasicSystemApp", BaasicApi.baasicSystemAppServiceDefinition)
-                    .service("baasicSystemApiHttp", BaasicApi.baasicSystemApiHttpDefinition)
-                    .service("baasicApp", BaasicApi.baasicAppServiceDefinition)
-                    .service("baasicApiHttp", BaasicApi.baasicApiHttpDefinition);
-
-})(MonoSoftware.BaasicApi);
-
-            
+})(angular);
