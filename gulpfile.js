@@ -11,8 +11,8 @@ gulp.task('scripts', function() {
 	.pipe(plugins.concat('baasic-angular.js'))
 	.pipe(plugins.header('(function (angular, undefined) {\n'))
 	.pipe(plugins.footer('\n})(angular);'))
-	.pipe(plugins.beautify({ preserveNewlines: true }))
-    .pipe(gulp.dest('dist'))
+	.pipe(plugins.beautify())
+	.pipe(gulp.dest('dist'))
 	.pipe(plugins.uglify())
 	.pipe(plugins.rename('baasic-angular.min.js'))
 	.pipe(gulp.dest('dist'));

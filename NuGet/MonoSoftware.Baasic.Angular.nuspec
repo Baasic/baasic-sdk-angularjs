@@ -17,7 +17,8 @@
         </dependencies>
     </metadata>
     <files>
-        <file src="..\src\MonoSoftware.Baasic.Framework.js" target="content\Scripts\MonoSoftware.Baasic.Angular.js" />
+        <file src="..\dist\baasic-angular.js" target="content\Scripts\baasic-angular.js" />
+		<file src="..\dist\baasic-angular.min.js" target="content\Scripts\baasic-angular.min.js" />
     </files>
 </package>
 
