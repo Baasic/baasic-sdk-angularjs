@@ -181,51 +181,6 @@
                 };
             });
         }
-
-        // proxy.createMockDefer = function () {
-        // var deferrd = defer();
-
-        // var resolve = deferrd.resolve;
-        // var reject = deferrd.reject;
-
-        // deferrd.resolve = function (obj) {
-        // resolve({
-        // data: obj
-        // });
-        // };
-
-        // deferrd.reject = function (obj) {
-        // reject({
-        // data: obj
-        // });
-        // };
-
-        // return deferrd;
-        // };
-
-        // return proxy;
-
-        // function defer() {
-        // var deferred = $q.defer();
-        // var promise = deferred.promise;
-
-        // promise.success = function (fn) {
-        // promise.then(function (response) {
-        // fn(response.data, response.status, response.headers, response.config);
-        // });
-        // return promise;
-        // };
-
-        // promise.error = function (fn) {
-        // promise.then(null, function (response) {
-        // fn(response.data, response.status, response.headers, response.config);
-        // });
-        // return promise;
-        // };
-
-        // return deferred;
-        // }
-
     })(angular, module);
 
     ﻿module.provider("baasicApp", function baasicAppService() {
