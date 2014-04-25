@@ -41,7 +41,7 @@
 
 			promise = extend(promise.then(function (response) {
 				if (response.headers) {
-					var contentType = response.headers["Content-Type"];
+					var contentType = response.headers("Content-Type");
 					if (contentType && contentType.toLowerCase().indexOf("application/hal+json") != -1) {
 						response.data = parser.parse(response.data);
 					}
