@@ -58,7 +58,7 @@
 	}
 
 	function createShortMethods(proxy) {
-		_.each(_.rest(arguments, 1), function (name) {
+		angular.forEach(tail(arguments, 1), function (name) {
 			proxy[name] = function (url, config) {
 				return proxy(extend(config || {}, {
 					method: name,
@@ -69,7 +69,7 @@
 	}
 
 	function createShortMethodsWithData(proxy) {
-		_.each(_.rest(arguments, 1), function (name) {
+		angular.forEach(tail(arguments, 1), function (name) {
 			proxy[name] = function (url, data, config) {
 				return proxy(extend(config || {}, {
 					method: name,
@@ -79,4 +79,8 @@
 			};
 		});
 	}
+
+	function tail(array) {
+		return Array.prototype.slice.call(array, 1);
+	};
 })(angular, module);
