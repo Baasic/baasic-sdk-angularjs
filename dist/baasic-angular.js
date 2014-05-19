@@ -122,7 +122,9 @@
             var proxyMethod = function (config) {
                 if (config) {
                     config.withCredentials = true;
-                    config.url = apiUrl + config.url;
+                    if (!isAbsoluteUrl(config.url)) {
+                        config.url = apiUrl + config.url;
+                    }
 
                     var headers = config.headers || (config.headers = {});
 
@@ -180,6 +182,15 @@
                     }));
                 };
             });
+        }
+
+        function isAbsoluteUrl(url) {
+            var lowerUrl = url.toLowerCase();
+            return startsWith(lowerUrl, "http://") || startsWith(lowerUrl, "https://");
+        }
+
+        function startsWith(target, input) {
+            return target.substring(0, input.length) === input;
         }
 
         function tail(array) {
