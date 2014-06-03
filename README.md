@@ -9,8 +9,12 @@ The Baasic AngularJS library provides integration access to the Baasic BaaS (htt
 ## Installation
 
 
+
 ## Quick Start Example
 
 ## Build Process
 
-http://nodejs.org/download/
+1. Install NodeJs (http://nodejs.org/download/)
+2. Open Shell/Command Prompt in the Baasic AngularJS folder 
+3. Run "npm install" 
+4. Run "gulp"
