@@ -16,5 +16,6 @@ The Baasic AngularJS library provides integration access to the Baasic BaaS (htt
 
 1. Install NodeJs (http://nodejs.org/download/)
 2. Open Shell/Command Prompt in the Baasic AngularJS folder 
-3. Run "npm install" 
-4. Run "gulp"
+3. Run __npm install__
+4. Install gulp globally: __npm install -g gulp__ 
+5. Run __gulp__

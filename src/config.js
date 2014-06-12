@@ -1,9 +1,16 @@
-﻿module.config(["$provide",
+﻿module.config(["$provide",	
 	function config($provide) {
+		function browserSupportCredentialsWithCookies() {
+			return ('withCredentials' in new XMLHttpRequest())
+				&& !(window.ActiveXObject || "ActiveXObject" in window);
+		}
+	
 		if (!browserSupportCredentialsWithCookies()) {
 			$provide.decorator("$httpBackend", ["$delegate", "$q", "$rootScope", "$window", "$document", "baasicApp", function initBaasicProxy($delegate, $q, $rootScope, $window, $document, baasicApp) {
 				var apps = baasicApp.all();
-				
+				 //TODO: Fix the apiUrl issue in case of multi-application environment
+                var apiUrl = apps[0].get_apiUrl();
+
 				var apiUrlRegexPattern = "";
 				for (var i=0;i<apps.length;i++) {
 					apiUrlRegexPattern += "|" + regExpEscape(apps[i].get_apiUrl());
@@ -86,12 +93,7 @@
 				
 				
 			}]);
-		}
-		
-		function browserSupportCredentialsWithCookies() {
-			return ('withCredentials' in new XMLHttpRequest())
-				&& !(window.ActiveXObject || "ActiveXObject" in window);
-		};
+		}			
 		
 		// copied from http://stackoverflow.com/questions/3561493/is-there-a-regexp-escape-function-in-javascript
 		function regExpEscape(s) {

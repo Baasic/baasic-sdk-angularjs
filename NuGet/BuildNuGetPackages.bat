@@ -9,3 +9,4 @@ for /f "usebackq delims=" %%F in (nuspec.list) DO (
 for /f "usebackq delims=" %%F in (nuspec.list) DO (	
 	move "%%~dpF%%~nF.%argVersion%.nupkg" \\buildserver\d$\Publish\NuGets\MonoSoftware.Baasic\
 )
+del nuspec.list /Q

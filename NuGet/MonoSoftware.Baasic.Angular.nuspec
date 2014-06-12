@@ -13,7 +13,7 @@
         <language>en-US</language>
         <tags>Javascript, Baasic, AngularJs</tags>
 		<dependencies>            
-            <dependency id="MonoSoftware.Baasic.Js.Framework" version="[1.0.0-beta01]" />                        
+            <dependency id="MonoSoftware.Baasic.Js.Framework" version="(,2.0)" />                        
         </dependencies>
     </metadata>
     <files>
