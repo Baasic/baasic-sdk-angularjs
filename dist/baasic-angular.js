@@ -104,6 +104,25 @@
     }]);
 
     (function (angular, module, undefined) {
+        "use strict";
+        module.directive("recaptcha", ["recaptchaService", function recaptcha(recaptchaService) {
+            return {
+                restrict: 'A',
+                link: function (scope, elem, attrs) {
+                    recaptchaService.create(elem, {
+                        theme: "clean"
+                    });
+
+                    scope.$on("$destroy", function () {
+                        if (recaptchaService) {
+                            recaptchaService.destroy();
+                        }
+                    });
+                }
+            };
+        }]);
+    }(angular, module));
+    (function (angular, module, undefined) {
         module.service("baasicApiHttp", ["$http", "HALParser", "baasicApp", function baasicApiHttp($http, HALParser, baasicApp) {
             var parser = new HALParser();
 
@@ -200,6 +219,53 @@
         };
     })(angular, module);
 
+    (function (angular, module, undefined) {
+        "use strict";
+        module.service("baasicApiService", ["baasicConstants", function (baasicConstants) {
+            function FindParams(data) {
+                this.page = data.page;
+                this.rpp = data.rpp;
+                this.sort = data.orderBy ? data.orderBy + '|' + data.orderDirection : null;
+                this.searchQuery = data.search;
+                this.embed = data.embed;
+                this.fields = data.fields;
+            }
+
+            function KeyParams(data) {
+                if (angular.isObject(data)) {
+                    angular.extend(this, data);
+                } else {
+                    this[baasicConstants.keyPropertyName] = data;
+                }
+            }
+
+            function ModelParams(data) {
+                if (data.hasOwnProperty(baasicConstants.modelPropertyName)) {
+                    angular.extend(this, data);
+                } else {
+                    this[baasicConstants.modelPropertyName] = data[baasicConstants.modelPropertyName];
+                }
+            }
+
+            return {
+                findParams: function (data) {
+                    return new FindParams(data);
+                },
+                getParams: function (data) {
+                    return new KeyParams(data);
+                },
+                createParams: function (data) {
+                    return new ModelParams(data);
+                },
+                updateParams: function (data) {
+                    return new ModelParams(data);
+                },
+                removeParams: function (data) {
+                    return new ModelParams(data);
+                }
+            };
+        }]);
+    }(angular, module));
     module.provider("baasicApp", function baasicAppService() {
         var apps = {};
         var defaultApp;
@@ -241,4 +307,334 @@
         };
     });
 
+    (function (angular, module, undefined) {
+        "use strict";
+        module.constant("baasicConstants", {
+            keyPropertyName: 'key',
+            modelPropertyName: 'model'
+        });
+    }(angular, module));
+    (function (angular, module, undefined) {
+        "use strict";
+        module.service("keyValueRouteService", ["uriTemplateService", function (uriTemplateService) {
+            return {
+                find: uriTemplateService.parse("keyvalue/{?searchQuery,page,rpp,sort,embed,fields}"),
+                get: uriTemplateService.parse("keyvalue/{key}/{?embed,fields}"),
+                create: uriTemplateService.parse("keyvalue")
+            };
+        }]);
+    }(angular, module));
+    (function (angular, module, undefined) {
+        "use strict";
+        module.service("keyValueService", ["baasicApiHttp", "baasicApiService", "baasicConstants", "keyValueRouteService", function (baasicApiHttp, baasicApiService, baasicConstants, keyValueRouteService) {
+            return {
+                find: function (data) {
+                    return baasicApiHttp.get(keyValueRouteService.find.expand(baasicApiService.findParams(data)));
+                },
+                get: function (data) {
+                    return baasicApiHttp.get(keyValueRouteService.get.expand(baasicApiService.getParams(data)));
+                },
+                create: function (data) {
+                    return baasicApiHttp.post(keyValueRouteService.create.expand(), baasicApiService.createParams(data)[baasicConstants.modelPropertyName]);
+                },
+                update: function (data) {
+                    var params = baasicApiService.updateParams(data);
+                    return baasicApiHttp.put(params[baasicConstants.modelPropertyName].links('put').href, params[baasicConstants.modelPropertyName]);
+                },
+                remove: function (data) {
+                    var params = baasicApiService.removeParams(data);
+                    return baasicApiHttp.delete(params[baasicConstants.modelPropertyName].links('delete').href);
+                }
+            };
+        }]);
+    }(angular, module));
+    (function (angular, module, undefined) {
+        "use strict";
+        module.service("valueSetItemRouteService", ["uriTemplateService", function (uriTemplateService) {
+            return {
+                find: uriTemplateService.parse("valuesetitems/set/{setName}/{?searchQuery,page,rpp,sort,embed,fields}"),
+                get: uriTemplateService.parse("valuesetitems/set/{setName}/item/{itemKey}/{?embed,fields}"),
+                create: uriTemplateService.parse("valuesetitems")
+            };
+        }]);
+    }(angular, module));
+    (function (angular, module, undefined) {
+        "use strict";
+        module.service("valueSetItemService", ["baasicApiHttp", "baasicApiService", "baasicConstants", "valueSetItemRouteService", function (baasicApiHttp, baasicApiService, baasicConstants, valueSetItemRouteService) {
+            return {
+                find: function (data) {
+                    return baasicApiHttp.get(valueSetItemRouteService.find.expand(baasicApiService.findParams(data)));
+                },
+                get: function (data) {
+                    return baasicApiHttp.get(valueSetItemRouteService.get.expand(baasicApiService.getParams(data)));
+                },
+                create: function (data) {
+                    return baasicApiHttp.post(valueSetItemRouteService.create.expand(), baasicApiService.createParams(data)[baasicConstants.modelPropertyName]);
+                },
+                update: function (data) {
+                    var params = baasicApiService.updateParams(data);
+                    return baasicApiHttp.put(params[baasicConstants.modelPropertyName].links('put').href, params[baasicConstants.modelPropertyName]);
+                },
+                remove: function (valueSetItem) {
+                    var params = baasicApiService.removeParams(data);
+                    return baasicApiHttp.delete(params[baasicConstants.modelPropertyName].links('delete').href);
+                }
+            };
+        }]);
+    }(angular, module));
+    (function (angular, module, undefined) {
+        "use strict";
+        module.service("valueSetRouteService", ["uriTemplateService", function (uriTemplateService) {
+            return {
+                find: uriTemplateService.parse("valueset/{?searchQuery,page,rpp,sort,embed,fields}"),
+                get: uriTemplateService.parse("valueset/{setName}/{?embed,fields}"),
+                create: uriTemplateService.parse("valueset")
+            };
+        }]);
+    }(angular, module));
+    (function (angular, module, undefined) {
+        "use strict";
+        module.service("valueSetService", ["baasicApiHttp", "baasicApiService", "baasicConstants", "valueSetRouteService", function (baasicApiHttp, baasicApiService, baasicConstants, valueSetRouteService) {
+            return {
+                find: function (data) {
+                    return baasicApiHttp.get(valueSetRouteService.find.expand(baasicApiService.findParams(data)));
+                },
+                get: function (data) {
+                    return baasicApiHttp.get(valueSetRouteService.get.expand(baasicApiService.getParams(data)));
+                },
+                create: function (data) {
+                    return baasicApiHttp.post(valueSetRouteService.create.expand(), baasicApiService.createParams(data)[baasicConstants.modelPropertyName]);
+                },
+                update: function (data) {
+                    var params = baasicApiService.updateParams(data);
+                    return baasicApiHttp.put(params[baasicConstants.modelPropertyName].links('put').href, params[baasicConstants.modelPropertyName]);
+                },
+                remove: function (data) {
+                    var params = baasicApiService.removeParams(data);
+                    return baasicApiHttp.delete(params[baasicConstants.modelPropertyName].links('delete').href);
+                }
+            };
+        }]);
+    }(angular, module));
+    (function (angular, module, undefined) {
+        "use strict";
+        var permissionHash = {};
+        module.service("authenticationService", ["$rootScope", "baasicApp", function ($rootScope, baasicApp) {
+            var app = baasicApp.get();
+
+            return {
+                getUser: function getUser() {
+                    var user = app.get_user();
+                    if ($rootScope.user === undefined && user.user !== undefined) {
+                        $rootScope.user = user.user;
+                    }
+                    return user.user;
+                },
+                setUser: function setUser(user) {
+                    if (user) {
+                        var token = user.accessToken;
+                        delete user.accessToken;
+
+                        app.set_user(user, token);
+                        user.isAuthenticated = true;
+                        $rootScope.user = user;
+                    } else {
+                        app.set_user(null);
+
+                        $rootScope.user = {
+                            isAuthenticated: false
+                        };
+                    }
+                },
+                updateUser: function updateUser(user) {
+                    if (!user.accessToken) {
+                        user.accessToken = this.getAccessToken();
+                    }
+
+                    var currentUser = this.getUser();
+                    angular.extend(currentUser, user);
+
+                    this.setUser(currentUser);
+                },
+                getAccessToken: function getAccessToken() {
+                    return app.get_accessToken();
+                },
+                hasPermission: function (authorization) {
+                    if (permissionHash.hasOwnProperty(authorization)) {
+                        return permissionHash[authorization];
+                    } else {
+                        var user = this.getUser();
+                        var hasPermission = false;
+
+                        if (user.permissions) {
+                            var tokens = authorization.split(".");
+                            if (tokens.length > 0) {
+                                var section = tokens[0];
+
+                                var sectionPermissions = user.permissions[section];
+                                if (sectionPermissions) {
+                                    if (tokens.length > 1) {
+                                        var action = tokens[1].toLowerCase();
+                                        hasPermission = _.any(sectionPermissions, function (sectionAction) {
+                                            return sectionAction.toLowerCase() == action
+                                        });
+                                    } else {
+                                        hasPermission = true;
+                                    }
+                                }
+                            }
+                        }
+
+                        permissionHash[authorization] = hasPermission;
+                        return hasPermission;
+                    }
+                }
+            };
+        }]);
+    }(angular, module));
+    (function (angular, module, undefined) {
+        "use strict";
+        module.service("loginRouteService", ["uriTemplateService", function (uriTemplateService) {
+            return {
+                login: uriTemplateService.parse("/login")
+            };
+        }]);
+    }(angular, module));
+    (function (angular, module, undefined) {
+        "use strict";
+        module.service("loginService", ["baasicApiHttp", "loginRouteService", function (baasicApiHttp, loginRouteService) {
+            return {
+                login: function (username, password) {
+                    var data = 'grant_type=password&username=' + username + '&password=' + password;
+
+                    return baasicApiHttp({
+                        url: loginRouteService.login.expand() + "?withSession=true",
+                        method: "POST",
+                        data: data,
+                        headers: {
+                            "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8"
+                        }
+                    });
+                },
+                loadUserData: function loadUserData() {
+                    return baasicApiHttp.get(loginRouteService.login.expand(), {
+                        headers: {
+                            "Accept": "application/json; charset=UTF-8"
+                        }
+                    });
+                },
+                logout: function (token, type) {
+                    return baasicApiHttp({
+                        url: loginRouteService.login.expand(),
+                        method: "DELETE",
+                        data: {
+                            token: token,
+                            type: type
+                        }
+                    });
+                }
+            };
+        }]);
+    }(angular, module));
+    (function (angular, module, undefined) {
+        "use strict";
+        module.service("passwordRecoveryService", ["baasicApiHttp", function (baasicApiHttp) {
+            var url = "RecoverPassword";
+
+            return {
+                requestReset: function (request) {
+                    return baasicApiHttp({
+                        url: url,
+                        method: "POST",
+                        data: request
+                    });
+                },
+                change: function (change) {
+                    return baasicApiHttp({
+                        url: url,
+                        method: "PUT",
+                        data: change
+                    });
+                }
+            };
+        }]);
+    }(angular, module));
+    (function (angular, module, undefined) {
+        "use strict";
+        module.service("recaptchaService", ["recaptchaKey", function (recaptchaKey) {
+            return {
+                create: function (elem, options) {
+                    var id = elem.attr("id");
+                    if (!id) {
+                        id = "recaptcha-" + Math.random() * 10000;
+                        elem.attr("id", id);
+                    }
+                    Recaptcha.create(recaptchaKey, id, options);
+                },
+                challenge: function () {
+                    return Recaptcha.get_challenge();
+                },
+                response: function () {
+                    return Recaptcha.get_response();
+                },
+                reload: function () {
+                    Recaptcha.reload();
+                },
+                destroy: function () {
+                    Recaptcha.destroy();
+                }
+            };
+        }]);
+    }(angular, module));
+    (function (angular, module, undefined) {
+        "use strict";
+        module.service("uriTemplateService", [function () {
+            return {
+                parse: function (link) {
+                    return UriTemplate.parse(link);
+                },
+                constructTemplateUrl: function (config, params) {
+                    if (!config || !config.templateText || !config.defaultUrl) {
+                        throw "Invalid template configuration.";
+                    }
+
+                    if (config.templateText) {
+                        var
+                        expandedTemplate = null,
+                            defaultUrlIndex = null,
+                            sortParams = params.orderBy ? params.orderBy + '|' + params.orderDirection : null;
+
+                        var expandConfig = {
+                            page: params.pageNumber,
+                            rpp: params.pageSize,
+                            sort: sortParams,
+                            searchQuery: params.search
+                        };
+
+                        if (config.additionalParams) {
+                            for (var p in config.additionalParams) {
+                                if (expandConfig[p]) {
+                                    throw 'Property' + p + ' already exists in default expand configuration';
+                                }
+                                else {
+                                    expandConfig[p] = config.additionalParams[p];
+                                }
+                            }
+                        }
+
+                        expandedTemplate = config.templateText.expand(expandConfig);
+
+                        defaultUrlIndex = expandedTemplate.indexOf(config.defaultUrl);
+
+                        url = expandedTemplate.substr(defaultUrlIndex);
+                    }
+                    else {
+                        url = defaultUrl;
+                    }
+
+                    return url;
+                }
+            }
+        }]);
+    })(angular, module);
 })(angular);
