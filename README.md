@@ -24,7 +24,7 @@ It is recommended to server the library from the CDN (Content Delivery Network) 
 
 ### Initialize
 
-To use the library you need to add the Baasic (_baasic.baasicApi_) dependency to your Angular module. This will allow you to use library services described in the [Services Section](#services).
+To use the library you need to add the Baasic (_baasic.baasicApi_) dependency to your Angular module. This will allow you to use library services described in the [Modules Section](#baasic-modules).
 
 	 angular.module('my-module', ["baasic.baasicApi"])		
 
@@ -43,14 +43,39 @@ Baasic AngularJS library allows you to use multiple Baasic applications in your 
 
 **Note:** _To obtain Baasic Application Identifier please create your application on [Baasic Registration](https://dashboard.baasic.com/register/) page._
 
-## Services
+## Baasic Modules
+
+Baasic back-end has many built-in modules that can be used with Baasic AngularJs library. Below you can find detailed information about every module supported by library. 
 
 ### Baasic Module Architecture
 
+To get better understanding of Baasic AngularJs services we will explain main architecture that all library services conform to. 
+
 * Route Service
-* Main Service
+	* every service has route service used to wrap REST service URL discovery 
+	* route service will parse the REST service URL and prepare the URL for expansion 
+	* route services contain following routes
+		* _find_ - used to fetch collection of resources that can be filtered, sorted and paged
+		* _get_ - used to fetch single resource
+		* _create_ - used to create new resources
+	* _find_ route has the following parameters
+		* _searchQuery_ - used to build simple filters or complex queries
+		* _page_ - used to define the current page
+		* _rpp_ - used to define the number of resources per page
+		* _sort_ - used to define sorting expression applied on the returned resources. Sorting expression has the following format _"fieldName|asc", "field1Name|asc,field2Name|desc"_
+		* _embed_ - used to embed additional resources 
+		* _fields_ - used to define the list of fields returned by the service  
+	* _get_ route has the following parameters
+		* _embed_ - used to embed additional resources 
+		* _fields_ - used to define the list of fields returned by the service
+* Module Services
+	* Baasic module services are built on top of the AngularJs services 
+	* module services depend upon the route services as they are used for REST service URL discovery
+	* every service has the _find_, _get_, _create_, _update_ and _remove_ functions used to communicate with the Baasic back-end
+	* all services accept the data object 
 * Options - Params
 * HAL links
+* Extending existing modules with dynamic props
 
 ### Membership
 
