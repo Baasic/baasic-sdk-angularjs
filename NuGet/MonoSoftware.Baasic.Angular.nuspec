@@ -17,6 +17,7 @@
         </dependencies>
     </metadata>
     <files>
+        <file src="..\dist\uritemplate-min.js" target="content\Scripts\uritemplate-min.js" />
         <file src="..\dist\hal-parser.js" target="content\Scripts\hal-parser.js" />
         <file src="..\dist\baasic-angular.js" target="content\Scripts\baasic-angular.js" />
 		<file src="..\dist\baasic-angular.min.js" target="content\Scripts\baasic-angular.min.js" />

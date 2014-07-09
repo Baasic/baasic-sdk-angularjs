@@ -1,0 +1,76 @@
+﻿(function (angular, module, undefined) {
+    "use strict";
+    var permissionHash = {};
+    module.service("authenticationService", ["$rootScope", "baasicApp",
+        function ($rootScope, baasicApp) {
+            var app = baasicApp.get();
+
+            return {
+                getUser: function getUser() {
+                    var user = app.get_user();
+                    if ($rootScope.user === undefined &&
+                        user.user !== undefined) {
+                        $rootScope.user = user.user;
+                    }
+                    return user.user;
+                },
+                setUser: function setUser(user) {
+                    if (user) {
+                        var token = user.accessToken;
+                        delete user.accessToken;
+
+                        app.set_user(user, token);
+                        user.isAuthenticated = true;
+                        $rootScope.user = user;
+                    } else {
+                        app.set_user(null);
+
+                        $rootScope.user = {
+                            isAuthenticated: false
+                        };
+                    }
+                },
+                updateUser: function updateUser(user) {
+                    if (!user.accessToken) {
+                        user.accessToken = this.getAccessToken();
+                    }
+
+                    var currentUser = this.getUser();
+                    angular.extend(currentUser, user);
+
+                    this.setUser(currentUser);
+                },
+                getAccessToken: function getAccessToken() {
+                    return app.get_accessToken();
+                },
+                hasPermission: function (authorization) {
+                    if (permissionHash.hasOwnProperty(authorization)) {
+                        return permissionHash[authorization];
+                    } else {
+                        var user = this.getUser();
+                        var hasPermission = false;
+
+                        if (user.permissions) {
+                            var tokens = authorization.split(".");
+                            if (tokens.length > 0) {
+                                var section = tokens[0];
+
+                                var sectionPermissions = user.permissions[section];
+                                if (sectionPermissions) {
+                                    if (tokens.length > 1) {
+                                        var action = tokens[1].toLowerCase();
+                                        hasPermission = _.any(sectionPermissions, function (sectionAction) { return sectionAction.toLowerCase() == action });
+                                    } else {
+                                        hasPermission = true;
+                                    }
+                                }
+                            }
+                        }
+
+                        permissionHash[authorization] = hasPermission;
+                        return hasPermission;
+                    }
+                }
+            };
+        }]);
+}(angular, module));

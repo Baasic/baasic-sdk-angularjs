@@ -1,0 +1,48 @@
+﻿(function (angular, module, undefined) {
+    "use strict";
+    module.service("baasicApiService", ["baasicConstants",
+        function (baasicConstants) {
+            function FindParams(data) {
+                this.page = data.page;
+                this.rpp = data.rpp;
+                this.sort = data.orderBy ? data.orderBy + '|' + data.orderDirection : null;
+                this.searchQuery = data.search;
+                this.embed = data.embed;
+                this.fields = data.fields;
+            }
+
+            function KeyParams(data) {
+                if (angular.isObject(data)) {
+                    angular.extend(this, data);
+                } else {
+                    this[baasicConstants.keyPropertyName] = data;
+                }
+            }
+
+            function ModelParams(data) {
+                if (data.hasOwnProperty(baasicConstants.modelPropertyName)) {
+                    angular.extend(this, data);
+                } else {
+                    this[baasicConstants.modelPropertyName] = data[baasicConstants.modelPropertyName];
+                }
+            }
+
+            return {
+                findParams: function (data) {
+                    return new FindParams(data);
+                },
+                getParams: function (data) {
+                    return new KeyParams(data);
+                },
+                createParams: function (data) {
+                    return new ModelParams(data);
+                },
+                updateParams: function (data) {
+                    return new ModelParams(data);
+                },
+                removeParams: function (data) {
+                    return new ModelParams(data);
+                }
+            };
+        }]);
+}(angular, module));
