@@ -231,11 +231,15 @@
                 this.fields = data.fields;
             }
 
-            function KeyParams(data) {
+            function KeyParams(data, propName) {
                 if (angular.isObject(data)) {
                     angular.extend(this, data);
                 } else {
-                    this[baasicConstants.keyPropertyName] = data;
+                    if (propName !== undefined) {
+                        this[propName] = data;
+                    } else {
+                        this[baasicConstants.keyPropertyName] = data;
+                    }
                 }
             }
 
@@ -243,7 +247,7 @@
                 if (data.hasOwnProperty(baasicConstants.modelPropertyName)) {
                     angular.extend(this, data);
                 } else {
-                    this[baasicConstants.modelPropertyName] = data[baasicConstants.modelPropertyName];
+                    this[baasicConstants.modelPropertyName] = data;
                 }
             }
 
@@ -251,8 +255,8 @@
                 findParams: function (data) {
                     return new FindParams(data);
                 },
-                getParams: function (data) {
-                    return new KeyParams(data);
+                getParams: function (data, propName) {
+                    return new KeyParams(data, propName);
                 },
                 createParams: function (data) {
                     return new ModelParams(data);
@@ -310,6 +314,7 @@
     (function (angular, module, undefined) {
         "use strict";
         module.constant("baasicConstants", {
+            idPropertyName: 'id',
             keyPropertyName: 'key',
             modelPropertyName: 'model'
         });
@@ -400,10 +405,10 @@
                     return baasicApiHttp.get(valueSetRouteService.find.expand(baasicApiService.findParams(data)));
                 },
                 get: function (data) {
-                    return baasicApiHttp.get(valueSetRouteService.get.expand(baasicApiService.getParams(data)));
+                    return baasicApiHttp.get(valueSetRouteService.get.expand(baasicApiService.getParams(data, 'setName')));
                 },
                 create: function (data) {
-                    return baasicApiHttp.post(valueSetRouteService.create.expand(), baasicApiService.createParams(data)[baasicConstants.modelPropertyName]);
+                    return baasicApiHttp.post(valueSetRouteService.create.expand({}), baasicApiService.createParams(data)[baasicConstants.modelPropertyName]);
                 },
                 update: function (data) {
                     var params = baasicApiService.updateParams(data);
@@ -475,9 +480,12 @@
                                 if (sectionPermissions) {
                                     if (tokens.length > 1) {
                                         var action = tokens[1].toLowerCase();
-                                        hasPermission = _.any(sectionPermissions, function (sectionAction) {
-                                            return sectionAction.toLowerCase() == action
-                                        });
+                                        for (var i = 0; i < sectionPermissions.length; i++) {
+                                            if (sectionPermissions[i].toLowerCase() == action) {
+                                                hasPermission = true;
+                                                break;
+                                            }
+                                        }
                                     } else {
                                         hasPermission = true;
                                     }
@@ -496,7 +504,7 @@
         "use strict";
         module.service("loginRouteService", ["uriTemplateService", function (uriTemplateService) {
             return {
-                login: uriTemplateService.parse("/login")
+                login: uriTemplateService.parse("/login/{?embed,fields}")
             };
         }]);
     }(angular, module));
@@ -508,7 +516,7 @@
                     var data = 'grant_type=password&username=' + username + '&password=' + password;
 
                     return baasicApiHttp({
-                        url: loginRouteService.login.expand() + "?withSession=true",
+                        url: loginRouteService.login.expand({}) + "?withSession=true",
                         method: "POST",
                         data: data,
                         headers: {
@@ -516,8 +524,8 @@
                         }
                     });
                 },
-                loadUserData: function loadUserData() {
-                    return baasicApiHttp.get(loginRouteService.login.expand(), {
+                loadUserData: function loadUserData(data) {
+                    return baasicApiHttp.get(loginRouteService.login.expand(data), {
                         headers: {
                             "Accept": "application/json; charset=UTF-8"
                         }
@@ -525,7 +533,7 @@
                 },
                 logout: function (token, type) {
                     return baasicApiHttp({
-                        url: loginRouteService.login.expand(),
+                        url: loginRouteService.login.expand({}),
                         method: "DELETE",
                         data: {
                             token: token,

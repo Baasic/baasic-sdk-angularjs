@@ -58,8 +58,13 @@
                                 var sectionPermissions = user.permissions[section];
                                 if (sectionPermissions) {
                                     if (tokens.length > 1) {
-                                        var action = tokens[1].toLowerCase();
-                                        hasPermission = _.any(sectionPermissions, function (sectionAction) { return sectionAction.toLowerCase() == action });
+                                        var action = tokens[1].toLowerCase();										
+                                        for (var i = 0; i < sectionPermissions.length; i++) {
+                                            if (sectionPermissions[i].toLowerCase() == action) {
+                                                hasPermission = true;
+                                                break;
+                                            }
+                                        }
                                     } else {
                                         hasPermission = true;
                                     }

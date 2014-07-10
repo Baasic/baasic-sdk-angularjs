@@ -7,10 +7,10 @@
                     return baasicApiHttp.get(valueSetRouteService.find.expand(baasicApiService.findParams(data)));
                 },
                 get: function (data) {
-                    return baasicApiHttp.get(valueSetRouteService.get.expand(baasicApiService.getParams(data)));
+                    return baasicApiHttp.get(valueSetRouteService.get.expand(baasicApiService.getParams(data, 'setName')));
                 },
                 create: function (data) {
-                    return baasicApiHttp.post(valueSetRouteService.create.expand(), baasicApiService.createParams(data)[baasicConstants.modelPropertyName]);
+                    return baasicApiHttp.post(valueSetRouteService.create.expand({}), baasicApiService.createParams(data)[baasicConstants.modelPropertyName]);
                 },
                 update: function (data) {
                     var params = baasicApiService.updateParams(data);

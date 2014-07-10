@@ -51,6 +51,11 @@ Baasic back-end has many built-in modules that can be used with Baasic AngularJs
 
 To get better understanding of Baasic AngularJs services we will explain main architecture that all library services conform to. 
 
+* Core Services
+	* **baasicApp**
+	* **baasicApiHttp**
+	* **baasicApiService**
+	* **baasicConstants**
 * Route Service
 	* every service has route service used to wrap REST service URL discovery 
 	* route service will parse the REST service URL and prepare the URL for expansion 
@@ -72,7 +77,7 @@ To get better understanding of Baasic AngularJs services we will explain main ar
 	* Baasic module services are built on top of the AngularJs services 
 	* module services depend upon the route services as they are used for REST service URL discovery
 	* every service has the _find_, _get_, _create_, _update_ and _remove_ functions used to communicate with the Baasic back-end
-	* all services accept the data object 
+	* all services accept the data object as function parameter 
 * Options - Params
 * HAL links
 * Extending existing modules with dynamic props
@@ -90,6 +95,12 @@ To get better understanding of Baasic AngularJs services we will explain main ar
 ### Key Value Module
 
 ### General Services, Directives etc.
+
+* loginService
+* passwordRecoveryService
+* authenticationService
+* recaptchaService
+* 
 
 ## Quick Start Guide
 

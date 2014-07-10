@@ -11,19 +11,23 @@
                 this.fields = data.fields;
             }
 
-            function KeyParams(data) {
+            function KeyParams(data, propName) {
                 if (angular.isObject(data)) {
                     angular.extend(this, data);
                 } else {
-                    this[baasicConstants.keyPropertyName] = data;
-                }
+					if (propName !== undefined) {
+						this[propName] = data;
+					} else {
+						this[baasicConstants.keyPropertyName] = data;
+					}
+                } 
             }
 
             function ModelParams(data) {
                 if (data.hasOwnProperty(baasicConstants.modelPropertyName)) {
                     angular.extend(this, data);
                 } else {
-                    this[baasicConstants.modelPropertyName] = data[baasicConstants.modelPropertyName];
+                    this[baasicConstants.modelPropertyName] = data;
                 }
             }
 
@@ -31,8 +35,8 @@
                 findParams: function (data) {
                     return new FindParams(data);
                 },
-                getParams: function (data) {
-                    return new KeyParams(data);
+                getParams: function (data, propName) {
+                    return new KeyParams(data, propName);
                 },
                 createParams: function (data) {
                     return new ModelParams(data);

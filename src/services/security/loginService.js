@@ -7,7 +7,7 @@
                     var data = 'grant_type=password&username=' + username + '&password=' + password;
 
                     return baasicApiHttp({
-                        url: loginRouteService.login.expand() + "?withSession=true",
+                        url: loginRouteService.login.expand({}) + "?withSession=true",
                         method: "POST",
                         data: data,
                         headers: {
@@ -15,12 +15,12 @@
                         }
                     });
                 },
-                loadUserData: function loadUserData() {
-                    return baasicApiHttp.get(loginRouteService.login.expand(), { headers: { "Accept": "application/json; charset=UTF-8" } });
+                loadUserData: function loadUserData(data) {
+                    return baasicApiHttp.get(loginRouteService.login.expand(data), { headers: { "Accept": "application/json; charset=UTF-8" } });
                 },
                 logout: function (token, type) {
                     return baasicApiHttp({
-                        url: loginRouteService.login.expand(),
+                        url: loginRouteService.login.expand({}),
                         method: "DELETE",
                         data: {
                             token: token,
