@@ -48,6 +48,9 @@
                         return permissionHash[authorization];
                     } else {
                         var user = this.getUser();
+						if (user === undefined) {
+							return;
+						}
                         var hasPermission = false;
 
                         if (user.permissions) {
