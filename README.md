@@ -129,7 +129,7 @@ To get better understanding of Baasic AngularJS services here are the details ab
 
 ### Value Set Module
 
-### Key Value Module
+### Dynamic Resources Module
 
 ### General Services, Directives etc.
 
