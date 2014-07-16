@@ -1,7 +1,7 @@
 ﻿(function (angular, module, undefined) {
     "use strict";
     var permissionHash = {};
-    module.service("authenticationService", ["$rootScope", "baasicApp",
+    module.service("authorizationService", ["$rootScope", "baasicApp",
         function ($rootScope, baasicApp) {
             var app = baasicApp.get();
 

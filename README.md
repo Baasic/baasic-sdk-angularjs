@@ -52,7 +52,7 @@ Baasic back-end has many built-in modules that can be used with Baasic AngularJS
 To get better understanding of Baasic AngularJS services here are the details about main architecture that all library services conform to. 
 
 * Core Services
-	* _baasicApp_ service is used to manage the Baasic application instances. There can be multiple AngularJS application instances communicating with difference Baasic applications. 
+	* __baasicApp__ service is used to manage the Baasic application instances. There can be multiple AngularJS application instances communicating with difference Baasic applications. 
 
 		*  create an application 
 
@@ -69,17 +69,19 @@ To get better understanding of Baasic AngularJS services here are the details ab
 				module.controller("MyCtrl", ["baasicApp",
 					function MyCtrl(baasicApp) {
 						var app = baasicApp.get();
-						var apiKey = app.get_apiKey();
-						var apiURI = app.get_apiUrl();
-						var accessToken = app.get_accessToken();
-						app.update_accessToken(accessToken);
-						var currentUser = app.get_user();
-						app.set_user(userDetails, accessToken);
-						var currentLanguage = app.get_currentLanguage();
-						var defaultLanguage = app.get_defaultLanguage();
 					}]);   
 
-    
+    	* application object has the following methods
+
+				var apiKey = app.get_apiKey();
+				var apiURI = app.get_apiUrl();
+				var accessToken = app.get_accessToken();
+				app.update_accessToken(accessToken);
+				var currentUser = app.get_user();
+				app.set_user(userDetails, accessToken);
+				var currentLanguage = app.get_currentLanguage();
+				var defaultLanguage = app.get_defaultLanguage();
+	    	
     
 	* **baasicApiHttp**
 	* **baasicApiService**
@@ -101,6 +103,9 @@ To get better understanding of Baasic AngularJS services here are the details ab
 	* _get_ route has the following parameters
 		* _embed_ - used to embed additional resources 
 		* _fields_ - used to define the list of fields returned by the service
+	* _create_ route has the no parameters in most cases and it's used to create a new resource
+	* _parse_ is an utility method used to parse custom URIs. _Note: parse will not return a route_	 
+
 * Module Services
 	* Baasic module services are built on top of the AngularJS services 
 	* module services depend upon the route services as they are used for REST service URL discovery

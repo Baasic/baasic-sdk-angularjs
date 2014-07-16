@@ -223,12 +223,9 @@
         "use strict";
         module.service("baasicApiService", ["baasicConstants", function (baasicConstants) {
             function FindParams(data) {
-                this.page = data.page;
-                this.rpp = data.rpp;
+                angular.extend(this, data);
                 this.sort = data.orderBy ? data.orderBy + '|' + data.orderDirection : null;
                 this.searchQuery = data.search;
-                this.embed = data.embed;
-                this.fields = data.fields;
             }
 
             function KeyParams(data, propName) {
@@ -313,6 +310,89 @@
 
     (function (angular, module, undefined) {
         "use strict";
+        module.service("roleRouteService", ["uriTemplateService", function (uriTemplateService) {
+            return {
+                find: uriTemplateService.parse("role/{?searchQuery,page,rpp,sort,embed,fields}"),
+                get: uriTemplateService.parse("role/{roleId}/{?embed,fields}"),
+                create: uriTemplateService.parse("role"),
+                parse: uriTemplateService.parse
+            };
+        }]);
+    }(angular, module));
+    (function (angular, module, undefined) {
+        "use strict";
+        module.service("roleService", ["baasicApiHttp", "baasicApiService", "baasicConstants", "roleRouteService", function (baasicApiHttp, baasicApiService, baasicConstants, roleRouteService) {
+            return {
+                find: function (data) {
+                    return baasicApiHttp.get(roleRouteService.find.expand(baasicApiService.findParams(data)));
+                },
+                get: function (data) {
+                    return baasicApiHttp.get(roleRouteService.get.expand(baasicApiService.getParams(data, 'roleId')));
+                },
+                create: function (data) {
+                    return baasicApiHttp.post(roleRouteService.create.expand({}), baasicApiService.createParams(data)[baasicConstants.modelPropertyName]);
+                },
+                update: function (data) {
+                    var params = baasicApiService.updateParams(data);
+                    return baasicApiHttp.put(params[baasicConstants.modelPropertyName].links('put').href, params[baasicConstants.modelPropertyName]);
+                },
+                remove: function (data) {
+                    var params = baasicApiService.removeParams(data);
+                    return baasicApiHttp.delete(params[baasicConstants.modelPropertyName].links('delete').href);
+                }
+            };
+        }]);
+    }(angular, module));
+    (function (angular, module, undefined) {
+        "use strict";
+        module.service("userRouteService", ["uriTemplateService", function (uriTemplateService) {
+            return {
+                find: uriTemplateService.parse("user/{?searchQuery,page,rpp,sort,embed,fields}"),
+                get: uriTemplateService.parse("user/{username}/{?embed,fields}"),
+                create: uriTemplateService.parse("user"),
+                activate: uriTemplateService.parse("user/activate/{activationToken}/"),
+                parse: uriTemplateService.parse
+            };
+        }]);
+    }(angular, module));
+    (function (angular, module, undefined) {
+        "use strict";
+        module.service("userService", ["baasicApiHttp", "baasicApiService", "baasicConstants", "userRouteService", function (baasicApiHttp, baasicApiService, baasicConstants, userRouteService) {
+            return {
+                find: function (data) {
+                    return baasicApiHttp.get(userRouteService.find.expand(baasicApiService.findParams(data)));
+                },
+                get: function (data) {
+                    return baasicApiHttp.get(userRouteService.get.expand(baasicApiService.getParams(data, 'username')));
+                },
+                create: function (data) {
+                    return baasicApiHttp.post(userRouteService.create.expand({}), baasicApiService.createParams(data)[baasicConstants.modelPropertyName]);
+                },
+                update: function (data) {
+                    var params = baasicApiService.updateParams(data);
+                    return baasicApiHttp.put(params[baasicConstants.modelPropertyName].links('put').href, params[baasicConstants.modelPropertyName]);
+                },
+                remove: function (data) {
+                    var params = baasicApiService.removeParams(data);
+                    return baasicApiHttp.delete(params[baasicConstants.modelPropertyName].links('delete').href);
+                },
+                unlock: function (data) {
+                    var params = baasicApiService.updateParams(data);
+                    return baasicApiHttp.put(params[baasicConstants.modelPropertyName].links('unlock').href, {});
+                },
+                lock: function (data) {
+                    var params = baasicApiService.updateParams(data);
+                    return baasicApiHttp.put(params[baasicConstants.modelPropertyName].links('lock').href, {});
+                },
+                activate: function (data) {
+                    var params = baasicApiService.getParams(data, 'activationToken');
+                    return baasicApiHttp.put(userRouteService.activate.expand(params), {});
+                }
+            };
+        }]);
+    }(angular, module));
+    (function (angular, module, undefined) {
+        "use strict";
         module.constant("baasicConstants", {
             idPropertyName: 'id',
             keyPropertyName: 'key',
@@ -321,11 +401,38 @@
     }(angular, module));
     (function (angular, module, undefined) {
         "use strict";
+        module.service("applicationSettingsRouteService", ["uriTemplateService", function (uriTemplateService) {
+            return {
+                get: uriTemplateService.parse("application/{key}/{?embed,fields}"),
+                update: uriTemplateService.parse("application/{key}/"),
+                parse: uriTemplateService.parse
+            };
+        }]);
+    }(angular, module));
+    (function (angular, module, undefined) {
+        "use strict";
+        module.service("applicationSettingsService", ["baasicApiHttp", "baasicApiService", "baasicConstants", "applicationSettingsRouteService", function (baasicApiHttp, baasicApiService, baasicConstants, applicationSettingsRouteService) {
+            return {
+                get: function (data) {
+                    return baasicApiHttp.get(applicationSettingsRouteService.get.expand(baasicApiService.getParams(data))).success(function (appSettings) {
+                        appSettings.origins = appSettings.origins || [];
+                    });
+                },
+                update: function (data) {
+                    var params = baasicApiService.updateParams(data);
+                    return baasicApiHttp.put(params[baasicConstants.modelPropertyName].links('put').href, params[baasicConstants.modelPropertyName]);
+                }
+            };
+        }]);
+    }(angular, module));
+    (function (angular, module, undefined) {
+        "use strict";
         module.service("keyValueRouteService", ["uriTemplateService", function (uriTemplateService) {
             return {
                 find: uriTemplateService.parse("keyvalue/{?searchQuery,page,rpp,sort,embed,fields}"),
                 get: uriTemplateService.parse("keyvalue/{key}/{?embed,fields}"),
-                create: uriTemplateService.parse("keyvalue")
+                create: uriTemplateService.parse("keyvalue"),
+                parse: uriTemplateService.parse
             };
         }]);
     }(angular, module));
@@ -359,7 +466,8 @@
             return {
                 find: uriTemplateService.parse("valuesetitems/set/{setName}/{?searchQuery,page,rpp,sort,embed,fields}"),
                 get: uriTemplateService.parse("valuesetitems/set/{setName}/item/{itemKey}/{?embed,fields}"),
-                create: uriTemplateService.parse("valuesetitems")
+                create: uriTemplateService.parse("valuesetitems"),
+                parse: uriTemplateService.parse
             };
         }]);
     }(angular, module));
@@ -393,7 +501,8 @@
             return {
                 find: uriTemplateService.parse("valueset/{?searchQuery,page,rpp,sort,embed,fields}"),
                 get: uriTemplateService.parse("valueset/{setName}/{?embed,fields}"),
-                create: uriTemplateService.parse("valueset")
+                create: uriTemplateService.parse("valueset"),
+                parse: uriTemplateService.parse
             };
         }]);
     }(angular, module));
@@ -424,7 +533,7 @@
     (function (angular, module, undefined) {
         "use strict";
         var permissionHash = {};
-        module.service("authenticationService", ["$rootScope", "baasicApp", function ($rootScope, baasicApp) {
+        module.service("authorizationService", ["$rootScope", "baasicApp", function ($rootScope, baasicApp) {
             var app = baasicApp.get();
 
             return {
@@ -507,7 +616,8 @@
         "use strict";
         module.service("loginRouteService", ["uriTemplateService", function (uriTemplateService) {
             return {
-                login: uriTemplateService.parse("/login/{?embed,fields}")
+                login: uriTemplateService.parse("/login/{?embed,fields}"),
+                parse: uriTemplateService.parse
             };
         }]);
     }(angular, module));

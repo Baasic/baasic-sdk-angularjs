@@ -3,12 +3,9 @@
     module.service("baasicApiService", ["baasicConstants",
         function (baasicConstants) {
             function FindParams(data) {
-                this.page = data.page;
-                this.rpp = data.rpp;
+				angular.extend(this, data);		
                 this.sort = data.orderBy ? data.orderBy + '|' + data.orderDirection : null;
                 this.searchQuery = data.search;
-                this.embed = data.embed;
-                this.fields = data.fields;
             }
 
             function KeyParams(data, propName) {
