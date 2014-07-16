@@ -1,6 +1,6 @@
 ﻿(function (angular, module, undefined) {
     "use strict";
-    module.service("valueSetRouteService", ["uriTemplateService",
+    module.service("baasicValueSetRouteService", ["baasicUriTemplateService",
         function (uriTemplateService) {
             return {
                 find: uriTemplateService.parse("valueset/{?searchQuery,page,rpp,sort,embed,fields}"),

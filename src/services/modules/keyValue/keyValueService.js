@@ -1,6 +1,6 @@
 ﻿(function (angular, module, undefined) {
     "use strict";
-    module.service("keyValueService", ["baasicApiHttp", "baasicApiService", "baasicConstants", "keyValueRouteService",
+    module.service("baasicKeyValueService", ["baasicApiHttp", "baasicApiService", "baasicConstants", "baasicKeyValueRouteService",
         function (baasicApiHttp, baasicApiService, baasicConstants, keyValueRouteService) {
             return {
                 find: function (data) {

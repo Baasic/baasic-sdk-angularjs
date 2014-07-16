@@ -1,6 +1,6 @@
 ﻿(function (angular, module, undefined) {
     "use strict";
-    module.service("userRouteService", ["uriTemplateService",
+    module.service("baasicUserRouteService", ["baasicUriTemplateService",
         function (uriTemplateService) {
             return {
                 find: uriTemplateService.parse("user/{?searchQuery,page,rpp,sort,embed,fields}"),

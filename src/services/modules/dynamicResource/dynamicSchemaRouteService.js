@@ -1,6 +1,6 @@
 ﻿(function (angular, module, undefined) {
     "use strict";
-    module.service("dynamicSchemaRouteService", ["uriTemplateService",
+    module.service("baasicDynamicSchemaRouteService", ["baasicUriTemplateService",
         function (uriTemplateService) {
             return {
                 find: uriTemplateService.parse("schema/{?searchQuery,page,rpp,sort,embed,fields}"),

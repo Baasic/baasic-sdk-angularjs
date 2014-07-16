@@ -1,6 +1,6 @@
 ﻿(function (angular, module, undefined) {
     "use strict";
-    module.service("passwordRecoveryService", ["baasicApiHttp",
+    module.service("baasicPasswordRecoveryService", ["baasicApiHttp",
         function (baasicApiHttp) {
             var url = "RecoverPassword";
 

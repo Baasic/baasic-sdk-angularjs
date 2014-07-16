@@ -1,6 +1,6 @@
 ﻿(function (angular, module, undefined) {
     "use strict";
-    module.service("dynamicResourceService", ["baasicApiHttp", "baasicApiService", "baasicConstants", "dynamicResourceRouteService",
+    module.service("baasicDynamicResourceService", ["baasicApiHttp", "baasicApiService", "baasicConstants", "baasicDynamicResourceRouteService",
         function (baasicApiHttp, baasicApiService, baasicConstants, dynamicResourceRouteService) {
             return {
                 find: function (data) {

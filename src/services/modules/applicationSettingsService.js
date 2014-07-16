@@ -1,6 +1,6 @@
 ﻿(function (angular, module, undefined) {
     "use strict";
-    module.service("applicationSettingsService", ["baasicApiHttp", "baasicApiService", "baasicConstants", "applicationSettingsRouteService",
+    module.service("baasicApplicationSettingsService", ["baasicApiHttp", "baasicApiService", "baasicConstants", "baasicApplicationSettingsRouteService",
         function (baasicApiHttp, baasicApiService, baasicConstants, applicationSettingsRouteService) {
             return {
                 get: function (data) {

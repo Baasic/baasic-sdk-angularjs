@@ -1,6 +1,6 @@
 ﻿(function (angular, module, undefined) {
     "use strict";
-    module.service("uriTemplateService", [function () {
+    module.service("baasicUriTemplateService", [function () {
         return {
             parse: function (link) {
                 return UriTemplate.parse(link);

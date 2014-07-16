@@ -1,6 +1,6 @@
 ﻿(function (angular, module, undefined) {
     "use strict";
-    module.service("loginService", ["baasicApiHttp", "loginRouteService",
+    module.service("baasicLoginService", ["baasicApiHttp", "baasicLoginRouteService",
         function (baasicApiHttp, loginRouteService) {
             return {
                 login: function (username, password) {

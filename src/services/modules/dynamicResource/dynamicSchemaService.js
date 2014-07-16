@@ -1,6 +1,6 @@
 ﻿(function (angular, module, undefined) {
     "use strict";
-    module.service("dynamicSchemaService", ["baasicApiHttp", "baasicApiService", "baasicConstants", "dynamicSchemaRouteService",
+    module.service("baasicDynamicSchemaService", ["baasicApiHttp", "baasicApiService", "baasicConstants", "baasicDynamicSchemaRouteService",
         function (baasicApiHttp, baasicApiService, baasicConstants, dynamicSchemaRouteService) {
             return {
                 find: function (data) {

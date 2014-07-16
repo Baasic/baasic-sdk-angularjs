@@ -1,6 +1,6 @@
 ﻿(function (angular, module, undefined) {
     "use strict";
-    module.service("keyValueRouteService", ["uriTemplateService",
+    module.service("baasicKeyValueRouteService", ["baasicUriTemplateService",
         function (uriTemplateService) {
             return {
                 find: uriTemplateService.parse("keyvalue/{?searchQuery,page,rpp,sort,embed,fields}"),

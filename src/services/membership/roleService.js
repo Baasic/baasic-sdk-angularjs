@@ -1,6 +1,6 @@
 ﻿(function (angular, module, undefined) {
     "use strict";
-    module.service("roleService", ["baasicApiHttp", "baasicApiService", "baasicConstants", "roleRouteService",
+    module.service("baasicRoleService", ["baasicApiHttp", "baasicApiService", "baasicConstants", "baasicRoleRouteService",
         function (baasicApiHttp, baasicApiService, baasicConstants, roleRouteService) {
             return {
                 find: function (data) {

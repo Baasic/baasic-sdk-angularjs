@@ -105,7 +105,7 @@
 
     (function (angular, module, undefined) {
         "use strict";
-        module.directive("recaptcha", ["recaptchaService", function recaptcha(recaptchaService) {
+        module.directive("baasicRecaptcha", ["baasicRecaptchaService", function (recaptchaService) {
             return {
                 restrict: 'A',
                 link: function (scope, elem, attrs) {
@@ -310,7 +310,7 @@
 
     (function (angular, module, undefined) {
         "use strict";
-        module.service("roleRouteService", ["uriTemplateService", function (uriTemplateService) {
+        module.service("baasicRoleRouteService", ["baasicUriTemplateService", function (uriTemplateService) {
             return {
                 find: uriTemplateService.parse("role/{?searchQuery,page,rpp,sort,embed,fields}"),
                 get: uriTemplateService.parse("role/{roleId}/{?embed,fields}"),
@@ -321,7 +321,7 @@
     }(angular, module));
     (function (angular, module, undefined) {
         "use strict";
-        module.service("roleService", ["baasicApiHttp", "baasicApiService", "baasicConstants", "roleRouteService", function (baasicApiHttp, baasicApiService, baasicConstants, roleRouteService) {
+        module.service("baasicRoleService", ["baasicApiHttp", "baasicApiService", "baasicConstants", "baasicRoleRouteService", function (baasicApiHttp, baasicApiService, baasicConstants, roleRouteService) {
             return {
                 find: function (data) {
                     return baasicApiHttp.get(roleRouteService.find.expand(baasicApiService.findParams(data)));
@@ -345,7 +345,7 @@
     }(angular, module));
     (function (angular, module, undefined) {
         "use strict";
-        module.service("userRouteService", ["uriTemplateService", function (uriTemplateService) {
+        module.service("baasicUserRouteService", ["baasicUriTemplateService", function (uriTemplateService) {
             return {
                 find: uriTemplateService.parse("user/{?searchQuery,page,rpp,sort,embed,fields}"),
                 get: uriTemplateService.parse("user/{username}/{?embed,fields}"),
@@ -357,7 +357,7 @@
     }(angular, module));
     (function (angular, module, undefined) {
         "use strict";
-        module.service("userService", ["baasicApiHttp", "baasicApiService", "baasicConstants", "userRouteService", function (baasicApiHttp, baasicApiService, baasicConstants, userRouteService) {
+        module.service("baasicUserService", ["baasicApiHttp", "baasicApiService", "baasicConstants", "baasicUserRouteService", function (baasicApiHttp, baasicApiService, baasicConstants, userRouteService) {
             return {
                 find: function (data) {
                     return baasicApiHttp.get(userRouteService.find.expand(baasicApiService.findParams(data)));
@@ -401,7 +401,7 @@
     }(angular, module));
     (function (angular, module, undefined) {
         "use strict";
-        module.service("applicationSettingsRouteService", ["uriTemplateService", function (uriTemplateService) {
+        module.service("baasicApplicationSettingsRouteService", ["baasicUriTemplateService", function (uriTemplateService) {
             return {
                 get: uriTemplateService.parse("application/{key}/{?embed,fields}"),
                 update: uriTemplateService.parse("application/{key}/"),
@@ -411,7 +411,7 @@
     }(angular, module));
     (function (angular, module, undefined) {
         "use strict";
-        module.service("applicationSettingsService", ["baasicApiHttp", "baasicApiService", "baasicConstants", "applicationSettingsRouteService", function (baasicApiHttp, baasicApiService, baasicConstants, applicationSettingsRouteService) {
+        module.service("baasicApplicationSettingsService", ["baasicApiHttp", "baasicApiService", "baasicConstants", "baasicApplicationSettingsRouteService", function (baasicApiHttp, baasicApiService, baasicConstants, applicationSettingsRouteService) {
             return {
                 get: function (data) {
                     return baasicApiHttp.get(applicationSettingsRouteService.get.expand(baasicApiService.getParams(data))).success(function (appSettings) {
@@ -427,7 +427,7 @@
     }(angular, module));
     (function (angular, module, undefined) {
         "use strict";
-        module.service("dynamicResourceRouteService", ["uriTemplateService", function (uriTemplateService) {
+        module.service("baasicDynamicResourceRouteService", ["baasicUriTemplateService", function (uriTemplateService) {
             return {
                 find: uriTemplateService.parse("resource/{resourceName}/{?searchQuery,page,rpp,sort,embed,fields}"),
                 get: uriTemplateService.parse("resource/{resourceName}/{id}/{?embed,fields}"),
@@ -438,7 +438,7 @@
     }(angular, module));
     (function (angular, module, undefined) {
         "use strict";
-        module.service("dynamicResourceService", ["baasicApiHttp", "baasicApiService", "baasicConstants", "dynamicResourceRouteService", function (baasicApiHttp, baasicApiService, baasicConstants, dynamicResourceRouteService) {
+        module.service("baasicDynamicResourceService", ["baasicApiHttp", "baasicApiService", "baasicConstants", "baasicDynamicResourceRouteService", function (baasicApiHttp, baasicApiService, baasicConstants, dynamicResourceRouteService) {
             return {
                 find: function (data) {
                     return baasicApiHttp.get(dynamicResourceRouteService.find.expand(baasicApiService.findParams(data)));
@@ -464,7 +464,7 @@
     }(angular, module));
     (function (angular, module, undefined) {
         "use strict";
-        module.service("dynamicSchemaRouteService", ["uriTemplateService", function (uriTemplateService) {
+        module.service("baasicDynamicSchemaRouteService", ["baasicUriTemplateService", function (uriTemplateService) {
             return {
                 find: uriTemplateService.parse("schema/{?searchQuery,page,rpp,sort,embed,fields}"),
                 get: uriTemplateService.parse("schema/{resourceName}/{?embed,fields}"),
@@ -476,7 +476,7 @@
     }(angular, module));
     (function (angular, module, undefined) {
         "use strict";
-        module.service("dynamicSchemaService", ["baasicApiHttp", "baasicApiService", "baasicConstants", "dynamicSchemaRouteService", function (baasicApiHttp, baasicApiService, baasicConstants, dynamicSchemaRouteService) {
+        module.service("baasicDynamicSchemaService", ["baasicApiHttp", "baasicApiService", "baasicConstants", "baasicDynamicSchemaRouteService", function (baasicApiHttp, baasicApiService, baasicConstants, dynamicSchemaRouteService) {
             return {
                 find: function (data) {
                     return baasicApiHttp.get(dynamicSchemaRouteService.find.expand(baasicApiService.findParams(data)));
@@ -503,7 +503,7 @@
     }(angular, module));
     (function (angular, module, undefined) {
         "use strict";
-        module.service("keyValueRouteService", ["uriTemplateService", function (uriTemplateService) {
+        module.service("baasicKeyValueRouteService", ["baasicUriTemplateService", function (uriTemplateService) {
             return {
                 find: uriTemplateService.parse("keyvalue/{?searchQuery,page,rpp,sort,embed,fields}"),
                 get: uriTemplateService.parse("keyvalue/{key}/{?embed,fields}"),
@@ -514,7 +514,7 @@
     }(angular, module));
     (function (angular, module, undefined) {
         "use strict";
-        module.service("keyValueService", ["baasicApiHttp", "baasicApiService", "baasicConstants", "keyValueRouteService", function (baasicApiHttp, baasicApiService, baasicConstants, keyValueRouteService) {
+        module.service("baasicKeyValueService", ["baasicApiHttp", "baasicApiService", "baasicConstants", "baasicKeyValueRouteService", function (baasicApiHttp, baasicApiService, baasicConstants, keyValueRouteService) {
             return {
                 find: function (data) {
                     return baasicApiHttp.get(keyValueRouteService.find.expand(baasicApiService.findParams(data)));
@@ -538,7 +538,7 @@
     }(angular, module));
     (function (angular, module, undefined) {
         "use strict";
-        module.service("valueSetItemRouteService", ["uriTemplateService", function (uriTemplateService) {
+        module.service("baasicValueSetItemRouteService", ["baasicUriTemplateService", function (uriTemplateService) {
             return {
                 find: uriTemplateService.parse("valuesetitems/set/{setName}/{?searchQuery,page,rpp,sort,embed,fields}"),
                 get: uriTemplateService.parse("valuesetitems/set/{setName}/item/{itemKey}/{?embed,fields}"),
@@ -549,7 +549,7 @@
     }(angular, module));
     (function (angular, module, undefined) {
         "use strict";
-        module.service("valueSetItemService", ["baasicApiHttp", "baasicApiService", "baasicConstants", "valueSetItemRouteService", function (baasicApiHttp, baasicApiService, baasicConstants, valueSetItemRouteService) {
+        module.service("baasicValueSetItemService", ["baasicApiHttp", "baasicApiService", "baasicConstants", "baasicValueSetItemRouteService", function (baasicApiHttp, baasicApiService, baasicConstants, valueSetItemRouteService) {
             return {
                 find: function (data) {
                     return baasicApiHttp.get(valueSetItemRouteService.find.expand(baasicApiService.findParams(data)));
@@ -573,7 +573,7 @@
     }(angular, module));
     (function (angular, module, undefined) {
         "use strict";
-        module.service("valueSetRouteService", ["uriTemplateService", function (uriTemplateService) {
+        module.service("baasicValueSetRouteService", ["baasicUriTemplateService", function (uriTemplateService) {
             return {
                 find: uriTemplateService.parse("valueset/{?searchQuery,page,rpp,sort,embed,fields}"),
                 get: uriTemplateService.parse("valueset/{setName}/{?embed,fields}"),
@@ -584,7 +584,7 @@
     }(angular, module));
     (function (angular, module, undefined) {
         "use strict";
-        module.service("valueSetService", ["baasicApiHttp", "baasicApiService", "baasicConstants", "valueSetRouteService", function (baasicApiHttp, baasicApiService, baasicConstants, valueSetRouteService) {
+        module.service("baasicValueSetService", ["baasicApiHttp", "baasicApiService", "baasicConstants", "baasicValueSetRouteService", function (baasicApiHttp, baasicApiService, baasicConstants, valueSetRouteService) {
             return {
                 find: function (data) {
                     return baasicApiHttp.get(valueSetRouteService.find.expand(baasicApiService.findParams(data)));
@@ -609,7 +609,7 @@
     (function (angular, module, undefined) {
         "use strict";
         var permissionHash = {};
-        module.service("authorizationService", ["$rootScope", "baasicApp", function ($rootScope, baasicApp) {
+        module.service("baasicAuthorizationService", ["$rootScope", "baasicApp", function ($rootScope, baasicApp) {
             var app = baasicApp.get();
             var apiKey = app.get_apiKey();
             permissionHash[apiKey] = {};
@@ -693,7 +693,7 @@
     }(angular, module));
     (function (angular, module, undefined) {
         "use strict";
-        module.service("loginRouteService", ["uriTemplateService", function (uriTemplateService) {
+        module.service("baasicLoginRouteService", ["baasicUriTemplateService", function (uriTemplateService) {
             return {
                 login: uriTemplateService.parse("/login/{?embed,fields}"),
                 parse: uriTemplateService.parse
@@ -702,7 +702,7 @@
     }(angular, module));
     (function (angular, module, undefined) {
         "use strict";
-        module.service("loginService", ["baasicApiHttp", "loginRouteService", function (baasicApiHttp, loginRouteService) {
+        module.service("baasicLoginService", ["baasicApiHttp", "baasicLoginRouteService", function (baasicApiHttp, loginRouteService) {
             return {
                 login: function (username, password) {
                     var data = 'grant_type=password&username=' + username + '&password=' + password;
@@ -738,7 +738,7 @@
     }(angular, module));
     (function (angular, module, undefined) {
         "use strict";
-        module.service("passwordRecoveryService", ["baasicApiHttp", function (baasicApiHttp) {
+        module.service("baasicPasswordRecoveryService", ["baasicApiHttp", function (baasicApiHttp) {
             var url = "RecoverPassword";
 
             return {
@@ -761,7 +761,7 @@
     }(angular, module));
     (function (angular, module, undefined) {
         "use strict";
-        module.service("recaptchaService", ["recaptchaKey", function (recaptchaKey) {
+        module.service("baasicRecaptchaService", ["recaptchaKey", function (recaptchaKey) {
             return {
                 create: function (elem, options) {
                     var id = elem.attr("id");
@@ -788,7 +788,7 @@
     }(angular, module));
     (function (angular, module, undefined) {
         "use strict";
-        module.service("uriTemplateService", [function () {
+        module.service("baasicUriTemplateService", [function () {
             return {
                 parse: function (link) {
                     return UriTemplate.parse(link);

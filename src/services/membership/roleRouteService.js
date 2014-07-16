@@ -1,6 +1,6 @@
 ﻿(function (angular, module, undefined) {
     "use strict";
-    module.service("roleRouteService", ["uriTemplateService",
+    module.service("baasicRoleRouteService", ["baasicUriTemplateService",
         function (uriTemplateService) {
             return {
                 find: uriTemplateService.parse("role/{?searchQuery,page,rpp,sort,embed,fields}"),
