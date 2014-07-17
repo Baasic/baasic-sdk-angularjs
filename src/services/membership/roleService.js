@@ -3,6 +3,7 @@
     module.service("baasicRoleService", ["baasicApiHttp", "baasicApiService", "baasicConstants", "baasicRoleRouteService",
         function (baasicApiHttp, baasicApiService, baasicConstants, roleRouteService) {
             return {
+				routeService: roleRouteService,
                 find: function (data) {
                     return baasicApiHttp.get(roleRouteService.find.expand(baasicApiService.findParams(data)));
                 },

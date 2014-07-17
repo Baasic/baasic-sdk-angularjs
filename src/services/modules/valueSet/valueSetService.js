@@ -3,6 +3,7 @@
     module.service("baasicValueSetService", ["baasicApiHttp", "baasicApiService", "baasicConstants", "baasicValueSetRouteService",
         function (baasicApiHttp, baasicApiService, baasicConstants, valueSetRouteService) {
             return {
+				routeService: valueSetRouteService,
                 find: function (data) {
                     return baasicApiHttp.get(valueSetRouteService.find.expand(baasicApiService.findParams(data)));
                 },

@@ -3,6 +3,7 @@
     module.service("baasicDynamicSchemaService", ["baasicApiHttp", "baasicApiService", "baasicConstants", "baasicDynamicSchemaRouteService",
         function (baasicApiHttp, baasicApiService, baasicConstants, dynamicSchemaRouteService) {
             return {
+				routeService: dynamicSchemaRouteService,
                 find: function (data) {
                     return baasicApiHttp.get(dynamicSchemaRouteService.find.expand(baasicApiService.findParams(data)));
                 },

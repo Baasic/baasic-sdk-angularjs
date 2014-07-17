@@ -3,6 +3,7 @@
     module.service("baasicDynamicResourceService", ["baasicApiHttp", "baasicApiService", "baasicConstants", "baasicDynamicResourceRouteService",
         function (baasicApiHttp, baasicApiService, baasicConstants, dynamicResourceRouteService) {
             return {
+				routeService: dynamicResourceRouteService,
                 find: function (data) {
                     return baasicApiHttp.get(dynamicResourceRouteService.find.expand(baasicApiService.findParams(data)));
                 },

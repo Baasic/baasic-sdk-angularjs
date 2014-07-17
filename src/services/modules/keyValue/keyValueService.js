@@ -3,6 +3,7 @@
     module.service("baasicKeyValueService", ["baasicApiHttp", "baasicApiService", "baasicConstants", "baasicKeyValueRouteService",
         function (baasicApiHttp, baasicApiService, baasicConstants, keyValueRouteService) {
             return {
+				routeService: keyValueRouteService,
                 find: function (data) {
                     return baasicApiHttp.get(keyValueRouteService.find.expand(baasicApiService.findParams(data)));
                 },

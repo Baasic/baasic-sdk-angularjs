@@ -3,6 +3,7 @@
     module.service("baasicLoginService", ["baasicApiHttp", "baasicLoginRouteService",
         function (baasicApiHttp, loginRouteService) {
             return {
+				routeService: loginRouteService,
                 login: function (username, password) {
                     var data = 'grant_type=password&username=' + username + '&password=' + password;
 
@@ -16,6 +17,7 @@
                     });
                 },
                 loadUserData: function loadUserData(data) {
+					data = data || {};
                     return baasicApiHttp.get(loginRouteService.login.expand(data), { headers: { "Accept": "application/json; charset=UTF-8" } });
                 },
                 logout: function (token, type) {

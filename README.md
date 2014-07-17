@@ -108,7 +108,7 @@ To get better understanding of Baasic AngularJS services here are the details ab
 
 * Module Services
 	* Baasic module services are built on top of the AngularJS services 
-	* module services depend upon the route services as they are used for REST service URL discovery
+	* module services depend upon the route services as they are used for REST service URL discovery (Note: every service exposes route service with the _routeService_ property)
 	* every service has the _find_, _get_, _create_, _update_ and _remove_ functions used to communicate with the Baasic back-end
 	* all services accept the data object as function parameter 
 * Options - Params

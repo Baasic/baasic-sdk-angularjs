@@ -3,6 +3,7 @@
     module.service("baasicUserService", ["baasicApiHttp", "baasicApiService", "baasicConstants", "baasicUserRouteService",
         function (baasicApiHttp, baasicApiService, baasicConstants, userRouteService) {
             return {
+				routeService: userRouteService,
                 find: function (data) {
                     return baasicApiHttp.get(userRouteService.find.expand(baasicApiService.findParams(data)));
                 },
