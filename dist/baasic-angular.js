@@ -310,6 +310,53 @@
 
     (function (angular, module, undefined) {
         "use strict";
+        module.service("baasicLookupRouteService", ["baasicUriTemplateService", function (uriTemplateService) {
+            return {
+                get: uriTemplateService.parse("lookup/{?embed,fields}")
+            };
+        }]);
+    }(angular, module));
+    (function (angular, module, undefined) {
+        "use strict";
+        module.service("baasicLookupService", ["baasicApiHttp", "baasicApiService", "baasicLookupRouteService", function (baasicApiHttp, baasicApiService, lookupRouteService) {
+            var lookupKey = "baasic-lookup-data";
+            return {
+                routeService: lookupRouteService,
+                get: function (data) {
+                    var deferred = baasicApiHttp.createHttpDefer();
+                    var result = JSON.parse(localStorage.getItem(lookupKey));
+                    if (result === undefined || result === null) {
+                        baasicApiHttp.get(lookupRouteService.get.expand(baasicApiService.getParams(data))).success(function (data, status, headers, config) {
+                            localStorage.setItem(lookupKey, JSON.stringify(data));
+                            deferred.resolve({
+                                data: data,
+                                status: status,
+                                headers: headers,
+                                config: config
+                            });
+                        }).error(function (data, status, headers, config) {
+                            deferred.reject({
+                                data: data,
+                                status: status,
+                                headers: headers,
+                                config: config
+                            });
+                        });
+                    } else {
+                        deferred.resolve({
+                            data: result
+                        });
+                    }
+                    return deferred.promise;
+                },
+                reset: function () {
+                    localStorage.setItem(lookupKey, null);
+                }
+            };
+        }]);
+    }(angular, module));
+    (function (angular, module, undefined) {
+        "use strict";
         module.service("baasicRoleRouteService", ["baasicUriTemplateService", function (uriTemplateService) {
             return {
                 find: uriTemplateService.parse("role/{?searchQuery,page,rpp,sort,embed,fields}"),
@@ -640,7 +687,7 @@
                         $rootScope.user = user;
                     } else {
                         app.set_user(null);
-                        permissionHash[apiKey] = {};
+                        this.resetPermissions();
                         $rootScope.user = {
                             isAuthenticated: false
                         };
@@ -658,6 +705,9 @@
                 },
                 getAccessToken: function getAccessToken() {
                     return app.get_accessToken();
+                },
+                resetPermissions: function () {
+                    permissionHash[apiKey] = {};
                 },
                 hasPermission: function (authorization) {
                     if (permissionHash[apiKey].hasOwnProperty(authorization)) {

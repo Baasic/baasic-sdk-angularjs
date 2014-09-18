@@ -26,7 +26,7 @@
                         $rootScope.user = user;
                     } else {
                         app.set_user(null);
-                        permissionHash[apiKey] = {};
+                        this.resetPermissions();
                         $rootScope.user = {
                             isAuthenticated: false
                         };
@@ -44,6 +44,9 @@
                 },
                 getAccessToken: function getAccessToken() {
                     return app.get_accessToken();
+                },
+				resetPermissions: function () {
+                    permissionHash[apiKey] = {};
                 },
                 hasPermission: function (authorization) {
                     if (permissionHash[apiKey].hasOwnProperty(authorization)) {
