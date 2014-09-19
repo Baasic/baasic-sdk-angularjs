@@ -3,9 +3,23 @@
     module.service("baasicApiService", ["baasicConstants",
         function (baasicConstants) {
             function FindParams(data) {
-				angular.extend(this, data);		
-                this.sort = data.orderBy ? data.orderBy + '|' + data.orderDirection : null;
-                this.searchQuery = data.search;
+				if (angular.isObject(data)) {
+                    angular.extend(this, data);					
+					if (data.hasOwnProperty('orderBy') && data.hasOwnProperty('orderDirection')) {
+						this.sort = data.orderBy ? data.orderBy + '|' + data.orderDirection : null;
+					}
+					if (data.hasOwnProperty('search')) {
+						this.searchQuery = data.search;
+					}
+					if (data.hasOwnProperty('pageNumber')) {
+						this.page = data.pageNumber;
+					}
+					if (data.hasOwnProperty('pageSize')) {
+						this.rpp = data.pageSize;
+					}
+                } else {
+					this.searchQuery = data;
+				}
             }
 
             function KeyParams(data, propName) {
