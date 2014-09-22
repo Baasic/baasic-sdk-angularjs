@@ -12,11 +12,18 @@
                         data: request
                     });
                 },
-                change: function (change) {
+                reset: function (reset) {
                     return baasicApiHttp({
                         url: passwordRecoveryRouteService.passwordRecovery.expand({}),
                         method: "PUT",
-                        data: change
+                        data: reset
+                    });
+                },
+				change: function (username, data) {
+                    return baasicApiHttp({
+                        url: passwordRecoveryRouteService.changePassword.expand({ username: username }),
+                        method: "PUT",
+                        data: data
                     });
                 }
             };
