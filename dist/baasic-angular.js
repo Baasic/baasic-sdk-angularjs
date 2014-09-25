@@ -767,7 +767,7 @@
         "use strict";
         module.service("baasicLoginRouteService", ["baasicUriTemplateService", function (uriTemplateService) {
             return {
-                login: uriTemplateService.parse("/login/{?embed,fields}"),
+                login: uriTemplateService.parse("/login/{?embed,fields,options}"),
                 parse: uriTemplateService.parse
             };
         }]);
@@ -777,13 +777,13 @@
         module.service("baasicLoginService", ["baasicApiHttp", "baasicLoginRouteService", function (baasicApiHttp, loginRouteService) {
             return {
                 routeService: loginRouteService,
-                login: function (username, password) {
-                    var data = 'grant_type=password&username=' + username + '&password=' + password;
+                login: function (data) {
+                    var formData = 'grant_type=password&username=' + data.username + '&password=' + data.password;
 
                     return baasicApiHttp({
-                        url: loginRouteService.login.expand({}) + "?withSession=true",
+                        url: loginRouteService.login.expand(data),
                         method: "POST",
-                        data: data,
+                        data: formData,
                         headers: {
                             "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8"
                         }

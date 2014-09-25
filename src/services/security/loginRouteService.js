@@ -3,7 +3,7 @@
     module.service("baasicLoginRouteService", ["baasicUriTemplateService",
         function (uriTemplateService) {
             return {
-                login: uriTemplateService.parse("/login/{?embed,fields}"),
+                login: uriTemplateService.parse("/login/{?embed,fields,options}"),
 				parse: uriTemplateService.parse
             };
         }]);
