@@ -1,5 +1,5 @@
 ﻿(function (angular, module, undefined) {
-	module.service("baasicApiHttp", ["$http", "HALParser", "baasicApp", function baasicApiHttp($http, HALParser, baasicApp) {
+	module.service("baasicApiHttp", ["$rootScope", "$http", "HALParser", "baasicApp", function baasicApiHttp($rootScope, $http, HALParser, baasicApp) {
 			var parser = new HALParser();
 			
 			var proxy = proxyFactory($http, parser, baasicApp.get());
@@ -42,12 +42,62 @@
 			var promise = $http(config);
 
 			promise = extend(promise.then(function (response) {
+				
+				
 				if (response.headers) {
 					var contentType = response.headers("Content-Type");
 					if (contentType && contentType.toLowerCase().indexOf("application/hal+json") != -1) {
 						response.data = parser.parse(response.data);
 					}
+					
+					var wwwAuthenticate = response.headers("WWW-Authenticate");
+					if (wwwAuthenticate) {
+						var scheme,
+							details,
+							splitIndex = wwwAuthenticate.indexOf(" ");
+						
+						if (splitIndex == -1) {
+							scheme = wwwAuthenticate;
+						} else {
+							scheme = wwwAuthenticate.substring(0, splitIndex);
+							details = {};
+							var detailItems = www.Authenticate.substring(splitIndex + 1).split(";");
+							for (var i=0, l=detailItems.length;i<l;i++) {
+								var item = detailItems[i];
+								
+								var itemSegments = item.split("=");
+								if (itemSegments.length > 1) {
+									details[itemSegments[0]] = itemSegments[1];
+								}
+							}
+						}
+						
+						if (scheme.toLowerCase() === "bearer") {
+							if (details) {
+								if (details.error) {
+									switch (details.error) {
+										case "invalid_token":
+											var token = app.get_accessToken();
+											app.update_accessToken(null);
+											$rootScope.$broadcast("token_error", {
+												token: token,
+												error: details.error,
+												error_description: details.error_description
+											});
+											break;
+									}
+								}
+							}
+						}
+					}
 				}
+				
+				var token = app.get_accessToken();
+				if (token && token.sliding_window) {
+					token.expireTime = new Date().getTime() + (token.sliding_window * 1000);
+					app.update_accessToken(token);
+				}
+				
 			}), promise);
 
 			return promise;
