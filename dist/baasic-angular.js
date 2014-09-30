@@ -165,7 +165,7 @@
             });
         }
 
-        var proxyFactory = function proxyFactory($http, parser, app) {
+        var proxyFactory = function proxyFactory($rootScope, $http, parser, app) {
             var apiUrl = app.get_apiUrl();
 
             var proxyMethod = function (config) {
@@ -208,15 +208,49 @@
                             } else {
                                 scheme = wwwAuthenticate.substring(0, splitIndex);
                                 details = {};
-                                var detailItems = wwwAuthenticate.substring(splitIndex + 1).split(";");
-                                for (var i = 0, l = detailItems.length; i < l; i++) {
-                                    var item = detailItems[i];
+                                var detailsText = wwwAuthenticate.substring(splitIndex + 1),
+                                    currentPosition = 0;
 
-                                    var itemSegments = item.split("=");
-                                    if (itemSegments.length > 1) {
-                                        details[itemSegments[0]] = itemSegments[1];
+                                do {
+                                    var setIndex = detailsText.indexOf("=", currentPosition);
+                                    if (setIndex !== -1) {
+                                        var key = detailsText.substring(currentPosition, setIndex);
+                                        currentPosition = setIndex + 1;
+                                        var firstChar = detailsText.charAt(currentPosition);
+                                        var valueEndIndex;
+                                        if (firstChar === '"') {
+                                            currentPosition += 1;
+                                            valueEndIndex = detailsText.indexOf('"', currentPosition);
+                                        } else if (firstChar === "'") {
+                                            currentPosition += 1;
+                                            valueEndIndex = detailsText.indexOf("'", currentPosition);
+                                        } else {
+                                            valueEndIndex = detailsText.indexOf(",", currentPosition)
+                                        }
+
+                                        var value;
+                                        if (valueEndIndex === -1) {
+                                            value = detailsText.substring(currentPosition);
+                                        } else {
+                                            value = detailsText.substring(currentPosition, valueEndIndex);
+                                        }
+
+                                        details[key] = value;
+
+                                        if (valueEndIndex === -1) {
+                                            break;
+                                        } else {
+                                            currentPosition = detailsText.indexOf(",", valueEndIndex);
+                                            if (currentPosition !== -1) {
+                                                if (currentPosition === detailsText.length - 1) {
+                                                    break;
+                                                } else {
+                                                    currentPosition += 1;
+                                                }
+                                            }
+                                        }
                                     }
-                                }
+                                } while (currentPosition !== -1);
                             }
 
                             if (scheme.toLowerCase() === "bearer") {
@@ -259,10 +293,10 @@
         module.service("baasicApiHttp", ["$rootScope", "$http", "HALParser", "baasicApp", function baasicApiHttp($rootScope, $http, HALParser, baasicApp) {
             var parser = new HALParser();
 
-            var proxy = proxyFactory($http, parser, baasicApp.get());
+            var proxy = proxyFactory($rootScope, $http, parser, baasicApp.get());
 
             proxy.createNew = function (app) {
-                return proxyFactory($http, parser, app);
+                return proxyFactory($rootScope, $http, parser, app);
             };
 
             return proxy;
@@ -805,11 +839,19 @@
         module.service("baasicLoginService", ["baasicApiHttp", "baasicLoginRouteService", function (baasicApiHttp, loginRouteService) {
             return {
                 routeService: loginRouteService,
-                login: function (data) {
-                    var formData = 'grant_type=password&username=' + data.username + '&password=' + data.password;
+                login: function login(data) {
+                    var settings = angular.copy(data);
+                    var formData = 'grant_type=password&username=' + settings.username + '&password=' + settings.password;
+
+                    if (settings.options) {
+                        var options = settings.options;
+                        if (angular.isArray(options)) {
+                            settings.options = options.join();
+                        }
+                    }
 
                     return baasicApiHttp({
-                        url: loginRouteService.login.expand(data),
+                        url: loginRouteService.login.expand(settings),
                         method: "POST",
                         data: formData,
                         headers: {
@@ -825,7 +867,7 @@
                         }
                     });
                 },
-                logout: function (token, type) {
+                logout: function logout(token, type) {
                     return baasicApiHttp({
                         url: loginRouteService.login.expand({}),
                         method: "DELETE",

@@ -4,11 +4,19 @@
         function (baasicApiHttp, loginRouteService) {
             return {
 				routeService: loginRouteService,
-                login: function (data) {
-                    var formData = 'grant_type=password&username=' + data.username + '&password=' + data.password;
+				login: function login(data) {
+				    var settings = angular.copy(data);
+				    var formData = 'grant_type=password&username=' + settings.username + '&password=' + settings.password;
+
+				    if (settings.options) {
+				        var options = settings.options;
+				        if (angular.isArray(options)) {
+				            settings.options = options.join();
+				        }
+				    }
 
                     return baasicApiHttp({
-                        url: loginRouteService.login.expand(data),
+                        url: loginRouteService.login.expand(settings),
                         method: "POST",
                         data: formData,
                         headers: {
@@ -20,7 +28,7 @@
 					data = data || {};
                     return baasicApiHttp.get(loginRouteService.login.expand(data), { headers: { "Accept": "application/json; charset=UTF-8" } });
                 },
-                logout: function (token, type) {
+                logout: function logout(token, type) {
                     return baasicApiHttp({
                         url: loginRouteService.login.expand({}),
                         method: "DELETE",
