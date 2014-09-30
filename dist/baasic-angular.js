@@ -1,109 +1,112 @@
-(function (angular, undefined) {
+(function (angular, undefined) {﻿
     var module = angular.module("baasic.baasicApi", ["HALParser"]);
 
-    module.config(["$provide", function config($provide) {
-        function browserSupportCredentialsWithCookies() {
-            return ('withCredentials' in new XMLHttpRequest()) && !(window.ActiveXObject || "ActiveXObject" in window);
-        }
+    ﻿module.config(["$provide", function config($provide) {
+        // copied from http://stackoverflow.com/questions/3561493/is-there-a-regexp-escape-function-in-javascript
 
-        if (!browserSupportCredentialsWithCookies()) {
+        function regExpEscape(s) {
+            return s.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+        };
+
+        if (!('withCredentials' in new XMLHttpRequest()) || (window.ActiveXObject || "ActiveXObject" in window)) {
+
             $provide.decorator("$httpBackend", ["$delegate", "$q", "$rootScope", "$window", "$document", "baasicApp", function initBaasicProxy($delegate, $q, $rootScope, $window, $document, baasicApp) {
                 var apps = baasicApp.all();
-                //TODO: Fix the apiUrl issue in case of multi-application environment
-                var apiUrl = apps[0].get_apiUrl();
-
-                var apiUrlRegexPattern = "";
-                for (var i = 0; i < apps.length; i++) {
-                    apiUrlRegexPattern += "|" + regExpEscape(apps[i].get_apiUrl());
-                }
-
-                var apiUrlRegex = new RegExp("^" + apiUrlRegexPattern.substring(1));
-
-                var proxyFrame = [];
+                var proxies = [];
                 var requestHash = {};
                 var nextRequestId = 0;
-                var sendMessage = sendMessageToQueue;
 
-                var injectFrame = angular.element('<iframe src="' + apiUrl + 'proxy/angular" style="display:none"></iframe>');
-                injectFrame.bind("load", function () {
-                    var queue = proxyFrame;
-
-                    proxyFrame = this;
-                    sendMessage = sendMessageToProxy;
-
-                    while (queue.length > 0) {
-                        sendMessage(queue.shift());
-                    }
-                });
-                $document.find("body").append(injectFrame);
-
-                angular.element($window).bind("message", function readMessageFromProxy(e) {
-                    var event = e.originalEvent || e;
-                    if (event.source == proxyFrame.contentWindow) {
-                        var response = JSON.parse(event.data);
-                        var request = requestHash[response.requestId];
-                        if (request) {
-                            delete requestHash[response.requestId];
-
-                            request.callback(response.status, response.response, response.headersString);
-                        }
-                    }
-                });
-
-                return function (method, url, post, callback, headers, timeout, withCredentials, responseType) {
-                    if (apiUrlRegex.test(url)) {
-
-                        sendNewMessage({
-                            method: method,
-                            url: url,
-                            post: post,
-                            headers: headers,
-                            timeout: timeout,
-                            withCredentials: withCredentials,
-                            responseType: responseType
-                        }, callback);
-
-                    } else {
-                        $delegate(method, url, post, callback, headers, timeout, withCredentials, responseType);
-                    }
-                };
-
-                function sendNewMessage(message, callback) {
+                function sendNewMessage(proxy, message, callback) {
 
                     message.requestId = nextRequestId;
 
                     var request = {
+                        proxy: proxy,
                         callback: callback,
                         message: message
                     };
 
                     requestHash[message.requestId] = request;
 
-                    sendMessage(request);
+                    sendMessage(proxy.proxyFrame, request);
 
                     nextRequestId += 1;
                 }
 
-                function sendMessageToProxy(request) {
+                function sendMessageToProxy(proxyFrame, request) {
                     proxyFrame.contentWindow.postMessage(JSON.stringify(request.message), apiUrl);
                 }
 
-                function sendMessageToQueue(request) {
+                function sendMessageToQueue(proxyFrame, request) {
                     proxyFrame.push[request];
                 }
 
+                for (var i = 0, l = apps.length; i < l; i++) {
+                    var app = apps[i];
 
+                    (function (app) {
+                        var apiUrl = app.get_apiUrl();
+                        var proxy = {
+                            proxyFrame: [],
+                            apiUrlRegex: new RegExp("^" + regExpEscape(apiUrl))
+                        };
+
+                        proxies.push(proxy);
+
+                        var sendMessage = sendMessageToQueue;
+
+                        var injectFrame = angular.element('<iframe src="' + apiUrl + 'proxy/angular" style="display:none"></iframe>');
+                        injectFrame.bind("load", function () {
+                            var queue = proxy.proxyFrame;
+
+                            proxy.proxyFrame = this;
+                            sendMessage = sendMessageToProxy;
+
+                            while (queue.length > 0) {
+                                sendMessage(queue.shift());
+                            }
+                        });
+
+                        $document.find("body").append(injectFrame);
+                    })(app);
+                }
+
+                angular.element($window).bind("message", function readMessageFromProxy(e) {
+                    var event = e.originalEvent || e;
+                    var response = JSON.parse(event.data);
+                    var request = requestHash[response.requestId];
+                    if (request && event.source == request.proxy.proxyFrame.contentWindow) {
+                        delete requestHash[response.requestId];
+                        request.callback(response.status, response.response, response.headersString);
+                    }
+                });
+
+                return function (method, url, post, callback, headers, timeout, withCredentials, responseType) {
+                    for (var i = 0, l = proxies.length; i < l; i++) {
+                        var proxy = proxies[i];
+                        if (proxy.apiUrlRegex.test(url)) {
+
+                            sendNewMessage(proxy, {
+                                method: method,
+                                url: url,
+                                post: post,
+                                headers: headers,
+                                timeout: timeout,
+                                withCredentials: withCredentials,
+                                responseType: responseType
+                            }, callback);
+
+                            return;
+                        }
+                    }
+
+                    $delegate(method, url, post, callback, headers, timeout, withCredentials, responseType);
+                };
             }]);
         }
-
-        // copied from http://stackoverflow.com/questions/3561493/is-there-a-regexp-escape-function-in-javascript
-
-        function regExpEscape(s) {
-            return s.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
-        };
     }]);
 
-    (function (angular, module, undefined) {
+    ﻿ (function (angular, module, undefined) {
         "use strict";
         module.directive("baasicRecaptcha", ["baasicRecaptchaService", function (recaptchaService) {
             return {
@@ -121,21 +124,46 @@
                 }
             };
         }]);
-    }(angular, module));
-    (function (angular, module, undefined) {
-        module.service("baasicApiHttp", ["$http", "HALParser", "baasicApp", function baasicApiHttp($http, HALParser, baasicApp) {
-            var parser = new HALParser();
-
-            var proxy = proxyFactory($http, parser, baasicApp.get());
-
-            proxy.createNew = function (app) {
-                return proxyFactory($http, parser, app);
-            };
-
-            return proxy;
-        }]);
+    }(angular, module));﻿ (function (angular, module, undefined) {
+        "use strict";
 
         var extend = angular.extend;
+
+        function startsWith(target, input) {
+            return target.substring(0, input.length) === input;
+        }
+
+        function isAbsoluteUrl(url) {
+            var lowerUrl = url.toLowerCase();
+            return startsWith(lowerUrl, "http://") || startsWith(lowerUrl, "https://");
+        }
+
+        function tail(array) {
+            return Array.prototype.slice.call(array, 1);
+        }
+
+        function createShortMethods(proxy) {
+            angular.forEach(tail(arguments, 1), function (name) {
+                proxy[name] = function (url, config) {
+                    return proxy(extend(config || {}, {
+                        method: name,
+                        url: url
+                    }));
+                };
+            });
+        }
+
+        function createShortMethodsWithData(proxy) {
+            angular.forEach(tail(arguments, 1), function (name) {
+                proxy[name] = function (url, data, config) {
+                    return proxy(extend(config || {}, {
+                        method: name,
+                        url: url,
+                        data: data
+                    }));
+                };
+            });
+        }
 
         var proxyFactory = function proxyFactory($http, parser, app) {
             var apiUrl = app.get_apiUrl();
@@ -167,10 +195,56 @@
                 promise = extend(promise.then(function (response) {
                     if (response.headers) {
                         var contentType = response.headers("Content-Type");
-                        if (contentType && contentType.toLowerCase().indexOf("application/hal+json") != -1) {
+                        if (contentType && contentType.toLowerCase().indexOf("application/hal+json") !== -1) {
                             response.data = parser.parse(response.data);
                         }
+
+                        var wwwAuthenticate = response.headers("WWW-Authenticate");
+                        if (wwwAuthenticate) {
+                            var scheme, details, splitIndex = wwwAuthenticate.indexOf(" ");
+
+                            if (splitIndex === -1) {
+                                scheme = wwwAuthenticate;
+                            } else {
+                                scheme = wwwAuthenticate.substring(0, splitIndex);
+                                details = {};
+                                var detailItems = wwwAuthenticate.substring(splitIndex + 1).split(";");
+                                for (var i = 0, l = detailItems.length; i < l; i++) {
+                                    var item = detailItems[i];
+
+                                    var itemSegments = item.split("=");
+                                    if (itemSegments.length > 1) {
+                                        details[itemSegments[0]] = itemSegments[1];
+                                    }
+                                }
+                            }
+
+                            if (scheme.toLowerCase() === "bearer") {
+                                if (details) {
+                                    if (details.error) {
+                                        switch (details.error) {
+                                        case "invalid_token":
+                                            var token = app.get_accessToken();
+                                            app.update_accessToken(null);
+                                            $rootScope.$broadcast("token_error", {
+                                                token: token,
+                                                error: details.error,
+                                                error_description: details.error_description
+                                            });
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
+
+                    var token = app.get_accessToken();
+                    if (token && token.sliding_window) {
+                        token.expireTime = new Date().getTime() + (token.sliding_window * 1000);
+                        app.update_accessToken(token);
+                    }
+
                 }), promise);
 
                 return promise;
@@ -182,44 +256,20 @@
             return proxyMethod;
         }
 
-        function createShortMethods(proxy) {
-            angular.forEach(tail(arguments, 1), function (name) {
-                proxy[name] = function (url, config) {
-                    return proxy(extend(config || {}, {
-                        method: name,
-                        url: url
-                    }));
-                };
-            });
-        }
+        module.service("baasicApiHttp", ["$rootScope", "$http", "HALParser", "baasicApp", function baasicApiHttp($rootScope, $http, HALParser, baasicApp) {
+            var parser = new HALParser();
 
-        function createShortMethodsWithData(proxy) {
-            angular.forEach(tail(arguments, 1), function (name) {
-                proxy[name] = function (url, data, config) {
-                    return proxy(extend(config || {}, {
-                        method: name,
-                        url: url,
-                        data: data
-                    }));
-                };
-            });
-        }
+            var proxy = proxyFactory($http, parser, baasicApp.get());
 
-        function isAbsoluteUrl(url) {
-            var lowerUrl = url.toLowerCase();
-            return startsWith(lowerUrl, "http://") || startsWith(lowerUrl, "https://");
-        }
+            proxy.createNew = function (app) {
+                return proxyFactory($http, parser, app);
+            };
 
-        function startsWith(target, input) {
-            return target.substring(0, input.length) === input;
-        }
-
-        function tail(array) {
-            return Array.prototype.slice.call(array, 1);
-        };
+            return proxy;
+        }]);
     })(angular, module);
 
-    (function (angular, module, undefined) {
+    ﻿ (function (angular, module, undefined) {
         "use strict";
         module.service("baasicApiService", ["baasicConstants", function (baasicConstants) {
             function FindParams(data) {
@@ -280,8 +330,7 @@
                 }
             };
         }]);
-    }(angular, module));
-    module.provider("baasicApp", function baasicAppService() {
+    }(angular, module));﻿module.provider("baasicApp", function baasicAppService() {
         var apps = {};
         var defaultApp;
 
@@ -322,15 +371,14 @@
         };
     });
 
-    (function (angular, module, undefined) {
+    ﻿ (function (angular, module, undefined) {
         "use strict";
         module.service("baasicLookupRouteService", ["baasicUriTemplateService", function (uriTemplateService) {
             return {
                 get: uriTemplateService.parse("lookup/{?embed,fields}")
             };
         }]);
-    }(angular, module));
-    (function (angular, module, undefined) {
+    }(angular, module));﻿ (function (angular, module, undefined) {
         "use strict";
         module.service("baasicLookupService", ["baasicApiHttp", "baasicApiService", "baasicLookupRouteService", function (baasicApiHttp, baasicApiService, lookupRouteService) {
             var lookupKey = "baasic-lookup-data";
@@ -368,8 +416,7 @@
                 }
             };
         }]);
-    }(angular, module));
-    (function (angular, module, undefined) {
+    }(angular, module));﻿ (function (angular, module, undefined) {
         "use strict";
         module.service("baasicRoleRouteService", ["baasicUriTemplateService", function (uriTemplateService) {
             return {
@@ -379,8 +426,7 @@
                 parse: uriTemplateService.parse
             };
         }]);
-    }(angular, module));
-    (function (angular, module, undefined) {
+    }(angular, module));﻿ (function (angular, module, undefined) {
         "use strict";
         module.service("baasicRoleService", ["baasicApiHttp", "baasicApiService", "baasicConstants", "baasicRoleRouteService", function (baasicApiHttp, baasicApiService, baasicConstants, roleRouteService) {
             return {
@@ -404,8 +450,7 @@
                 }
             };
         }]);
-    }(angular, module));
-    (function (angular, module, undefined) {
+    }(angular, module));﻿ (function (angular, module, undefined) {
         "use strict";
         module.service("baasicUserRouteService", ["baasicUriTemplateService", function (uriTemplateService) {
             return {
@@ -416,8 +461,7 @@
                 parse: uriTemplateService.parse
             };
         }]);
-    }(angular, module));
-    (function (angular, module, undefined) {
+    }(angular, module));﻿ (function (angular, module, undefined) {
         "use strict";
         module.service("baasicUserService", ["baasicApiHttp", "baasicApiService", "baasicConstants", "baasicUserRouteService", function (baasicApiHttp, baasicApiService, baasicConstants, userRouteService) {
             return {
@@ -453,16 +497,14 @@
                 }
             };
         }]);
-    }(angular, module));
-    (function (angular, module, undefined) {
+    }(angular, module));﻿ (function (angular, module, undefined) {
         "use strict";
         module.constant("baasicConstants", {
             idPropertyName: 'id',
             keyPropertyName: 'key',
             modelPropertyName: 'model'
         });
-    }(angular, module));
-    (function (angular, module, undefined) {
+    }(angular, module));﻿ (function (angular, module, undefined) {
         "use strict";
         module.service("baasicApplicationSettingsRouteService", ["baasicUriTemplateService", function (uriTemplateService) {
             return {
@@ -471,8 +513,7 @@
                 parse: uriTemplateService.parse
             };
         }]);
-    }(angular, module));
-    (function (angular, module, undefined) {
+    }(angular, module));﻿ (function (angular, module, undefined) {
         "use strict";
         module.service("baasicApplicationSettingsService", ["baasicApiHttp", "baasicApiService", "baasicConstants", "baasicApplicationSettingsRouteService", function (baasicApiHttp, baasicApiService, baasicConstants, applicationSettingsRouteService) {
             return {
@@ -488,8 +529,7 @@
                 }
             };
         }]);
-    }(angular, module));
-    (function (angular, module, undefined) {
+    }(angular, module));﻿ (function (angular, module, undefined) {
         "use strict";
         module.service("baasicDynamicResourceRouteService", ["baasicUriTemplateService", function (uriTemplateService) {
             return {
@@ -499,8 +539,7 @@
                 parse: uriTemplateService.parse
             };
         }]);
-    }(angular, module));
-    (function (angular, module, undefined) {
+    }(angular, module));﻿ (function (angular, module, undefined) {
         "use strict";
         module.service("baasicDynamicResourceService", ["baasicApiHttp", "baasicApiService", "baasicConstants", "baasicDynamicResourceRouteService", function (baasicApiHttp, baasicApiService, baasicConstants, dynamicResourceRouteService) {
             return {
@@ -526,8 +565,7 @@
                 }
             };
         }]);
-    }(angular, module));
-    (function (angular, module, undefined) {
+    }(angular, module));﻿ (function (angular, module, undefined) {
         "use strict";
         module.service("baasicDynamicSchemaRouteService", ["baasicUriTemplateService", function (uriTemplateService) {
             return {
@@ -538,8 +576,7 @@
                 parse: uriTemplateService.parse
             };
         }]);
-    }(angular, module));
-    (function (angular, module, undefined) {
+    }(angular, module));﻿ (function (angular, module, undefined) {
         "use strict";
         module.service("baasicDynamicSchemaService", ["baasicApiHttp", "baasicApiService", "baasicConstants", "baasicDynamicSchemaRouteService", function (baasicApiHttp, baasicApiService, baasicConstants, dynamicSchemaRouteService) {
             return {
@@ -566,8 +603,7 @@
                 }
             };
         }]);
-    }(angular, module));
-    (function (angular, module, undefined) {
+    }(angular, module));﻿ (function (angular, module, undefined) {
         "use strict";
         module.service("baasicKeyValueRouteService", ["baasicUriTemplateService", function (uriTemplateService) {
             return {
@@ -577,8 +613,7 @@
                 parse: uriTemplateService.parse
             };
         }]);
-    }(angular, module));
-    (function (angular, module, undefined) {
+    }(angular, module));﻿ (function (angular, module, undefined) {
         "use strict";
         module.service("baasicKeyValueService", ["baasicApiHttp", "baasicApiService", "baasicConstants", "baasicKeyValueRouteService", function (baasicApiHttp, baasicApiService, baasicConstants, keyValueRouteService) {
             return {
@@ -602,8 +637,7 @@
                 }
             };
         }]);
-    }(angular, module));
-    (function (angular, module, undefined) {
+    }(angular, module));﻿ (function (angular, module, undefined) {
         "use strict";
         module.service("baasicValueSetItemRouteService", ["baasicUriTemplateService", function (uriTemplateService) {
             return {
@@ -613,8 +647,7 @@
                 parse: uriTemplateService.parse
             };
         }]);
-    }(angular, module));
-    (function (angular, module, undefined) {
+    }(angular, module));﻿ (function (angular, module, undefined) {
         "use strict";
         module.service("baasicValueSetItemService", ["baasicApiHttp", "baasicApiService", "baasicConstants", "baasicValueSetItemRouteService", function (baasicApiHttp, baasicApiService, baasicConstants, valueSetItemRouteService) {
             return {
@@ -638,8 +671,7 @@
                 }
             };
         }]);
-    }(angular, module));
-    (function (angular, module, undefined) {
+    }(angular, module));﻿ (function (angular, module, undefined) {
         "use strict";
         module.service("baasicValueSetRouteService", ["baasicUriTemplateService", function (uriTemplateService) {
             return {
@@ -649,8 +681,7 @@
                 parse: uriTemplateService.parse
             };
         }]);
-    }(angular, module));
-    (function (angular, module, undefined) {
+    }(angular, module));﻿ (function (angular, module, undefined) {
         "use strict";
         module.service("baasicValueSetService", ["baasicApiHttp", "baasicApiService", "baasicConstants", "baasicValueSetRouteService", function (baasicApiHttp, baasicApiService, baasicConstants, valueSetRouteService) {
             return {
@@ -674,8 +705,7 @@
                 }
             };
         }]);
-    }(angular, module));
-    (function (angular, module, undefined) {
+    }(angular, module));﻿ (function (angular, module, undefined) {
         "use strict";
         var permissionHash = {};
         module.service("baasicAuthorizationService", ["$rootScope", "baasicApp", function ($rootScope, baasicApp) {
@@ -762,8 +792,7 @@
                 }
             };
         }]);
-    }(angular, module));
-    (function (angular, module, undefined) {
+    }(angular, module));﻿ (function (angular, module, undefined) {
         "use strict";
         module.service("baasicLoginRouteService", ["baasicUriTemplateService", function (uriTemplateService) {
             return {
@@ -771,8 +800,7 @@
                 parse: uriTemplateService.parse
             };
         }]);
-    }(angular, module));
-    (function (angular, module, undefined) {
+    }(angular, module));﻿ (function (angular, module, undefined) {
         "use strict";
         module.service("baasicLoginService", ["baasicApiHttp", "baasicLoginRouteService", function (baasicApiHttp, loginRouteService) {
             return {
@@ -809,8 +837,7 @@
                 }
             };
         }]);
-    }(angular, module));
-    (function (angular, module, undefined) {
+    }(angular, module));﻿ (function (angular, module, undefined) {
         "use strict";
         module.service("baasicPasswordRecoveryRouteService", ["baasicUriTemplateService", function (uriTemplateService) {
             return {
@@ -819,8 +846,7 @@
                 parse: uriTemplateService.parse
             };
         }]);
-    }(angular, module));
-    (function (angular, module, undefined) {
+    }(angular, module));﻿ (function (angular, module, undefined) {
         "use strict";
         module.service("baasicPasswordRecoveryService", ["baasicApiHttp", "baasicPasswordRecoveryRouteService", function (baasicApiHttp, passwordRecoveryRouteService) {
 
@@ -851,8 +877,7 @@
                 }
             };
         }]);
-    }(angular, module));
-    (function (angular, module, undefined) {
+    }(angular, module));﻿ (function (angular, module, undefined) {
         "use strict";
         module.service("baasicPermissionsRouteService", ["baasicUriTemplateService", function (uriTemplateService) {
             return {
@@ -869,8 +894,7 @@
                 parse: uriTemplateService.parse
             };
         }]);
-    }(angular, module));
-    (function (angular, module, undefined) {
+    }(angular, module));﻿ (function (angular, module, undefined) {
         "use strict";
         module.service("baasicPermissionsService", ["$q", "$filter", "baasicApiHttp", "baasicApiService", "baasicConstants", "baasicPermissionsRouteService", "baasicAuthorizationService", function ($q, $filter, baasicApiHttp, baasicApiService, baasicConstants, permissionsRouteService, authService) {
             var _orderBy = $filter('orderBy');
@@ -1036,8 +1060,7 @@
                 }
             };
         }]);
-    }(angular, module));
-    (function (angular, module, undefined) {
+    }(angular, module));﻿ (function (angular, module, undefined) {
         "use strict";
         module.service("baasicRecaptchaService", ["recaptchaKey", function (recaptchaKey) {
             return {
@@ -1063,8 +1086,7 @@
                 }
             };
         }]);
-    }(angular, module));
-    (function (angular, module, undefined) {
+    }(angular, module));﻿ (function (angular, module, undefined) {
         "use strict";
         module.service("baasicUriTemplateService", [function () {
             return {
