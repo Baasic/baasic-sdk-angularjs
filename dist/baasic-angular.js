@@ -28,17 +28,9 @@
 
                     requestHash[message.requestId] = request;
 
-                    sendMessage(proxy.proxyFrame, request);
+                    proxy.sendMessage(request);
 
                     nextRequestId += 1;
-                }
-
-                function sendMessageToProxy(proxyFrame, request) {
-                    proxyFrame.contentWindow.postMessage(JSON.stringify(request.message), apiUrl);
-                }
-
-                function sendMessageToQueue(proxyFrame, request) {
-                    proxyFrame.push[request];
                 }
 
                 for (var i = 0, l = apps.length; i < l; i++) {
@@ -48,22 +40,25 @@
                         var apiUrl = app.get_apiUrl();
                         var proxy = {
                             proxyFrame: [],
-                            apiUrlRegex: new RegExp("^" + regExpEscape(apiUrl))
+                            apiUrlRegex: new RegExp("^" + regExpEscape(apiUrl)),
+                            sendMessage: function sendMessageToQueue(request) {
+                                this.proxyFrame.push[request];
+                            }
                         };
 
                         proxies.push(proxy);
-
-                        var sendMessage = sendMessageToQueue;
 
                         var injectFrame = angular.element('<iframe src="' + apiUrl + 'proxy/angular" style="display:none"></iframe>');
                         injectFrame.bind("load", function () {
                             var queue = proxy.proxyFrame;
 
                             proxy.proxyFrame = this;
-                            sendMessage = sendMessageToProxy;
+                            proxy.sendMessage = function sendMessageToProxy(request) {
+                                this.proxyFrame.contentWindow.postMessage(JSON.stringify(request.message), apiUrl);
+                            };
 
                             while (queue.length > 0) {
-                                sendMessage(queue.shift());
+                                proxy.sendMessage(queue.shift());
                             }
                         });
 

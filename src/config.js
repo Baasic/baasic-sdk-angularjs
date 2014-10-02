@@ -25,44 +25,39 @@
 
                 requestHash[message.requestId] = request;
 
-                sendMessage(proxy.proxyFrame, request);
+                proxy.sendMessage(request);
 
                 nextRequestId += 1;
-            }
-
-            function sendMessageToProxy(proxyFrame, request) {
-                proxyFrame.contentWindow.postMessage(JSON.stringify(request.message), apiUrl);
-            }
-				
-            function sendMessageToQueue(proxyFrame, request) {
-                proxyFrame.push[request];
             }
                 
             for (var i=0,l=apps.length;i<l;i++) {
                 var app = apps[i];
 					
                 (function (app) {
-                    var apiUrl = app.get_apiUrl();
-                    var proxy = {
-                        proxyFrame: [],
-                        apiUrlRegex: new RegExp("^" + regExpEscape(apiUrl))
-                    };
-						
-                    proxies.push(proxy);
-						
-                    var sendMessage = sendMessageToQueue;
-						
-                    var injectFrame = angular.element('<iframe src="' + apiUrl + 'proxy/angular" style="display:none"></iframe>');
-                    injectFrame.bind("load", function () {
-                        var queue = proxy.proxyFrame;
-							
-                        proxy.proxyFrame = this;
-                        sendMessage = sendMessageToProxy;
-							
-                        while (queue.length > 0) {
-                            sendMessage(queue.shift());
-                        }
-                    });
+                        var apiUrl = app.get_apiUrl();
+                        var proxy = {
+                            proxyFrame: [],
+                            apiUrlRegex: new RegExp("^" + regExpEscape(apiUrl)),
+							sendMessage: function sendMessageToQueue(request) {
+								this.proxyFrame.push[request];
+							}
+                        };
+
+                        proxies.push(proxy);
+
+                        var injectFrame = angular.element('<iframe src="' + apiUrl + 'proxy/angular" style="display:none"></iframe>');
+                        injectFrame.bind("load", function () {
+                            var queue = proxy.proxyFrame;
+
+                            proxy.proxyFrame = this;
+                            proxy.sendMessage =  function sendMessageToProxy(request) {
+								this.proxyFrame.contentWindow.postMessage(JSON.stringify(request.message), apiUrl);
+							};
+
+                            while (queue.length > 0) {
+                                proxy.sendMessage(queue.shift());
+                            }
+                        });
 
                     $document.find("body").append(injectFrame);
                 })(app);
