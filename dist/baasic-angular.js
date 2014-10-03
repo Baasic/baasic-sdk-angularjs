@@ -123,7 +123,7 @@
         "use strict";
 
         var extend = angular.extend;
-        // Tokenizer and unqoute code taken from http://stackoverflow.com/questions/5288150/digest-authentication-w-jquery-is-it-possible/5288679#5288679
+        // Tokenizer and unquote code taken from http://stackoverflow.com/questions/5288150/digest-authentication-w-jquery-is-it-possible/5288679#5288679
         var wwwAuthenticateTokenizer = (function () {
             var ws = '(?:(?:\\r\\n)?[ \\t])+',
                 token = '(?:[\\x21\\x23-\\x27\\x2A\\x2B\\x2D\\x2E\\x30-\\x39\\x3F\\x41-\\x5A\\x5E-\\x7A\\x7C\\x7E]+)',
@@ -148,7 +148,7 @@
                         var details = {};
                         for (var i = 1, l = tokens.length; i < l; i++) {
                             var values = tokens[i].split("=");
-                            details[values[0]] = unqoute(values[1]);
+                            details[values[0]] = unquote(values[1]);
                         }
 
                         wwwAutheniticate.details = details;
@@ -200,6 +200,30 @@
         var proxyFactory = function proxyFactory($rootScope, $http, parser, app) {
             var apiUrl = app.get_apiUrl();
 
+            function parseHeaders(headers) {
+                var wwwAuthenticate = parseWWWAuthenticateHeader(headers("WWW-Authenticate"));
+                if (wwwAuthenticate) {
+                    if (wwwAuthenticate.scheme.toLowerCase() === "bearer") {
+                        var details = wwwAuthenticate.details;
+                        if (details) {
+                            if (details.error) {
+                                switch (details.error) {
+                                case "invalid_token":
+                                    var token = app.get_accessToken();
+                                    app.update_accessToken(null);
+                                    $rootScope.$broadcast("token_error", {
+                                        token: token,
+                                        error: details.error,
+                                        error_description: details.error_description
+                                    });
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
             var proxyMethod = function (config) {
                 if (config) {
                     config.withCredentials = true;
@@ -231,35 +255,19 @@
                             response.data = parser.parse(response.data);
                         }
 
-                        var wwwAuthenticate = parseWWWAuthenticateHeader(response.headers("WWW-Authenticate"));
-                        if (wwwAuthenticate) {
-                            if (wwwAuthenticate.scheme.toLowerCase() === "bearer") {
-                                var details = wwwAuthenticate.details;
-                                if (details) {
-                                    if (details.error) {
-                                        switch (details.error) {
-                                        case "invalid_token":
-                                            var token = app.get_accessToken();
-                                            app.update_accessToken(null);
-                                            $rootScope.$broadcast("token_error", {
-                                                token: token,
-                                                error: details.error,
-                                                error_description: details.error_description
-                                            });
-                                            break;
-                                        }
-                                    }
-                                }
-                            }
-                        }
+                        parseHeaders(response.headers);
                     }
-
+                }, function (response) {
+                    if (response.headers) {
+                        parseHeaders(response.headers);
+                    }
+                }).
+                finally(function () {
                     var token = app.get_accessToken();
                     if (token && token.sliding_window) {
                         token.expireTime = new Date().getTime() + (token.sliding_window * 1000);
                         app.update_accessToken(token);
                     }
-
                 }), promise);
 
                 return promise;
