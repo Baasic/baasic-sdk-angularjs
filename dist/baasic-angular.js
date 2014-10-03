@@ -123,6 +123,43 @@
         "use strict";
 
         var extend = angular.extend;
+        // Tokenizer and unqoute code taken from http://stackoverflow.com/questions/5288150/digest-authentication-w-jquery-is-it-possible/5288679#5288679
+        var wwwAuthenticateTokenizer = (function () {
+            var ws = '(?:(?:\\r\\n)?[ \\t])+',
+                token = '(?:[\\x21\\x23-\\x27\\x2A\\x2B\\x2D\\x2E\\x30-\\x39\\x3F\\x41-\\x5A\\x5E-\\x7A\\x7C\\x7E]+)',
+                quotedString = '"(?:[\\x00-\\x0B\\x0D-\\x21\\x23-\\x5B\\\\x5D-\\x7F]|' + ws + '|\\\\[\\x00-\\x7F])*"';
+
+            return RegExp(token + '(?:=(?:' + quotedString + '|' + token + '))?', 'g');
+        })();
+
+        function unquote(quotedString) {
+            return quotedString.substr(1, quotedString.length - 2).replace(/(?:(?:\r\n)?[ \t])+/g, " ");
+        }
+
+        function parseWWWAuthenticateHeader(value) {
+            if (value) {
+                var tokens = value.match(wwwAuthenticateTokenizer);
+                if (tokens && tokens.length > 0) {
+                    var wwwAutheniticate = {
+                        scheme: tokens[0]
+                    };
+
+                    if (tokens.length > 1) {
+                        var details = {};
+                        for (var i = 1, l = tokens.length; i < l; i++) {
+                            var values = tokens[i].split("=");
+                            details[values[0]] = unqoute(values[1]);
+                        }
+
+                        wwwAutheniticate.details = details;
+                    }
+
+                    return wwwAutheniticate;
+                }
+            }
+
+            return undefined;
+        }
 
         function startsWith(target, input) {
             return target.substring(0, input.length) === input;
@@ -194,61 +231,10 @@
                             response.data = parser.parse(response.data);
                         }
 
-                        var wwwAuthenticate = response.headers("WWW-Authenticate");
+                        var wwwAuthenticate = parseWWWAuthenticateHeader(response.headers("WWW-Authenticate"));
                         if (wwwAuthenticate) {
-                            var scheme, details, splitIndex = wwwAuthenticate.indexOf(" ");
-
-                            if (splitIndex === -1) {
-                                scheme = wwwAuthenticate;
-                            } else {
-                                scheme = wwwAuthenticate.substring(0, splitIndex);
-                                details = {};
-                                var detailsText = wwwAuthenticate.substring(splitIndex + 1),
-                                    currentPosition = 0;
-
-                                do {
-                                    var setIndex = detailsText.indexOf("=", currentPosition);
-                                    if (setIndex !== -1) {
-                                        var key = detailsText.substring(currentPosition, setIndex);
-                                        currentPosition = setIndex + 1;
-                                        var firstChar = detailsText.charAt(currentPosition);
-                                        var valueEndIndex;
-                                        if (firstChar === '"') {
-                                            currentPosition += 1;
-                                            valueEndIndex = detailsText.indexOf('"', currentPosition);
-                                        } else if (firstChar === "'") {
-                                            currentPosition += 1;
-                                            valueEndIndex = detailsText.indexOf("'", currentPosition);
-                                        } else {
-                                            valueEndIndex = detailsText.indexOf(",", currentPosition)
-                                        }
-
-                                        var value;
-                                        if (valueEndIndex === -1) {
-                                            value = detailsText.substring(currentPosition);
-                                        } else {
-                                            value = detailsText.substring(currentPosition, valueEndIndex);
-                                        }
-
-                                        details[key] = value;
-
-                                        if (valueEndIndex === -1) {
-                                            break;
-                                        } else {
-                                            currentPosition = detailsText.indexOf(",", valueEndIndex);
-                                            if (currentPosition !== -1) {
-                                                if (currentPosition === detailsText.length - 1) {
-                                                    break;
-                                                } else {
-                                                    currentPosition += 1;
-                                                }
-                                            }
-                                        }
-                                    }
-                                } while (currentPosition !== -1);
-                            }
-
-                            if (scheme.toLowerCase() === "bearer") {
+                            if (wwwAuthenticate.scheme.toLowerCase() === "bearer") {
+                                var details = wwwAuthenticate.details;
                                 if (details) {
                                     if (details.error) {
                                         switch (details.error) {
