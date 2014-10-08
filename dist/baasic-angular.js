@@ -1,7 +1,7 @@
-(function (angular, undefined) {﻿
+(function (angular, undefined) {
     var module = angular.module("baasic.baasicApi", ["HALParser"]);
 
-    ﻿module.config(["$provide", function config($provide) {
+    module.config(["$provide", function config($provide) {
         // copied from http://stackoverflow.com/questions/3561493/is-there-a-regexp-escape-function-in-javascript
 
         function regExpEscape(s) {
@@ -101,7 +101,7 @@
         }
     }]);
 
-    ﻿ (function (angular, module, undefined) {
+    (function (angular, module, undefined) {
         "use strict";
         module.directive("baasicRecaptcha", ["baasicRecaptchaService", function (recaptchaService) {
             return {
@@ -119,7 +119,8 @@
                 }
             };
         }]);
-    }(angular, module));﻿ (function (angular, module, undefined) {
+    }(angular, module));
+    (function (angular, module, undefined) {
         "use strict";
 
         var extend = angular.extend;
@@ -292,7 +293,7 @@
         }]);
     })(angular, module);
 
-    ﻿ (function (angular, module, undefined) {
+    (function (angular, module, undefined) {
         "use strict";
         module.service("baasicApiService", ["baasicConstants", function (baasicConstants) {
             function FindParams(data) {
@@ -353,7 +354,8 @@
                 }
             };
         }]);
-    }(angular, module));﻿module.provider("baasicApp", function baasicAppService() {
+    }(angular, module));
+    module.provider("baasicApp", function baasicAppService() {
         var apps = {};
         var defaultApp;
 
@@ -394,14 +396,15 @@
         };
     });
 
-    ﻿ (function (angular, module, undefined) {
+    (function (angular, module, undefined) {
         "use strict";
         module.service("baasicLookupRouteService", ["baasicUriTemplateService", function (uriTemplateService) {
             return {
                 get: uriTemplateService.parse("lookup/{?embed,fields}")
             };
         }]);
-    }(angular, module));﻿ (function (angular, module, undefined) {
+    }(angular, module));
+    (function (angular, module, undefined) {
         "use strict";
         module.service("baasicLookupService", ["baasicApiHttp", "baasicApiService", "baasicLookupRouteService", function (baasicApiHttp, baasicApiService, lookupRouteService) {
             var lookupKey = "baasic-lookup-data";
@@ -439,7 +442,8 @@
                 }
             };
         }]);
-    }(angular, module));﻿ (function (angular, module, undefined) {
+    }(angular, module));
+    (function (angular, module, undefined) {
         "use strict";
         module.service("baasicRoleRouteService", ["baasicUriTemplateService", function (uriTemplateService) {
             return {
@@ -449,7 +453,8 @@
                 parse: uriTemplateService.parse
             };
         }]);
-    }(angular, module));﻿ (function (angular, module, undefined) {
+    }(angular, module));
+    (function (angular, module, undefined) {
         "use strict";
         module.service("baasicRoleService", ["baasicApiHttp", "baasicApiService", "baasicConstants", "baasicRoleRouteService", function (baasicApiHttp, baasicApiService, baasicConstants, roleRouteService) {
             return {
@@ -473,7 +478,8 @@
                 }
             };
         }]);
-    }(angular, module));﻿ (function (angular, module, undefined) {
+    }(angular, module));
+    (function (angular, module, undefined) {
         "use strict";
         module.service("baasicUserRouteService", ["baasicUriTemplateService", function (uriTemplateService) {
             return {
@@ -484,7 +490,8 @@
                 parse: uriTemplateService.parse
             };
         }]);
-    }(angular, module));﻿ (function (angular, module, undefined) {
+    }(angular, module));
+    (function (angular, module, undefined) {
         "use strict";
         module.service("baasicUserService", ["baasicApiHttp", "baasicApiService", "baasicConstants", "baasicUserRouteService", function (baasicApiHttp, baasicApiService, baasicConstants, userRouteService) {
             return {
@@ -520,23 +527,26 @@
                 }
             };
         }]);
-    }(angular, module));﻿ (function (angular, module, undefined) {
+    }(angular, module));
+    (function (angular, module, undefined) {
         "use strict";
         module.constant("baasicConstants", {
             idPropertyName: 'id',
             keyPropertyName: 'key',
             modelPropertyName: 'model'
         });
-    }(angular, module));﻿ (function (angular, module, undefined) {
+    }(angular, module));
+    (function (angular, module, undefined) {
         "use strict";
         module.service("baasicApplicationSettingsRouteService", ["baasicUriTemplateService", function (uriTemplateService) {
             return {
-                get: uriTemplateService.parse("application/{key}/{?embed,fields}"),
-                update: uriTemplateService.parse("application/{key}/"),
+                get: uriTemplateService.parse("application/{?embed,fields}"),
+                update: uriTemplateService.parse("application/"),
                 parse: uriTemplateService.parse
             };
         }]);
-    }(angular, module));﻿ (function (angular, module, undefined) {
+    }(angular, module));
+    (function (angular, module, undefined) {
         "use strict";
         module.service("baasicApplicationSettingsService", ["baasicApiHttp", "baasicApiService", "baasicConstants", "baasicApplicationSettingsRouteService", function (baasicApiHttp, baasicApiService, baasicConstants, applicationSettingsRouteService) {
             return {
@@ -549,10 +559,15 @@
                 update: function (data) {
                     var params = baasicApiService.updateParams(data);
                     return baasicApiHttp.put(params[baasicConstants.modelPropertyName].links('put').href, params[baasicConstants.modelPropertyName]);
+                },
+                remove: function (data) {
+                    var params = baasicApiService.removeParams(data);
+                    return baasicApiHttp.delete(params[baasicConstants.modelPropertyName].links('delete').href);
                 }
             };
         }]);
-    }(angular, module));﻿ (function (angular, module, undefined) {
+    }(angular, module));
+    (function (angular, module, undefined) {
         "use strict";
         module.service("baasicDynamicResourceRouteService", ["baasicUriTemplateService", function (uriTemplateService) {
             return {
@@ -562,7 +577,8 @@
                 parse: uriTemplateService.parse
             };
         }]);
-    }(angular, module));﻿ (function (angular, module, undefined) {
+    }(angular, module));
+    (function (angular, module, undefined) {
         "use strict";
         module.service("baasicDynamicResourceService", ["baasicApiHttp", "baasicApiService", "baasicConstants", "baasicDynamicResourceRouteService", function (baasicApiHttp, baasicApiService, baasicConstants, dynamicResourceRouteService) {
             return {
@@ -588,7 +604,8 @@
                 }
             };
         }]);
-    }(angular, module));﻿ (function (angular, module, undefined) {
+    }(angular, module));
+    (function (angular, module, undefined) {
         "use strict";
         module.service("baasicDynamicSchemaRouteService", ["baasicUriTemplateService", function (uriTemplateService) {
             return {
@@ -599,7 +616,8 @@
                 parse: uriTemplateService.parse
             };
         }]);
-    }(angular, module));﻿ (function (angular, module, undefined) {
+    }(angular, module));
+    (function (angular, module, undefined) {
         "use strict";
         module.service("baasicDynamicSchemaService", ["baasicApiHttp", "baasicApiService", "baasicConstants", "baasicDynamicSchemaRouteService", function (baasicApiHttp, baasicApiService, baasicConstants, dynamicSchemaRouteService) {
             return {
@@ -626,7 +644,8 @@
                 }
             };
         }]);
-    }(angular, module));﻿ (function (angular, module, undefined) {
+    }(angular, module));
+    (function (angular, module, undefined) {
         "use strict";
         module.service("baasicKeyValueRouteService", ["baasicUriTemplateService", function (uriTemplateService) {
             return {
@@ -636,7 +655,8 @@
                 parse: uriTemplateService.parse
             };
         }]);
-    }(angular, module));﻿ (function (angular, module, undefined) {
+    }(angular, module));
+    (function (angular, module, undefined) {
         "use strict";
         module.service("baasicKeyValueService", ["baasicApiHttp", "baasicApiService", "baasicConstants", "baasicKeyValueRouteService", function (baasicApiHttp, baasicApiService, baasicConstants, keyValueRouteService) {
             return {
@@ -660,7 +680,8 @@
                 }
             };
         }]);
-    }(angular, module));﻿ (function (angular, module, undefined) {
+    }(angular, module));
+    (function (angular, module, undefined) {
         "use strict";
         module.service("baasicValueSetItemRouteService", ["baasicUriTemplateService", function (uriTemplateService) {
             return {
@@ -670,7 +691,8 @@
                 parse: uriTemplateService.parse
             };
         }]);
-    }(angular, module));﻿ (function (angular, module, undefined) {
+    }(angular, module));
+    (function (angular, module, undefined) {
         "use strict";
         module.service("baasicValueSetItemService", ["baasicApiHttp", "baasicApiService", "baasicConstants", "baasicValueSetItemRouteService", function (baasicApiHttp, baasicApiService, baasicConstants, valueSetItemRouteService) {
             return {
@@ -694,7 +716,8 @@
                 }
             };
         }]);
-    }(angular, module));﻿ (function (angular, module, undefined) {
+    }(angular, module));
+    (function (angular, module, undefined) {
         "use strict";
         module.service("baasicValueSetRouteService", ["baasicUriTemplateService", function (uriTemplateService) {
             return {
@@ -704,7 +727,8 @@
                 parse: uriTemplateService.parse
             };
         }]);
-    }(angular, module));﻿ (function (angular, module, undefined) {
+    }(angular, module));
+    (function (angular, module, undefined) {
         "use strict";
         module.service("baasicValueSetService", ["baasicApiHttp", "baasicApiService", "baasicConstants", "baasicValueSetRouteService", function (baasicApiHttp, baasicApiService, baasicConstants, valueSetRouteService) {
             return {
@@ -728,7 +752,8 @@
                 }
             };
         }]);
-    }(angular, module));﻿ (function (angular, module, undefined) {
+    }(angular, module));
+    (function (angular, module, undefined) {
         "use strict";
         var permissionHash = {};
         module.service("baasicAuthorizationService", ["$rootScope", "baasicApp", function ($rootScope, baasicApp) {
@@ -815,15 +840,17 @@
                 }
             };
         }]);
-    }(angular, module));﻿ (function (angular, module, undefined) {
+    }(angular, module));
+    (function (angular, module, undefined) {
         "use strict";
         module.service("baasicLoginRouteService", ["baasicUriTemplateService", function (uriTemplateService) {
             return {
-                login: uriTemplateService.parse("/login/{?embed,fields,options}"),
+                login: uriTemplateService.parse("login/{?embed,fields,options}"),
                 parse: uriTemplateService.parse
             };
         }]);
-    }(angular, module));﻿ (function (angular, module, undefined) {
+    }(angular, module));
+    (function (angular, module, undefined) {
         "use strict";
         module.service("baasicLoginService", ["baasicApiHttp", "baasicLoginRouteService", function (baasicApiHttp, loginRouteService) {
             return {
@@ -868,16 +895,18 @@
                 }
             };
         }]);
-    }(angular, module));﻿ (function (angular, module, undefined) {
+    }(angular, module));
+    (function (angular, module, undefined) {
         "use strict";
         module.service("baasicPasswordRecoveryRouteService", ["baasicUriTemplateService", function (uriTemplateService) {
             return {
-                passwordRecovery: uriTemplateService.parse("/RecoverPassword"),
-                changePassword: uriTemplateService.parse("/RecoverPassword/user/{username}/change"),
+                passwordRecovery: uriTemplateService.parse("RecoverPassword"),
+                changePassword: uriTemplateService.parse("RecoverPassword/user/{username}/change"),
                 parse: uriTemplateService.parse
             };
         }]);
-    }(angular, module));﻿ (function (angular, module, undefined) {
+    }(angular, module));
+    (function (angular, module, undefined) {
         "use strict";
         module.service("baasicPasswordRecoveryService", ["baasicApiHttp", "baasicPasswordRecoveryRouteService", function (baasicApiHttp, passwordRecoveryRouteService) {
 
@@ -908,7 +937,8 @@
                 }
             };
         }]);
-    }(angular, module));﻿ (function (angular, module, undefined) {
+    }(angular, module));
+    (function (angular, module, undefined) {
         "use strict";
         module.service("baasicPermissionsRouteService", ["baasicUriTemplateService", function (uriTemplateService) {
             return {
@@ -925,7 +955,8 @@
                 parse: uriTemplateService.parse
             };
         }]);
-    }(angular, module));﻿ (function (angular, module, undefined) {
+    }(angular, module));
+    (function (angular, module, undefined) {
         "use strict";
         module.service("baasicPermissionsService", ["$q", "$filter", "baasicApiHttp", "baasicApiService", "baasicConstants", "baasicPermissionsRouteService", "baasicAuthorizationService", function ($q, $filter, baasicApiHttp, baasicApiService, baasicConstants, permissionsRouteService, authService) {
             var _orderBy = $filter('orderBy');
@@ -1091,7 +1122,8 @@
                 }
             };
         }]);
-    }(angular, module));﻿ (function (angular, module, undefined) {
+    }(angular, module));
+    (function (angular, module, undefined) {
         "use strict";
         module.service("baasicRecaptchaService", ["recaptchaKey", function (recaptchaKey) {
             return {
@@ -1117,7 +1149,8 @@
                 }
             };
         }]);
-    }(angular, module));﻿ (function (angular, module, undefined) {
+    }(angular, module));
+    (function (angular, module, undefined) {
         "use strict";
         module.service("baasicUriTemplateService", [function () {
             return {

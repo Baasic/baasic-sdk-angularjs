@@ -3,8 +3,8 @@
     module.service("baasicPasswordRecoveryRouteService", ["baasicUriTemplateService",
         function (uriTemplateService) {
             return {
-                passwordRecovery: uriTemplateService.parse("/RecoverPassword"),
-				changePassword: uriTemplateService.parse("/RecoverPassword/user/{username}/change"),
+                passwordRecovery: uriTemplateService.parse("RecoverPassword"),
+				changePassword: uriTemplateService.parse("RecoverPassword/user/{username}/change"),
 				parse: uriTemplateService.parse
             };
         }]);

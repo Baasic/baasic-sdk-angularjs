@@ -13,6 +13,10 @@
                 update: function (data) {
                     var params = baasicApiService.updateParams(data);
                     return baasicApiHttp.put(params[baasicConstants.modelPropertyName].links('put').href, params[baasicConstants.modelPropertyName]);
+                },
+                remove: function (data) {
+                    var params = baasicApiService.removeParams(data);
+                    return baasicApiHttp.delete(params[baasicConstants.modelPropertyName].links('delete').href);
                 }
             };
         }]);
