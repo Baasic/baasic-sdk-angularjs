@@ -1104,7 +1104,7 @@
                     requestPermission.actions = [action];
 
                     var operation;
-                    if (action.checked) {
+                    if (!action.checked) {
                         operation = this.remove;
                     } else {
                         operation = this.create;
