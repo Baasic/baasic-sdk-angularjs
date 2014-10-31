@@ -1,7 +1,7 @@
 ﻿(function (angular, module, undefined) {
     "use strict";
-    module.directive("recaptcha", ["recaptchaService",
-        function recaptcha(recaptchaService) {
+    module.directive("baasicRecaptcha", ["baasicRecaptchaService",
+        function (recaptchaService) {
             return {
                 restrict: 'A',
                 link: function (scope, elem, attrs) {

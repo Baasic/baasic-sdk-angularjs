@@ -1,15 +1,17 @@
 ﻿(function (angular, module, undefined) {
     "use strict";
     var permissionHash = {};
-    module.service("authenticationService", ["$rootScope", "baasicApp",
+    module.service("baasicAuthorizationService", ["$rootScope", "baasicApp",
         function ($rootScope, baasicApp) {
             var app = baasicApp.get();
+            var apiKey = app.get_apiKey();
+            permissionHash[apiKey] = {};
 
             return {
                 getUser: function getUser() {
                     var user = app.get_user();
                     if ($rootScope.user === undefined &&
-                        user.user !== undefined) {
+                            user.user !== undefined) {
                         $rootScope.user = user.user;
                     }
                     return user.user;
@@ -24,7 +26,7 @@
                         $rootScope.user = user;
                     } else {
                         app.set_user(null);
-
+                        this.resetPermissions();
                         $rootScope.user = {
                             isAuthenticated: false
                         };
@@ -43,33 +45,45 @@
                 getAccessToken: function getAccessToken() {
                     return app.get_accessToken();
                 },
+				resetPermissions: function () {
+                    permissionHash[apiKey] = {};
+                },
                 hasPermission: function (authorization) {
-                    if (permissionHash.hasOwnProperty(authorization)) {
-                        return permissionHash[authorization];
-                    } else {
-                        var user = this.getUser();
-                        var hasPermission = false;
+                    if (permissionHash[apiKey].hasOwnProperty(authorization)) {
+                        return permissionHash[apiKey][authorization];
+                    }
 
-                        if (user.permissions) {
-                            var tokens = authorization.split(".");
-                            if (tokens.length > 0) {
-                                var section = tokens[0];
+                    var user = this.getUser();
+                    if (user === undefined) {
+                        return;
+                    }
 
-                                var sectionPermissions = user.permissions[section];
-                                if (sectionPermissions) {
-                                    if (tokens.length > 1) {
-                                        var action = tokens[1].toLowerCase();
-                                        hasPermission = _.any(sectionPermissions, function (sectionAction) { return sectionAction.toLowerCase() == action });
-                                    } else {
-                                        hasPermission = true;
+                    var hasPermission = false;
+
+                    if (user.permissions) {
+                        var tokens = authorization.split(".");
+                        if (tokens.length > 0) {
+                            var section = tokens[0];
+
+                            var sectionPermissions = user.permissions[section];
+                            if (sectionPermissions) {
+                                if (tokens.length > 1) {
+                                    var action = tokens[1].toLowerCase();
+                                    for (var i = 0; i < sectionPermissions.length; i++) {
+                                        if (sectionPermissions[i].toLowerCase() == action) {
+                                            hasPermission = true;
+                                            break;
+                                        }
                                     }
+                                } else {
+                                    hasPermission = true;
                                 }
                             }
                         }
-
-                        permissionHash[authorization] = hasPermission;
-                        return hasPermission;
                     }
+
+                    permissionHash[apiKey][authorization] = hasPermission;
+                    return hasPermission;
                 }
             };
         }]);

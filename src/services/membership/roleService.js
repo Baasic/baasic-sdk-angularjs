@@ -1,17 +1,17 @@
 ﻿(function (angular, module, undefined) {
     "use strict";
-    module.service("baasicValueSetService", ["baasicApiHttp", "baasicApiService", "baasicConstants", "baasicValueSetRouteService",
-        function (baasicApiHttp, baasicApiService, baasicConstants, valueSetRouteService) {
+    module.service("baasicRoleService", ["baasicApiHttp", "baasicApiService", "baasicConstants", "baasicRoleRouteService",
+        function (baasicApiHttp, baasicApiService, baasicConstants, roleRouteService) {
             return {
-				routeService: valueSetRouteService,
+				routeService: roleRouteService,
                 find: function (data) {
-                    return baasicApiHttp.get(valueSetRouteService.find.expand(baasicApiService.findParams(data)));
+                    return baasicApiHttp.get(roleRouteService.find.expand(baasicApiService.findParams(data)));
                 },
                 get: function (data) {
-                    return baasicApiHttp.get(valueSetRouteService.get.expand(baasicApiService.getParams(data, 'setName')));
+                    return baasicApiHttp.get(roleRouteService.get.expand(baasicApiService.getParams(data, 'roleId')));
                 },
                 create: function (data) {
-                    return baasicApiHttp.post(valueSetRouteService.create.expand({}), baasicApiService.createParams(data)[baasicConstants.modelPropertyName]);
+                    return baasicApiHttp.post(roleRouteService.create.expand({}), baasicApiService.createParams(data)[baasicConstants.modelPropertyName]);
                 },
                 update: function (data) {
                     var params = baasicApiService.updateParams(data);

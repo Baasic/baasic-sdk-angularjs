@@ -3,27 +3,42 @@
     module.service("baasicApiService", ["baasicConstants",
         function (baasicConstants) {
             function FindParams(data) {
-                this.page = data.page;
-                this.rpp = data.rpp;
-                this.sort = data.orderBy ? data.orderBy + '|' + data.orderDirection : null;
-                this.searchQuery = data.search;
-                this.embed = data.embed;
-                this.fields = data.fields;
+				if (angular.isObject(data)) {
+                    angular.extend(this, data);					
+					if (data.hasOwnProperty('orderBy') && data.hasOwnProperty('orderDirection')) {
+						this.sort = data.orderBy ? data.orderBy + '|' + data.orderDirection : null;
+					}
+					if (data.hasOwnProperty('search')) {
+						this.searchQuery = data.search;
+					}
+					if (data.hasOwnProperty('pageNumber')) {
+						this.page = data.pageNumber;
+					}
+					if (data.hasOwnProperty('pageSize')) {
+						this.rpp = data.pageSize;
+					}
+                } else {
+					this.searchQuery = data;
+				}
             }
 
-            function KeyParams(data) {
+            function KeyParams(data, propName) {
                 if (angular.isObject(data)) {
                     angular.extend(this, data);
                 } else {
-                    this[baasicConstants.keyPropertyName] = data;
-                }
+					if (propName !== undefined) {
+						this[propName] = data;
+					} else {
+						this[baasicConstants.keyPropertyName] = data;
+					}
+                } 
             }
 
             function ModelParams(data) {
                 if (data.hasOwnProperty(baasicConstants.modelPropertyName)) {
                     angular.extend(this, data);
                 } else {
-                    this[baasicConstants.modelPropertyName] = data[baasicConstants.modelPropertyName];
+                    this[baasicConstants.modelPropertyName] = data;
                 }
             }
 
@@ -31,8 +46,8 @@
                 findParams: function (data) {
                     return new FindParams(data);
                 },
-                getParams: function (data) {
-                    return new KeyParams(data);
+                getParams: function (data, propName) {
+                    return new KeyParams(data, propName);
                 },
                 createParams: function (data) {
                     return new ModelParams(data);

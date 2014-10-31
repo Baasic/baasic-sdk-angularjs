@@ -1,6 +1,6 @@
 ﻿(function (angular, module, undefined) {
     "use strict";
-    module.service("recaptchaService", ["recaptchaKey",
+    module.service("baasicRecaptchaService", ["recaptchaKey",
         function (recaptchaKey) {
             return {
                 create: function (elem, options) {
