@@ -1,6 +1,6 @@
 {
   "name": "baasic-sdk-angular",
-  "version": "0.1.21",
+  "version": "0.1.23",
   "main": "dist/*",
     "ignore": [
         "src",
