@@ -1,7 +1,7 @@
 {
-  "name": "baasic-angular",
-  "version": "0.0.1",
-  "main": "dist/baasic-angular.js",
+  "name": "baasic-sdk-angular",
+  "version": "0.1.21",
+  "main": "dist/*",
     "ignore": [
         "src",
         "spec",
@@ -29,6 +29,14 @@
 	"gulp-uglify": ">0.0.21"
   },
   "dependencies": {
-	"uritemplate": "0.0.0"
+	"baasic-javascript-framework": "Baasic/baasic-sdk-javascript",
+	"baasic-angular-core": "Baasic/baasic-sdk-angularjs-core",
+	"baasic-angular-app-settings": "Baasic/baasic-sdk-angularjs-app-settings",
+	"baasic-angular-article": "Baasic/baasic-sdk-angularjs-articles",
+	"baasic-angular-dynamic-resource": "Baasic/baasic-sdk-angularjs-dynamic-resource",
+	"baasic-angular-key-value": "Baasic/baasic-sdk-angularjs-key-value",
+	"baasic-angular-membership": "Baasic/baasic-sdk-angularjs-membership",
+	"baasic-angular-security": "Baasic/baasic-sdk-angularjs-security",
+	"baasic-angular-value-set": "Baasic/baasic-sdk-angularjs-value-set"
   }
 }

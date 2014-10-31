@@ -1,6 +1,6 @@
 {
-  "name": "baasic-angular",
-  "version": "0.0.1",
+  "name": "baasic-sdk-angular",
+  "version": "0.1.21",
   "devDependencies": {
     "gulp": ">3.4.0",
 	"gulp-beautify": "1.0.3",
