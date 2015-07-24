@@ -1,6 +1,6 @@
 {
   "name": "baasic-sdk-angularjs",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "main": "dist/*",
     "ignore": [
         "src",
@@ -37,6 +37,7 @@
 	"baasic-angularjs-key-value": "Baasic/baasic-sdk-angularjs-key-value",
 	"baasic-angularjs-membership": "Baasic/baasic-sdk-angularjs-membership",
 	"baasic-angularjs-security": "Baasic/baasic-sdk-angularjs-security",
-	"baasic-angularjs-value-set": "Baasic/baasic-sdk-angularjs-value-set"
+	"baasic-angularjs-value-set": "Baasic/baasic-sdk-angularjs-value-set",
+	"baasic-angularjs-user-profile": "Baasic/baasic-sdk-angularjs-user-profile"
   }
 }
