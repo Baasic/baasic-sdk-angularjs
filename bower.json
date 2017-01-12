@@ -38,6 +38,9 @@
 	"baasic-angularjs-membership": "Baasic/baasic-sdk-angularjs-membership",
 	"baasic-angularjs-security": "Baasic/baasic-sdk-angularjs-security",
 	"baasic-angularjs-value-set": "Baasic/baasic-sdk-angularjs-value-set",
-	"baasic-angularjs-user-profile": "Baasic/baasic-sdk-angularjs-user-profile"
+	"baasic-angularjs-user-profile": "Baasic/baasic-sdk-angularjs-user-profile",
+    "baasic-angularjs-files": "Baasic/baasic-sdk-angularjs-files",
+    "baasic-angularjs-notifications": "Baasic/baasic-sdk-angularjs-notifications",
+    "baasic-angularjs-templating": "Baasic/baasic-sdk-angularjs-templating"
   }
 }

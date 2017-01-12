@@ -22,7 +22,11 @@
             <dependency id="Baasic.Angular.KeyValue" version="(,2.0)" />                        
             <dependency id="Baasic.Angular.Membership" version="(,2.0)" />                        
             <dependency id="Baasic.Angular.Security" version="(,2.0)" />                        
-            <dependency id="Baasic.Angular.ValueSet" version="(,2.0)" />                        
+            <dependency id="Baasic.Angular.ValueSet" version="(,2.0)" />
+            <dependency id="Baasic.AngularJS.UserProfile" version="(,2.0)" />
+            <dependency id="Baasic.AngularJS.Files" version="(,2.0)" />
+            <dependency id="Baasic.AngularJS.Notifications" version="(,2.0)" /> 
+            <dependency id="Baasic.AngularJs.Templating" version="(,2.0)" />            
         </dependencies>
     </metadata>
     <files>
