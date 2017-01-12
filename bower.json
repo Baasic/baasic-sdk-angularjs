@@ -1,6 +1,6 @@
 {
   "name": "baasic-sdk-angularjs",
-  "version": "0.2.2",
+  "version": "1.0.0",
   "main": "dist/*",
     "ignore": [
         "src",

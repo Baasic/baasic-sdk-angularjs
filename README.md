@@ -1,6 +1,35 @@
 # Baasic AngularJS SDK Bundle
 
-The Baasic AngularJS SDK bundle provides integration access to all Baasic Services [REST API](https://api.baasic.com/beta/).
+The Baasic AngularJS SDK bundle provides integration access to all Baasic [Baasic REST API](http://dev.baasic.com/api/reference/home) end-points.
+
+## Dependencies
+
+Baasic AngularJS Core library has the following dependencies:
+
+* [Baasic JavaScript Framework](../../../baasic-sdk-javascript)
+* [AngularJS](http://www.angularjs.org/) (>= 1.2.16)
+* [HAL Parser](../../../angular-hal)
+* [URI Template](../../../uritemplate-js)
+
+### Application Configuration
+
+Baasic AngularJS library allows you to use multiple Baasic applications in your AngularJS modules. To initialize a Baasic application you will need to add the following code to you module configuration:
+
+```javascript
+module.config(["baasicAppProvider",
+    function (baasicAppProvider) {
+        var app = baasicAppProvider.create("my-app-identifier", {
+            apiRootUrl: "api.baasic.com",
+            apiVersion: "<version>"
+        });
+    }]);
+```
+
+**Note:** _To obtain a Baasic Application Identifier please create your application on [Baasic Registration](https://dashboard.baasic.com/register/) page._
+
+## Baasic Modules
+
+Baasic back-end contains various built-in modules that can be easily consumed through the Baasic AngularJS library. Baasic Developer Center contains detailed information about all the core modules supported by the [AngularJS library](http://dev.baasic.com/sdk#AngularJS).
 
 ## Upgrading the package
 
