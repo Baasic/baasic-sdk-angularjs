@@ -1,18 +1,39 @@
 {
   "name": "baasic-sdk-angularjs",
   "version": "1.0.0",
-  "devDependencies": {
-    "gulp": ">3.4.0",
-	"gulp-beautify": "1.0.3",
-	"gulp-concat": ">2.1.7",
-	"gulp-footer": "^1.0.4",
-	"gulp-header": "^1.0.2",
-    "gulp-jshint": ">1.4.2",
-	"gulp-load-plugins": "0.5.0",
-	"gulp-ngmin": "0.2.0",
-	"gulp-order": "1.0.6",
-	"gulp-rename": "1.2.0",
-	"gulp-uglify": ">0.0.21"
+  "main": "./lib/index.js",
+  "types": "./lib/types/index.d.ts",
+  "scripts": {
+    "ws:setup": "npm install npm-workspace && npm run link-dependencies && npm run build:dependencies && npm run install-peer-dependencies",
+    "ws:clean": "npm-workspace clean",
+    "install-peer-dependencies": "npm install angular",
+    "build:dependencies": "cd ./dependencies/baasic-sdk-core && npm install && npm run build:prod",
+    "link-dependencies": "npm-workspace install",
+    "start": "npm run watch",
+    "watch": "run-p watch:*",
+    "watch:tsc": "npm run build:tsc -- --watch",
+    "watch:webpack": "webpack --config webpack.watch-dev.js",
+    "build:dev": "npm run clean:build && npm run build:tsc && webpack --config webpack.dev.js --bail",
+    "build:prod": "npm run clean:build && npm run build:tsc && webpack --config webpack.prod.js --bail",
+    "build:tsc": "tsc --outDir build/lib --declaration --declarationDir build/lib/types",
+    "clean:build": "rimraf build"
   },
-  "dependencies": {}
+  "devDependencies": {
+    "@types/node": "^7.0.5",
+    "@types/webpack": "^2.2.5",
+    "npm-workspace": "^0.7.1",
+    "npm-run-all": "^4.0.1",
+    "rimraf": "^2.5.4",
+    "ts-loader": "^2.0.0",
+    "typescript": "^2.1.6",
+    "webpack": "^2.2.1",
+    "webpack-merge": "^2.6.1",
+    "webpack-uglify-js-plugin": "^1.1.9"
+  },
+  "dependencies": {
+    "baasic-sdk-core": "*"
+  },
+  "peerDependencies": {
+    "angular": "^1.6.2"
+  }
 }
