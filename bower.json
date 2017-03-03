@@ -1,34 +1,46 @@
 {
-  "name": "baasic-angularjs-core",
+  "name": "baasic-sdk-angularjs",
   "version": "1.0.0",
-  "description": "Baasic AngularJS SDK Core modules and services.",
-  "keywords": [
-    "angularjs",
-    "baasic",
-    "ajax",
-    "backend"
-  ],
-  "license": "MIT",
-  "main": "dist/baasic-angular-core.js",
-  "ignore": [
-    "**/.*",
-    "node_modules",
-    "bower_components",
-    "test",
-    "tests",
-    "src",
-    "spec",
-    "NuGet",
-    "lib",
-    "bower.json",
-    "gulpfile.js",
-    "package.json",
-    "README.md"
-  ],
-  "devDependencies": {},
+  "main": "dist/*",
+    "ignore": [
+        "src",
+        "spec",
+		"NuGet",
+		"lib",
+		"node_modules",
+        ".bowerrc",
+        ".gitignore",
+        "bower.json",
+        "gulpfile.js",
+        "package.json",
+        "README.md"
+    ],
+  "devDependencies": {
+    "gulp": ">3.4.0",
+	"gulp-beautify": "1.0.3",
+	"gulp-concat": ">2.1.7",
+	"gulp-footer": "1.0.4",
+	"gulp-header": "1.0.2",
+    "gulp-jshint": ">1.4.2",
+	"gulp-load-plugins": "0.5.0",
+	"gulp-ngmin": "0.2.0",
+	"gulp-order": "1.0.6",
+	"gulp-rename": "1.2.0",
+	"gulp-uglify": ">0.0.21"
+  },
   "dependencies": {
-    "baasic-uritemplate": "Baasic/uritemplate-js",
-    "baasic-angular-hal": "Baasic/angular-hal",
-    "baasic-javascript-framework": "Baasic/baasic-sdk-javascript"
+	"baasic-javascript-framework": "Baasic/baasic-sdk-javascript",
+	"baasic-angularjs-core": "Baasic/baasic-sdk-angularjs-core",
+	"baasic-angularjs-app-settings": "Baasic/baasic-sdk-angularjs-app-settings",
+	"baasic-angularjs-article": "Baasic/baasic-sdk-angularjs-articles",
+	"baasic-angularjs-dynamic-resource": "Baasic/baasic-sdk-angularjs-dynamic-resource",
+	"baasic-angularjs-key-value": "Baasic/baasic-sdk-angularjs-key-value",
+	"baasic-angularjs-membership": "Baasic/baasic-sdk-angularjs-membership",
+	"baasic-angularjs-security": "Baasic/baasic-sdk-angularjs-security",
+	"baasic-angularjs-value-set": "Baasic/baasic-sdk-angularjs-value-set",
+	"baasic-angularjs-user-profile": "Baasic/baasic-sdk-angularjs-user-profile",
+    "baasic-angularjs-files": "Baasic/baasic-sdk-angularjs-files",
+    "baasic-angularjs-notifications": "Baasic/baasic-sdk-angularjs-notifications",
+    "baasic-angularjs-templating": "Baasic/baasic-sdk-angularjs-templating"
   }
 }
