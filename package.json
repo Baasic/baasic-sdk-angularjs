@@ -19,6 +19,7 @@
     "clean:build": "rimraf build"
   },
   "devDependencies": {
+    "@types/angular": "^1.6.2",
     "@types/node": "^7.0.5",
     "@types/webpack": "^2.2.5",
     "npm-workspace": "^0.7.1",
