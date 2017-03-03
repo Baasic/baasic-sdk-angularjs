@@ -1,7 +1,7 @@
 ﻿/* globals module */
 /**
  * @module baasicLoginService
- * @description Baasic Register Service provides an easy way to consume Baasic Application Registration REST API end-points. In order to obtain needed routes `baasicLoginService` uses `baasicLoginRouteService`.
+ * @description Baasic Register Service provides an easy way to consume Baasic Application Registration REST API end-points. 
  */
 (function (angular, module, undefined) {
     'use strict';
@@ -60,9 +60,9 @@ baasicLoginService.logout(token.access_token, token.token_type)
                     return baasicApp.membership.login.logout(token, type);
                 },
                 /**
-                 * Provides direct access to `baasicLoginRouteService`.
+                 * Provides direct access to route definition.
                  * @method        
-                 * @example baasicLoginService.routeService.get.expand(expandObject);
+                 * @example baasicLoginService.routeService.get('<id>', expandObject);
                  **/
                 routeService: baasicApp.membership.login.routeDefinition,
                 social: {
@@ -79,11 +79,7 @@ baasicLoginService.social.get('<provider>', '<returnUrl>')
 });
                     **/
                     get: function (provider, returnUrl) {
-                        var params = {
-                            provider: provider,
-                            returnUrl: returnUrl
-                        };
-                        return baasicApiHttp.get(loginRouteService.social.get.expand(baasicApiService.findParams(params)));
+                        return baasicApp.membership.loginSocial.get(provider, returnUrl);
                     },
                     /**
                     * Returns a promise that is resolved once the post action has been performed. This action logs user into the application and success response returns the token resource.
@@ -107,28 +103,7 @@ baasicLoginService.social.post('<provider>', postData)
 });
                     **/
                     post: function (provider, data, options) {
-                        var params = {
-                            provider: provider
-                        };
-                        if (options) {
-                            params.options = options;
-                        }
-                        return baasicApiHttp({
-                                url: loginRouteService.social.post.expand({
-                                    provider: provider,
-                                    options: options
-                                }),
-                                method: 'POST',
-                                data: baasicApiService.createParams(data)[baasicConstants.modelPropertyName],
-                                headers: {
-                                    'Content-Type': 'application/json; charset=UTF-8'
-                                }
-                            })
-                            .success(function (data) {
-                                if (data && !data.status) {
-                                    authService.updateAccessToken(data);
-                                }
-                            });
+                        return baasicApp.membership.loginSocial.post(provider, data, options);
                     },
                     /**
                      * Parses social provider response parameters.
@@ -136,54 +111,11 @@ baasicLoginService.social.post('<provider>', postData)
                      * @example baasicLoginService.social.parseResponse('<provider>');
                      **/
                     parseResponse: function (provider, returnUrl) {
-                        var params = parseUrlParams();
-                        var result = {};
-                        switch (provider) {
-                            case 'twitter':
-                                /*jshint camelcase: false */
-                                result.oAuthToken = params.oauth_token;
-                                result.oAuthVerifier = params.oauth_verifier;
-                                break;
-                            default:
-                                result.code = params.code;
-                                result.returnUrl = returnUrl;
-                                break;
-                        }
-                        return result;
+                        return baasicApp.membership.loginSocial.parseResponse(provider, returnUrl);
                     }
                 }
             };
 
-            // Getting query string values in javascript: http://stackoverflow.com/questions/901115/how-can-i-get-query-string-values-in-javascript
-            function parseUrlParams() {
-                var urlParams;
-                var match,
-                    pl = /\+/g,
-                    search = /([^&=]+)=?([^&]*)/g,
-                    decode = function (s) {
-                        return decodeURIComponent(s.replace(pl, ' '));
-                    },
-                    query = window.location.search.substring(1);
-
-                urlParams = {};
-                /*jshint -W084 */
-                while (match = search.exec(query)) {
-                    urlParams[decode(match[1])] = decode(match[2]);
-                }
-                return urlParams;
-            }
-
-            /**
-             * Returns url encoded form data.
-             */
-            function transformData(data) {
-                var items = [];
-                angular.forEach(data, function (value, key) {
-                    items.push([encodeURIComponent(key), encodeURIComponent(value)].join('='));
-                });
-
-                return items.join('&');
-            }
         }
     ]);
 }(angular, module));

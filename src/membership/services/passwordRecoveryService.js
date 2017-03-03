@@ -1,14 +1,14 @@
 ﻿/* globals module */
 /**
  * @module baasicPasswordRecoveryService
- * @description Baasic Password Recovery Service provides an easy way to consume Baasic Password Recovery REST API end-points. In order to obtain needed routes `baasicPasswordRecoveryService` uses `baasicPasswordRecoveryRouteService`.
-*/
+ * @description Baasic Password Recovery Service provides an easy way to consume Baasic Password Recovery REST API end-points. 
+ */
 (function (angular, module, undefined) {
     'use strict';
-    module.service('baasicPasswordRecoveryService', ['baasicApiHttp', 'baasicPasswordRecoveryRouteService',
-        function (baasicApiHttp, passwordRecoveryRouteService) {
+    module.service('baasicPasswordRecoveryService', ['baasicApp',
+        function (baasicApp) {
             return {
-				/**
+                /**
 				* Returns a promise that is resolved once the password recovery requestReset action is completed. This action initiates the password recovery process for the user.
 				* @method
 				* @example
@@ -27,13 +27,9 @@ baasicPasswordRecoveryService.requestReset({
 .finally (function () {});				
 				*/
                 requestReset: function (data) {
-                    return baasicApiHttp({
-                        url: passwordRecoveryRouteService.passwordRecovery.expand({}),
-                        method: 'POST',
-                        data: data
-                    });
+                    return baasicApp.membership.passwordRecovery.requestReset(data);
                 },
-				/**
+                /**
 				* Returns a promise that is resolved once the password reset action is completed. This updates user's password selection.
 				* @method
 				* @example
@@ -48,22 +44,19 @@ baasicPasswordRecoveryService.reset({
   // perform error handling here
 })
 .finally (function () {});				
-				*/				
+				*/
                 reset: function (data) {
-                    return baasicApiHttp({
-                        url: passwordRecoveryRouteService.passwordRecovery.expand({}),
-                        method: 'PUT',
-                        data: data
-                    });
+                    return baasicApp.membership.passwordRecovery.reset(data);
                 },
                 /**
-                * Provides direct access to `baasicPasswordRecoveryRouteService`.
-                * @method        
-                * @example baasicPasswordRecoveryService.routeService.get.expand(expandObject);
-                **/             
-                routeService: passwordRecoveryRouteService
+                 * Provides direct access to route definition.
+                 * @method        
+                 * @example baasicPasswordRecoveryService.routeService.get('<id>', expandObject);
+                 **/
+                routeService: baasicApp.membership.passwordRecovery.routeDefinition
             };
-        }]);
+        }
+    ]);
 }(angular, module));
 /**
  * @overview 

@@ -1,14 +1,14 @@
 ﻿/* globals module */
 /**
  * @module baasicRoleService
- * @description Baasic Role Service provides an easy way to consume Baasic Role REST API end-points. In order to obtain needed routes `baasicRoleService` uses `baasicRoleRouteService`.
-*/
+ * @description Baasic Role Service provides an easy way to consume Baasic Role REST API end-points. 
+ */
 (function (angular, module, undefined) {
-    'use strict';
-    module.service('baasicRoleService', ['baasicApiHttp', 'baasicApiService', 'baasicConstants', 'baasicRoleRouteService',
-        function (baasicApiHttp, baasicApiService, baasicConstants, roleRouteService) {
-            return {
-                 /**
+  'use strict';
+  module.service('baasicRoleService', ['baasicApp',
+    function (baasicApp) {
+      return {
+        /**
                  * Returns a promise that is resolved once the find action has been performed. Success response returns a list of role resources matching the given criteria.
                  * @method        
                  * @example 
@@ -25,11 +25,11 @@ baasicRoleService.find({
 .error(function (response, status, headers, config) {
   // perform error handling here
 });    
-                 **/  					
-                find: function (options) {
-                    return baasicApiHttp.get(roleRouteService.find.expand(baasicApiService.findParams(options)));
-                },
-                 /**
+                 **/
+        find: function (options) {
+          return baasicApp.membership.role.find(options);
+        },
+        /**
                  * Returns a promise that is resolved once the get action has been performed. Success response returns the specified role resource.
                  * @method        
                  * @example 
@@ -40,11 +40,11 @@ baasicRoleService.get('<role-id>')
 .error(function (response, status, headers, config) {
   // perform error handling here
 });
-                 **/ 				
-                get: function (id, options) {
-                    return baasicApiHttp.get(roleRouteService.get.expand(baasicApiService.getParams(id, options)));
-                },
-                 /**
+                 **/
+        get: function (id, options) {
+          return baasicApp.membership.role.get(id, options);
+        },
+        /**
                  * Returns a promise that is resolved once the create action has been performed; this action creates a role.
                  * @method        
                  * @example 
@@ -58,16 +58,12 @@ baasicRoleService.create({
 .error(function (response, status, headers, config) {
   // perform error handling here
 });
-                 **/ 				
-                create: function (data) {
-                    return baasicApiHttp.post(roleRouteService.create.expand({}), baasicApiService.createParams(data)[baasicConstants.modelPropertyName]);
-                },
-                 /**
-                 * Returns a promise that is resolved once the update role action has been performed; this action updates a role. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicRoleService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
-```
-var params = baasicApiService.removeParams(role);
-var uri = params['model'].links('put').href;
-```
+                 **/
+        create: function (data) {
+          return baasicApp.membership.role.create(data);
+        },
+        /**
+                 * Returns a promise that is resolved once the update role action has been performed; this action updates a role. 
                  * @method        
                  * @example 
 // role is a resource previously fetched using get action.
@@ -81,16 +77,11 @@ baasicRoleService.update(role)
 });
 
 				**/
-                update: function (data) {
-                    var params = baasicApiService.updateParams(data);
-                    return baasicApiHttp.put(params[baasicConstants.modelPropertyName].links('put').href, params[baasicConstants.modelPropertyName]);
-                },
-                 /**
-                 * Returns a promise that is resolved once the remove role action has been performed. This action will remove a role from the system, if completed successfully. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicRoleService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
-```
-var params = baasicApiService.removeParams(role);
-var uri = params['model'].links('delete').href;
-```
+        update: function (data) {
+          return baasicApp.membership.role.update(data);
+        },
+        /**
+                 * Returns a promise that is resolved once the remove role action has been performed. This action will remove a role from the system, if completed successfully. 
                  * @method        
                  * @example 
 // Role is a resource previously fetched using get action.				 
@@ -101,19 +92,19 @@ baasicRoleService.remove(role)
 .error(function (response, status, headers, config) {
   // perform error handling here
 });		
-				**/				
-                remove: function (data) {
-                    var params = baasicApiService.removeParams(data);
-                    return baasicApiHttp.delete(params[baasicConstants.modelPropertyName].links('delete').href);
-                },
-                /**
-                * Provides direct access to `baasicRoleRouteService`.
-                * @method        
-                * @example baasicRoleService.routeService.get.expand(expandObject);
-                **/             
-                routeService: roleRouteService
-            };
-        }]);
+				**/
+        remove: function (data) {
+          return baasicApp.membership.role.remove(data);
+        },
+        /**
+         * Provides direct access to route definition.
+         * @method        
+         * @example baasicRoleService.routeService.get('<id>', expandObject);
+         **/
+        routeService: baasicApp.membership.role.routeDefinition
+      };
+    }
+  ]);
 }(angular, module));
 /**
  * @overview 
