@@ -1,6 +1,6 @@
 ﻿/**
  * @module baasicKeyValueService
- * @description Baasic Key Value Service provides an easy way to consume Baasic Key Value REST API end-points. In order to obtain needed routes `baasicKeyValueService` uses `baasicKeyValueRouteService`.
+ * @description Baasic Key Value Service provides an easy way to consume Baasic Key Value REST API end-points. 
  */
 (function (angular, module, undefined) {
   "use strict";
@@ -26,7 +26,7 @@ baasicKeyValueService.find({
 });    
                  **/
         find: function (options) {
-          return baasicApiHttp.get(keyValueRouteService.find.expand(baasicApiService.findParams(options)));
+          return baasicApp.keyValue.get(options);
         },
         /**
                  * Returns a promise that is resolved once the get action has been performed. Success response returns the specified key value resource.
@@ -41,7 +41,7 @@ baasicKeyValueService.get('<key-value-id>')
 });
                  **/
         get: function (id, options) {
-          return baasicApiHttp.get(keyValueRouteService.get.expand(baasicApiService.getParams(id, options)));
+          return baasicApp.keyValue.get(id, options);
         },
         /**
                  * Returns a promise that is resolved once the create key value action has been performed; this action creates a new key value resource.
@@ -59,14 +59,10 @@ baasicKeyValueService.create({
 });
                  **/
         create: function (data) {
-          return baasicApiHttp.post(keyValueRouteService.create.expand(), baasicApiService.createParams(data)[baasicConstants.modelPropertyName]);
+          return baasicApp.keyValue.post(data);
         },
         /**
-                 * Returns a promise that is resolved once the update key value action has been performed; this action updates a key value resource. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicKeyValueRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
-```
-var params = baasicApiService.removeParams(keyValue);
-var uri = params['model'].links('put').href;
-```
+                 * Returns a promise that is resolved once the update key value action has been performed; this action updates a key value resource. 
                  * @method        
                  * @example 
 // keyValue is a resource previously fetched using get action.
@@ -80,15 +76,10 @@ baasicKeyValueService.update(keyValue)
 });
 				**/
         update: function (data) {
-          var params = baasicApiService.updateParams(data);
-          return baasicApiHttp.put(params[baasicConstants.modelPropertyName].links('put').href, params[baasicConstants.modelPropertyName]);
+          return baasicApp.keyValue.put(data);
         },
         /**
-                 * Returns a promise that is resolved once the remove action has been performed. This action will remove a key value resource from the system if successfully completed. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicKeyValueRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
-```
-var params = baasicApiService.removeParams(keyValue);
-var uri = params['model'].links('delete').href;
-```
+                 * Returns a promise that is resolved once the remove action has been performed. This action will remove a key value resource from the system if successfully completed. 
                  * @method        
                  * @example 
 // keyValue is a resource previously fetched using get action.				 
@@ -101,15 +92,14 @@ baasicKeyValueService.remove(keyValue)
 });		
 				**/
         remove: function (data) {
-          var params = baasicApiService.removeParams(data);
-          return baasicApiHttp.delete(params[baasicConstants.modelPropertyName].links('delete').href);
+          return baasicApp.keyValue.delete(data);
         },
         /**
-         * Provides direct access to `baasicKeyValueRouteService`.
+         * Provides direct access to routeDefinition.
          * @method        
-         * @example baasicKeyValueService.routeService.get.expand(expandObject);
+         * @example baasicKeyValueService.routeService.get('<id>', { embed:'<embeds>', fields: '<fields>' });
          **/
-        routeService: keyValueRouteService
+        routeService: baasicApp.keyValue.routeDefinition
       };
     }
   ]);
