@@ -1,6 +1,6 @@
 # Baasic AngularJS SDK Bundle
 
-The Baasic AngularJS SDK bundle provides integration access to all Baasic [Baasic REST API](http://dev.baasic.com/api/reference/home) end-points.
+The Baasic AngularJS SDK bundle provides integration access to all [Baasic REST API](http://dev.baasic.com/api/reference/home) end-points.
 
 ## Dependencies
 
@@ -11,7 +11,7 @@ Baasic AngularJS Core library has the following dependencies:
 * [HAL Parser](../../../angular-hal)
 * [URI Template](../../../uritemplate-js)
 
-### Application Configuration
+## Application Configuration
 
 Baasic AngularJS library allows you to use multiple Baasic applications in your AngularJS modules. To initialize a Baasic application you will need to add the following code to you module configuration:
 
