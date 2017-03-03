@@ -1,0 +1,34 @@
+{
+  "name": "baasic-angularjs-core",
+  "version": "1.0.0",
+  "description": "Baasic AngularJS SDK Core modules and services.",
+  "keywords": [
+    "angularjs",
+    "baasic",
+    "ajax",
+    "backend"
+  ],
+  "license": "MIT",
+  "main": "dist/baasic-angular-core.js",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests",
+    "src",
+    "spec",
+    "NuGet",
+    "lib",
+    "bower.json",
+    "gulpfile.js",
+    "package.json",
+    "README.md"
+  ],
+  "devDependencies": {},
+  "dependencies": {
+    "baasic-uritemplate": "Baasic/uritemplate-js",
+    "baasic-angular-hal": "Baasic/angular-hal",
+    "baasic-javascript-framework": "Baasic/baasic-sdk-javascript"
+  }
+}
