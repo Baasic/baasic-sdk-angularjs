@@ -1,0 +1,209 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+    <metadata>
+        <id>Baasic.Angular.Core</id>
+        <version>$version$</version>
+        <title>Baasic Angular Core Module</title>
+        <authors>Kristijan Horvat</authors>
+        <owners>Mono Ltd.</owners>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>AngularJS Core module making calls to the Baasic API easy.</description>
+        <summary />
+		<projectUrl>https://github.com/Baasic/baasic-sdk-angularjs-core</projectUrl>
+        <copyright>Mono Ltd.</copyright>
+        <language>en-US</language>
+        <tags>Javascript, Baasic, AngularJs</tags>
+		<dependencies>     
+            <dependency id="UriTemplateJs" version="(,2.0)" />                        
+            <dependency id="AngularJs.HAL.Parser" version="(,2.0)" />                        
+            <dependency id="Baasic.JavaScript.Framework" version="(,2.0)" />                        
+        </dependencies>
+    </metadata>
+    <files>
+        <file src="..\dist\baasic-angular-core.js" target="content\Scripts\baasic-angular-core.js" />
+		<file src="..\dist\baasic-angular-core.min.js" target="content\Scripts\baasic-angular-core.min.js" />
+    </files>
+</package>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
