@@ -8,7 +8,7 @@
 	'use strict';
 	module.provider('baasicApp', function baasicAppService() {
 		var apps = {};
-		var defaultApp;
+		var defaultAppKey;
         /**
         * Create an application.
         * @method create       
@@ -20,21 +20,27 @@ var app = baasicApp.create('<api-key>', {
 });      
         **/ 
 		this.create = function create(apiKey, config) {
-			var defaultConfig = {
-				apiRootUrl: 'api.baasic.local',
-				apiVersion: 'beta'
-			};
-			var app = MonoSoftware.Baasic.Application.init(apiKey, angular.extend(defaultConfig, config));
 
-			apps[apiKey] = app;
-			if (!defaultApp) {
-				defaultApp = app;
+			apps[apiKey] = function (httpClient) {
+				var cfg = angular.extend({}, config, {
+					httpClient: httpClient
+				});
+				var app = new BaasicApp(apiKey, cfg);
+				apps[apiKey] = function() { return app; };
+
+				return app;
+			};
+			
+			if (!defaultAppKey) {
+				defaultAppKey = apiKey;
 			}
 
 			return app;
 		};
 
-		this.$get = function () {
+		this.$get = ["$http", function ($http) {
+			var httpClient = getHttpClient($http);
+
 			return {
                 /**
                 * Returns a list of all applications.
@@ -44,7 +50,7 @@ var app = baasicApp.create('<api-key>', {
 				all: function () {
 					var list = [];
 					for (var key in apps) {
-						list.push(apps[key]);
+						list.push(apps[key](httpClient));
 					}
 					
 					return list;
@@ -55,13 +61,41 @@ var app = baasicApp.create('<api-key>', {
                 * @example baasicApp.get('<api-key>');               
                 **/ 				
 				get: function getBaasicApplication (apiKey) {
+					var appFactory;
 					if (apiKey) {
-						return apps[apiKey];
+						appFactory = apps[apiKey];
 					} else {
-						return defaultApp;
+						appFactory = apps[defaultAppKey];
 					}
+
+					return appFactory(httpClient);
 				}
 			};
-		};
+		}];
 	});
+
+	function getHttpClient($http) {
+		return function (request)
+		{
+			var config = {
+				withCredentials: true,
+				method: request.method,
+				url: request.url.toString()
+			};
+
+			if (request.headers) config.headers = request.headers;
+			if (request.body) config.data = request.body;
+
+			return $http(config)
+				.then((value) => {
+					return {
+						headers: value.headers(),
+						body: value.data,
+						statusCode: value.status,
+						statusText: value.statusText
+					};
+				});
+		};
+	}
+
 }(angular, module));
