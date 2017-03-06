@@ -5674,75 +5674,13 @@
 
     module.config(["$provide", function config($provide) {}]);
 
-    /* globals module */
-    /**
-     * @module baasicKeyValueRouteService
-     * @description Baasic Key Value Route Service provides Baasic route templates which can be expanded to Baasic REST URIs. Various services can use Baasic Key Value Route Service to obtain needed routes while other routes will be obtained through HAL. By convention, all route services  use the same function names as their corresponding services.
-     */
-    (function (angular, module, undefined) {
-        "use strict";
-        module.service("baasicKeyValueRouteService", ["baasicUriTemplateService", function (uriTemplateService) {
-            return {
-                /**
-                 * Parses find key value route which can be expanded with additional options. Supported items are: 
-                 * - `searchQuery` - A string value used to identify key value resources using the phrase search.
-                 * - `page` - A value used to set the page number, i.e. to retrieve certain key value subset from the storage.
-                 * - `rpp` - A value used to limit the size of result set per page.
-                 * - `sort` - A string used to set the key value property to sort the result collection by.
-                 * - `embed` - Comma separated list of resources to be contained within the current representation.
-                 * @method        
-                 * @example 
-                 baasicKeyValueRouteService.find.expand(
-                 {searchQuery: '<search-phrase>'}
-                 );
-                 **/
-                find: uriTemplateService.parse("key-values/{?searchQuery,page,rpp,sort,embed,fields}"),
-                /**
-                 * Parses get key value route which must be expanded with the Id of the previously created key value resource in the system.
-                 * @method        
-                 * @example 
-                 baasicKeyValueRouteService.get.expand(
-                 {id: '<key-value-id>'}
-                 );
-                 **/
-                get: uriTemplateService.parse("key-values/{id}/{?embed,fields}"),
-                /**
-                 * Parses create key value route; this URI template does not expose any additional options.
-                 * @method        
-                 * @example baasicKeyValueRouteService.create.expand({});              
-                 **/
-                create: uriTemplateService.parse("key-values"),
-                /**
-                 * Parses and expands URI templates based on [RFC6570](http://tools.ietf.org/html/rfc6570) specifications. For more information please visit the project [GitHub](https://github.com/Baasic/uritemplate-js) page.
-                 * @method
-                 * @example 
-                 baasicKeyValueRouteService.parse(
-                 '<route>/{?embed,fields,options}'
-                 ).expand(
-                 {embed: '<embedded-resource>'}
-                 );
-                 **/
-                parse: uriTemplateService.parse
-            };
-        }]);
-    }(angular, module));
-    /**
-     * @copyright (c) 2017 Mono Ltd
-     * @license MIT
-     * @author Mono Ltd
-     * @overview 
-     ***Notes:**
-     - Refer to the [Baasic REST API](http://dev.baasic.com/api/reference/home) for detailed information about available Baasic REST API end-points.
-     - [URI Template](https://github.com/Baasic/uritemplate-js) syntax enables expanding the Baasic route templates to Baasic REST URIs providing it with an object that contains URI parameters.
-     - All end-point objects are transformed by the associated route service.
-     */
     /**
      * @module baasicKeyValueService
-     * @description Baasic Key Value Service provides an easy way to consume Baasic Key Value REST API end-points. In order to obtain needed routes `baasicKeyValueService` uses `baasicKeyValueRouteService`.
+     * @description Baasic Key Value Service provides an easy way to consume Baasic Key Value REST API end-points. 
      */
     (function (angular, module, undefined) {
         "use strict";
-        module.service("baasicKeyValueService", ["baasicApiHttp", "baasicApiService", "baasicConstants", "baasicKeyValueRouteService", function (baasicApiHttp, baasicApiService, baasicConstants, keyValueRouteService) {
+        module.service("baasicKeyValueService", ["baasicApp", function (baasicApp) {
             return {
                 /**
                  * Returns a promise that is resolved once the find action has been performed. Success response returns a list of key value resources matching the given criteria.
@@ -5763,7 +5701,7 @@
                  });
                  **/
                 find: function (options) {
-                    return baasicApiHttp.get(keyValueRouteService.find.expand(baasicApiService.findParams(options)));
+                    return baasicApp.keyValue.get(options);
                 },
                 /**
                  * Returns a promise that is resolved once the get action has been performed. Success response returns the specified key value resource.
@@ -5778,7 +5716,7 @@
                  });
                  **/
                 get: function (id, options) {
-                    return baasicApiHttp.get(keyValueRouteService.get.expand(baasicApiService.getParams(id, options)));
+                    return baasicApp.keyValue.get(id, options);
                 },
                 /**
                  * Returns a promise that is resolved once the create key value action has been performed; this action creates a new key value resource.
@@ -5796,14 +5734,10 @@
                  });
                  **/
                 create: function (data) {
-                    return baasicApiHttp.post(keyValueRouteService.create.expand(), baasicApiService.createParams(data)[baasicConstants.modelPropertyName]);
+                    return baasicApp.keyValue.post(data);
                 },
                 /**
-                 * Returns a promise that is resolved once the update key value action has been performed; this action updates a key value resource. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicKeyValueRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
-                 ```
-                 var params = baasicApiService.removeParams(keyValue);
-                 var uri = params['model'].links('put').href;
-                 ```
+                 * Returns a promise that is resolved once the update key value action has been performed; this action updates a key value resource. 
                  * @method        
                  * @example 
                  // keyValue is a resource previously fetched using get action.
@@ -5817,15 +5751,10 @@
                  });
                  **/
                 update: function (data) {
-                    var params = baasicApiService.updateParams(data);
-                    return baasicApiHttp.put(params[baasicConstants.modelPropertyName].links('put').href, params[baasicConstants.modelPropertyName]);
+                    return baasicApp.keyValue.put(data);
                 },
                 /**
-                 * Returns a promise that is resolved once the remove action has been performed. This action will remove a key value resource from the system if successfully completed. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicKeyValueRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
-                 ```
-                 var params = baasicApiService.removeParams(keyValue);
-                 var uri = params['model'].links('delete').href;
-                 ```
+                 * Returns a promise that is resolved once the remove action has been performed. This action will remove a key value resource from the system if successfully completed. 
                  * @method        
                  * @example 
                  // keyValue is a resource previously fetched using get action.
@@ -5838,15 +5767,14 @@
                  });
                  **/
                 remove: function (data) {
-                    var params = baasicApiService.removeParams(data);
-                    return baasicApiHttp.delete(params[baasicConstants.modelPropertyName].links('delete').href);
+                    return baasicApp.keyValue.delete(data);
                 },
                 /**
-                 * Provides direct access to `baasicKeyValueRouteService`.
+                 * Provides direct access to routeDefinition.
                  * @method        
-                 * @example baasicKeyValueService.routeService.get.expand(expandObject);
+                 * @example baasicKeyValueService.routeService.get('<id>', { embed:'<embeds>', fields: '<fields>' });
                  **/
-                routeService: keyValueRouteService
+                routeService: baasicApp.keyValue.routeDefinition
             };
         }]);
     }(angular, module));
@@ -5859,7 +5787,6 @@
      - Refer to the [Baasic REST API](http://dev.baasic.com/api/reference/home) for detailed information about available Baasic REST API end-points.
      - All end-point objects are transformed by the associated route service.
      */
-
     /* exported module */
     /** 
      * @description The angular.module is a global place for creating, registering or retrieving modules. All modules should be registered in an application using this mechanism. An angular module is a container for the different parts of your app - services, directives etc. In order to use `baasic.membership` module functionality it must be added as a dependency to your app.
@@ -5885,76 +5812,12 @@
 
     /* globals module */
     /**
-     * @module baasicLoginRouteService
-     * @description Baasic Login Route Service provides Baasic route templates which can be expanded to Baasic REST URIs. Various services can use Baasic Login Route Service to obtain needed routes while other routes will be obtained through HAL. By convention, all route services use the same function names as their corresponding services.
-     */
-    (function (angular, module, undefined) {
-        'use strict';
-        module.service('baasicLoginRouteService', ['baasicUriTemplateService', function (uriTemplateService) {
-            return {
-                /**
-                 * Parses login route which can be expanded with additional options. Supported items are:                  
-                 * - `options` - Comma separated list of options used to setup authentication token with cookie session. Supported values are: "session" and "sliding".
-                 * @method        
-                 * @example 
-                 baasicLoginRouteService.login.expand(
-                 {options: 'sliding'}
-                 );
-                 **/
-                login: uriTemplateService.parse('login/{?embed,fields,options}'),
-                /**
-                 * Parses and expands URI templates based on [RFC6570](http://tools.ietf.org/html/rfc6570) specifications. For more information please visit the project [GitHub](https://github.com/Baasic/uritemplate-js) page.
-                 * @method
-                 * @example 
-                 baasicLoginRouteService.parse(
-                 '<route>/{?embed,fields,options}'
-                 ).expand(
-                 {embed: '<embedded-resource>'}
-                 );
-                 **/
-                parse: uriTemplateService.parse,
-                social: {
-                    /**
-                     * Parses get social login route which can be expanded with additional items. Supported items are:
-                     * - `provider` - Provider name or Id for which the login URL should be generated.
-                     * - `returnUrl` - Redirect Uri for the provider which will be used when the user is redirected back to the application.
-                     * @method social.get       
-                     * @example 
-                     baasicUserRouteService.social.get.expand({
-                     provider : '<provider>',
-                     returnUrl: '<returnUrl>'
-                     });
-                     **/
-                    get: uriTemplateService.parse('login/social/{provider}/{?returnUrl}'),
-                    /**
-                     * Parses post social login route which can be expanded with additional items. Supported items are:
-                     * - `provider` - Provider name or Id being used to login with.
-                     * @method social.get       
-                     * @example 
-                     baasicUserRouteService.social.post.expand({
-                     provider : '<provider>'
-                     });
-                     **/
-                    post: uriTemplateService.parse('login/social/{provider}/{?embed,fields,options}'),
-                }
-            };
-        }]);
-    }(angular, module));
-    /**
-     * @overview 
-     ***Notes:**
-     - Refer to the [Baasic REST API](http://dev.baasic.com/api/reference/home) for detailed information about available Baasic REST API end-points.
-     - [URI Template](https://github.com/Baasic/uritemplate-js) syntax enables expanding the Baasic route templates to Baasic REST URIs providing it with an object that contains URI parameters.
-     - All end-point objects are transformed by the associated route service.
-     */
-    /* globals module */
-    /**
      * @module baasicLoginService
-     * @description Baasic Register Service provides an easy way to consume Baasic Application Registration REST API end-points. In order to obtain needed routes `baasicLoginService` uses `baasicLoginRouteService`.
+     * @description Baasic Register Service provides an easy way to consume Baasic Application Registration REST API end-points. 
      */
     (function (angular, module, undefined) {
         'use strict';
-        module.service('baasicLoginService', ['baasicConstants', 'baasicApiService', 'baasicApiHttp', 'baasicAuthorizationService', 'baasicLoginRouteService', function (baasicConstants, baasicApiService, baasicApiHttp, authService, loginRouteService) {
+        module.service('baasicLoginService', ['baasicApp', function (baasicApp) {
 
             return {
                 /**
@@ -5975,30 +5838,7 @@
                  .finally (function () {});
                  **/
                 login: function login(data) {
-                    var settings = angular.copy(data);
-
-                    if (settings.options) {
-                        var options = settings.options;
-                        if (angular.isArray(options)) {
-                            settings.options = options.join();
-                        }
-                    }
-
-                    return baasicApiHttp({
-                        url: loginRouteService.login.expand(settings),
-                        method: 'POST',
-                        data: transformData({
-                            grant_type: 'password',
-                            // jshint ignore:line
-                            username: settings.username,
-                            password: settings.password
-                        }),
-                        headers: {
-                            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
-                        }
-                    }).success(function (data) {
-                        authService.updateAccessToken(data);
-                    });
+                    return baasicApp.membership.login.login(data);
                 },
                 /**
                  * Returns a promise that is resolved once the loadUserData action has been performed. This action retrieves the account information of the currently logged in user. Retrieved account information will contain permission collection which identifies access policies assigned to the user and application sections.
@@ -6014,12 +5854,7 @@
                  .finally (function () {});
                  */
                 loadUserData: function loadUserData(data) {
-                    data = data || {};
-                    return baasicApiHttp.get(loginRouteService.login.expand(data), {
-                        headers: {
-                            'Accept': 'application/json; charset=UTF-8'
-                        }
-                    });
+                    return baasicApp.membership.login.loadUserData(data);
                 },
                 /**
                  * Returns a promise that is resolved once the logout action has been performed. This action invalidates user token logging the user out of the system.
@@ -6033,23 +5868,14 @@
                  .finally (function () {});
                  */
                 logout: function logout(token, type) {
-                    return baasicApiHttp({
-                        url: loginRouteService.login.expand({}),
-                        method: 'DELETE',
-                        data: {
-                            token: token,
-                            type: type
-                        }
-                    }).success(function () {
-                        authService.updateAccessToken(null);
-                    });
+                    return baasicApp.membership.login.logout(token, type);
                 },
                 /**
-                 * Provides direct access to `baasicLoginRouteService`.
+                 * Provides direct access to route definition.
                  * @method        
-                 * @example baasicLoginService.routeService.get.expand(expandObject);
+                 * @example baasicLoginService.routeService.get('<id>', expandObject);
                  **/
-                routeService: loginRouteService,
+                routeService: baasicApp.membership.login.routeDefinition,
                 social: {
                     /**
                      * Returns a promise that is resolved once the get action has been performed. Success response returns a resolved social login provider Url.
@@ -6064,11 +5890,7 @@
                      });
                      **/
                     get: function (provider, returnUrl) {
-                        var params = {
-                            provider: provider,
-                            returnUrl: returnUrl
-                        };
-                        return baasicApiHttp.get(loginRouteService.social.get.expand(baasicApiService.findParams(params)));
+                        return baasicApp.membership.loginSocial.get(provider, returnUrl);
                     },
                     /**
                      * Returns a promise that is resolved once the post action has been performed. This action logs user into the application and success response returns the token resource.
@@ -6092,27 +5914,7 @@
                      });
                      **/
                     post: function (provider, data, options) {
-                        var params = {
-                            provider: provider
-                        };
-                        if (options) {
-                            params.options = options;
-                        }
-                        return baasicApiHttp({
-                            url: loginRouteService.social.post.expand({
-                                provider: provider,
-                                options: options
-                            }),
-                            method: 'POST',
-                            data: baasicApiService.createParams(data)[baasicConstants.modelPropertyName],
-                            headers: {
-                                'Content-Type': 'application/json; charset=UTF-8'
-                            }
-                        }).success(function (data) {
-                            if (data && !data.status) {
-                                authService.updateAccessToken(data);
-                            }
-                        });
+                        return baasicApp.membership.loginSocial.post(provider, data, options);
                     },
                     /**
                      * Parses social provider response parameters.
@@ -6120,106 +5922,27 @@
                      * @example baasicLoginService.social.parseResponse('<provider>');
                      **/
                     parseResponse: function (provider, returnUrl) {
-                        var params = parseUrlParams();
-                        var result = {};
-                        switch (provider) {
-                        case 'twitter':
-                            /*jshint camelcase: false */
-                            result.oAuthToken = params.oauth_token;
-                            result.oAuthVerifier = params.oauth_verifier;
-                            break;
-                        default:
-                            result.code = params.code;
-                            result.returnUrl = returnUrl;
-                            break;
-                        }
-                        return result;
+                        return baasicApp.membership.loginSocial.parseResponse(provider, returnUrl);
                     }
                 }
             };
 
-            // Getting query string values in javascript: http://stackoverflow.com/questions/901115/how-can-i-get-query-string-values-in-javascript
-
-            function parseUrlParams() {
-                var urlParams;
-                var match, pl = /\+/g,
-                    search = /([^&=]+)=?([^&]*)/g,
-                    decode = function (s) {
-                        return decodeURIComponent(s.replace(pl, ' '));
-                    },
-                    query = window.location.search.substring(1);
-
-                urlParams = {}; /*jshint -W084 */
-                while (match = search.exec(query)) {
-                    urlParams[decode(match[1])] = decode(match[2]);
-                }
-                return urlParams;
-            }
-
-            /**
-             * Returns url encoded form data.
-             */
-
-            function transformData(data) {
-                var items = [];
-                angular.forEach(data, function (value, key) {
-                    items.push([encodeURIComponent(key), encodeURIComponent(value)].join('='));
-                });
-
-                return items.join('&');
-            }
         }]);
     }(angular, module));
     /**
      * @overview 
      ***Notes:**
      - Refer to the [Baasic REST API](http://dev.baasic.com/api/reference/home) for detailed information about available Baasic REST API end-points.
-     - All end-point objects are transformed by the associated route service.
-     */
-    /* globals module */
-    /**
-     * @module baasicPasswordRecoveryRouteService 
-     * @description Baasic Password Recovery Route Service provides Baasic route templates which can be expanded to Baasic REST URIs. Various services can use Baasic Password Recovery Route Service to obtain needed routes while other routes will be obtained through HAL. By convention, all route services use the same function names as their corresponding services.
-     */
-    (function (angular, module, undefined) {
-        'use strict';
-        module.service('baasicPasswordRecoveryRouteService', ['baasicUriTemplateService', function (uriTemplateService) {
-            return {
-                /**
-                 * Parses recover-password route, recover-password route doesn't expose any additional properties.
-                 * @method        
-                 * @example baasicPasswordRecoveryRouteService.passwordRecovery.expand({});               
-                 **/
-                passwordRecovery: uriTemplateService.parse('recover-password'),
-                /**
-                 * Parses and expands URI templates based on [RFC6570](http://tools.ietf.org/html/rfc6570) specifications. For more information please visit the project [GitHub](https://github.com/Baasic/uritemplate-js) page.
-                 * @method
-                 * @example 
-                 baasicPasswordRecoveryRouteService.parse(
-                 '<route>/{?embed,fields,options}'
-                 ).expand(
-                 {embed: '<embedded-resource>'}
-                 );
-                 **/
-                parse: uriTemplateService.parse
-            };
-        }]);
-    }(angular, module));
-    /**
-     * @overview 
-     ***Notes:**
-     - Refer to the [Baasic REST API](http://dev.baasic.com/api/reference/home) for detailed information about available Baasic REST API end-points.
-     - [URI Template](https://github.com/Baasic/uritemplate-js) syntax enables expanding the Baasic route templates to Baasic REST URIs providing it with an object that contains URI parameters.
      - All end-point objects are transformed by the associated route service.
      */
     /* globals module */
     /**
      * @module baasicPasswordRecoveryService
-     * @description Baasic Password Recovery Service provides an easy way to consume Baasic Password Recovery REST API end-points. In order to obtain needed routes `baasicPasswordRecoveryService` uses `baasicPasswordRecoveryRouteService`.
+     * @description Baasic Password Recovery Service provides an easy way to consume Baasic Password Recovery REST API end-points. 
      */
     (function (angular, module, undefined) {
         'use strict';
-        module.service('baasicPasswordRecoveryService', ['baasicApiHttp', 'baasicPasswordRecoveryRouteService', function (baasicApiHttp, passwordRecoveryRouteService) {
+        module.service('baasicPasswordRecoveryService', ['baasicApp', function (baasicApp) {
             return {
                 /**
                  * Returns a promise that is resolved once the password recovery requestReset action is completed. This action initiates the password recovery process for the user.
@@ -6240,11 +5963,7 @@
                  .finally (function () {});
                  */
                 requestReset: function (data) {
-                    return baasicApiHttp({
-                        url: passwordRecoveryRouteService.passwordRecovery.expand({}),
-                        method: 'POST',
-                        data: data
-                    });
+                    return baasicApp.membership.passwordRecovery.requestReset(data);
                 },
                 /**
                  * Returns a promise that is resolved once the password reset action is completed. This updates user's password selection.
@@ -6263,18 +5982,14 @@
                  .finally (function () {});
                  */
                 reset: function (data) {
-                    return baasicApiHttp({
-                        url: passwordRecoveryRouteService.passwordRecovery.expand({}),
-                        method: 'PUT',
-                        data: data
-                    });
+                    return baasicApp.membership.passwordRecovery.reset(data);
                 },
                 /**
-                 * Provides direct access to `baasicPasswordRecoveryRouteService`.
+                 * Provides direct access to route definition.
                  * @method        
-                 * @example baasicPasswordRecoveryService.routeService.get.expand(expandObject);
+                 * @example baasicPasswordRecoveryService.routeService.get('<id>', expandObject);
                  **/
-                routeService: passwordRecoveryRouteService
+                routeService: baasicApp.membership.passwordRecovery.routeDefinition
             };
         }]);
     }(angular, module));
@@ -6282,50 +5997,16 @@
      * @overview 
      ***Notes:**
      - Refer to the [Baasic REST API](http://dev.baasic.com/api/reference/home) for detailed information about available Baasic REST API end-points.
-     - All end-point objects are transformed by the associated route service.
-     */
-    /* globals module */
-    /**
-     * @module baasicRegisterRouteService
-     * @description Baasic Register Route Service provides Baasic route templates which can be expanded to Baasic REST URIs. Various services can use Baasic Register Route Service to obtain needed routes while other routes will be obtained through HAL. By convention, all route services use the same function names as their corresponding services.
-     */
-    (function (angular, module, undefined) {
-        'use strict';
-        module.service('baasicRegisterRouteService', ['baasicUriTemplateService', function (uriTemplateService) {
-            return {
-                /**
-                 * Parses register route, this route doesn't support any additional properties. 
-                 * @method        
-                 * @example baasicRegisterRouteService.create.expand({});               
-                 **/
-                create: uriTemplateService.parse('register'),
-                /**
-                 * Parses activation route; route should be expanded with the `activationToken` which uniquely identifies the user account that needs to be activated.
-                 * @method        
-                 * @example 
-                 baasicRegisterRouteService.activate.expand(
-                 {activationToken: '<activation-token>'}
-                 );
-                 **/
-                activate: uriTemplateService.parse('register/activate/{activationToken}/')
-            };
-        }]);
-    }(angular, module));
-    /**
-     * @overview 
-     ***Notes:**
-     - Refer to the [Baasic REST API](http://dev.baasic.com/api/reference/home) for detailed information about available Baasic REST API end-points.
-     - [URI Template](https://github.com/Baasic/uritemplate-js) syntax enables expanding the Baasic route templates to Baasic REST URIs providing it with an object that contains URI parameters.
      - All end-point objects are transformed by the associated route service.
      */
     /* globals module */
     /**
      * @module baasicRegisterService
-     * @description Baasic Register Service provides an easy way to consume Baasic Application Registration REST API end-points. In order to obtain needed routes `baasicRegisterService` uses `baasicRegisterRouteService`.
+     * @description Baasic Register Service provides an easy way to consume Baasic Application Registration REST API end-points. 
      */
     (function (angular, module, undefined) {
         'use strict';
-        module.service('baasicRegisterService', ['baasicApiHttp', 'baasicApiService', 'baasicConstants', 'baasicRegisterRouteService', 'baasicAuthorizationService', function (baasicApiHttp, baasicApiService, baasicConstants, baasicRegisterRouteService, authService) {
+        module.service('baasicRegisterService', ['baasicApp', function (baasicApp) {
             return {
                 /**
                  * Returns a promise that is resolved once the register create has been performed. This action will create a new user if completed successfully. Created user is not approved immediately, instead an activation e-mail is sent to the user.
@@ -6349,7 +6030,7 @@
                  .finally (function () {});
                  **/
                 create: function (data) {
-                    return baasicApiHttp.post(baasicRegisterRouteService.create.expand({}), baasicApiService.createParams(data)[baasicConstants.modelPropertyName]);
+                    return baasicApp.membership.register.create(data);
                 },
                 /**
                  * Returns a promise that is resolved once the account activation action has been performed; this action activates a user account and success response returns the token resource.
@@ -6367,20 +6048,14 @@
                  .finally (function () {});
                  **/
                 activate: function (data) {
-                    var params = baasicApiService.getParams(data, 'activationToken');
-                    return baasicApiHttp({
-                        url: baasicRegisterRouteService.activate.expand(params),
-                        method: 'PUT'
-                    }).success(function (data) {
-                        authService.updateAccessToken(data);
-                    });
+                    return baasicApp.membership.register.activate(data);
                 },
                 /**
-                 * Provides direct access to `baasicRegisterRouteService`.
+                 * Provides direct access to route definition.
                  * @method        
-                 * @example baasicRegisterService.routeService.get.expand(expandObject);
+                 * @example baasicRegisterService.routeService.get('<id>', expandObject);
                  **/
-                routeService: baasicRegisterRouteService
+                routeService: baasicApp.membership.register.routeDefinition
             };
         }]);
     }(angular, module));
@@ -6388,74 +6063,16 @@
      * @overview 
      ***Notes:**
      - Refer to the [Baasic REST API](http://dev.baasic.com/api/reference/home) for detailed information about available Baasic REST API end-points.
-     - All end-point objects are transformed by the associated route service.
-     */
-    /* globals module */
-    /**
-     * @module baasicRoleRouteService
-     * @description Baasic Role Route Service provides Baasic route templates which can be expanded to Baasic REST URIs. Various services can use Baasic Role Route Service to obtain needed routes while other routes will be obtained through HAL. By convention, all route services use the same function names as their corresponding services.
-     */
-    (function (angular, module, undefined) {
-        'use strict';
-        module.service('baasicRoleRouteService', ['baasicUriTemplateService', function (uriTemplateService) {
-            return {
-                /**
-                 * Parses find role route which can be expanded with additional options. Supported items are: 
-                 * - `searchQuery` - A string value used to identify role resources using the phrase search.
-                 * - `page` - A value used to set the page number, i.e. to retrieve certain role subset from the storage.
-                 * - `rpp` - A value used to limit the size of result set per page.
-                 * - `sort` - A string used to set the role property to sort the result collection by.
-                 * @method        
-                 * @example 
-                 baasicRoleRouteService.find.expand(
-                 {searchQuery: '<search-phrase>'}
-                 );
-                 **/
-                find: uriTemplateService.parse('lookups/roles/{?searchQuery,page,rpp,sort,embed,fields}'),
-                /**
-                 * Parses get role route which should be expanded with the role Id. Note that the role Id is the primary key of the role.
-                 * @method        
-                 * @example 
-                 baasicRoleRouteService.get.expand(
-                 {id: '<role-id>'}
-                 );
-                 **/
-                get: uriTemplateService.parse('lookups/roles/{id}/{?embed,fields}'),
-                /**
-                 * Parses create role route; this URI template does not expose any additional options.
-                 * @method        
-                 * @example baasicRoleRouteService.create.expand({});               
-                 **/
-                create: uriTemplateService.parse('lookups/roles'),
-                /**
-                 * Parses and expands URI templates based on [RFC6570](http://tools.ietf.org/html/rfc6570) specifications. For more information please visit the project [GitHub](https://github.com/Baasic/uritemplate-js) page.
-                 * @method
-                 * @example 
-                 baasicRoleRouteService.parse(
-                 '<route>/{?embed,fields,options}'
-                 ).expand(
-                 {embed: '<embedded-resource>'}
-                 );
-                 **/
-                parse: uriTemplateService.parse
-            };
-        }]);
-    }(angular, module));
-    /**
-     * @overview 
-     ***Notes:**
-     - Refer to the [Baasic REST API](http://dev.baasic.com/api/reference/home) for detailed information about available Baasic REST API end-points.
-     - [URI Template](https://github.com/Baasic/uritemplate-js) syntax enables expanding the Baasic route templates to Baasic REST URIs providing it with an object that contains URI parameters.
      - All end-point objects are transformed by the associated route service.
      */
     /* globals module */
     /**
      * @module baasicRoleService
-     * @description Baasic Role Service provides an easy way to consume Baasic Role REST API end-points. In order to obtain needed routes `baasicRoleService` uses `baasicRoleRouteService`.
+     * @description Baasic Role Service provides an easy way to consume Baasic Role REST API end-points. 
      */
     (function (angular, module, undefined) {
         'use strict';
-        module.service('baasicRoleService', ['baasicApiHttp', 'baasicApiService', 'baasicConstants', 'baasicRoleRouteService', function (baasicApiHttp, baasicApiService, baasicConstants, roleRouteService) {
+        module.service('baasicRoleService', ['baasicApp', function (baasicApp) {
             return {
                 /**
                  * Returns a promise that is resolved once the find action has been performed. Success response returns a list of role resources matching the given criteria.
@@ -6476,7 +6093,7 @@
                  });
                  **/
                 find: function (options) {
-                    return baasicApiHttp.get(roleRouteService.find.expand(baasicApiService.findParams(options)));
+                    return baasicApp.membership.role.find(options);
                 },
                 /**
                  * Returns a promise that is resolved once the get action has been performed. Success response returns the specified role resource.
@@ -6491,7 +6108,7 @@
                  });
                  **/
                 get: function (id, options) {
-                    return baasicApiHttp.get(roleRouteService.get.expand(baasicApiService.getParams(id, options)));
+                    return baasicApp.membership.role.get(id, options);
                 },
                 /**
                  * Returns a promise that is resolved once the create action has been performed; this action creates a role.
@@ -6509,14 +6126,10 @@
                  });
                  **/
                 create: function (data) {
-                    return baasicApiHttp.post(roleRouteService.create.expand({}), baasicApiService.createParams(data)[baasicConstants.modelPropertyName]);
+                    return baasicApp.membership.role.create(data);
                 },
                 /**
-                 * Returns a promise that is resolved once the update role action has been performed; this action updates a role. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicRoleService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
-                 ```
-                 var params = baasicApiService.removeParams(role);
-                 var uri = params['model'].links('put').href;
-                 ```
+                 * Returns a promise that is resolved once the update role action has been performed; this action updates a role. 
                  * @method        
                  * @example 
                  // role is a resource previously fetched using get action.
@@ -6531,15 +6144,10 @@
                  
                  **/
                 update: function (data) {
-                    var params = baasicApiService.updateParams(data);
-                    return baasicApiHttp.put(params[baasicConstants.modelPropertyName].links('put').href, params[baasicConstants.modelPropertyName]);
+                    return baasicApp.membership.role.update(data);
                 },
                 /**
-                 * Returns a promise that is resolved once the remove role action has been performed. This action will remove a role from the system, if completed successfully. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicRoleService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
-                 ```
-                 var params = baasicApiService.removeParams(role);
-                 var uri = params['model'].links('delete').href;
-                 ```
+                 * Returns a promise that is resolved once the remove role action has been performed. This action will remove a role from the system, if completed successfully. 
                  * @method        
                  * @example 
                  // Role is a resource previously fetched using get action.
@@ -6552,15 +6160,14 @@
                  });
                  **/
                 remove: function (data) {
-                    var params = baasicApiService.removeParams(data);
-                    return baasicApiHttp.delete(params[baasicConstants.modelPropertyName].links('delete').href);
+                    return baasicApp.membership.role.remove(data);
                 },
                 /**
-                 * Provides direct access to `baasicRoleRouteService`.
+                 * Provides direct access to route definition.
                  * @method        
-                 * @example baasicRoleService.routeService.get.expand(expandObject);
+                 * @example baasicRoleService.routeService.get('<id>', expandObject);
                  **/
-                routeService: roleRouteService
+                routeService: baasicApp.membership.role.routeDefinition
             };
         }]);
     }(angular, module));
@@ -6568,108 +6175,6 @@
      * @overview 
      ***Notes:**
      - Refer to the [Baasic REST API](http://dev.baasic.com/api/reference/home) for detailed information about available Baasic REST API end-points.
-     - All end-point objects are transformed by the associated route service.
-     */
-    /* globals module */
-
-    /**
-     * @module baasicUserRouteService
-     * @description Baasic User Route Service provides Baasic route templates which can be expanded to Baasic REST URIs. Various services can use Baasic User Route Service to obtain needed routes while other routes will be obtained through HAL. By convention, all route services use the same function names as their corresponding services.
-     */
-    (function (angular, module, undefined) {
-        'use strict';
-        module.service('baasicUserRouteService', ['baasicUriTemplateService', function (uriTemplateService) {
-            return {
-                /**
-                 * Parses user exists route; URI template should be expanded with the username whose availability you'd like to check.                
-                 * @method        
-                 * @example 
-                 baasicUserRouteService.exists.expand(
-                 {username: '<username>'}
-                 );
-                 **/
-                exists: uriTemplateService.parse('users/{username}/exists/'),
-                /**
-                 * Parses find user route which can be expanded with additional options. Supported items are: 
-                 * - `searchQuery` - A string referencing user properties using the phrase or BQL (Baasic Query Language) search.
-                 * - `page` - A value used to set the page number, i.e. to retrieve certain user subset from the storage.
-                 * - `rpp` - A value used to limit the size of result set per page.
-                 * - `sort` - A string used to set the user property to sort the result collection by.
-                 * - `embed` - Comma separated list of resources to be contained within the current representation.
-                 * @method        
-                 * @example 
-                 baasicUserRouteService.find.expand(
-                 {searchQuery: '<search-phrase>'}
-                 );
-                 **/
-                find: uriTemplateService.parse('users/{?searchQuery,page,rpp,sort,embed,fields}'),
-                /**
-                 * Parses get user route which must be expanded with the username of the previously created user resource in the system. Additional expand supported items are:
-                 * - `embed` - Comma separated list of resources to be contained within the current representation.
-                 * @method        
-                 * @example 
-                 baasicUserRouteService.get.expand(
-                 {username: '<username>'}
-                 );
-                 **/
-                get: uriTemplateService.parse('users/{username}/{?embed,fields}'),
-                /**
-                 * Parses create user route, this URI template does not expose any additional options.
-                 * @method        
-                 * @example baasicUserRouteService.create.expand({});              
-                 **/
-                create: uriTemplateService.parse('users'),
-                /**
-                 * Parses change password route, URI template should be expanded with the username of the user resource whose password should be updated.
-                 * @method        
-                 * @example 
-                 baasicUserRouteService.changePassword.expand(
-                 {username: '<username>'}
-                 );
-                 **/
-                changePassword: uriTemplateService.parse('users/{username}/change-password'),
-                /**
-                 * Parses and expands URI templates based on [RFC6570](http://tools.ietf.org/html/rfc6570) specifications. For more information please visit the project [GitHub](https://github.com/Baasic/uritemplate-js) page.
-                 * @method
-                 * @example 
-                 baasicUserRouteService.parse(
-                 '<route>/{?embed,fields,options}'
-                 ).expand(
-                 {embed: '<embedded-resource>'}
-                 );
-                 **/
-                parse: uriTemplateService.parse,
-                socialLogin: {
-                    /**
-                     * Parses get social login route, URI template should be expanded with the username of the user resource whose social login connections should be retrieved.
-                     * @method socialLogin.get       
-                     * @example 
-                     baasicUserRouteService.socialLogin.get.expand({
-                     username : '<username>'
-                     });
-                     **/
-                    get: uriTemplateService.parse('users/{username}/social-login'),
-                    /**
-                     * Parses remove social login route which can be expanded with additional items. Supported items are:
-                     * - `username` - A username which uniquely identifies an application user whose social login connection needs to be removed.
-                     * - `provider` - Provider from which to disconnect the login resource from.
-                     * @method socialLogin.remove 
-                     * @example 
-                     baasicUserRouteService.socialLogin.remove.expand({
-                     username : '<username>',
-                     provider : '<provider>'
-                     });
-                     **/
-                    remove: uriTemplateService.parse('users/{username}/social-login/{provider}')
-                }
-            };
-        }]);
-    }(angular, module));
-    /**
-     * @overview 
-     ***Notes:**
-     - Refer to the [Baasic REST API](http://dev.baasic.com/api/reference/home) for detailed information about available Baasic REST API end-points.
-     - [URI Template](https://github.com/Baasic/uritemplate-js) syntax enables expanding the Baasic route templates to Baasic REST URIs providing it with an object that contains URI parameters.
      - All end-point objects are transformed by the associated route service.
      */
     /* globals module */
@@ -6679,7 +6184,7 @@
      */
     (function (angular, module, undefined) {
         'use strict';
-        module.service('baasicUserService', ['baasicApiHttp', 'baasicApiService', 'baasicConstants', 'baasicUserRouteService', function (baasicApiHttp, baasicApiService, baasicConstants, userRouteService) {
+        module.service('baasicUserService', ['baasicApp', function (baasicApp) {
             return {
                 /**
                  * Returns a promise that is resolved once the exists action has been performed. This action checks if user exists in the application.
@@ -6694,7 +6199,7 @@
                  });
                  **/
                 exists: function (username, options) {
-                    return baasicApiHttp.get(userRouteService.exists.expand(baasicApiService.getParams(username, options, 'username')));
+                    return baasicApp.membership.user.exists(username, options);
                 },
                 /**
                  * Returns a promise that is resolved once the find action has been performed. Success response returns a list of user resources matching the given criteria.
@@ -6715,7 +6220,7 @@
                  });
                  **/
                 find: function (options) {
-                    return baasicApiHttp.get(userRouteService.find.expand(baasicApiService.findParams(options)));
+                    return baasicApp.membership.user.find(options);
                 },
                 /**
                  * Returns a promise that is resolved once the get action has been performed. Success response returns the specified user resource.
@@ -6733,7 +6238,7 @@
                  });
                  **/
                 get: function (options) {
-                    return baasicApiHttp.get(userRouteService.get.expand(baasicApiService.getParams(options, 'username')));
+                    return baasicApp.membership.user.get(options.username, options);
                 },
                 /**
                  * Returns a promise that is resolved once the create user action has been performed; this action creates a new user.
@@ -6756,7 +6261,7 @@
                  });
                  **/
                 create: function (data) {
-                    return baasicApiHttp.post(userRouteService.create.expand({}), baasicApiService.createParams(data)[baasicConstants.modelPropertyName]);
+                    return baasicApp.membership.user.create(data);
                 },
                 /**
                  * Returns a promise that is resolved once the update user action has been performed; this action updates a user. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicUserRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
@@ -6778,8 +6283,7 @@
                  });
                  **/
                 update: function (data) {
-                    var params = baasicApiService.updateParams(data);
-                    return baasicApiHttp.put(params[baasicConstants.modelPropertyName].links('put').href, params[baasicConstants.modelPropertyName]);
+                    return baasicApp.membership.user.update(data);
                 },
                 /**
                  * Returns a promise that is resolved once the remove user action has been performed. This action will remove a user from the system if successfully completed. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicUserRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
@@ -6799,8 +6303,7 @@
                  });
                  **/
                 remove: function (data) {
-                    var params = baasicApiService.removeParams(data);
-                    return baasicApiHttp.delete(params[baasicConstants.modelPropertyName].links('delete').href);
+                    return baasicApp.membership.user.remove(data);
                 },
                 /**
                  * Returns a promise that is resolved once the unlock user action has been performed. This action will unlock the user resource which was previously locked either manually or automatically by the system. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicUserRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
@@ -6820,8 +6323,7 @@
                  });
                  **/
                 unlock: function (data) {
-                    var params = baasicApiService.updateParams(data);
-                    return baasicApiHttp.put(params[baasicConstants.modelPropertyName].links('unlock').href);
+                    return baasicApp.membership.user.unlock(data);
                 },
                 /**
                  * Returns a promise that is resolved once the lock user action has been performed. This action will lock the user resource out of the system. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicUserRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
@@ -6841,8 +6343,7 @@
                  });
                  **/
                 lock: function (data) {
-                    var params = baasicApiService.updateParams(data);
-                    return baasicApiHttp.put(params[baasicConstants.modelPropertyName].links('lock').href);
+                    return baasicApp.membership.user.lock(data);
                 },
                 /**
                  * Returns a promise that is resolved once the approve user action has been performed. This action will mark the user resource as 'approved' in the system. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicUserRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
@@ -6862,8 +6363,7 @@
                  });
                  **/
                 approve: function (data) {
-                    var params = baasicApiService.updateParams(data);
-                    return baasicApiHttp.put(params[baasicConstants.modelPropertyName].links('approve').href);
+                    return baasicApp.membership.user.approve(data);
                 },
                 /**
                  * Returns a promise that is resolved once the disapprove user action has been performed. This action will mark the user resource as 'not approved' in the system. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicUserRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
@@ -6883,8 +6383,7 @@
                  });
                  **/
                 disapprove: function (data) {
-                    var params = baasicApiService.updateParams(data);
-                    return baasicApiHttp.put(params[baasicConstants.modelPropertyName].links('disapprove').href);
+                    return baasicApp.membership.user.disapprove(data);
                 },
                 /**
                  * Returns a promise that is resolved once the changePassword action has been performed. This action will update user's password selection.
@@ -6903,20 +6402,14 @@
                  .finally (function () {});
                  **/
                 changePassword: function (username, data) {
-                    return baasicApiHttp({
-                        url: userRouteService.changePassword.expand({
-                            username: username
-                        }),
-                        method: 'PUT',
-                        data: data
-                    });
+                    return baasicApp.membership.user.changePassword(username, data);
                 },
                 /**
                  * Provides direct access to `baasicUserRouteService`.
                  * @method        
                  * @example baasicUserService.routeService.get.expand(expandObject);
                  **/
-                routeService: userRouteService,
+                routeService: baasicApp.membership.user.routeDefinition,
                 socialLogin: {
                     /**
                      * Returns a promise that is resolved once the get action has been performed. Success response returns a list user resource connected social login providers.
@@ -6931,9 +6424,7 @@
                      });
                      **/
                     get: function (username) {
-                        return baasicApiHttp.get(userRouteService.socialLogin.get.expand({
-                            username: username
-                        }));
+                        return baasicApp.membership.user.socialLogin.get(username);
                     },
                     /**
                      * Returns a promise that is resolved once the remove action has been performed. This action removes the user resource social login connection from the specified provider.
@@ -6948,20 +6439,7 @@
                      });
                      **/
                     remove: function (username, provider) {
-                        var params;
-                        if (provider.hasOwnProperty('abrv')) {
-                            params = {
-                                provider: provider.abrv
-                            };
-                        } else if (provider.hasOwnProperty('id')) {
-                            params = {
-                                provider: provider.id
-                            };
-                        } else {
-                            params = angular.extend({}, provider);
-                        }
-                        params.username = username;
-                        return baasicApiHttp.delete(userRouteService.socialLogin.remove.expand(baasicApiService.findParams(params)));
+                        return baasicApp.membership.user.socialLogin.remove(username, provider);
                     }
                 }
             };
@@ -9639,6 +9117,289 @@
      * @author Mono Ltd
      */
     /* exported module */
+    /** 
+     * @description The angular.module is a global place for creating, registering or retrieving modules. All modules should be registered in an application using this mechanism.  An angular module is a container for the different parts of your app - services, directives etc. In order to use `baasic.templating` module functionality it must be added as a dependency to your app.
+     * @copyright (c) 2015 Mono
+     * @license MIT
+     * @author Mono
+     * @module baasic.templating
+     * @example
+     (function (Main) {
+     'use strict';
+     var dependencies = [
+     'baasic.api',
+     'baasic.membership',
+     'baasic.security',
+     'baasic.appSettings',
+     'baasic.templating',
+     'baasic.dynamicResource',
+     'baasic.keyValue',
+     'baasic.valueSet'
+     ];
+     Main.module = angular.module('myApp.Main', dependencies);
+     }
+     (MyApp.Modules.Main = {})); 
+     */
+    var module = angular.module('baasic.templating', ['baasic.api']);
+
+    /*global module */
+
+    /**
+     * @module baasicTemplatingRouteService
+     * @description Baasic Templating Route Service provides Baasic route templates which can be expanded to Baasic REST URIs. Various services can use Baasic Templating Route Service to obtain a needed routes while other routes will be obtained through HAL. By convention, all route services use the same function names as their corresponding services.
+     */
+    (function (angular, module, undefined) {
+        'use strict';
+        module.service('baasicTemplatingRouteService', ['baasicUriTemplateService', function (uriTemplateService) {
+            return {
+                /**
+                 * Parses find route which can be expanded with additional options. Supported items are: 
+                 * - `searchQuery` - A string value used to identify template resources using the phrase search.
+                 * - `page` - A value used to set the page number, i.e. to retrieve certain template subset from the storage.
+                 * - `rpp` - A value used to limit the size of result set per page.
+                 * - `sort` - A string used to set the template property to sort the result collection by.
+                 * - `embed` - Comma separated list of resources to be contained within the current representation.
+                 * @method        
+                 * @example 
+                 baasicTemplatingRouteService.find.expand(
+                 {searchQuery: '<search-phrase>'}
+                 );
+                 **/
+                find: uriTemplateService.parse('templates/{?searchQuery,page,rpp,sort,embed,fields,moduleNames}'),
+                /**
+                 * Parses get route which must be expanded with the Id of the previously created template resource in the system.
+                 * @method        
+                 * @example 
+                 baasicTemplatingRouteService.get.expand(
+                 {id: '<template-id>'}
+                 );
+                 **/
+                get: uriTemplateService.parse('templates/{id}/{?embed,fields}'),
+                /**
+                 * Parses create route; this URI template does not expose any additional options.
+                 * @method        
+                 * @example baasicTemplatingRouteService.create.expand({});              
+                 **/
+                create: uriTemplateService.parse('templates'),
+                /**
+                 * Parses and expands URI templates based on [RFC6570](http://tools.ietf.org/html/rfc6570) specifications. For more information please visit the project [GitHub](https://github.com/Baasic/uritemplate-js) page.
+                 * @method
+                 * @example 
+                 baasicTemplatingRouteService.parse(
+                 '<route>/{?embed,fields,options}'
+                 ).expand(
+                 {embed: '<embedded-resource>'}
+                 );
+                 **/
+                parse: uriTemplateService.parse,
+                batch: {
+                    /**
+                     * Parses create route; this URI template does not expose any additional options.
+                     * @method batch.create       
+                     * @example baasicTemplatingRouteService.batch.create.expand({});              
+                     **/
+                    create: uriTemplateService.parse('templates/batch'),
+                    /**
+                     * Parses remove route; this URI template does not expose any additional options.
+                     * @method batch.remove       
+                     * @example baasicTemplatingRouteService.batch.remove.expand({});              
+                     **/
+                    remove: uriTemplateService.parse('templates/batch'),
+                    /**
+                     * Parses update route; this URI template does not expose any additional options.
+                     * @method batch.update       
+                     * @example baasicTemplatingRouteService.batch.update.expand({});              
+                     **/
+                    update: uriTemplateService.parse('templates/batch')
+                }
+            };
+        }]);
+    }(angular, module)); // jshint ignore:line
+    /**
+     * @overview 
+     ***Notes:**
+     - Refer to the [REST API documentation](https://github.com/Baasic/baasic-rest-api/wiki) for detailed information about available Baasic REST API end-points.
+     - [URI Template](https://github.com/Baasic/uritemplate-js) syntax enables expanding the Baasic route templates to Baasic REST URIs providing it with an object that contains URI parameters.
+     - All end-point objects are transformed by the associated route service.
+     */
+    /* globals module */
+
+    /**
+     * @module baasicTemplatingService
+     * @description Baasic Templating Service provides an easy way to consume Baasic Templating REST API end-points. In order to obtain a needed routes `baasicTemplatingService` uses `baasicTemplatingRouteService`.
+     */
+    (function (angular, module, undefined) {
+        'use strict';
+        module.service('baasicTemplatingService', ['baasicApiHttp', 'baasicApiService', 'baasicConstants', 'baasicTemplatingRouteService', function (baasicApiHttp, baasicApiService, baasicConstants, templatingRouteService) {
+            return {
+                /**
+                 * Returns a promise that is resolved once the find action has been performed. Success response returns a list of template resources matching the given criteria.
+                 * @method        
+                 * @example 
+                 baasicTemplatingService.find({
+                 pageNumber : 1,
+                 pageSize : 10,
+                 orderBy : '<field>',
+                 orderDirection : '<asc|desc>',
+                 search : '<search-phrase>'
+                 })
+                 .success(function (collection) {
+                 // perform success action here
+                 })
+                 .error(function (response, status, headers, config) {
+                 // perform error handling here
+                 });
+                 **/
+                find: function (options) {
+                    return baasicApiHttp.get(templatingRouteService.find.expand(baasicApiService.findParams(options)));
+                },
+                /**
+                 * Returns a promise that is resolved once the get action has been performed. Success response returns the specified template resource.
+                 * @method        
+                 * @example 
+                 baasicTemplatingService.get('<template-id>')
+                 .success(function (data) {
+                 // perform success action here
+                 })
+                 .error(function (response, status, headers, config) {
+                 // perform error handling here
+                 });
+                 **/
+                get: function (id, options) {
+                    return baasicApiHttp.get(templatingRouteService.get.expand(baasicApiService.getParams(id, options)));
+                },
+                /**
+                 * Returns a promise that is resolved once the create template action has been performed; this action creates a new template resource.
+                 * @method        
+                 * @example 
+                 baasicTemplatingService.create({
+                 content : '<content>',
+                 templateId : '<template-id>'
+                 })
+                 .success(function (data) {
+                 // perform success action here
+                 })
+                 .error(function (response, status, headers, config) {
+                 // perform error handling here
+                 });
+                 **/
+                create: function (data) {
+                    return baasicApiHttp.post(templatingRouteService.create.expand(), baasicApiService.createParams(data)[baasicConstants.modelPropertyName]);
+                },
+                /**
+                 * Returns a promise that is resolved once the update template action has been performed; this action updates a template resource. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicTemplatingRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
+                 ```
+                 var params = baasicApiService.removeParams(template);
+                 var uri = params['model'].links('put').href;
+                 ```
+                 * @method        
+                 * @example 
+                 // template is a resource previously fetched using get action.
+                 template.content = '<new-content>';
+                 baasicTemplatingService.update(template)
+                 .success(function (data) {
+                 // perform success action here
+                 })
+                 .error(function (response, status, headers, config) {
+                 // perform error handling here
+                 });
+                 **/
+                update: function (data) {
+                    var params = baasicApiService.updateParams(data);
+                    return baasicApiHttp.put(params[baasicConstants.modelPropertyName].links('put').href, params[baasicConstants.modelPropertyName]);
+                },
+                /**
+                 * Returns a promise that is resolved once the remove action has been performed. This action will remove a template resource from the system if successfully completed. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicTemplatingRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
+                 ```
+                 var params = baasicApiService.removeParams(template);
+                 var uri = params['model'].links('delete').href;
+                 ```
+                 * @method        
+                 * @example 
+                 // template is a resource previously fetched using get action.
+                 baasicTemplatingService.remove(template)
+                 .success(function (data) {
+                 // perform success action here
+                 })
+                 .error(function (response, status, headers, config) {
+                 // perform error handling here
+                 });
+                 **/
+                remove: function (data) {
+                    var params = baasicApiService.removeParams(data);
+                    return baasicApiHttp.delete(params[baasicConstants.modelPropertyName].links('delete').href);
+                },
+                /**
+                 * Provides direct access to `baasicKeyValueRouteService`.
+                 * @method        
+                 * @example baasicTemplatingService.routeService.get.expand(expandObject);
+                 **/
+                routeService: templatingRouteService,
+                batch: {
+                    /**
+                     * Returns a promise that is resolved once the create action has been performed; this action creates new template resources.
+                     * @method batch.create       
+                     * @example 
+                     baasicTemplatingService.batch.create([{
+                     content : '<content>',
+                     templateId : '<template-id>'
+                     }])
+                     .success(function (data) {
+                     // perform success action here
+                     })
+                     .error(function (response, status, headers, config) {
+                     // perform error handling here
+                     });
+                     **/
+                    create: function (data) {
+                        return baasicApiHttp.post(templatingRouteService.batch.create.expand(), baasicApiService.createParams(data)[baasicConstants.modelPropertyName]);
+                    },
+                    /**
+                     * Returns a promise that is resolved once the update action has been performed; this action updates specified template resources.
+                     * @method batch.update       
+                     * @example 
+                     baasicTemplatingService.batch.update(templates)
+                     .success(function (data) {
+                     // perform success action here
+                     })
+                     .error(function (response, status, headers, config) {
+                     // perform error handling here
+                     });
+                     **/
+                    update: function (data) {
+                        return baasicApiHttp.post(templatingRouteService.batch.update.expand(), baasicApiService.updateParams(data)[baasicConstants.modelPropertyName]);
+                    },
+                    /**
+                     * Returns a promise that is resolved once the remove action has been performed. This action will remove template resources from the system if successfully completed. 
+                     * @method batch.remove       
+                     * @example 			 
+                     baasicTemplatingService.batch.remove(companyIds)
+                     .success(function (data) {
+                     // perform success action here
+                     })
+                     .error(function (response, status, headers, config) {
+                     // perform error handling here
+                     });		
+                     **/
+                    remove: function (ids) {
+                        return baasicApiHttp({
+                            url: templatingRouteService.batch.remove.expand(),
+                            method: 'DELETE',
+                            data: ids
+                        });
+                    }
+                }
+            };
+        }]);
+    }(angular, module));
+    /**
+     * @overview 
+     ***Notes:**
+     - Refer to the [REST API documentation](https://github.com/Baasic/baasic-rest-api/wiki) for detailed information about available Baasic REST API end-points.
+     - All end-point objects are transformed by the associated route service.
+     */
+
+    /* exported module */
 
     /** 
      * @description The angular.module is a global place for creating, registering or retrieving modules. All modules should be registered in an application using this mechanism. An angular module is a container for the different parts of your app - services, directives etc. In order to use `baasic.userProfile` module functionality it must be added as a dependency to your app.
@@ -11517,120 +11278,12 @@
     module.config(["$provide", function config($provide) {}]);
 
     /**
-     * @module baasicValueSetRouteService
-     * @description Baasic Value Set Route Service provides Baasic route templates which can be expanded to Baasic REST URIs. Various services can use Baasic Value Set Route Service to obtain needed routes while other routes will be obtained through HAL. By convention, all route services  use the same function names as their corresponding services.
-     */
-    (function (angular, module, undefined) {
-        "use strict";
-        module.service("baasicValueSetRouteService", ["baasicUriTemplateService", function (uriTemplateService) {
-            return {
-                /**
-                 * Parses find value set route which can be expanded with additional options. Supported items are: 
-                 * - `searchQuery` - A string value used to identify value set resources using the phrase search.
-                 * - `page` - A value used to set the page number, i.e. to retrieve certain value set subset from the storage.
-                 * - `rpp` - A value used to limit the size of result set per page.
-                 * - `sort` - A string used to set the value set property to sort the result collection by.
-                 * - `embed` - Comma separated list of resources to be contained within the current representation.
-                 * @method        
-                 * @example 
-                 baasicValueSetRouteService.find.expand(
-                 {searchQuery: '<search-phrase>'}
-                 );
-                 **/
-                find: uriTemplateService.parse("value-sets/{?searchQuery,page,rpp,sort,embed,fields}"),
-                /**
-                 * Parses get value set route which must be expanded with the name of the previously created value set resource in the system.
-                 * @method        
-                 * @example 
-                 baasicValueSetRouteService.get.expand(
-                 {setName: '<value-set-name>'}
-                 );
-                 **/
-                get: uriTemplateService.parse("value-sets/{setName}/{?embed,fields}"),
-                /**
-                 * Parses create value set route; this URI template does not expose any additional options.
-                 * @method        
-                 * @example baasicValueSetRouteService.create.expand({});              
-                 **/
-                create: uriTemplateService.parse("value-sets"),
-                /**
-                 * Parses and expands URI templates based on [RFC6570](http://tools.ietf.org/html/rfc6570) specifications. For more information please visit the project [GitHub](https://github.com/Baasic/uritemplate-js) page.
-                 * @method
-                 * @example 
-                 baasicValueSetRouteService.parse(
-                 '<route>/{?embed,fields,options}'
-                 ).expand(
-                 {embed: '<embedded-resource>'}
-                 );
-                 **/
-                parse: uriTemplateService.parse,
-                items: {
-                    /**
-                     * Parses find value set items route which can be expanded with additional options. Supported items are:
-                     * - `setName` - Value set name.
-                     * - `searchQuery` - A string value used to identify value set items using the phrase search.
-                     * - `page` - A value used to set the page number, i.e. to retrieve certain value set item subset from the storage.
-                     * - `rpp` - A value used to limit the size of result set per page.
-                     * - `sort` - A string used to set the value set item property to sort the result collection by.
-                     * - `embed` - Comma separated list of resources to be contained within the current representation.
-                     * @method items.find       
-                     * @example 
-                     baasicValueSetRouteService.find.expand(
-                     {searchQuery: '<search-phrase>'}
-                     );
-                     **/
-                    find: uriTemplateService.parse("value-sets/{setName}/items/{?searchQuery,page,rpp,sort,embed,fields}"),
-                    /**
-                     * Parses get route which must be expanded with the following items:
-                     * - `setName` - Value set name.
-                     * - `id` - Value set item id.
-                     * @method        
-                     * @example 
-                     baasicValueSetRouteService.get.expand({
-                     setName: '<value-set-name>', 
-                     id: '<value-set-item-id>'
-                     });
-                     **/
-                    get: uriTemplateService.parse("value-sets/{setName}/items/{id}/{?embed,fields}"),
-                    /**
-                     * Parses create value set item route; the URI template should be expanded with the value set name.
-                     * @method        
-                     * @example baasicValueSetRouteService.create.expand({});              
-                     **/
-                    create: uriTemplateService.parse("value-sets/{setName}/items/"),
-                    /**
-                     * Parses and expands URI templates based on [RFC6570](http://tools.ietf.org/html/rfc6570) specifications. For more information please visit the project [GitHub](https://github.com/Baasic/uritemplate-js) page.
-                     * @method
-                     * @example 
-                     baasicValueSetRouteService.parse(
-                     '<route>/{?embed,fields,options}'
-                     ).expand(
-                     {embed: '<embedded-resource>'}
-                     );
-                     **/
-                    parse: uriTemplateService.parse
-                }
-            };
-        }]);
-    }(angular, module));
-    /**
-     * @copyright (c) 2017 Mono Ltd
-     * @license MIT
-     * @author Mono Ltd
-     * @overview 
-     ***Notes:**
-     - Refer to the [Baasic REST API](http://dev.baasic.com/api/reference/home) for detailed information about available Baasic REST API end-points.
-     - [URI Template](https://github.com/Baasic/uritemplate-js) syntax enables expanding the Baasic route templates to Baasic REST URIs providing it with an object that contains URI parameters.
-     - All end-point objects are transformed by the associated route service.
-     */
-
-    /**
      * @module baasicValueSetService
-     * @description Baasic Value Set Service provides an easy way to consume Baasic Value Set REST end-points. In order to obtain needed routes `baasicValueSetService` uses `baasicValueSetRouteService`.
+     * @description Baasic Value Set Service provides an easy way to consume Baasic Value Set REST end-points. 
      */
     (function (angular, module, undefined) {
         "use strict";
-        module.service("baasicValueSetService", ["baasicApiHttp", "baasicApiService", "baasicConstants", "baasicValueSetRouteService", function (baasicApiHttp, baasicApiService, baasicConstants, valueSetRouteService) {
+        module.service("baasicValueSetService", ["baasicApp", function (baasicApp) {
             return {
                 /**
                  * Returns a promise that is resolved once the find action has been performed. Success response returns a list of value set resources matching given criteria.
@@ -11651,7 +11304,7 @@
                  });
                  **/
                 find: function (options) {
-                    return baasicApiHttp.get(valueSetRouteService.find.expand(baasicApiService.findParams(options)));
+                    return baasicApp.valueSet.get(options);
                 },
                 /**
                  * Returns a promise that is resolved once the get action has been performed. Success response returns the specified value set resource.
@@ -11666,7 +11319,7 @@
                  });
                  **/
                 get: function (setName, options) {
-                    return baasicApiHttp.get(valueSetRouteService.get.expand(baasicApiService.getParams(setName, options, 'setName')));
+                    return baasicApp.valueSet.get(setName, options);
                 },
                 /**
                  * Returns a promise that is resolved once the create value set action has been performed; this action creates a new value set resource.
@@ -11685,14 +11338,10 @@
                  });
                  **/
                 create: function (data) {
-                    return baasicApiHttp.post(valueSetRouteService.create.expand({}), baasicApiService.createParams(data)[baasicConstants.modelPropertyName]);
+                    return baasicApp.valueSet.post(data);
                 },
                 /**
-                 * Returns a promise that is resolved once the update value set action has been performed; this action updates a value set resource. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicValueSetService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
-                 ```
-                 var params = baasicApiService.removeParams(valueSet);
-                 var uri = params['model'].links('put').href;
-                 ```
+                 * Returns a promise that is resolved once the update value set action has been performed; this action updates a value set resource. 
                  * @method        
                  * @example 
                  // valueSet is a resource previously fetched using get action.
@@ -11706,15 +11355,10 @@
                  });
                  **/
                 update: function (data) {
-                    var params = baasicApiService.updateParams(data);
-                    return baasicApiHttp.put(params[baasicConstants.modelPropertyName].links('put').href, params[baasicConstants.modelPropertyName]);
+                    return baasicApp.valueSet.put(data);
                 },
                 /**
-                 * Returns a promise that is resolved once the remove action has been performed. This action will delete a value set resource if the action is completed successfully. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicValueSetService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
-                 ```
-                 var params = baasicApiService.removeParams(valueSet);
-                 var uri = params['model'].links('delete').href;
-                 ```
+                 * Returns a promise that is resolved once the remove action has been performed. This action will delete a value set resource if the action is completed successfully. 
                  * @method        
                  * @example 
                  // valueSet is a resource previously fetched using get action.
@@ -11727,15 +11371,14 @@
                  });
                  **/
                 remove: function (data) {
-                    var params = baasicApiService.removeParams(data);
-                    return baasicApiHttp.delete(params[baasicConstants.modelPropertyName].links('delete').href);
+                    return baasicApp.valueSet.delete(data);
                 },
                 /**
-                 * Provides direct access to `baasicValueSetRouteService`.
+                 * Provides direct access to route defintion.
                  * @method        
-                 * @example baasicValueSetService.routeService.get.expand(expandObject);
+                 * @example baasicValueSetService.routeService.get('<id>', expandObject);
                  **/
-                routeService: valueSetRouteService,
+                routeService: baasicApp.valueSet.routeDefinition,
                 items: {
                     /**
                      * Returns a promise that is resolved once the find action has been performed. Success response returns a list of value set item resources matching given criteria.
@@ -11757,7 +11400,7 @@
                      });
                      **/
                     find: function (options) {
-                        return baasicApiHttp.get(valueSetRouteService.items.find.expand(baasicApiService.findParams(options)));
+                        return baasicApp.valueSet.items.get(options);
                     },
                     /**
                      * Returns a promise that is resolved once the get action has been performed. Success response returns the specified value set item resource.
@@ -11772,9 +11415,7 @@
                      });
                      **/
                     get: function (setName, id, options) {
-                        var params = angular.extend({}, options);
-                        params.setName = setName;
-                        return baasicApiHttp.get(valueSetRouteService.items.get.expand(baasicApiService.getParams(id, params)));
+                        return baasicApp.valueSet.items.get(setName, id, options);
                     },
                     /**
                      * Returns a promise that is resolved once the create value set item action has been performed; this action creates a new value set item resource.
@@ -11792,14 +11433,10 @@
                      });
                      **/
                     create: function (data) {
-                        return baasicApiHttp.post(valueSetRouteService.items.create.expand(data), baasicApiService.createParams(data)[baasicConstants.modelPropertyName]);
+                        return baasicApp.valueSet.items.post(data);
                     },
                     /**
-                     * Returns a promise that is resolved once the update value set item action has been performed; this action updates a value set item resource. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicValueSetService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
-                     ```
-                     var params = baasicApiService.removeParams(valueSetItem);
-                     var uri = params['model'].links('put').href;
-                     ```
+                     * Returns a promise that is resolved once the update value set item action has been performed; this action updates a value set item resource. 
                      * @method items.update       
                      * @example 
                      // valueSetItem is a resource previously fetched using get action.
@@ -11813,15 +11450,10 @@
                      });
                      **/
                     update: function (data) {
-                        var params = baasicApiService.updateParams(data);
-                        return baasicApiHttp.put(params[baasicConstants.modelPropertyName].links('put').href, params[baasicConstants.modelPropertyName]);
+                        return baasicApp.valueSet.items.put(data);
                     },
                     /**
-                     * Returns a promise that is resolved once the remove action has been performed. This action will delete a value set item if the action is completed successfully. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicValueSetService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
-                     ```
-                     var params = baasicApiService.removeParams(valueSetItem);
-                     var uri = params['model'].links('delete').href;
-                     ```
+                     * Returns a promise that is resolved once the remove action has been performed. This action will delete a value set item if the action is completed successfully. 
                      * @method items.remove       
                      * @example 
                      // valueSetItem is a resource previously fetched using get action.
@@ -11834,8 +11466,7 @@
                      });
                      **/
                     remove: function (data) {
-                        var params = baasicApiService.removeParams(data);
-                        return baasicApiHttp.delete(params[baasicConstants.modelPropertyName].links('delete').href);
+                        return baasicApp.valueSet.items.delete(data);
                     }
                 }
             };

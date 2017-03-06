@@ -3,11 +3,11 @@
 /**
  * @module baasicTemplatingService
  * @description Baasic Templating Service provides an easy way to consume Baasic Templating REST API end-points. In order to obtain a needed routes `baasicTemplatingService` uses `baasicTemplatingRouteService`.
-*/
+ */
 (function (angular, module, undefined) {
     'use strict';
-    module.service('baasicTemplatingService', ['baasicApiHttp', 'baasicApiService', 'baasicConstants', 'baasicTemplatingRouteService',
-        function (baasicApiHttp, baasicApiService, baasicConstants, templatingRouteService) {
+    module.service('baasicTemplatingService', ['baasicApp',
+        function (baasicApp) {
             return {
                 /**
                 * Returns a promise that is resolved once the find action has been performed. Success response returns a list of template resources matching the given criteria.
@@ -28,7 +28,7 @@ baasicTemplatingService.find({
 });    
                 **/
                 find: function (options) {
-                    return baasicApiHttp.get(templatingRouteService.find.expand(baasicApiService.findParams(options)));
+                    return baasicApp.templating.find(options);
                 },
                 /**
                 * Returns a promise that is resolved once the get action has been performed. Success response returns the specified template resource.
@@ -43,7 +43,7 @@ baasicTemplatingService.get('<template-id>')
 });
                 **/
                 get: function (id, options) {
-                    return baasicApiHttp.get(templatingRouteService.get.expand(baasicApiService.getParams(id, options)));
+                    return baasicApp.templating.get(id, options);
                 },
                 /**
                 * Returns a promise that is resolved once the create template action has been performed; this action creates a new template resource.
@@ -61,7 +61,7 @@ baasicTemplatingService.create({
 });
                 **/
                 create: function (data) {
-                    return baasicApiHttp.post(templatingRouteService.create.expand(), baasicApiService.createParams(data)[baasicConstants.modelPropertyName]);
+                    return baasicApp.templating.create(data);
                 },
                 /**
                 * Returns a promise that is resolved once the update template action has been performed; this action updates a template resource. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicTemplatingRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
@@ -82,8 +82,7 @@ baasicTemplatingService.update(template)
 });
                **/
                 update: function (data) {
-                    var params = baasicApiService.updateParams(data);
-                    return baasicApiHttp.put(params[baasicConstants.modelPropertyName].links('put').href, params[baasicConstants.modelPropertyName]);
+                    return baasicApp.templating.update(data);
                 },
                 /**
                 * Returns a promise that is resolved once the remove action has been performed. This action will remove a template resource from the system if successfully completed. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicTemplatingRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
@@ -103,15 +102,14 @@ baasicTemplatingService.remove(template)
 });		
                **/
                 remove: function (data) {
-                    var params = baasicApiService.removeParams(data);
-                    return baasicApiHttp.delete(params[baasicConstants.modelPropertyName].links('delete').href);
+                    return baasicApp.templating.remove(data);
                 },
                 /**
-                * Provides direct access to `baasicKeyValueRouteService`.
-                * @method        
-                * @example baasicTemplatingService.routeService.get.expand(expandObject);
-                **/
-                routeService: templatingRouteService,
+                 * Provides direct access to `baasicKeyValueRouteService`.
+                 * @method        
+                 * @example baasicTemplatingService.routeService.get.expand(expandObject);
+                 **/
+                routeService: baasicApp.templating.routeDefinition,
                 batch: {
                     /**
                     * Returns a promise that is resolved once the create action has been performed; this action creates new template resources.
@@ -129,8 +127,8 @@ baasicTemplatingService.remove(template)
     });
                     **/
                     create: function (data) {
-                        return baasicApiHttp.post(templatingRouteService.batch.create.expand(), baasicApiService.createParams(data)[baasicConstants.modelPropertyName]);
-                    }, 
+                        return baasicApp.templating.batch.create(data);
+                    },
                     /**
                     * Returns a promise that is resolved once the update action has been performed; this action updates specified template resources.
                     * @method batch.update       
@@ -144,8 +142,8 @@ baasicTemplatingService.remove(template)
     });
                     **/
                     update: function (data) {
-                        return baasicApiHttp.post(templatingRouteService.batch.update.expand(), baasicApiService.updateParams(data)[baasicConstants.modelPropertyName]);
-                    },                                      
+                        return baasicApp.templating.batch.update(data);
+                    },
                     /**
                     * Returns a promise that is resolved once the remove action has been performed. This action will remove template resources from the system if successfully completed. 
                     * @method batch.remove       
@@ -159,16 +157,13 @@ baasicTemplatingService.remove(template)
     });		
                     **/
                     remove: function (ids) {
-                        return baasicApiHttp({
-                            url: templatingRouteService.batch.remove.expand(),
-                            method: 'DELETE',
-                            data: ids
-                        });
+                        return baasicApp.templating.batch.remove(ids);
                     }
                 }
             };
-        }]);
-} (angular, module));
+        }
+    ]);
+}(angular, module));
 /**
  * @overview 
  ***Notes:**

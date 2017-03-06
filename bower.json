@@ -29,18 +29,6 @@
     "gulp-uglify": ">0.0.21"
   },
   "dependencies": {
-    "baasic-javascript-framework": "Baasic/baasic-sdk-javascript",
-    "baasic-angularjs-core": "Baasic/baasic-sdk-angularjs-core",
-    "baasic-angularjs-app-settings": "Baasic/baasic-sdk-angularjs-app-settings",
-    "baasic-angularjs-article": "Baasic/baasic-sdk-angularjs-articles",
-    "baasic-angularjs-dynamic-resource": "Baasic/baasic-sdk-angularjs-dynamic-resource",
-    "baasic-angularjs-key-value": "Baasic/baasic-sdk-angularjs-key-value",
-    "baasic-angularjs-membership": "Baasic/baasic-sdk-angularjs-membership",
-    "baasic-angularjs-security": "Baasic/baasic-sdk-angularjs-security",
-    "baasic-angularjs-value-set": "Baasic/baasic-sdk-angularjs-value-set",
-    "baasic-angularjs-user-profile": "Baasic/baasic-sdk-angularjs-user-profile",
-    "baasic-angularjs-files": "Baasic/baasic-sdk-angularjs-files",
-    "baasic-angularjs-notifications": "Baasic/baasic-sdk-angularjs-notifications",
-    "baasic-angularjs-templating": "Baasic/baasic-sdk-angularjs-templating"
+    "baasic-sdk-javascript": "Baasic/baasic-sdk-javascript"
   }
 }
