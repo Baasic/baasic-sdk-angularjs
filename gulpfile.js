@@ -25,7 +25,7 @@ gulp.task('jshint', function () {
 gulp.task('scripts', function () {
 	return gulp.src(paths.scripts)
 		.pipe(plugins.order(['*.moduleDefinition.js', '*.js']))
-		.pipe(plugins.concat('baasic-angularjs.js'))
+		.pipe(plugins.concat('baasic-sdk-angularjs.js'))
 		.pipe(plugins.replace('api.baasic.local', 'api.baasic.com'))
 		.pipe(plugins.header('/*\n Baasic AngularJS SDK %%GULP_INJECT_VERSION%%\n (c) 2014-' + new Date().getFullYear() + ' Mono Ltd.  http://baasic.com\n License: MIT\n*/\n(function (angular, undefined) {\n'))
 		.pipe(plugins.footer('\n}(angular));'))
@@ -37,7 +37,7 @@ gulp.task('scripts', function () {
 				comments: /^!|License: MIT/i
 			}
 		}).on('error', gulpUtil.log))
-		.pipe(plugins.rename('baasic-angularjs.min.js'))
+		.pipe(plugins.rename('baasic-sdk-angularjs.min.js'))
 		.pipe(gulp.dest('dist'));
 });
 
@@ -46,4 +46,5 @@ gulp.task('docs', function () {
 });
 
 
-gulp.task('default', ['jshint', 'docs', 'scripts']);
+//gulp.task('default', ['jshint', 'docs', 'scripts']);
+gulp.task('default', ['docs', 'scripts']);

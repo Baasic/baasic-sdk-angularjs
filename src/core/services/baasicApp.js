@@ -24,7 +24,7 @@ var app = baasicApp.create('<api-key>', {
 				var cfg = angular.extend({}, config, {
 					httpClient: httpClient
 				});
-				var app = new BaasicApp(apiKey, cfg);
+				var app = new baasicSdkJavaScript.BaasicApp(apiKey, cfg);
 				apps[apiKey] = function () {
 					return app;
 				};
@@ -35,8 +35,6 @@ var app = baasicApp.create('<api-key>', {
 			if (!defaultAppKey) {
 				defaultAppKey = apiKey;
 			}
-
-			return app;
 		};
 
 		this.$get = ["$http", function ($http) {
