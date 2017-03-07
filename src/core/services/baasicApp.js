@@ -84,7 +84,7 @@ var app = baasicApp.create('<api-key>', {
 			if (request.headers) config.headers = request.headers;
 			if (request.body) config.data = request.body;
 
-			return $http(config)
+			var promise = $http(config)
 				.then(function (value) {
 					return {
 						headers: value.headers(),
@@ -93,6 +93,22 @@ var app = baasicApp.create('<api-key>', {
 						statusText: value.statusText
 					};
 				});
+
+			promise.success = function (fn) {
+				promise.then(function (response) {
+					fn(response.body, response.statusCode, response.headers, request);
+				}, null);
+				return promise;
+			};
+
+			promise.error = function (fn) {
+				promise.then(null, function (response) {
+					fn(response.body, response.statusCode, response.headers, request);
+				});
+				return promise;
+			};				
+
+			return promise;
 		};
 	}
 
