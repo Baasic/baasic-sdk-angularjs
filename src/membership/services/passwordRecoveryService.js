@@ -6,7 +6,8 @@
 (function (angular, module, undefined) {
     'use strict';
     module.service('baasicPasswordRecoveryService', ['baasicApp',
-        function (baasicApp) {
+        function (baasicApps) {
+            var baasicApp = baasicApps.get();
             return {
                 /**
 				* Returns a promise that is resolved once the password recovery requestReset action is completed. This action initiates the password recovery process for the user.

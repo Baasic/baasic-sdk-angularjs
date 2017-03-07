@@ -7778,52 +7778,6 @@
     (function (angular, module, undefined) {
         'use strict';
         var extend = angular.extend;
-        // Tokenizer and unquote code taken from http://stackoverflow.com/questions/5288150/digest-authentication-w-jquery-is-it-possible/5288679#5288679
-        var wwwAuthenticateTokenizer = (function () {
-            var ws = '(?:(?:\\r\\n)?[ \\t])+',
-                token = '(?:[\\x21\\x23-\\x27\\x2A\\x2B\\x2D\\x2E\\x30-\\x39\\x3F\\x41-\\x5A\\x5E-\\x7A\\x7C\\x7E]+)',
-                quotedString = '"(?:[\\x00-\\x0B\\x0D-\\x21\\x23-\\x5B\\\\x5D-\\x7F]|' + ws + '|\\\\[\\x00-\\x7F])*"';
-
-            return new RegExp(token + '(?:=(?:' + quotedString + '|' + token + '))?', 'g');
-        })();
-
-        function unquote(quotedString) {
-            return quotedString.substr(1, quotedString.length - 2).replace(/(?:(?:\r\n)?[ \t])+/g, ' ');
-        }
-
-        function parseWWWAuthenticateHeader(value) {
-            if (value) {
-                var tokens = value.match(wwwAuthenticateTokenizer);
-                if (tokens && tokens.length > 0) {
-                    var wwwAutheniticate = {
-                        scheme: tokens[0]
-                    };
-
-                    if (tokens.length > 1) {
-                        var details = {};
-                        for (var i = 1, l = tokens.length; i < l; i++) {
-                            var values = tokens[i].split('=');
-                            details[values[0]] = unquote(values[1]);
-                        }
-
-                        wwwAutheniticate.details = details;
-                    }
-
-                    return wwwAutheniticate;
-                }
-            }
-
-            return undefined;
-        }
-
-        function startsWith(target, input) {
-            return target.substring(0, input.length) === input;
-        }
-
-        function isAbsoluteUrl(url) {
-            var lowerUrl = url.toLowerCase();
-            return startsWith(lowerUrl, 'http://') || startsWith(lowerUrl, 'https://');
-        }
 
         function tail(array) {
             return Array.prototype.slice.call(array, 1);
@@ -7852,96 +7806,18 @@
             });
         }
 
-        var proxyFactory = function proxyFactory($rootScope, $http, parser, app) {
-            var apiUrl = app.getApiUrl();
-
-            function removeToken(details) {
-                var token = app.getAccessToken();
-                app.updateAccessToken(null);
-                $rootScope.$broadcast('token_error', {
-                    token: token,
-                    error: details.error,
-                    /*jshint camelcase: false */
-                    errorDescription: details.error_description
-                });
-            }
-
-            function parseHeaders(headers) {
-                var wwwAuthenticate = parseWWWAuthenticateHeader(headers('WWW-Authenticate'));
-                if (wwwAuthenticate) {
-                    if (wwwAuthenticate.scheme.toLowerCase() === 'bearer') {
-                        var details = wwwAuthenticate.details;
-                        if (details) {
-                            if (details.error) {
-                                switch (details.error) {
-                                case 'invalid_token':
-                                    removeToken(details);
-                                    break;
-                                case 'invalid_request':
-                                    /*jshint camelcase: false */
-                                    switch (details.error_description) { /*jshint camelcase: true */
-                                    case 'Missing or invalid session':
-                                        removeToken(details);
-                                        break;
-                                    }
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
+        var proxyFactory = function proxyFactory(app) {
             var proxyMethod = function (config) {
+                var request = {};
                 if (config) {
-                    config.withCredentials = true;
-                    if (!isAbsoluteUrl(config.url)) {
-                        config.url = apiUrl + config.url;
-                    }
+                    request.url = new URL(config.url);
+                    request.metho = config.method;
+                    if (config.headers) request.headers = config.headers;
+                    if (config.data) request.body = config.data;
 
-                    var headers = config.headers || (config.headers = {});
-
-                    if (!headers.hasOwnProperty('Content-Type')) {
-                        headers['Content-Type'] = 'application/json; charset=UTF-8';
-                    } /*jshint sub: true */
-                    if (!headers.hasOwnProperty('Accept')) {
-                        headers['Accept'] = 'application/hal+json; charset=UTF-8';
-                    } /*jshint sub: false */
-
-                    var token = app.getAccessToken();
-                    if (token) { /*jshint camelcase: false, sub: true */
-                        headers['AUTHORIZATION'] = token.token_type + ' ' + token.access_token;
-                    }
                 }
 
-                var promise = $http(config);
-
-                promise = extend(promise.then(function (response) {
-                    if (response.headers) {
-                        var contentType = response.headers('Content-Type');
-                        if (contentType && contentType.toLowerCase().indexOf('application/hal+json') !== -1) {
-                            response.data = parser.parse(response.data);
-                        }
-
-                        parseHeaders(response.headers);
-                    }
-                }, function (response) {
-                    if (response.headers) {
-                        parseHeaders(response.headers);
-                    }
-                }).
-                finally(function () {
-                    var token = app.getAccessToken();
-                    if (token) { /*jshint camelcase: false */
-                        var slidingWindow = token.sliding_window; /*jshint camelcase: true */
-                        if (slidingWindow) {
-                            token.expireTime = new Date().getTime() + (token.slidingWindow * 1000);
-                            app.updateAccessToken(token);
-                        }
-                    }
-                }), promise);
-
-                return promise;
+                return app.baasicApiClient.request(request);
             };
 
             createShortMethods(proxyMethod, 'get', 'delete', 'head', 'jsonp');
@@ -7950,13 +7826,11 @@
             return proxyMethod;
         };
 
-        module.service('baasicApiHttp', ['$rootScope', '$http', 'HALParser', 'baasicApp', function baasicApiHttp($rootScope, $http, HALParser, baasicApp) {
-            var parser = new HALParser();
-
-            var proxy = proxyFactory($rootScope, $http, parser, baasicApp.get());
+        module.service('baasicApiHttp', ['baasicApp', function baasicApiHttp(baasicApp) {
+            var proxy = proxyFactory(baasicApp.get());
 
             proxy.createNew = function (app) {
-                return proxyFactory($rootScope, $http, parser, app);
+                return proxyFactory(app);
             };
 
             return proxy;
@@ -8154,7 +8028,7 @@
                 if (request.headers) config.headers = request.headers;
                 if (request.body) config.data = request.body;
 
-                return $http(config).then(function (value) {
+                var promise = $http(config).then(function (value) {
                     return {
                         headers: value.headers(),
                         body: value.data,
@@ -8162,6 +8036,22 @@
                         statusText: value.statusText
                     };
                 });
+
+                promise.success = function (fn) {
+                    promise.then(function (response) {
+                        fn(response.body, response.statusCode, response.headers, request);
+                    }, null);
+                    return promise;
+                };
+
+                promise.error = function (fn) {
+                    promise.then(null, function (response) {
+                        fn(response.body, response.statusCode, response.headers, request);
+                    });
+                    return promise;
+                };
+
+                return promise;
             };
         }
 
@@ -8985,7 +8875,8 @@
      */
     (function (angular, module, undefined) {
         "use strict";
-        module.service("baasicKeyValueService", ["baasicApp", function (baasicApp) {
+        module.service("baasicKeyValueService", ["baasicApp", function (baasicApps) {
+            var baasicApp = baasicApps.get();
             return {
                 /**
                  * Returns a promise that is resolved once the find action has been performed. Success response returns a list of key value resources matching the given criteria.
@@ -9122,8 +9013,8 @@
      */
     (function (angular, module, undefined) {
         'use strict';
-        module.service('baasicLoginService', ['baasicApp', function (baasicApp) {
-
+        module.service('baasicLoginService', ['baasicApp', function (baasicApps) {
+            var baasicApp = baasicApps.get();
             return {
                 /**
                  * Returns a promise that is resolved once the login action has been performed. This action logs user into the application and success response returns the token resource.
@@ -9228,7 +9119,13 @@
                      **/
                     parseResponse: function (provider, returnUrl) {
                         return baasicApp.membership.loginSocial.parseResponse(provider, returnUrl);
-                    }
+                    },
+                    /**
+                     * Provides direct access to route definition.
+                     * @method        
+                     * @example baasicLoginService.social.routeService.get('<id>', expandObject);
+                     **/
+                    routeService: baasicApp.membership.loginSocial.routeDefinition
                 }
             };
 
@@ -9247,7 +9144,8 @@
      */
     (function (angular, module, undefined) {
         'use strict';
-        module.service('baasicPasswordRecoveryService', ['baasicApp', function (baasicApp) {
+        module.service('baasicPasswordRecoveryService', ['baasicApp', function (baasicApps) {
+            var baasicApp = baasicApps.get();
             return {
                 /**
                  * Returns a promise that is resolved once the password recovery requestReset action is completed. This action initiates the password recovery process for the user.
@@ -9311,7 +9209,8 @@
      */
     (function (angular, module, undefined) {
         'use strict';
-        module.service('baasicRegisterService', ['baasicApp', function (baasicApp) {
+        module.service('baasicRegisterService', ['baasicApp', function (baasicApps) {
+            var baasicApp = baasicApps.get();
             return {
                 /**
                  * Returns a promise that is resolved once the register create has been performed. This action will create a new user if completed successfully. Created user is not approved immediately, instead an activation e-mail is sent to the user.
@@ -9377,7 +9276,8 @@
      */
     (function (angular, module, undefined) {
         'use strict';
-        module.service('baasicRoleService', ['baasicApp', function (baasicApp) {
+        module.service('baasicRoleService', ['baasicApp', function (baasicApps) {
+            var baasicApp = baasicApps.get();
             return {
                 /**
                  * Returns a promise that is resolved once the find action has been performed. Success response returns a list of role resources matching the given criteria.
@@ -9489,7 +9389,8 @@
      */
     (function (angular, module, undefined) {
         'use strict';
-        module.service('baasicUserService', ['baasicApp', function (baasicApp) {
+        module.service('baasicUserService', ['baasicApp', function (baasicApps) {
+            var baasicApp = baasicApps.get();
             return {
                 /**
                  * Returns a promise that is resolved once the exists action has been performed. This action checks if user exists in the application.
@@ -11892,8 +11793,8 @@
      */
     (function (angular, module, undefined) {
         'use strict';
-        module.service('baasicPermissionsService', ['baasicApp', 'baasicAuthorizationService', function (baasicAppHandler, authService) {
-            var baasicApp = baasicAppHandler.get();
+        module.service('baasicPermissionsService', ['baasicApp', 'baasicAuthorizationService', function (baasicApps, authService) {
+            var baasicApp = baasicApps.get();
             return {
                 /**
                  * Returns a promise that is resolved once the find action has been performed. Success response returns a list of access policies that match the specified search parameters.
@@ -14247,7 +14148,8 @@
      */
     (function (angular, module, undefined) {
         "use strict";
-        module.service("baasicValueSetService", ["baasicApp", function (baasicApp) {
+        module.service("baasicValueSetService", ["baasicApp", function (baasicApps) {
+            var baasicApp = baasicApps.get();
             return {
                 /**
                  * Returns a promise that is resolved once the find action has been performed. Success response returns a list of value set resources matching given criteria.

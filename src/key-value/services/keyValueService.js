@@ -5,7 +5,8 @@
 (function (angular, module, undefined) {
   "use strict";
   module.service("baasicKeyValueService", ["baasicApp",
-    function (baasicApp) {
+    function (baasicApps) {
+      var baasicApp = baasicApps.get();
       return {
         /**
                  * Returns a promise that is resolved once the find action has been performed. Success response returns a list of key value resources matching the given criteria.

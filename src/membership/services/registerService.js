@@ -6,7 +6,8 @@
 (function (angular, module, undefined) {
   'use strict';
   module.service('baasicRegisterService', ['baasicApp',
-    function (baasicApp) {
+    function (baasicApps) {
+      var baasicApp = baasicApps.get();
       return {
         /**
                 * Returns a promise that is resolved once the register create has been performed. This action will create a new user if completed successfully. Created user is not approved immediately, instead an activation e-mail is sent to the user.

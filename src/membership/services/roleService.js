@@ -6,7 +6,8 @@
 (function (angular, module, undefined) {
   'use strict';
   module.service('baasicRoleService', ['baasicApp',
-    function (baasicApp) {
+    function (baasicApps) {
+      var baasicApp = baasicApps.get();
       return {
         /**
                  * Returns a promise that is resolved once the find action has been performed. Success response returns a list of role resources matching the given criteria.
