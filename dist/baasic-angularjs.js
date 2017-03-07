@@ -4801,33 +4801,40 @@
         'use strict';
         module.provider('baasicApp', function baasicAppService() {
             var apps = {};
-            var defaultApp;
+            var defaultAppKey;
             /**
              * Create an application.
              * @method create       
              * @example
              var app = baasicApp.create('<api-key>', {
-             apiRootUrl : 'api.baasic.com',
-             // for beta please use "beta" as a desired version
+             apiRootUrl : 'api.baasic.com',	
              apiVersion : '<version>' 
              });
              **/
             this.create = function create(apiKey, config) {
-                var defaultConfig = {
-                    apiRootUrl: 'api.baasic.com',
-                    apiVersion: 'beta'
-                };
-                var app = MonoSoftware.Baasic.Application.init(apiKey, angular.extend(defaultConfig, config));
 
-                apps[apiKey] = app;
-                if (!defaultApp) {
-                    defaultApp = app;
+                apps[apiKey] = function (httpClient) {
+                    var cfg = angular.extend({}, config, {
+                        httpClient: httpClient
+                    });
+                    var app = new BaasicApp(apiKey, cfg);
+                    apps[apiKey] = function () {
+                        return app;
+                    };
+
+                    return app;
+                };
+
+                if (!defaultAppKey) {
+                    defaultAppKey = apiKey;
                 }
 
                 return app;
             };
 
-            this.$get = function () {
+            this.$get = ["$http", function ($http) {
+                var httpClient = getHttpClient($http);
+
                 return {
                     /**
                      * Returns a list of all applications.
@@ -4837,7 +4844,7 @@
                     all: function () {
                         var list = [];
                         for (var key in apps) {
-                            list.push(apps[key]);
+                            list.push(apps[key](httpClient));
                         }
 
                         return list;
@@ -4848,15 +4855,41 @@
                      * @example baasicApp.get('<api-key>');               
                      **/
                     get: function getBaasicApplication(apiKey) {
+                        var appFactory;
                         if (apiKey) {
-                            return apps[apiKey];
+                            appFactory = apps[apiKey];
                         } else {
-                            return defaultApp;
+                            appFactory = apps[defaultAppKey];
                         }
+
+                        return appFactory(httpClient);
                     }
                 };
-            };
+            }];
         });
+
+        function getHttpClient($http) {
+            return function (request) {
+                var config = {
+                    withCredentials: true,
+                    method: request.method,
+                    url: request.url.toString()
+                };
+
+                if (request.headers) config.headers = request.headers;
+                if (request.body) config.data = request.body;
+
+                return $http(config).then(function (value) {
+                    return {
+                        headers: value.headers(),
+                        body: value.data,
+                        statusCode: value.status,
+                        statusText: value.statusText
+                    };
+                });
+            };
+        }
+
     }(angular, module)); /* globals module */
     /**
      * @module baasicLookupRouteService
@@ -5052,7 +5085,7 @@
                 }
             };
         }]);
-    })(angular, module);
+    })(angular, module); /* globals module */
     /** 
      * @description The angular.module is a global place for creating, registering or retrieving modules. All modules should be registered in an application using this mechanism. An angular module is a container for the different parts of your app - services, directives etc. In order to use `baasic.dynamicResource` module functionality it must be added as a dependency to your app.
      * @module baasic.dynamicResource 
@@ -5073,10 +5106,8 @@
      }
      (MyApp.Modules.Main = {})); 
      */
-    var module = angular.module("baasic.dynamicResource", ["baasic.api"]);
-
+    var module = angular.module("baasic.dynamicResource", ["baasic.api"]); /* globals module */
     module.config(["$provide", function config($provide) {}]);
-
     /**
      * @module baasicDynamicResourceRouteService
      * @description Baasic Dynamic Resource Route Service provides Baasic route templates which can be expanded to Baasic REST URIs. Various services can use Baasic Dynamic Resource Route Service to obtain needed routes while other routes will be obtained through HAL. By convention, all route services  use the same function names as their corresponding services.
@@ -5647,6 +5678,7 @@
      - All end-point objects are transformed by the associated route service.
      */
 
+    /* globals module */
     /** 
      * @description The angular.module is a global place for creating, registering or retrieving modules. All modules should be registered in an application using this mechanism. An angular module is a container for the different parts of your app - services, directives etc. In order to use `baasic.keyValue` module functionality it must be added as a dependency to your app.
      * @copyright (c) 2017 Mono Ltd
@@ -5670,10 +5702,8 @@
      }
      (MyApp.Modules.Main = {})); 
      */
-    var module = angular.module("baasic.keyValue", ["baasic.api"]);
-
+    var module = angular.module("baasic.keyValue", ["baasic.api"]); /* globals module */
     module.config(["$provide", function config($provide) {}]);
-
     /**
      * @module baasicKeyValueService
      * @description Baasic Key Value Service provides an easy way to consume Baasic Key Value REST API end-points. 
@@ -8458,11 +8488,9 @@
      */
     (function (angular, module, undefined) {
         'use strict';
-        var permissionHash = {};
         module.service('baasicAuthorizationService', ['$rootScope', '$document', 'baasicApp', function ($rootScope, $document, baasicApp) {
             var app = baasicApp.get(),
                 apiKey = app.getApiKey();
-            permissionHash[apiKey] = {};
 
             angular.element($document).bind('tokenExpired', function () {
                 var user = app.getUser();
@@ -8552,7 +8580,7 @@
                     return app.updateAccessToken(token);
                 },
                 /**
-                 * Retrives user permission hash. This action should be performed when user information is updated.
+                 * Resets user permissions.
                  * @method        
                  * @example
                  baasicLoginService.loadUserData()
@@ -8564,7 +8592,7 @@
                  .finally (function () {});
                  **/
                 resetPermissions: function () {
-                    permissionHash[apiKey] = {};
+                    app.membership.permissions.resetPermissions();
                 },
                 /**
                  * Checks if current user has permissions to perform a certain action. To optimize performance this information is cached and can be reset using the resetPermissions action. Permissions cache should be reset when updated user information is set.
@@ -8572,41 +8600,7 @@
                  * @example baasicAuthorizationService.hasPermission("<baasic-Section>.<action>");				
                  **/
                 hasPermission: function (authorization) {
-                    if (permissionHash[apiKey].hasOwnProperty(authorization)) {
-                        return permissionHash[apiKey][authorization];
-                    }
-
-                    var user = this.getUser();
-                    if (user === undefined) {
-                        return;
-                    }
-
-                    var hasPermission = false;
-
-                    if (user.permissions) {
-                        var tokens = authorization.split('.');
-                        if (tokens.length > 0) {
-                            var section = tokens[0];
-
-                            var sectionPermissions = user.permissions[section];
-                            if (sectionPermissions) {
-                                if (tokens.length > 1) {
-                                    var action = tokens[1].toLowerCase();
-                                    for (var i = 0; i < sectionPermissions.length; i++) {
-                                        if (sectionPermissions[i].toLowerCase() === action) {
-                                            hasPermission = true;
-                                            break;
-                                        }
-                                    }
-                                } else {
-                                    hasPermission = true;
-                                }
-                            }
-                        }
-                    }
-
-                    permissionHash[apiKey][authorization] = hasPermission;
-                    return hasPermission;
+                    return app.membership.permissions.hasPermission(authorization);
                 }
             };
         }]);
@@ -8616,99 +8610,6 @@
      * @license MIT
      * @author Mono Ltd
      */
-
-    /* globals module */
-    /**
-     * @module baasicPermissionsRouteService
-     * @description Baasic Permissions Route Service provides Baasic route templates which can be expanded to Baasic REST URIs. Various services can use Baasic Permissions Route Service to obtain needed routes while other routes will be obtained through HAL. By convention, all route services use the same function names as their corresponding services.
-     */
-    (function (angular, module, undefined) {
-        'use strict';
-        module.service('baasicPermissionsRouteService', ['baasicUriTemplateService', function (uriTemplateService) {
-            return {
-                /**
-                 * Parses find route which can be expanded with additional options. Supported items are: 
-                 * - `section` - Section abbreviation which identifies part of the application for which security privileges can be retrieved and managed.
-                 * - `searchQuery` - A string value used to identify access policy resources using the phrase search. 
-                 * - `sort` - A string used to set the access policy property to sort the result collection by.				
-                 * @method        
-                 * @example 
-                 baasicPermissionsRouteService.find(
-                 'sectionName'
-                 ).expand(
-                 {searchQuery: '<search-phrase>'}
-                 );
-                 **/
-                find: function (section) {
-                    return uriTemplateService.parse('permissions/sections/{section}/{?searchQuery,sort}', section);
-                },
-                /**
-                 * Parses getActions route which can be expanded with additional options. Supported items are: 
-                 * - `searchQuery` - A string value used to identify access action resources using the phrase search.  
-                 * - `sort` - A string used to set the access action property to sort the result collection by.				
-                 * @method        
-                 * @example 
-                 baasicPermissionsRouteService.getActions.expand(
-                 {searchQuery: '<search-phrase>'}
-                 );
-                 **/
-                getActions: uriTemplateService.parse('permissions/actions/{?searchQuery,sort}'),
-                /**
-                 * Parses getRoles route which can be expanded with additional options. Supported items are: 
-                 * - `searchQuery` - A string value used to identify access policy resources using the phrase search.   
-                 * - `sort` - A string used to set the access policy property to sort the result collection by.	
-                 * - `page` - A value used to set the page number, i.e. to retrieve certain access policy subset from the storage.
-                 * - `rpp` - A value used to limit the size of result set per page.				
-                 * @method        
-                 * @example 
-                 baasicPermissionsRouteService.getRoles.expand(
-                 {searchQuery: '<search-phrase>'}
-                 );
-                 **/
-                getRoles: uriTemplateService.parse('lookups/roles/{?searchQuery,page,rpp,sort}'),
-                /**
-                 * Parses getUsers route which can be expanded with additional options. Supported items are: 
-                 * - `searchQuery` - A string value used to identify access policy resources using the phrase search.     
-                 * - `sort` - A string used to set the access policy property to sort the result collection by.	
-                 * - `page` - A value used to set the page number, i.e. to retrieve certain access policy subset from the storage.
-                 * - `rpp` - A value used to limit the size of result set per page.				
-                 * @method        
-                 * @example 
-                 baasicPermissionsRouteService.getRoles.expand(
-                 {searchQuery: '<search-phrase>'}
-                 );
-                 **/
-                getUsers: uriTemplateService.parse('users/{?searchQuery,page,rpp,sort}'),
-                /**
-                 * Parses create permission route; this URI template doesn't expose any additional properties.
-                 * @method        
-                 * @example baasicPermissionsRouteService.create.expand({});               
-                 **/
-                create: uriTemplateService.parse('permissions/'),
-                /**
-                 * Parses and expands URI templates based on [RFC6570](http://tools.ietf.org/html/rfc6570) specifications. For more information please visit the project [GitHub](https://github.com/Baasic/uritemplate-js) page.
-                 * @method tags.parse
-                 * @example 
-                 baasicPermissionsRouteService.parse(
-                 '<route>/{?embed,fields,options}'
-                 ).expand(
-                 {embed: '<embedded-resource>'}
-                 );
-                 **/
-                parse: uriTemplateService.parse
-            };
-        }]);
-    }(angular, module));
-    /**
-     * @copyright (c) 2017 Mono Ltd
-     * @license MIT
-     * @author Mono Ltd
-     * @overview 
-     ***Notes:**
-     - Refer to the [Baasic REST API](http://dev.baasic.com/api/reference/home) for detailed information about available Baasic REST API end-points.
-     - [URI Template](https://github.com/Baasic/uritemplate-js) syntax enables expanding the Baasic route templates to Baasic REST URIs providing it with an object that contains URI parameters.
-     - All end-point objects are transformed by the associated route service.
-     */
     /* globals module */
     /**
      * @module baasicPermissionsService
@@ -8716,27 +8617,8 @@
      */
     (function (angular, module, undefined) {
         'use strict';
-        module.service('baasicPermissionsService', ['$q', '$filter', 'baasicApiHttp', 'baasicApiService', 'baasicConstants', 'baasicPermissionsRouteService', 'baasicAuthorizationService', function ($q, $filter, baasicApiHttp, baasicApiService, baasicConstants, permissionsRouteService, authService) {
-            var _orderBy = $filter('orderBy');
-
-            function isEmpty(data) {
-                return data === undefined || data === null || data === '';
-            }
-
-            function getRoles(options) {
-                return baasicApiHttp.get(permissionsRouteService.getRoles.expand(baasicApiService.findParams(options)));
-            }
-
-            function getUsers(options) {
-                return baasicApiHttp.get(permissionsRouteService.getUsers.expand(baasicApiService.findParams(options)));
-            }
-
-            function firstCharToLowerCase(text) {
-                return text.replace(/^./, function (char) {
-                    return char.toLowerCase();
-                });
-            }
-
+        module.service('baasicPermissionsService', ['baasicApp', 'baasicAuthorizationService', function (baasicAppHandler, authService) {
+            var baasicApp = baasicAppHandler.get();
             return {
                 /**
                  * Returns a promise that is resolved once the find action has been performed. Success response returns a list of access policies that match the specified search parameters.
@@ -8753,19 +8635,13 @@
                  });
                  **/
                 find: function (section, options) {
-                    var params = angular.extend({}, options);
-                    params.section = section;
-                    return baasicApiHttp.get(permissionsRouteService.find().expand(baasicApiService.findParams(params)));
+                    return baasicApp.membership.permissions.find(section, options);
                 },
                 /**
                  * Returns a promise that is resolved once the getActions action has been performed. Success response returns a list of access policies that match the specified search parameters.
                  * @method        
                  * @example 
-                 baasicPermissionsService.find({
-                 pageNumber : 1,
-                 pageSize : 10,
-                 orderBy : '<field>',
-                 orderDirection : '<asc|desc>',
+                 baasicPermissionsService.getActions({
                  search : '<search-phrase>'
                  })
                  .success(function (collection) {
@@ -8776,7 +8652,7 @@
                  });
                  **/
                 getActions: function (options) {
-                    return baasicApiHttp.get(permissionsRouteService.getActions.expand(baasicApiService.findParams(options)));
+                    return baasicApp.membership.permissions.getActions(options);
                 },
                 /**
                  * Returns a promise that is resolved once the getPermissionSubjects action has been performed. Success response returns a list of matching user and role resources.
@@ -8795,66 +8671,7 @@
                  });
                  **/
                 getPermissionSubjects: function (options) {
-                    var membershipCollection = [];
-                    var resolvedTasks = 0;
-                    var deferred = $q.defer();
-
-                    function ensureTaskCount() {
-                        resolvedTasks++;
-                        if (resolvedTasks === 2) {
-                            deferred.resolve(membershipCollection);
-                            resolvedTasks = 0;
-                        }
-                    }
-
-                    getUsers(options).success(function (collection) {
-                        angular.forEach(collection.item, function (item) {
-                            var membershipItem = {
-                                name: item.userName,
-                                role: ''
-                            };
-                            angular.extend(membershipItem, item);
-                            membershipCollection.push(membershipItem);
-                        });
-                        ensureTaskCount();
-                    }).error(function (data, status, headers, config) {
-                        if (status !== undefined && status !== 403) {
-                            deferred.reject({
-                                data: data,
-                                status: status,
-                                headers: headers,
-                                config: config
-                            });
-                        }
-                        ensureTaskCount();
-                    });
-
-                    getRoles(options).success(function (collection) {
-                        angular.forEach(collection.item, function (item) {
-                            var membershipItem = {
-                                name: item.name,
-                                roleName: item.name,
-                                userName: ''
-                            };
-                            angular.extend(membershipItem, item);
-                            membershipCollection.push(membershipItem);
-                        });
-                        ensureTaskCount();
-                    }).error(function (data, status, headers, config) {
-                        if (status !== undefined && status !== 403) {
-                            deferred.reject({
-                                data: data,
-                                status: status,
-                                headers: headers,
-                                config: config
-                            });
-                        }
-                        ensureTaskCount();
-                    });
-
-                    return deferred.promise.then(function () {
-                        return _orderBy(membershipCollection, 'name');
-                    });
+                    return baasicApp.membership.permissions.getPermissionSubjects(options);
                 },
                 /**
                  * Returns a promise that is resolved once the create action has been performed; this action creates a new permission resource.
@@ -8874,7 +8691,7 @@
                  });
                  **/
                 create: function (data) {
-                    return baasicApiHttp.post(permissionsRouteService.create.expand(), baasicApiService.createParams(data)[baasicConstants.modelPropertyName]);
+                    return baasicApp.membership.permissions.create(data);
                 },
                 /**
                  * Returns a promise that is resolved once the remove action has been performed. If the action is successfully complete, an access policy assigned to the specified role and section will be removed. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicPermissionsService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
@@ -8894,10 +8711,7 @@
                  });
                  **/
                 remove: function (data) {
-                    var params = baasicApiService.removeParams(data);
-                    var action = data.actions[0];
-                    var operation = !isEmpty(data.role) ? 'Role' : 'User';
-                    return baasicApiHttp.delete(params[baasicConstants.modelPropertyName].links('delete' + action.abrv + operation).href);
+                    return baasicApp.membership.permissions.remove(data);
                 },
                 /**
                  * Creates a new in-memory permission object.
@@ -8914,21 +8728,7 @@
                  baasicPermissionsService.createPermission('<section-Name>', actionCollection, subjectItem);
                  **/
                 createPermission: function (section, actionCollection, membershipItem) {
-                    var permission = {
-                        dirty: true,
-                        role: membershipItem.roleName,
-                        userName: membershipItem.userName,
-                        section: section,
-                        actions: []
-                    };
-                    angular.forEach(actionCollection, function (lookupAction) {
-                        var newAction = {
-                            checked: false
-                        };
-                        angular.extend(newAction, lookupAction);
-                        permission.actions.push(newAction);
-                    });
-                    return permission;
+                    return baasicApp.membership.permissions.createPermission(section, actionCollection, membershipItem);
                 },
                 /**
                  * Finds a permission in a given permission collection.
@@ -8936,14 +8736,7 @@
                  * @example baasicPermissionsService.findPermission(permissionObj, permissionCollection);
                  **/
                 findPermission: function (permission, permissionCollection) {
-                    for (var i = 0; i < permissionCollection.length; i++) {
-                        var item = permissionCollection[i];
-
-                        if (item.section === permission.section && ((!isEmpty(item.role) && !isEmpty(permission.role) && item.role === permission.role) || (!isEmpty(item.userName) && !isEmpty(permission.userName) && item.userName === permission.userName))) {
-                            return item;
-                        }
-                    }
-                    return undefined;
+                    return baasicApp.membership.permissions.findPermission(permission, permissionCollection);
                 },
                 /**
                  * Checks if a permission object exists in a given permission collection.
@@ -8951,7 +8744,7 @@
                  * @example baasicPermissionsService.exists(permissionObj, permissionCollection);
                  **/
                 exists: function (permission, permissionCollection) {
-                    return this.findPermission(permission, permissionCollection) !== undefined;
+                    return baasicApp.membership.permissions.exists(permission, permissionCollection);
                 },
                 /**
                  * Returns a promise that is resolved once the togglePermission action has been completed. The action will internally either call a `remove` or `create` action based on given criteria.
@@ -8959,17 +8752,7 @@
                  * @example baasicPermissionsService.togglePermission(permissionObj, action);
                  **/
                 togglePermission: function (permission, action) {
-                    var requestPermission = {};
-                    angular.extend(requestPermission, permission);
-                    requestPermission.actions = [action];
-
-                    var operation;
-                    if (!action.checked) {
-                        operation = this.remove;
-                    } else {
-                        operation = this.create;
-                    }
-                    return operation(requestPermission);
+                    return baasicApp.membership.permissions.togglePermission(permission, action);
                 },
                 /**
                  * Fetches and returns and object containing all existing module permissions.
@@ -8977,21 +8760,14 @@
                  * @example baasicPermissionsService.getModulePermissions('<section-name>');
                  **/
                 getModulePermissions: function (section) {
-                    var permission = {
-                        update: authService.hasPermission(firstCharToLowerCase(section) + '.update'),
-                        create: authService.hasPermission(firstCharToLowerCase(section) + '.create'),
-                        remove: authService.hasPermission(firstCharToLowerCase(section) + '.delete'),
-                        read: authService.hasPermission(firstCharToLowerCase(section) + '.read'),
-                        full: authService.hasPermission(firstCharToLowerCase(section) + '.full')
-                    };
-                    return permission;
+                    return baasicApp.membership.permissions.getModulePermissions(section);
                 },
                 /**
                  * Provides direct access to `baasicPermissionsRouteService`.
                  * @method        
                  * @example baasicPermissionsService.routeService.get.expand(expandObject);
                  **/
-                routeService: permissionsRouteService
+                routeService: baasicApp.membership.permissions.routeDefinition
             };
         }]);
     }(angular, module));
@@ -9142,86 +8918,6 @@
      */
     var module = angular.module('baasic.templating', ['baasic.api']);
 
-    /*global module */
-
-    /**
-     * @module baasicTemplatingRouteService
-     * @description Baasic Templating Route Service provides Baasic route templates which can be expanded to Baasic REST URIs. Various services can use Baasic Templating Route Service to obtain a needed routes while other routes will be obtained through HAL. By convention, all route services use the same function names as their corresponding services.
-     */
-    (function (angular, module, undefined) {
-        'use strict';
-        module.service('baasicTemplatingRouteService', ['baasicUriTemplateService', function (uriTemplateService) {
-            return {
-                /**
-                 * Parses find route which can be expanded with additional options. Supported items are: 
-                 * - `searchQuery` - A string value used to identify template resources using the phrase search.
-                 * - `page` - A value used to set the page number, i.e. to retrieve certain template subset from the storage.
-                 * - `rpp` - A value used to limit the size of result set per page.
-                 * - `sort` - A string used to set the template property to sort the result collection by.
-                 * - `embed` - Comma separated list of resources to be contained within the current representation.
-                 * @method        
-                 * @example 
-                 baasicTemplatingRouteService.find.expand(
-                 {searchQuery: '<search-phrase>'}
-                 );
-                 **/
-                find: uriTemplateService.parse('templates/{?searchQuery,page,rpp,sort,embed,fields,moduleNames}'),
-                /**
-                 * Parses get route which must be expanded with the Id of the previously created template resource in the system.
-                 * @method        
-                 * @example 
-                 baasicTemplatingRouteService.get.expand(
-                 {id: '<template-id>'}
-                 );
-                 **/
-                get: uriTemplateService.parse('templates/{id}/{?embed,fields}'),
-                /**
-                 * Parses create route; this URI template does not expose any additional options.
-                 * @method        
-                 * @example baasicTemplatingRouteService.create.expand({});              
-                 **/
-                create: uriTemplateService.parse('templates'),
-                /**
-                 * Parses and expands URI templates based on [RFC6570](http://tools.ietf.org/html/rfc6570) specifications. For more information please visit the project [GitHub](https://github.com/Baasic/uritemplate-js) page.
-                 * @method
-                 * @example 
-                 baasicTemplatingRouteService.parse(
-                 '<route>/{?embed,fields,options}'
-                 ).expand(
-                 {embed: '<embedded-resource>'}
-                 );
-                 **/
-                parse: uriTemplateService.parse,
-                batch: {
-                    /**
-                     * Parses create route; this URI template does not expose any additional options.
-                     * @method batch.create       
-                     * @example baasicTemplatingRouteService.batch.create.expand({});              
-                     **/
-                    create: uriTemplateService.parse('templates/batch'),
-                    /**
-                     * Parses remove route; this URI template does not expose any additional options.
-                     * @method batch.remove       
-                     * @example baasicTemplatingRouteService.batch.remove.expand({});              
-                     **/
-                    remove: uriTemplateService.parse('templates/batch'),
-                    /**
-                     * Parses update route; this URI template does not expose any additional options.
-                     * @method batch.update       
-                     * @example baasicTemplatingRouteService.batch.update.expand({});              
-                     **/
-                    update: uriTemplateService.parse('templates/batch')
-                }
-            };
-        }]);
-    }(angular, module)); // jshint ignore:line
-    /**
-     * @overview 
-     ***Notes:**
-     - Refer to the [REST API documentation](https://github.com/Baasic/baasic-rest-api/wiki) for detailed information about available Baasic REST API end-points.
-     - [URI Template](https://github.com/Baasic/uritemplate-js) syntax enables expanding the Baasic route templates to Baasic REST URIs providing it with an object that contains URI parameters.
-     - All end-point objects are transformed by the associated route service.
-     */
     /* globals module */
 
     /**
@@ -9230,7 +8926,7 @@
      */
     (function (angular, module, undefined) {
         'use strict';
-        module.service('baasicTemplatingService', ['baasicApiHttp', 'baasicApiService', 'baasicConstants', 'baasicTemplatingRouteService', function (baasicApiHttp, baasicApiService, baasicConstants, templatingRouteService) {
+        module.service('baasicTemplatingService', ['baasicApp', function (baasicApp) {
             return {
                 /**
                  * Returns a promise that is resolved once the find action has been performed. Success response returns a list of template resources matching the given criteria.
@@ -9251,7 +8947,7 @@
                  });
                  **/
                 find: function (options) {
-                    return baasicApiHttp.get(templatingRouteService.find.expand(baasicApiService.findParams(options)));
+                    return baasicApp.templating.find(options);
                 },
                 /**
                  * Returns a promise that is resolved once the get action has been performed. Success response returns the specified template resource.
@@ -9266,7 +8962,7 @@
                  });
                  **/
                 get: function (id, options) {
-                    return baasicApiHttp.get(templatingRouteService.get.expand(baasicApiService.getParams(id, options)));
+                    return baasicApp.templating.get(id, options);
                 },
                 /**
                  * Returns a promise that is resolved once the create template action has been performed; this action creates a new template resource.
@@ -9284,7 +8980,7 @@
                  });
                  **/
                 create: function (data) {
-                    return baasicApiHttp.post(templatingRouteService.create.expand(), baasicApiService.createParams(data)[baasicConstants.modelPropertyName]);
+                    return baasicApp.templating.create(data);
                 },
                 /**
                  * Returns a promise that is resolved once the update template action has been performed; this action updates a template resource. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicTemplatingRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
@@ -9305,8 +9001,7 @@
                  });
                  **/
                 update: function (data) {
-                    var params = baasicApiService.updateParams(data);
-                    return baasicApiHttp.put(params[baasicConstants.modelPropertyName].links('put').href, params[baasicConstants.modelPropertyName]);
+                    return baasicApp.templating.update(data);
                 },
                 /**
                  * Returns a promise that is resolved once the remove action has been performed. This action will remove a template resource from the system if successfully completed. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicTemplatingRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
@@ -9326,15 +9021,14 @@
                  });
                  **/
                 remove: function (data) {
-                    var params = baasicApiService.removeParams(data);
-                    return baasicApiHttp.delete(params[baasicConstants.modelPropertyName].links('delete').href);
+                    return baasicApp.templating.remove(data);
                 },
                 /**
                  * Provides direct access to `baasicKeyValueRouteService`.
                  * @method        
                  * @example baasicTemplatingService.routeService.get.expand(expandObject);
                  **/
-                routeService: templatingRouteService,
+                routeService: baasicApp.templating.routeDefinition,
                 batch: {
                     /**
                      * Returns a promise that is resolved once the create action has been performed; this action creates new template resources.
@@ -9352,7 +9046,7 @@
                      });
                      **/
                     create: function (data) {
-                        return baasicApiHttp.post(templatingRouteService.batch.create.expand(), baasicApiService.createParams(data)[baasicConstants.modelPropertyName]);
+                        return baasicApp.templating.batch.create(data);
                     },
                     /**
                      * Returns a promise that is resolved once the update action has been performed; this action updates specified template resources.
@@ -9367,7 +9061,7 @@
                      });
                      **/
                     update: function (data) {
-                        return baasicApiHttp.post(templatingRouteService.batch.update.expand(), baasicApiService.updateParams(data)[baasicConstants.modelPropertyName]);
+                        return baasicApp.templating.batch.update(data);
                     },
                     /**
                      * Returns a promise that is resolved once the remove action has been performed. This action will remove template resources from the system if successfully completed. 
@@ -9382,11 +9076,7 @@
                      });		
                      **/
                     remove: function (ids) {
-                        return baasicApiHttp({
-                            url: templatingRouteService.batch.remove.expand(),
-                            method: 'DELETE',
-                            data: ids
-                        });
+                        return baasicApp.templating.batch.remove(ids);
                     }
                 }
             };
@@ -9398,7 +9088,6 @@
      - Refer to the [REST API documentation](https://github.com/Baasic/baasic-rest-api/wiki) for detailed information about available Baasic REST API end-points.
      - All end-point objects are transformed by the associated route service.
      */
-
     /* exported module */
 
     /** 

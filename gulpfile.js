@@ -3,6 +3,7 @@
 
 var docgen = require('baasic-javascript-docgen');
 var injectVersion = require('gulp-inject-version');
+var gulpUtil = require('gulp-util');
 
 var gulp = require('gulp'),
 	plugins = require('gulp-load-plugins')(),
@@ -35,7 +36,7 @@ gulp.task('scripts', function () {
 			output: {
 				comments: /^!|License: MIT/i
 			}
-		}))
+		}).on('error', gulpUtil.log))
 		.pipe(plugins.rename('baasic-angularjs.min.js'))
 		.pipe(gulp.dest('dist'));
 });

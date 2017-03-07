@@ -112,7 +112,7 @@ baasicLoginService.loadUserData()
 .finally (function () {});				
                 **/
                 resetPermissions: function () {
-                    baasicApp.membership.permissions.resetPermissions();
+                    app.membership.permissions.resetPermissions();
                 },
                 /**
                  * Checks if current user has permissions to perform a certain action. To optimize performance this information is cached and can be reset using the resetPermissions action. Permissions cache should be reset when updated user information is set.
@@ -120,7 +120,7 @@ baasicLoginService.loadUserData()
                  * @example baasicAuthorizationService.hasPermission("<baasic-Section>.<action>");				
                  **/
                 hasPermission: function (authorization) {
-                    return baasicApp.membership.permissions.hasPermission(authorization);
+                    return app.membership.permissions.hasPermission(authorization);
                 }
             };
         }

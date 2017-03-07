@@ -1,2 +1,2 @@
-﻿module.config(["$provide", function config($provide) {
-}]);
+﻿/* globals module */
+module.config(["$provide", function config($provide) {}]);
