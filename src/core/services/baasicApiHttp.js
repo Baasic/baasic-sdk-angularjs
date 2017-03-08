@@ -68,20 +68,20 @@
             );
 
             promise.success = function (fn) {
-				promise.then(function (response) {
-					fn(response.body, response.statusCode, response.headers, request);
-				}, null);
-				return promise;
-			};
+                promise.then(function (response) {
+                    fn(response.data, response.statusCode, response.headers, config);
+                }, null);
+                return promise;
+            };
 
-			promise.error = function (fn) {
-				promise.then(null, function (response) {
-					fn(response.body, response.statusCode, response.headers, request);
-				});
-				return promise;
-			};				
+            promise.error = function (fn) {
+                promise.then(null, function (response) {
+                    fn(response.data, response.statusCode, response.headers, config);
+                });
+                return promise;
+            };
 
-			return promise;
+            return promise;
         };
 
         createShortMethods(proxyMethod, 'get', 'delete', 'head', 'jsonp');

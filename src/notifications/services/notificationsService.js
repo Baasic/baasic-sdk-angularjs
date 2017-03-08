@@ -2,11 +2,12 @@
 /**
  * @module baasicNotificationsService
  * @description Baasic Notifications Service provides an easy way to consume Baasic Notifications REST API end-points. In order to obtain needed routes `baasicNotificationsService` uses `baasicNotificationsRouteService`.
-*/
-(function (angular, module, undefined){
+ */
+(function (angular, module, undefined) {
     'use strict';
-    module.service('baasicNotificationsService', ['baasicApiHttp', 'baasicApiService', 'baasicConstants', 'baasicNotificationsRouteService',
-        function (baasicApiHttp, baasicApiService, baasicConstants, notificationsRouteService){
+    module.service('baasicNotificationsService', ['baasicApp',
+        function (baasicApps) {
+            var baasicApp = baasicApps.get();
             return {
                 publish: {
                     /**
@@ -28,9 +29,9 @@ baasicNotificationsService.publish.create({
 .error(function (response, status, headers, config) {
     // perform error handling here
 });
-                     */ 					
+                     */
                     create: function (data) {
-                        return baasicApiHttp.post(notificationsRouteService.publish.create.expand(), baasicApiService.createParams(data)[baasicConstants.modelPropertyName]);
+                        //return baasicApp..post(notificationsRouteService.publish.create.expand(), baasicApiService.createParams(data)[baasicConstants.modelPropertyName]);
                     },
                     batch: {
                         /**
@@ -52,7 +53,7 @@ baasicNotificationsService.publish.create([{
 .error(function (response, status, headers, config) {
     // perform error handling here
 });
-                        */ 	
+                        */
                         create: function (data) {
                             return baasicApiHttp.post(notificationsRouteService.publish.batch.create.expand(), baasicApiService.createParams(data)[baasicConstants.modelPropertyName]);
                         }
@@ -99,11 +100,11 @@ baasicNotificationsService.subscriptions.users.find({
 .error(function (response, status, headers, config) {
     // perform error handling here
 });    
-                        */ 
+                        */
                         find: function (options) {
                             return baasicApiHttp.get(notificationsRouteService.subscriptions.users.find.expand(baasicApiService.findParams(options)));
                         },
-                        
+
                         /**
                          * Returns a promise that is resolved once the get action has been performed. Success response returns the specified user subscription resource.
                          * @method subscriptions.users.get       
@@ -115,7 +116,7 @@ baasicNotificationsService.subscriptions.users.get('<subscription-id>')
 .error(function (response, status, headers, config) {
     // perform error handling here
 });
-                        */ 
+                        */
                         get: function (id, options) {
                             return baasicApiHttp.get(notificationsRouteService.subscriptions.users.get.expand(baasicApiService.getParams(id, options)));
                         },
@@ -159,7 +160,7 @@ baasicNotificationsService.subscriptions.users.update(subscription)
 .error(function (response, status, headers, config) {
     // perform error handling here
 });
-				        */	
+				        */
                         update: function (data) {
                             var params = baasicApiService.updateParams(data);
                             return baasicApiHttp.put(params[baasicConstants.modelPropertyName].links('put').href, params[baasicConstants.modelPropertyName]);
@@ -195,7 +196,7 @@ baasicNotificationsService.subscriptions.users.batch.remove(subscriptionIds)
 .error(function (response, status, headers, config) {
     // perform error handling here
 });		
-                            */	
+                            */
                             remove: function (ids) {
                                 return baasicApiHttp({
                                     url: notificationsRouteService.subscriptions.users.batch.remove.expand(),
@@ -261,7 +262,7 @@ baasicNotificationsService.subscriptions.anonymous.find({
 .error(function (response, status, headers, config) {
     // perform error handling here
 });    
-                        */ 
+                        */
                         find: function (options) {
                             return baasicApiHttp.get(notificationsRouteService.subscriptions.anonymous.find.expand(baasicApiService.findParams(options)));
                         },
@@ -277,7 +278,7 @@ baasicNotificationsService.subscriptions.anonymous.get('<subscription-id>')
 .error(function (response, status, headers, config) {
     // perform error handling here
 });
-                        */ 
+                        */
                         get: function (id, options) {
                             return baasicApiHttp.get(notificationsRouteService.subscriptions.anonymous.get.expand(baasicApiService.getParams(id, options)));
                         },
@@ -426,7 +427,7 @@ baasicNotificationsService.registrations.users.find({
 .error(function (response, status, headers, config) {
     // perform error handling here
 });    
-                        */ 
+                        */
                         find: function (options) {
                             return baasicApiHttp.get(notificationsRouteService.registrations.users.find.expand(baasicApiService.findParams(options)));
                         },
@@ -442,7 +443,7 @@ baasicNotificationsService.registrations.users.get('<registration-id>')
 .error(function (response, status, headers, config) {
     // perform error handling here
 });
-                        */ 
+                        */
                         get: function (id, options) {
                             return baasicApiHttp.get(notificationsRouteService.registrations.users.get.expand(baasicApiService.getParams(id, options)));
                         },
@@ -490,7 +491,7 @@ baasicNotificationsService.registrations.users.remove(registration)
                         update: function (data) {
                             var params = baasicApiService.updateParams(data);
                             return baasicApiHttp.put(params[baasicConstants.modelPropertyName].links('put').href, params[baasicConstants.modelPropertyName]);
-                        }, 
+                        },
                         batch: {
                             /**
                              * Returns a promise that is resolved once the create user registration action has been performed; this action creates new user registration resources.
@@ -589,7 +590,7 @@ baasicNotificationsService.registrations.anonymous.find({
 .error(function (response, status, headers, config) {
     // perform error handling here
 });    
-                        */ 
+                        */
                         find: function (options) {
                             return baasicApiHttp.get(notificationsRouteService.registrations.anonymous.find.expand(baasicApiService.findParams(options)));
                         },
@@ -605,7 +606,7 @@ baasicNotificationsService.registrations.anonymous.get('<registration-id>')
 .error(function (response, status, headers, config) {
     // perform error handling here
 });
-                        */ 
+                        */
                         get: function (id, options) {
                             return baasicApiHttp.get(notificationsRouteService.registrations.anonymous.get.expand(baasicApiService.getParams(id, options)));
                         },
@@ -653,7 +654,7 @@ baasicNotificationsService.update(registration)
                         update: function (data) {
                             var params = baasicApiService.updateParams(data);
                             return baasicApiHttp.put(params[baasicConstants.modelPropertyName].links('put').href, params[baasicConstants.modelPropertyName]);
-                        }, 
+                        },
                         batch: {
                             /**
                              * Returns a promise that is resolved once the create anonymous registration action has been performed; this action creates new anonymous registration resources.
@@ -725,7 +726,7 @@ baasicNotificationsService.settings.get('<provider-name>')
 .error(function (response, status, headers, config) {
     // perform error handling here
 });
-                    */ 
+                    */
                     get: function (provider) {
                         return baasicApiHttp.get(notificationsRouteService.settings.get.expand(baasicApiService.getParams(provider)));
                     },
@@ -757,10 +758,11 @@ baasicNotificationsService.update(settings)
                  * Provides direct access to `baasicNotificationsRouteService`.
                  * @method
                  * @example baasicNotificationsService.routeService.publish.create.expand({});
-                 */ 
+                 */
                 routeService: notificationsRouteService
             };
-        }]);
+        }
+    ]);
 }(angular, module));
 /**
  * @overview 
