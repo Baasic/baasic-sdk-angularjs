@@ -13,10 +13,10 @@
         * Create an application.
         * @method create       
         * @example
-var app = baasicApp.create('<api-key>', {
-    apiRootUrl : 'api.baasic.com',	
-    apiVersion : '<version>' 
-});      
+		var app = baasicApp.create('<api-key>', {
+			apiRootUrl : 'api.baasic.com',	
+			apiVersion : '<version>' 
+		});      
         **/
 		this.create = function create(apiKey, config) {
 
