@@ -48,7 +48,7 @@
 
             }
 
-            return app.baasicApiClient.request(request).then(
+            var promise = app.baasicApiClient.request(request).then(
                 function (response) {
                     return {
                         data: response.body,
@@ -66,6 +66,22 @@
                     };
                 }
             );
+
+            promise.success = function (fn) {
+				promise.then(function (response) {
+					fn(response.body, response.statusCode, response.headers, request);
+				}, null);
+				return promise;
+			};
+
+			promise.error = function (fn) {
+				promise.then(null, function (response) {
+					fn(response.body, response.statusCode, response.headers, request);
+				});
+				return promise;
+			};				
+
+			return promise;
         };
 
         createShortMethods(proxyMethod, 'get', 'delete', 'head', 'jsonp');

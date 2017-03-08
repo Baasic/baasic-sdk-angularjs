@@ -84,7 +84,7 @@
 			if (request.headers) config.headers = request.headers;
 			if (request.body) config.data = request.body;
 
-			var promise = $http(config)
+			return $http(config)
 				.then(function (value) {
 					return {
 						headers: value.headers(),
@@ -93,22 +93,6 @@
 						statusText: value.statusText
 					};
 				});
-
-			promise.success = function (fn) {
-				promise.then(function (response) {
-					fn(response.body, response.statusCode, response.headers, request);
-				}, null);
-				return promise;
-			};
-
-			promise.error = function (fn) {
-				promise.then(null, function (response) {
-					fn(response.body, response.statusCode, response.headers, request);
-				});
-				return promise;
-			};				
-
-			return promise;
 		};
 	}
 
