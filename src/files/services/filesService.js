@@ -2,13 +2,14 @@
 /**
  * @module baasicFilesService
  * @description Baasic Files Service provides Baasic route templates which can be expanded to Baasic REST URIs. Various services can use Baasic Files Route Service to obtain needed routes while other routes will be obtained through HAL. By convention, all route services use the same function names as their corresponding services.
-*/
+ */
 (function (angular, module, undefined) {
-    'use strict';
-    module.service('baasicFilesService', ['baasicApiHttp', 'baasicApiService', 'baasicConstants', 'baasicFilesRouteService',
-        function (baasicApiHttp, baasicApiService, baasicConstants, filesRouteService) {
-            return {                                                                                                                    
-                 /**
+  'use strict';
+  module.service('baasicFilesService', ['baasicApp',
+    function (baasicApps) {
+      var baasicApp = baasicApps.get();
+      return {
+        /**
                  * Returns a promise that is resolved once the find action has been performed. Success response returns a list of file resources matching the given criteria.
                  * @method        
                  * @example 
@@ -25,12 +26,12 @@ baasicFilesService.find({
 .error(function (response, status, headers, config) {
   // perform error handling here
 });    
-                **/ 				
-                find: function (options) {
-                    return baasicApiHttp.get(filesRouteService.find.expand(baasicApiService.findParams(options)));
-                },    
-                
-                /**
+                **/
+        find: function (options) {
+          return baasicApp.files.find(options);
+        },
+
+        /**
                 * Returns a promise that is resolved once the get action has been performed. Success response returns requested file resource.
                 * @method        
                 * @example 
@@ -41,12 +42,12 @@ baasicFilesService.get('<file-id>')
 .error(function (response, status, headers, config) {
   // perform error handling here
 });
-                **/  				
-                get: function (id, options) {
-                    return baasicApiHttp.get(filesRouteService.get.expand(baasicApiService.getParams(id, options)));
-                },
-                
-                 /**
+                **/
+        get: function (id, options) {
+          return baasicApp.files.get(id, options);
+        },
+
+        /**
                  * Returns a promise that is resolved once the unlink action has been performed. This action will remove one or many file resources from the system if successfully completed. If derived resource's format is passed, such as `width` and `height` for the image type of file resource, the operation will remove just derived resource. Otherwise, specified file and all its accompanying derived resources will be removed from the system. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply baasicFilesRouteService route template. Here is an example of how a route can be obtained from HAL enabled objects:
 ```
 var params = baasicApiService.removeParams(fileEntry);
@@ -70,12 +71,12 @@ baasicFilesRouteService.remove(fileEntry, {width: <width>, height: <height>})
 .error(function (response, status, headers, config) {
   // perform error handling here
 });		
-				**/		                			
-                remove: function (data, options) {
-                    return this.unlink(data, options);
-                },
-                
-                 /**
+				**/
+        remove: function (data, options) {
+          return this.unlink(data, options);
+        },
+
+        /**
                  * Returns a promise that is resolved once the unlink action has been performed. This action will remove one or many file resources from the system if successfully completed. If derived resource's format is passed, such as `width` and `height` for the image type of file resource, the operation will remove just derived resource. Otherwise, specified file and all its accompanying derived resources will be removed from the system. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply baasicFilesRouteService route template. Here is an example of how a route can be obtained from HAL enabled objects:
 ```
 var params = baasicApiService.removeParams(fileEntry);
@@ -99,17 +100,12 @@ baasicFilesRouteService.remove(fileEntry, {width: <width>, height: <height>})
 .error(function (response, status, headers, config) {
   // perform error handling here
 });		
-				**/		                   
-                unlink: function(data, options){
-                  if (!options){
-                      options = {};
-                  }  
-                  var params = baasicApiService.removeParams(data);
-                  var href = filesRouteService.parse(params[baasicConstants.modelPropertyName].links('unlink').href + '{?height,width}').expand(options);
-                  return baasicApiHttp.delete(href); 
-                },
-                
-                /**
+				**/
+        unlink: function (data, options) {
+          return baasicApp.files.unlink(data, options);
+        },
+
+        /**
                  * Returns a promise that is resolved once the update file action has been performed; this action will update a file resource if successfully completed. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicFilesRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
 ```
 var params = baasicApiService.updateParams(fileEntry);
@@ -126,13 +122,12 @@ baasicFilesService.update(fileEntry)
 .error(function (response, status, headers, config) {
   // perform error handling here
 });
-				**/		                			
-                update: function (data) {
-                    var params = baasicApiService.updateParams(data);
-                    return baasicApiHttp.put(params[baasicConstants.modelPropertyName].links('put').href, params[baasicConstants.modelPropertyName]);
-                },   
-                
-                 /**
+				**/
+        update: function (data) {
+          return baasicApp.files.update(data);
+        },
+
+        /**
                  * Returns a promise that is resolved once the link action has been performed; this action links file resource from other modules into the Files module (For example: file resources from the Media Vault module can be linked directly into the Files module).
                  * @method        
                  * @example 
@@ -143,13 +138,13 @@ baasicFilesService.link(fileObject)
 .error(function (response, status, headers, config) {
   // perform error handling here
 });
-                **/ 				
-                link: function (data) {
-                    return baasicApiHttp.post(filesRouteService.link.expand(), baasicApiService.createParams(data)[baasicConstants.modelPropertyName]);
-                },                     
-                
-                streams: {                    
-                    /**
+                **/
+        link: function (data) {
+          return baasicApp.files.link(data);
+        },
+
+        streams: {
+          /**
                     * Returns a promise that is resolved once the get action has been performed. Success response returns the file stream if successfully completed. If derived resource's format is passed, such as `width` and `height` for the image type of file resource, the operation will return a stream of the derived resource. Otherwise, stream of the original file resource will be retrieved.
                     * @method streams.get        
                     * @example 
@@ -169,17 +164,12 @@ baasicFilesService.stream.get({id: '<path>', width: <width>, height: <height>})
 .error(function (response, status, headers, config) {
     // perform error handling here
 });
-                    **/  	                    
-                    get: function(data) {
-                        if (!angular.isObject(data)){
-                            data = {
-                              id: data  
-                            };
-                        }                        
-                        return baasicApiHttp.get(filesRouteService.streams.get.expand(data));                                          
-                    },
-                    
-                    /**
+                    **/
+          get: function (data) {
+            return baasicApp.files.streams.get(data);
+          },
+
+          /**
                     * Returns a promise that is resolved once the get action has been performed. Success response returns the file stream as a blob. If derived resource's format is passed, such as `width` and `height` for the image type of file resource, the operation will return a blob of the derived file resource. Otherwise, blob of the original file resource will be retrieved. For more information on Blob objects please see [Blob Documentation](https://developer.mozilla.org/en-US/docs/Web/API/Blob).
                     * @method streams.getBlob        
                     * @example 
@@ -199,21 +189,12 @@ baasicFilesService.stream.getBlob({id: '<path>', width: <width>, height: <height
 .error(function (response, status, headers, config) {
     // perform error handling here
 });
-                    **/  	                    
-                    getBlob: function(data) {
-                        if (!angular.isObject(data)){
-                            data = {
-                              id: data  
-                            };
-                        }                        
-                        return baasicApiHttp({
-                            url:  filesRouteService.streams.get.expand(data),
-                            method: 'GET',
-                            responseType: 'blob'                            
-                        });                                                               
-                    },                    
+                    **/
+          getBlob: function (data) {
+            return baasicApp.files.streams.getBlob(data);
+          },
 
-                     /**
+          /**
                      * Returns a promise that is resolved once the update file stream action has been performed; this action will replace the existing stream with a new one. Alternatively, if a derived stream is being updated it will either create a new derived stream or replace the existing one. In order to update a derived stream, format needs to be passed (For example: `width` and `height` for the image type of file stream data type).
                      * @method streams.update
                      * @example
@@ -233,27 +214,12 @@ baasicFilesService.streams.update({id: '<path>', width: <width>, height: <height
 .error(function (response, status, headers, config) {
   // perform error handling here
 });
-                    **/ 	                    
-                    update: function(data, stream) {
-                        if (!angular.isObject(data)){
-                            data = {
-                              id: data  
-                            };
-                        }
-                        var formData = new FormData();
-                        formData.append('file', stream);
-                        return baasicApiHttp({
-                            transformRequest: angular.identity,
-                            url:  filesRouteService.streams.update.expand(data),
-                            method: 'PUT',
-                            data: formData,
-                            headers: {
-                                'Content-Type': undefined
-                            }
-                        });                       
-                    },
+                    **/
+          update: function (data, stream) {
+            return baasicApp.files.streams.update(data, stream);
+          },
 
-                     /**
+          /**
                      * Returns a promise that is resolved once the create file stream action has been performed; this action will upload the specified blob. For more information on Blob objects please see [Blob Documentation](https://developer.mozilla.org/en-US/docs/Web/API/Blob).
                      * @method streams.create
                      * @example 
@@ -264,29 +230,14 @@ baasicFilesService.streams.create('<path>', <blob>)
 .error(function (response, status, headers, config) {
   // perform error handling here
 });
-                    **/ 	                                         
-                    create: function(data, stream) {
-                        if (!angular.isObject(data)){
-                            data = {
-                              path: data  
-                            };
-                        }
-                        var formData = new FormData();
-                        formData.append('file', stream);
-                        return baasicApiHttp({
-                            transformRequest: angular.identity,
-                            url:  filesRouteService.streams.create.expand(data),
-                            method: 'POST',
-                            data: formData,
-                            headers: {
-                                'Content-Type': undefined
-                            }
-                        });                        
-                    }
-                },
-                
-                batch: {
-                  /**
+                    **/
+          create: function (data, stream) {
+            return baasicApp.files.streams.create(data, stream);
+          }
+        },
+
+        batch: {
+          /**
                   * Returns a promise that is resolved once the unlink action has been performed. This action will remove file resources from the system if successfully completed. If derived resource's format is passed, such as `width` and `height` for the image type of file resource, the operation will remove just derived resource. Otherwise, specified file and all its accompanying derived resources will be removed from the system.
                   * @method batch.remove       
                   * @example
@@ -306,12 +257,12 @@ baasicFilesService.batch.remove([{ id: '<file-id>', fileFormat: { width: <width>
 .error(function (response, status, headers, config) {
   // perform error handling here
 });		  
-                  **/		                  
-                  remove: function(data) {                                          
-                    return this.unlink(data);
-                  },
-                  
-                  /**
+                  **/
+          remove: function (data) {
+            return this.unlink(data);
+          },
+
+          /**
                   * Returns a promise that is resolved once the unlink action has been performed. This action will remove file resources from the system if successfully completed. If derived resource's format is passed, such as `width` and `height` for the image type of file resource, the operation will remove just derived resource. Otherwise, specified file and all its accompanying derived resources will be removed from the system.
                   * @method batch.unlink       
                   * @example
@@ -331,15 +282,11 @@ baasicFilesService.batch.unlink([{ id: '<file-id>', fileFormat: { width: <width>
 .error(function (response, status, headers, config) {
   // perform error handling here
 });		  
-                  **/                  
-                  unlink: function(data){
-                    return baasicApiHttp({
-                        url: filesRouteService.batch.unlink.expand({}),
-                        method: 'DELETE',
-                        data: data                           
-                    });
-                  },
-                  /**
+                  **/
+          unlink: function (data) {
+            return baasicApp.files.batch.unlink(data);
+          },
+          /**
                   * Returns a promise that is resolved once the update action has been performed; this action updates specified file resources.
                   * @method batch.update       
                   * @example 
@@ -350,12 +297,12 @@ baasicFilesService.batch.update(files)
 .error(function (response, status, headers, config) {
   // perform error handling here
 });
-                  **/ 				
-                  update: function (data) {
-                      return baasicApiHttp.put(filesRouteService.batch.update.expand(), baasicApiService.updateParams(data)[baasicConstants.modelPropertyName]);
-                  },
-                  
-                  /**
+                  **/
+          update: function (data) {
+            return baasicApp.files.batch.update(data);
+          },
+
+          /**
                   * Returns a promise that is resolved once the link action has been performed; this action links file resources from other modules into the Files module (For example: file resources from the Media Vault module can be linked directly into the Files module).
                   * @method batch.link       
                   * @example 
@@ -366,14 +313,14 @@ baasicFilesService.batch.link(files)
 .error(function (response, status, headers, config) {
   // perform error handling here
 });
-                  **/                   
-                  link: function (data){
-                      return baasicApiHttp.post(filesRouteService.batch.link.expand(), baasicApiService.createParams(data)[baasicConstants.modelPropertyName]);
-                  }                       
-                },
-                
-                acl: {
-                    /**
+                  **/
+          link: function (data) {
+            return baasicApp.files.batch.link(data);
+          }
+        },
+
+        acl: {
+          /**
                     * Returns a promise that is resolved once the get action has been performed. Success response returns a list of ACL policies established for the specified file resource.
                     * @method acl.get       
                     * @example 
@@ -384,12 +331,11 @@ baasicFilesService.acl.get({id: '<file-id>'})
 .error(function (response, status, headers, config) {
   // perform error handling here
 });
-                    **/ 					
-                    get: function (options) {
-                        var params = angular.copy(options);
-                        return baasicApiHttp.get(filesRouteService.acl.get.expand(params));
-                    },
-                    /**
+                    **/
+          get: function (options) {
+            return baasicApp.files.acl.get(options);
+          },
+          /**
                     * Returns a promise that is resolved once the update acl action has been performed, this action creates new ACL policy for the specified file resource.
                     * @method acl.update      
                     * @example 
@@ -407,12 +353,11 @@ baasicFilesService.acl.update(options)
 .error(function (response, status, headers, config) {
   // perform error handling here
 });
-				    **/							
-                    update: function (options) {
-                        var params = angular.copy(options);
-                        return baasicApiHttp.put(filesRouteService.acl.get.expand(params), params[baasicConstants.modelPropertyName]);
-                    },
-                    /**
+				    **/
+          update: function (options) {
+            return baasicApp.files.acl.update(options);
+          },
+          /**
                     * Returns a promise that is resolved once the removeByUser action has been performed. This action deletes ACL policy assigned to the specified user and file resource.
                     * @method acl.deleteByUser      
                     * @example 
@@ -423,15 +368,11 @@ baasicFilesService.acl.removeByUser('<file-id>', '<access-action>', '<username>'
 .error(function (response, status, headers, config) {
   // perform error handling here
 });
-				    **/						
-                    removeByUser: function (fileEntryId, action, user, data) {
-                        var params = baasicApiService.removeParams(data);
-                        params.id = fileEntryId;
-                        params.user = user;
-                        params.accessAction = action;
-                        return baasicApiHttp.delete(filesRouteService.acl.deleteByUser.expand(params));
-                    },
-                    /**
+				    **/
+          removeByUser: function (fileEntryId, action, user, data) {
+            return baasicApp.files.acl.removeByUser(fileEntryId, action, user, data);
+          },
+          /**
                     * Returns a promise that is resolved once the removeByRole action has been performed. This action deletes ACL policy assigned to the specified role and file resource.
                     * @method acl.deleteByRole      
                     * @example 
@@ -442,17 +383,14 @@ baasicFilesService.acl.removeByRole('<file-id>', '<access-action>', '<role-name>
 .error(function (response, status, headers, config) {
   // perform error handling here
 });
-				    **/						
-                    removeByRole: function (fileEntryId, action, role, data) {
-                        var params = baasicApiService.removeParams(data);
-                        params.id = fileEntryId;
-                        params.role = role;
-                        params.accessAction = action;
-                        return baasicApiHttp.delete(filesRouteService.acl.deleteByRole.expand(params));
-                    }
-                },                 
-            };       
-        }]);
+				    **/
+          removeByRole: function (fileEntryId, action, role, data) {
+            return baasicApp.files.acl.removeByRole(fileEntryId, action, role, data);
+          }
+        },
+      };
+    }
+  ]);
 }(angular, module));
 
 /**
