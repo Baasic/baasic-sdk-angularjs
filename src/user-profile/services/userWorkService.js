@@ -2,13 +2,13 @@
 /**
  * @module baasicUserWorkService
  * @description Baasic User Work Service provides Baasic route templates which can be expanded to Baasic REST URIs. Various services can use Baasic User Work Route Service to obtain needed routes while other routes will be obtained through HAL. By convention, all route services use the same function names as their corresponding services.
-*/
+ */
 (function (angular, module, undefined) {
-    'use strict';
-    module.service('baasicUserWorkService', ['baasicApiHttp', 'baasicApiService', 'baasicConstants', 'baasicUserWorkRouteService',
-        function (baasicApiHttp, baasicApiService, baasicConstants, userWorkRouteService) {
-            return {
-                 /**
+  'use strict';
+  module.service('baasicUserWorkService', ['baasicApp',
+    function (baasicApps) {
+      return {
+        /**
                  * Returns a promise that is resolved once the create user work action has been performed; this action creates a new user work resource.
                  * @method        
                  * @example 
@@ -22,11 +22,11 @@ baasicUserWorkService.create({
 .error(function (response, status, headers, config) {
   // perform error handling here
 });
-                **/ 				
-                create: function (data) {
-                    return baasicApiHttp.post(userWorkRouteService.create.expand(data), baasicApiService.createParams(data)[baasicConstants.modelPropertyName]);
-                },                
-                /**
+                **/
+        create: function (data) {
+          return baasicApp.userProfile.profile.work.create(data);
+        },
+        /**
                  * Returns a promise that is resolved once the find action has been performed. Success response returns a list of user work resources matching the given criteria.
                  * @method        
                  * @example 
@@ -43,11 +43,11 @@ baasicUserWorkService.find({
 .error(function (response, status, headers, config) {
   // perform error handling here
 });    
-                **/ 				
-                find: function (options) {
-                    return baasicApiHttp.get(userWorkRouteService.find.expand(baasicApiService.findParams(options)));
-                },                
-                /**
+                **/
+        find: function (options) {
+          return baasicApp.userProfile.profile.work.find(options);
+        },
+        /**
                 * Returns a promise that is resolved once the get action has been performed. Success response returns the user work resource.
                 * @method        
                 * @example 
@@ -58,11 +58,11 @@ baasicUserWorkService.get()
 .error(function (response, status, headers, config) {
   // perform error handling here
 });
-                **/  				
-                get: function (id, options) {
-                    return baasicApiHttp.get(userWorkRouteService.get.expand(baasicApiService.getParams(id, options)));
-                },                                   
-                 /**
+                **/
+        get: function (id, options) {
+          return baasicApp.userProfile.profile.work.get(id, options);
+        },
+        /**
                  * Returns a promise that is resolved once the remove action has been performed. This action will remove a user work resource from the system if successfully completed. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicUserWorkRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
 ```
 var params = baasicApiService.removeParams(work);
@@ -78,12 +78,11 @@ baasicUserWorkService.remove(work)
 .error(function (response, status, headers, config) {
   // perform error handling here
 });		
-				        **/					
-                remove: function (data) {
-                    var params = baasicApiService.removeParams(data);
-                    return baasicApiHttp.delete(params[baasicConstants.modelPropertyName].links('delete').href);
-                }, 
-                /**
+				        **/
+        remove: function (data) {
+          return baasicApp.userProfile.profile.work.remove(data);
+        },
+        /**
                  * Returns a promise that is resolved once the update user work action has been performed; this action updates a user work resource. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicUserWorkRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
 ```
 var params = baasicApiService.removeParams(work);
@@ -100,13 +99,13 @@ baasicUserWorkService.update(work)
 .error(function (response, status, headers, config) {
   // perform error handling here
 });
-				        **/					
-                update: function (data) {
-                    var params = baasicApiService.updateParams(data);
-                    return baasicApiHttp.put(params[baasicConstants.modelPropertyName].links('put').href, params[baasicConstants.modelPropertyName]);
-                }
-            };       
-        }]);
+				        **/
+        update: function (data) {
+          return baasicApp.userProfile.profile.work.update(data);
+        }
+      };
+    }
+  ]);
 }(angular, module));
 
 /**

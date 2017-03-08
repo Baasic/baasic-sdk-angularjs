@@ -48,7 +48,24 @@
 
             }
 
-            return app.baasicApiClient.request(request);
+            return app.baasicApiClient.request(request).then(
+                function (response) {
+                    return {
+                        data: response.body,
+                        status: response.statusCode,
+                        statusText: response.statusText,
+                        headers: response.headers
+                    };
+                },
+                function (response) {
+                    return {
+                        data: response.body,
+                        status: response.statusCode,
+                        statusText: response.statusText,
+                        headers: response.headers
+                    };
+                }
+            );
         };
 
         createShortMethods(proxyMethod, 'get', 'delete', 'head', 'jsonp');

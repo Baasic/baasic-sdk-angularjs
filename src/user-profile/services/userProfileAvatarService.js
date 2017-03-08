@@ -2,12 +2,13 @@
 /**
  * @module baasicUserProfileAvatarService
  * @description Baasic Files Service provides Baasic route templates which can be expanded to Baasic REST URIs. Various services can use Baasic Files Route Service to obtain needed routes while other routes will be obtained through HAL. By convention, all route services use the same function names as their corresponding services.
-*/
+ */
 (function (angular, module, undefined) {
     'use strict';
-    module.service('baasicUserProfileAvatarService', ['baasicApiHttp', 'baasicApiService', 'baasicConstants', 'baasicUserProfileAvatarRouteService',
-        function (baasicApiHttp, baasicApiService, baasicConstants, filesRouteService) {
-            return {                                                                                                                    
+    module.service('baasicUserProfileAvatarService', ['baasicApp',
+        function (baasicApps) {
+            var baasicApp = baasicApps.get();
+            return {
                 /**
                 * Returns a promise that is resolved once the get action has been performed. Success response returns requested file resource.
                 * @method        
@@ -21,9 +22,9 @@ baasicUserProfileAvatarService.get('<file-id>')
 });
                 **/
                 get: function (id, options) {
-                    return baasicApiHttp.get(filesRouteService.get.expand(baasicApiService.getParams(id, options)));
+                    return baasicApp.userProfile.profile.avatar.get(id, options);
                 },
-                                
+
                 /**
                 * Returns a promise that is resolved once the unlink action has been performed. This action will remove one or many file resources from the system if successfully completed. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply baasicUserProfileAvatarRouteService route template. Here is an example of how a route can be obtained from HAL enabled objects:
 ```
@@ -42,14 +43,9 @@ baasicUserProfileAvatarRouteService.remove(fileEntry)
 });
                **/
                 unlink: function (data, options) {
-                    if (!options) {
-                        options = {};
-                    }
-                    var params = baasicApiService.removeParams(data);
-                    var href = filesRouteService.parse(params[baasicConstants.modelPropertyName].links('unlink').href).expand(options);
-                    return baasicApiHttp.delete(href);
+                    return baasicApp.userProfile.profile.avatar.unlink(data, options);
                 },
-                
+
                 /**
                  * Returns a promise that is resolved once the update file action has been performed; this action will update a file resource if successfully completed. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicUserProfileAvatarRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
 ```
@@ -69,10 +65,9 @@ baasicUserProfileAvatarService.update(fileEntry)
 });
 				**/
                 update: function (data) {
-                    var params = baasicApiService.updateParams(data);
-                    return baasicApiHttp.put(params[baasicConstants.modelPropertyName].links('put').href, params[baasicConstants.modelPropertyName]);
-                },   
-                
+                    return baasicApp.userProfile.profile.avatar.update(data);
+                },
+
                 /**
                 * Returns a promise that is resolved once the link action has been performed; this action links file resource from other modules into the Profile Files module (For example: file resources from the Media Vault module can be linked directly into the Profile Files module).
                 * @method        
@@ -86,12 +81,10 @@ baasicUserProfileAvatarService.link(fileObject)
 });
                **/
                 link: function (id, data) {
-                    var params = angular.copy(data);
-                    params.id = id;
-                    return baasicApiHttp.post(filesRouteService.link.expand(params), baasicApiService.createParams(data)[baasicConstants.modelPropertyName]);
+                    return baasicApp.userProfile.profile.avatar.link(id, data);
                 },
-
-                streams: {                    
+                routeService: baasicApp.userProfile.profile.avatar.routeDefinition,
+                streams: {
                     /**
                     * Returns a promise that is resolved once the get action has been performed. Success response returns the file stream if successfully completed. If derived resource's format is passed, such as `width` and `height` for the image type of file resource, the operation will return a stream of the derived resource. Otherwise, stream of the original file resource will be retrieved.
                     * @method streams.get        
@@ -114,14 +107,9 @@ baasicUserProfileAvatarService.stream.get({id: '<file-id>', width: <width>, heig
 });
                     **/
                     get: function (data) {
-                        if (!angular.isObject(data)) {
-                            data = {
-                                id: data
-                            };
-                        }
-                        return baasicApiHttp.get(filesRouteService.streams.get.expand(data));
+                        return baasicApp.userProfile.profile.avatar.streams.get(data);
                     },
-                    
+
                     /**
                     * Returns a promise that is resolved once the get action has been performed. Success response returns the file stream as a blob. If derived resource's format is passed, such as `width` and `height` for the image type of file resource, the operation will return a blob of the derived file resource. Otherwise, blob of the original file resource will be retrieved. For more information on Blob objects please see [Blob Documentation](https://developer.mozilla.org/en-US/docs/Web/API/Blob).
                     * @method streams.getBlob        
@@ -144,17 +132,8 @@ baasicUserProfileAvatarService.stream.getBlob({id: '<file-id>', width: <width>, 
 });
                     **/
                     getBlob: function (data) {
-                        if (!angular.isObject(data)) {
-                            data = {
-                                id: data
-                            };
-                        }
-                        return baasicApiHttp({
-                            url: filesRouteService.streams.get.expand(data),
-                            method: 'GET',
-                            responseType: 'blob'
-                        });
-                    },                    
+                        return baasicApp.userProfile.profile.avatar.streams.getBlob(data);
+                    },
 
                     /**
                     * Returns a promise that is resolved once the update file stream action has been performed; this action will replace the existing stream with a new one. Alternatively, if a derived stream is being updated it will either create a new derived stream or replace the existing one. In order to update a derived stream, format needs to be passed (For example: `width` and `height` for the image type of file stream data type).
@@ -178,22 +157,7 @@ baasicUserProfileAvatarService.streams.update({id: '<file-id>', width: <width>, 
 });
                    **/
                     update: function (data, stream) {
-                        if (!angular.isObject(data)) {
-                            data = {
-                                id: data
-                            };
-                        }
-                        var formData = new FormData();
-                        formData.append('file', stream);
-                        return baasicApiHttp({
-                            transformRequest: angular.identity,
-                            url: filesRouteService.streams.update.expand(data),
-                            method: 'PUT',
-                            data: formData,
-                            headers: {
-                                'Content-Type': undefined
-                            }
-                        });
+                        return baasicApp.userProfile.profile.avatar.streams.update(data, stream);
                     },
 
                     /**
@@ -209,29 +173,14 @@ baasicUserProfileAvatarService.streams.create('<file-id>', '<filename'>, <blob>)
 });
                    **/
                     create: function (id, data, stream) {
-                        if (!angular.isObject(data)) {
-                            data = {
-                                filename: data
-                            };
-                        }
-                        var params = angular.copy(data);
-                        params.id = id;
-                        var formData = new FormData();
-                        formData.append('file', stream);
-                        return baasicApiHttp({
-                            transformRequest: angular.identity,
-                            url: filesRouteService.streams.create.expand(params),
-                            method: 'POST',
-                            data: formData,
-                            headers: {
-                                'Content-Type': undefined
-                            }
-                        });
-                    }
+                        return baasicApp.userProfile.profile.avatar.streams.create(id, data, stream);
+                    },
+                    routeService: baasicApp.userProfile.profile.avatar.streams.routeDefinition,
                 }
             };
-        }]);
-} (angular, module));
+        }
+    ]);
+}(angular, module));
 
 /**
  * @overview 
