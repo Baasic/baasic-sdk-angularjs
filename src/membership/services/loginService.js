@@ -6,8 +6,8 @@
 (function (angular, module, undefined) {
     'use strict';
     module.service('baasicLoginService', ['baasicApp',
-        function (baasicApp) {
-
+        function (baasicApps) {
+            var baasicApp = baasicApps.get();
             return {
                 /**
                  * Returns a promise that is resolved once the login action has been performed. This action logs user into the application and success response returns the token resource.
@@ -112,7 +112,13 @@ baasicLoginService.social.post('<provider>', postData)
                      **/
                     parseResponse: function (provider, returnUrl) {
                         return baasicApp.membership.loginSocial.parseResponse(provider, returnUrl);
-                    }
+                    },
+                    /**
+                     * Provides direct access to route definition.
+                     * @method        
+                     * @example baasicLoginService.social.routeService.get('<id>', expandObject);
+                     **/
+                    routeService: baasicApp.membership.loginSocial.routeDefinition
                 }
             };
 

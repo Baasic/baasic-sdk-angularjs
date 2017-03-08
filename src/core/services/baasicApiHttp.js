@@ -39,16 +39,33 @@
 
     var proxyFactory = function proxyFactory(app) {
         var proxyMethod = function (config) {
-			var request = {};
+            var request = {};
             if (config) {
-                request.url = new URL(config.url);
-				request.metho = config.method;
-				if (config.headers) request.headers = config.headers;
-				if (config.data) request.body = config.data;
+                request.url = config.url;
+                request.method = config.method;
+                if (config.headers) request.headers = config.headers;
+                if (config.data) request.body = config.data;
 
             }
 
-            return app.baasicApiClient.request(request);
+            return app.baasicApiClient.request(request).then(
+                function (response) {
+                    return {
+                        data: response.body,
+                        status: response.statusCode,
+                        statusText: response.statusText,
+                        headers: response.headers
+                    };
+                },
+                function (response) {
+                    return {
+                        data: response.body,
+                        status: response.statusCode,
+                        statusText: response.statusText,
+                        headers: response.headers
+                    };
+                }
+            );
         };
 
         createShortMethods(proxyMethod, 'get', 'delete', 'head', 'jsonp');
@@ -56,14 +73,14 @@
 
         return proxyMethod;
     };
-    
+
     module.service('baasicApiHttp', ['baasicApp', function baasicApiHttp(baasicApp) {
-		var proxy = proxyFactory(baasicApp.get());
-			
-		proxy.createNew = function (app) {
-			return proxyFactory(app);
-		};
-			
-		return proxy;
-	}]);
+        var proxy = proxyFactory(baasicApp.get());
+
+        proxy.createNew = function (app) {
+            return proxyFactory(app);
+        };
+
+        return proxy;
+    }]);
 })(angular, module);

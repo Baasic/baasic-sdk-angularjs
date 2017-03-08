@@ -6,8 +6,8 @@
 (function (angular, module, undefined) {
     'use strict';
     module.service('baasicPermissionsService', ['baasicApp', 'baasicAuthorizationService',
-        function (baasicAppHandler, authService) {
-            var baasicApp = baasicAppHandler.get();
+        function (baasicApps, authService) {
+            var baasicApp = baasicApps.get();
             return {
                 /**
                 * Returns a promise that is resolved once the find action has been performed. Success response returns a list of access policies that match the specified search parameters.

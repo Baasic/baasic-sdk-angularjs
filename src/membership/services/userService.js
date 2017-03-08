@@ -6,7 +6,8 @@
 (function (angular, module, undefined) {
   'use strict';
   module.service('baasicUserService', ['baasicApp',
-    function (baasicApp) {
+    function (baasicApps) {
+      var baasicApp = baasicApps.get();
       return {
         /**
                  * Returns a promise that is resolved once the exists action has been performed. This action checks if user exists in the application.
