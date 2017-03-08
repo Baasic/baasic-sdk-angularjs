@@ -31,7 +31,7 @@ baasicNotificationsService.publish.create({
 });
                      */
                     create: function (data) {
-                        //return baasicApp..post(notificationsRouteService.publish.create.expand(), baasicApiService.createParams(data)[baasicConstants.modelPropertyName]);
+                        return baasicApp.notifications.publish.create(data);
                     },
                     batch: {
                         /**
@@ -55,7 +55,7 @@ baasicNotificationsService.publish.create([{
 });
                         */
                         create: function (data) {
-                            return baasicApiHttp.post(notificationsRouteService.publish.batch.create.expand(), baasicApiService.createParams(data)[baasicConstants.modelPropertyName]);
+                            return baasicApp.notifications.publish.batch.create(data);
                         }
                     }
                 },
@@ -77,7 +77,7 @@ baasicNotificationsService.subscriptions.users.create({
 });
                         */
                         create: function (data) {
-                            return baasicApiHttp.post(notificationsRouteService.subscriptions.users.create.expand(), baasicApiService.createParams(data)[baasicConstants.modelPropertyName]);
+                            return baasicApp.notifications.subscriptions.users.create(data);
                         },
 
                         /**
@@ -102,7 +102,7 @@ baasicNotificationsService.subscriptions.users.find({
 });    
                         */
                         find: function (options) {
-                            return baasicApiHttp.get(notificationsRouteService.subscriptions.users.find.expand(baasicApiService.findParams(options)));
+                            return baasicApp.notifications.subscriptions.users.find(options);
                         },
 
                         /**
@@ -118,7 +118,7 @@ baasicNotificationsService.subscriptions.users.get('<subscription-id>')
 });
                         */
                         get: function (id, options) {
-                            return baasicApiHttp.get(notificationsRouteService.subscriptions.users.get.expand(baasicApiService.getParams(id, options)));
+                            return baasicApp.notifications.subscriptions.users.get(id, options);
                         },
 
                         /**
@@ -139,8 +139,7 @@ baasicNotificationsService.subscriptions.users.remove(subscription)
 });		
                         */
                         remove: function (data) {
-                            var params = baasicApiService.removeParams(data);
-                            return baasicApiHttp.delete(params[baasicConstants.modelPropertyName].links('delete').href);
+                            return baasicApp.notifications.subscriptions.users.remove(data);
                         },
 
                         /**
@@ -162,8 +161,7 @@ baasicNotificationsService.subscriptions.users.update(subscription)
 });
 				        */
                         update: function (data) {
-                            var params = baasicApiService.updateParams(data);
-                            return baasicApiHttp.put(params[baasicConstants.modelPropertyName].links('put').href, params[baasicConstants.modelPropertyName]);
+                            return baasicApp.notifications.subscriptions.users.update(data);
                         },
                         batch: {
                             /**
@@ -182,7 +180,7 @@ baasicNotificationsService.subscriptions.users.batch.create([{
 });
                             */
                             create: function (data) {
-                                return baasicApiHttp.post(notificationsRouteService.subscriptions.users.batch.create.expand(), baasicApiService.createParams(data)[baasicConstants.modelPropertyName]);
+                                return baasicApp.notifications.subscriptions.batch.create(data);
                             },
 
                             /**
@@ -198,11 +196,7 @@ baasicNotificationsService.subscriptions.users.batch.remove(subscriptionIds)
 });		
                             */
                             remove: function (ids) {
-                                return baasicApiHttp({
-                                    url: notificationsRouteService.subscriptions.users.batch.remove.expand(),
-                                    method: 'DELETE',
-                                    data: ids
-                                });
+                                return baasicApp.notifications.subscriptions.batch.remove(ids);
                             },
 
                             /**
@@ -218,7 +212,7 @@ baasicNotificationsService.subscriptions.users.batch.update(subscriptions)
 });
                             */
                             update: function (data) {
-                                return baasicApiHttp.put(notificationsRouteService.subscriptions.users.batch.update.expand(), baasicApiService.updateParams(data)[baasicConstants.modelPropertyName]);
+                                return baasicApp.notifications.subscriptions.batch.update(data);
                             }
                         }
                     },
@@ -239,7 +233,7 @@ baasicNotificationsService.subscriptions.anonymous.create({
 });
                         */
                         create: function (data) {
-                            return baasicApiHttp.post(notificationsRouteService.subscriptions.anonymous.create.expand(), baasicApiService.createParams(data)[baasicConstants.modelPropertyName]);
+                            return baasicApp.notifications.subscriptions.anonymous.create(data);
                         },
 
                         /**
@@ -264,7 +258,7 @@ baasicNotificationsService.subscriptions.anonymous.find({
 });    
                         */
                         find: function (options) {
-                            return baasicApiHttp.get(notificationsRouteService.subscriptions.anonymous.find.expand(baasicApiService.findParams(options)));
+                            return baasicApp.notifications.subscriptions.anonymous.find(options);
                         },
 
                         /**
@@ -280,7 +274,7 @@ baasicNotificationsService.subscriptions.anonymous.get('<subscription-id>')
 });
                         */
                         get: function (id, options) {
-                            return baasicApiHttp.get(notificationsRouteService.subscriptions.anonymous.get.expand(baasicApiService.getParams(id, options)));
+                            return baasicApp.notifications.subscriptions.anonymous.get(id, options);
                         },
 
                         /**
@@ -301,8 +295,7 @@ baasicNotificationsService.subscriptions.anonymous.remove(subscription)
 });		
 				        */
                         remove: function (data) {
-                            var params = baasicApiService.removeParams(data);
-                            return baasicApiHttp.delete(params[baasicConstants.modelPropertyName].links('delete').href);
+                            return baasicApp.notifications.subscriptions.anonymous.remove(data);
                         },
 
                         /**
@@ -324,8 +317,7 @@ baasicNotificationsService.update(subscription)
 });
 				        */
                         update: function (data) {
-                            var params = baasicApiService.updateParams(data);
-                            return baasicApiHttp.put(params[baasicConstants.modelPropertyName].links('put').href, params[baasicConstants.modelPropertyName]);
+                            return baasicApp.notifications.subscriptions.anonymous.update(data);
                         },
                         batch: {
                             /**
@@ -344,7 +336,7 @@ baasicNotificationsService.subscriptions.anonymous.batch.create([{
 });
                             */
                             create: function (data) {
-                                return baasicApiHttp.post(notificationsRouteService.subscriptions.anonymous.batch.create.expand(), baasicApiService.createParams(data)[baasicConstants.modelPropertyName]);
+                                return baasicApp.notifications.subscriptions.anonymous.batch.create(data);
                             },
 
                             /**
@@ -360,11 +352,7 @@ baasicNotificationsService.subscriptions.anonymous.batch.remove(subscriptionIds)
 });		
                             */
                             remove: function (ids) {
-                                return baasicApiHttp({
-                                    url: notificationsRouteService.subscriptions.anonymous.batch.remove.expand(),
-                                    method: 'DELETE',
-                                    data: ids
-                                });
+                                return baasicApp.notifications.subscriptions.anonymous.batch.remove(ids);
                             },
 
                             /**
@@ -380,7 +368,7 @@ baasicNotificationsService.subscriptions.anonymous.batch.update(subscriptions)
 });
                             */
                             update: function (data) {
-                                return baasicApiHttp.put(notificationsRouteService.subscriptions.anonymous.batch.update.expand(), baasicApiService.updateParams(data)[baasicConstants.modelPropertyName]);
+                                return baasicApp.notifications.subscriptions.anonymous.batch.update(data);
                             }
                         }
                     }
@@ -404,7 +392,7 @@ baasicNotificationsService.registrations.users.create({
 });
                         */
                         create: function (data) {
-                            return baasicApiHttp.post(notificationsRouteService.registrations.users.create.expand(), baasicApiService.createParams(data)[baasicConstants.modelPropertyName]);
+                            return baasicApp.notifications.registrations.users.create(data);
                         },
 
                         /**
@@ -429,7 +417,7 @@ baasicNotificationsService.registrations.users.find({
 });    
                         */
                         find: function (options) {
-                            return baasicApiHttp.get(notificationsRouteService.registrations.users.find.expand(baasicApiService.findParams(options)));
+                            return baasicApp.notifications.registrations.users.find(options);
                         },
 
                         /**
@@ -445,7 +433,7 @@ baasicNotificationsService.registrations.users.get('<registration-id>')
 });
                         */
                         get: function (id, options) {
-                            return baasicApiHttp.get(notificationsRouteService.registrations.users.get.expand(baasicApiService.getParams(id, options)));
+                            return baasicApp.notifications.registrations.users.get(id, options);
                         },
 
                         /**
@@ -466,8 +454,7 @@ baasicNotificationsService.registrations.users.remove(registration)
 });		
 				        */
                         remove: function (data) {
-                            var params = baasicApiService.removeParams(data);
-                            return baasicApiHttp.delete(params[baasicConstants.modelPropertyName].links('delete').href);
+                            return baasicApp.notifications.registrations.users.remove(data);
                         },
 
                         /**
@@ -489,8 +476,7 @@ baasicNotificationsService.registrations.users.remove(registration)
                             });
 				        */
                         update: function (data) {
-                            var params = baasicApiService.updateParams(data);
-                            return baasicApiHttp.put(params[baasicConstants.modelPropertyName].links('put').href, params[baasicConstants.modelPropertyName]);
+                            return baasicApp.notifications.registrations.users.update(data);
                         },
                         batch: {
                             /**
@@ -510,7 +496,7 @@ baasicNotificationsService.registrations.users.batch.create([{
 });
                             */
                             create: function (data) {
-                                return baasicApiHttp.post(notificationsRouteService.registrations.users.batch.create.expand(), baasicApiService.createParams(data)[baasicConstants.modelPropertyName]);
+                                return baasicApp.notifications.registrations.users.batch.create(data);
                             },
 
                             /**
@@ -526,11 +512,7 @@ baasicNotificationsService.registrations.users.batch.remove(subscriptionIds)
 });		
                             */
                             remove: function (ids) {
-                                return baasicApiHttp({
-                                    url: notificationsRouteService.registrations.users.batch.remove.expand(),
-                                    method: 'DELETE',
-                                    data: ids
-                                });
+                                return baasicApp.notifications.registrations.users.batch.remove(ids);
                             },
 
                             /**
@@ -546,7 +528,7 @@ baasicNotificationsService.registrations.users.batch.update(registrations)
 });
                             */
                             update: function (data) {
-                                return baasicApiHttp.put(notificationsRouteService.registrations.users.batch.update.expand(), baasicApiService.updateParams(data)[baasicConstants.modelPropertyName]);
+                                return baasicApp.notifications.registrations.users.batch.update(data);
                             }
                         }
                     },
@@ -568,7 +550,7 @@ baasicNotificationsService.registrations.anonymous.create({
 });
                         */
                         create: function (data) {
-                            return baasicApiHttp.post(notificationsRouteService.registrations.anonymous.create.expand(), baasicApiService.createParams(data)[baasicConstants.modelPropertyName]);
+                            return baasicApp.notifications.registrations.anonymous.create(data);
                         },
 
                         /**
@@ -592,7 +574,7 @@ baasicNotificationsService.registrations.anonymous.find({
 });    
                         */
                         find: function (options) {
-                            return baasicApiHttp.get(notificationsRouteService.registrations.anonymous.find.expand(baasicApiService.findParams(options)));
+                            return baasicApp.notifications.registrations.anonymous.find(options);
                         },
 
                         /**
@@ -608,7 +590,7 @@ baasicNotificationsService.registrations.anonymous.get('<registration-id>')
 });
                         */
                         get: function (id, options) {
-                            return baasicApiHttp.get(notificationsRouteService.registrations.anonymous.get.expand(baasicApiService.getParams(id, options)));
+                            return baasicApp.notifications.registrations.anonymous.get(id, options);
                         },
 
                         /**
@@ -629,8 +611,7 @@ baasicNotificationsService.registrations.anonymous.remove(registration)
 });		
 				        */
                         remove: function (data) {
-                            var params = baasicApiService.removeParams(data);
-                            return baasicApiHttp.delete(params[baasicConstants.modelPropertyName].links('delete').href);
+                            return baasicApp.notifications.registrations.anonymous.remove(data);
                         },
 
                         /**
@@ -652,8 +633,7 @@ baasicNotificationsService.update(registration)
 });
 				        */
                         update: function (data) {
-                            var params = baasicApiService.updateParams(data);
-                            return baasicApiHttp.put(params[baasicConstants.modelPropertyName].links('put').href, params[baasicConstants.modelPropertyName]);
+                            return baasicApp.notifications.registrations.anonymous.update(data);
                         },
                         batch: {
                             /**
@@ -673,7 +653,7 @@ baasicNotificationsService.registrations.anonymous.batch.create([{
 });
                             */
                             create: function (data) {
-                                return baasicApiHttp.post(notificationsRouteService.registrations.anonymous.batch.create.expand(), baasicApiService.createParams(data)[baasicConstants.modelPropertyName]);
+                                return baasicApp.notifications.registrations.anonymous.batch.create(data);
                             },
 
                             /**
@@ -689,11 +669,7 @@ baasicNotificationsService.registrations.anonymous.batch.remove(subscriptionIds)
 });		
                             */
                             remove: function (ids) {
-                                return baasicApiHttp({
-                                    url: notificationsRouteService.registrations.anonymous.batch.remove.expand(),
-                                    method: 'DELETE',
-                                    data: ids
-                                });
+                                return baasicApp.notifications.registrations.anonymous.batch.remove(ids);
                             },
 
                             /**
@@ -709,7 +685,7 @@ baasicNotificationsService.registrations.anonymous.batch.update(registrations)
 });
                             */
                             update: function (data) {
-                                return baasicApiHttp.put(notificationsRouteService.registrations.anonymous.batch.update.expand(), baasicApiService.updateParams(data)[baasicConstants.modelPropertyName]);
+                                return baasicApp.notifications.registrations.anonymous.batch.update(data);
                             }
                         }
                     }
@@ -728,7 +704,7 @@ baasicNotificationsService.settings.get('<provider-name>')
 });
                     */
                     get: function (provider) {
-                        return baasicApiHttp.get(notificationsRouteService.settings.get.expand(baasicApiService.getParams(provider)));
+                        return baasicApp.notifications.settings.get(provider);
                     },
 
                     /**
@@ -749,8 +725,7 @@ baasicNotificationsService.update(settings)
 });
                     */
                     update: function (data) {
-                        var params = baasicApiService.updateParams(data);
-                        return baasicApiHttp.put(params[baasicConstants.modelPropertyName].links('put').href, params[baasicConstants.modelPropertyName]);
+                        return baasicApp.notifications.settings.update(data);
                     }
                 },
 
@@ -759,7 +734,7 @@ baasicNotificationsService.update(settings)
                  * @method
                  * @example baasicNotificationsService.routeService.publish.create.expand({});
                  */
-                routeService: notificationsRouteService
+                routeService: baasicApp.notifications.routeDefinition
             };
         }
     ]);

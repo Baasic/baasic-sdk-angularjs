@@ -7813,27 +7813,11 @@
                     request.url = config.url;
                     request.method = config.method;
                     if (config.headers) request.headers = config.headers;
-                    if (config.data) request.body = config.data;
+                    if (config.data) request.data = config.data;
 
                 }
 
-                var promise = app.baasicApiClient.request(request).then(
-
-                function (response) {
-                    return {
-                        data: response.body,
-                        status: response.statusCode,
-                        statusText: response.statusText,
-                        headers: response.headers
-                    };
-                }, function (response) {
-                    return {
-                        data: response.body,
-                        status: response.statusCode,
-                        statusText: response.statusText,
-                        headers: response.headers
-                    };
-                });
+                return app.baasicApiClient.request(request);
 
                 promise.success = function (fn) {
                     promise.then(function (response) {
@@ -8056,27 +8040,28 @@
                 };
 
                 if (request.headers) config.headers = request.headers;
-                if (request.body) config.data = request.body;
+                if (request.data) config.data = request.data;
 
                 var promise = $http(config).then(function (value) {
                     return {
                         headers: value.headers(),
-                        body: value.data,
+                        data: value.data,
                         statusCode: value.status,
-                        statusText: value.statusText
+                        statusText: value.statusText,
+                        request: request
                     };
                 });
 
                 promise.success = function (fn) {
                     promise.then(function (response) {
-                        fn(response.body, response.statusCode, response.headers, request);
+                        fn(response.data, response.statusCode, response.headers, request);
                     }, null);
                     return promise;
                 };
 
                 promise.error = function (fn) {
                     promise.then(null, function (response) {
-                        fn(response.body, response.statusCode, response.headers, request);
+                        fn(response.data, response.statusCode, response.headers, request);
                     });
                     return promise;
                 };
@@ -11723,7 +11708,7 @@
                      });
                      */
                     create: function (data) {
-                        //return baasicApp..post(notificationsRouteService.publish.create.expand(), baasicApiService.createParams(data)[baasicConstants.modelPropertyName]);
+                        return baasicApp.notifications.publish.create(data);
                     },
                     batch: {
                         /**
@@ -11747,7 +11732,7 @@
                          });
                          */
                         create: function (data) {
-                            return baasicApiHttp.post(notificationsRouteService.publish.batch.create.expand(), baasicApiService.createParams(data)[baasicConstants.modelPropertyName]);
+                            return baasicApp.notifications.publish.batch.create(data);
                         }
                     }
                 },
@@ -11769,7 +11754,7 @@
                          });
                          */
                         create: function (data) {
-                            return baasicApiHttp.post(notificationsRouteService.subscriptions.users.create.expand(), baasicApiService.createParams(data)[baasicConstants.modelPropertyName]);
+                            return baasicApp.notifications.subscriptions.users.create(data);
                         },
 
                         /**
@@ -11794,7 +11779,7 @@
                          });
                          */
                         find: function (options) {
-                            return baasicApiHttp.get(notificationsRouteService.subscriptions.users.find.expand(baasicApiService.findParams(options)));
+                            return baasicApp.notifications.subscriptions.users.find(options);
                         },
 
                         /**
@@ -11810,7 +11795,7 @@
                          });
                          */
                         get: function (id, options) {
-                            return baasicApiHttp.get(notificationsRouteService.subscriptions.users.get.expand(baasicApiService.getParams(id, options)));
+                            return baasicApp.notifications.subscriptions.users.get(id, options);
                         },
 
                         /**
@@ -11831,8 +11816,7 @@
                          });
                          */
                         remove: function (data) {
-                            var params = baasicApiService.removeParams(data);
-                            return baasicApiHttp.delete(params[baasicConstants.modelPropertyName].links('delete').href);
+                            return baasicApp.notifications.subscriptions.users.remove(data);
                         },
 
                         /**
@@ -11854,8 +11838,7 @@
                          });
                          */
                         update: function (data) {
-                            var params = baasicApiService.updateParams(data);
-                            return baasicApiHttp.put(params[baasicConstants.modelPropertyName].links('put').href, params[baasicConstants.modelPropertyName]);
+                            return baasicApp.notifications.subscriptions.users.update(data);
                         },
                         batch: {
                             /**
@@ -11874,7 +11857,7 @@
                              });
                              */
                             create: function (data) {
-                                return baasicApiHttp.post(notificationsRouteService.subscriptions.users.batch.create.expand(), baasicApiService.createParams(data)[baasicConstants.modelPropertyName]);
+                                return baasicApp.notifications.subscriptions.batch.create(data);
                             },
 
                             /**
@@ -11890,11 +11873,7 @@
                              });
                              */
                             remove: function (ids) {
-                                return baasicApiHttp({
-                                    url: notificationsRouteService.subscriptions.users.batch.remove.expand(),
-                                    method: 'DELETE',
-                                    data: ids
-                                });
+                                return baasicApp.notifications.subscriptions.batch.remove(ids);
                             },
 
                             /**
@@ -11910,7 +11889,7 @@
                              });
                              */
                             update: function (data) {
-                                return baasicApiHttp.put(notificationsRouteService.subscriptions.users.batch.update.expand(), baasicApiService.updateParams(data)[baasicConstants.modelPropertyName]);
+                                return baasicApp.notifications.subscriptions.batch.update(data);
                             }
                         }
                     },
@@ -11931,7 +11910,7 @@
                          });
                          */
                         create: function (data) {
-                            return baasicApiHttp.post(notificationsRouteService.subscriptions.anonymous.create.expand(), baasicApiService.createParams(data)[baasicConstants.modelPropertyName]);
+                            return baasicApp.notifications.subscriptions.anonymous.create(data);
                         },
 
                         /**
@@ -11956,7 +11935,7 @@
                          });
                          */
                         find: function (options) {
-                            return baasicApiHttp.get(notificationsRouteService.subscriptions.anonymous.find.expand(baasicApiService.findParams(options)));
+                            return baasicApp.notifications.subscriptions.anonymous.find(options);
                         },
 
                         /**
@@ -11972,7 +11951,7 @@
                          });
                          */
                         get: function (id, options) {
-                            return baasicApiHttp.get(notificationsRouteService.subscriptions.anonymous.get.expand(baasicApiService.getParams(id, options)));
+                            return baasicApp.notifications.subscriptions.anonymous.get(id, options);
                         },
 
                         /**
@@ -11993,8 +11972,7 @@
                          });
                          */
                         remove: function (data) {
-                            var params = baasicApiService.removeParams(data);
-                            return baasicApiHttp.delete(params[baasicConstants.modelPropertyName].links('delete').href);
+                            return baasicApp.notifications.subscriptions.anonymous.remove(data);
                         },
 
                         /**
@@ -12016,8 +11994,7 @@
                          });
                          */
                         update: function (data) {
-                            var params = baasicApiService.updateParams(data);
-                            return baasicApiHttp.put(params[baasicConstants.modelPropertyName].links('put').href, params[baasicConstants.modelPropertyName]);
+                            return baasicApp.notifications.subscriptions.anonymous.update(data);
                         },
                         batch: {
                             /**
@@ -12036,7 +12013,7 @@
                              });
                              */
                             create: function (data) {
-                                return baasicApiHttp.post(notificationsRouteService.subscriptions.anonymous.batch.create.expand(), baasicApiService.createParams(data)[baasicConstants.modelPropertyName]);
+                                return baasicApp.notifications.subscriptions.anonymous.batch.create(data);
                             },
 
                             /**
@@ -12052,11 +12029,7 @@
                              });
                              */
                             remove: function (ids) {
-                                return baasicApiHttp({
-                                    url: notificationsRouteService.subscriptions.anonymous.batch.remove.expand(),
-                                    method: 'DELETE',
-                                    data: ids
-                                });
+                                return baasicApp.notifications.subscriptions.anonymous.batch.remove(ids);
                             },
 
                             /**
@@ -12072,7 +12045,7 @@
                              });
                              */
                             update: function (data) {
-                                return baasicApiHttp.put(notificationsRouteService.subscriptions.anonymous.batch.update.expand(), baasicApiService.updateParams(data)[baasicConstants.modelPropertyName]);
+                                return baasicApp.notifications.subscriptions.anonymous.batch.update(data);
                             }
                         }
                     }
@@ -12096,7 +12069,7 @@
                          });
                          */
                         create: function (data) {
-                            return baasicApiHttp.post(notificationsRouteService.registrations.users.create.expand(), baasicApiService.createParams(data)[baasicConstants.modelPropertyName]);
+                            return baasicApp.notifications.registrations.users.create(data);
                         },
 
                         /**
@@ -12121,7 +12094,7 @@
                          });
                          */
                         find: function (options) {
-                            return baasicApiHttp.get(notificationsRouteService.registrations.users.find.expand(baasicApiService.findParams(options)));
+                            return baasicApp.notifications.registrations.users.find(options);
                         },
 
                         /**
@@ -12137,7 +12110,7 @@
                          });
                          */
                         get: function (id, options) {
-                            return baasicApiHttp.get(notificationsRouteService.registrations.users.get.expand(baasicApiService.getParams(id, options)));
+                            return baasicApp.notifications.registrations.users.get(id, options);
                         },
 
                         /**
@@ -12158,8 +12131,7 @@
                          });
                          */
                         remove: function (data) {
-                            var params = baasicApiService.removeParams(data);
-                            return baasicApiHttp.delete(params[baasicConstants.modelPropertyName].links('delete').href);
+                            return baasicApp.notifications.registrations.users.remove(data);
                         },
 
                         /**
@@ -12181,8 +12153,7 @@
                          });
                          */
                         update: function (data) {
-                            var params = baasicApiService.updateParams(data);
-                            return baasicApiHttp.put(params[baasicConstants.modelPropertyName].links('put').href, params[baasicConstants.modelPropertyName]);
+                            return baasicApp.notifications.registrations.users.update(data);
                         },
                         batch: {
                             /**
@@ -12202,7 +12173,7 @@
                              });
                              */
                             create: function (data) {
-                                return baasicApiHttp.post(notificationsRouteService.registrations.users.batch.create.expand(), baasicApiService.createParams(data)[baasicConstants.modelPropertyName]);
+                                return baasicApp.notifications.registrations.users.batch.create(data);
                             },
 
                             /**
@@ -12218,11 +12189,7 @@
                              });
                              */
                             remove: function (ids) {
-                                return baasicApiHttp({
-                                    url: notificationsRouteService.registrations.users.batch.remove.expand(),
-                                    method: 'DELETE',
-                                    data: ids
-                                });
+                                return baasicApp.notifications.registrations.users.batch.remove(ids);
                             },
 
                             /**
@@ -12238,7 +12205,7 @@
                              });
                              */
                             update: function (data) {
-                                return baasicApiHttp.put(notificationsRouteService.registrations.users.batch.update.expand(), baasicApiService.updateParams(data)[baasicConstants.modelPropertyName]);
+                                return baasicApp.notifications.registrations.users.batch.update(data);
                             }
                         }
                     },
@@ -12260,7 +12227,7 @@
                          });
                          */
                         create: function (data) {
-                            return baasicApiHttp.post(notificationsRouteService.registrations.anonymous.create.expand(), baasicApiService.createParams(data)[baasicConstants.modelPropertyName]);
+                            return baasicApp.notifications.registrations.anonymous.create(data);
                         },
 
                         /**
@@ -12284,7 +12251,7 @@
                          });
                          */
                         find: function (options) {
-                            return baasicApiHttp.get(notificationsRouteService.registrations.anonymous.find.expand(baasicApiService.findParams(options)));
+                            return baasicApp.notifications.registrations.anonymous.find(options);
                         },
 
                         /**
@@ -12300,7 +12267,7 @@
                          });
                          */
                         get: function (id, options) {
-                            return baasicApiHttp.get(notificationsRouteService.registrations.anonymous.get.expand(baasicApiService.getParams(id, options)));
+                            return baasicApp.notifications.registrations.anonymous.get(id, options);
                         },
 
                         /**
@@ -12321,8 +12288,7 @@
                          });
                          */
                         remove: function (data) {
-                            var params = baasicApiService.removeParams(data);
-                            return baasicApiHttp.delete(params[baasicConstants.modelPropertyName].links('delete').href);
+                            return baasicApp.notifications.registrations.anonymous.remove(data);
                         },
 
                         /**
@@ -12344,8 +12310,7 @@
                          });
                          */
                         update: function (data) {
-                            var params = baasicApiService.updateParams(data);
-                            return baasicApiHttp.put(params[baasicConstants.modelPropertyName].links('put').href, params[baasicConstants.modelPropertyName]);
+                            return baasicApp.notifications.registrations.anonymous.update(data);
                         },
                         batch: {
                             /**
@@ -12365,7 +12330,7 @@
                              });
                              */
                             create: function (data) {
-                                return baasicApiHttp.post(notificationsRouteService.registrations.anonymous.batch.create.expand(), baasicApiService.createParams(data)[baasicConstants.modelPropertyName]);
+                                return baasicApp.notifications.registrations.anonymous.batch.create(data);
                             },
 
                             /**
@@ -12381,11 +12346,7 @@
                              });
                              */
                             remove: function (ids) {
-                                return baasicApiHttp({
-                                    url: notificationsRouteService.registrations.anonymous.batch.remove.expand(),
-                                    method: 'DELETE',
-                                    data: ids
-                                });
+                                return baasicApp.notifications.registrations.anonymous.batch.remove(ids);
                             },
 
                             /**
@@ -12401,7 +12362,7 @@
                              });
                              */
                             update: function (data) {
-                                return baasicApiHttp.put(notificationsRouteService.registrations.anonymous.batch.update.expand(), baasicApiService.updateParams(data)[baasicConstants.modelPropertyName]);
+                                return baasicApp.notifications.registrations.anonymous.batch.update(data);
                             }
                         }
                     }
@@ -12420,7 +12381,7 @@
                      });
                      */
                     get: function (provider) {
-                        return baasicApiHttp.get(notificationsRouteService.settings.get.expand(baasicApiService.getParams(provider)));
+                        return baasicApp.notifications.settings.get(provider);
                     },
 
                     /**
@@ -12441,8 +12402,7 @@
                      });
                      */
                     update: function (data) {
-                        var params = baasicApiService.updateParams(data);
-                        return baasicApiHttp.put(params[baasicConstants.modelPropertyName].links('put').href, params[baasicConstants.modelPropertyName]);
+                        return baasicApp.notifications.settings.update(data);
                     }
                 },
 
@@ -12451,7 +12411,7 @@
                  * @method
                  * @example baasicNotificationsService.routeService.publish.create.expand({});
                  */
-                routeService: notificationsRouteService
+                routeService: baasicApp.notifications.routeDefinition
             };
         }]);
     }(angular, module));

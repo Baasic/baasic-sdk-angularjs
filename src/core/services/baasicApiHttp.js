@@ -44,28 +44,11 @@
                 request.url = config.url;
                 request.method = config.method;
                 if (config.headers) request.headers = config.headers;
-                if (config.data) request.body = config.data;
+                if (config.data) request.data = config.data;
 
             }
 
-            var promise = app.baasicApiClient.request(request).then(
-                function (response) {
-                    return {
-                        data: response.body,
-                        status: response.statusCode,
-                        statusText: response.statusText,
-                        headers: response.headers
-                    };
-                },
-                function (response) {
-                    return {
-                        data: response.body,
-                        status: response.statusCode,
-                        statusText: response.statusText,
-                        headers: response.headers
-                    };
-                }
-            );
+            return app.baasicApiClient.request(request);
 
             promise.success = function (fn) {
                 promise.then(function (response) {
