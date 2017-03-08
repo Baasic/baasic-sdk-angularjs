@@ -2,13 +2,14 @@
 /**
  * @module baasicMeteringService
  * @description Baasic Metering Service provides an easy way to consume Baasic Metering REST API end-points. In order to obtain a needed routes `baasicMeteringService` uses `baasicMeteringRouteService`.
-*/
+ */
 (function (angular, module, undefined) {
-    'use strict';
-    module.service('baasicMeteringService', ['baasicApiHttp', 'baasicApiService', 'baasicConstants', 'baasicMeteringRouteService',
-        function (baasicApiHttp, baasicApiService, baasicConstants, routeService) {
-            return {    
-                /**
+  'use strict';
+  module.service('baasicMeteringService', ['baasicApp',
+    function (baasicApps) {
+      var baasicApp = baasicApps.get();
+      return {
+        /**
                  * Returns a promise that is resolved once the find action has been performed. Success response returns a list of metering resources matching the given criteria.
                  * @method        
                  * @example 
@@ -25,11 +26,11 @@ baasicMeteringService.find({
 .error(function (response, status, headers, config) {
   // perform error handling here
 });    
-                 **/ 				
-                find: function (options) {
-                    return baasicApiHttp.get(routeService.find.expand(baasicApiService.findParams(options)));
-                },
-                /**
+                 **/
+        find: function (options) {
+          return baasicApp.metering.find(options);
+        },
+        /**
                 * Returns a promise that is resolved once the get action has been performed. Success response returns the metering resource.
                 * @method        
                 * @example 
@@ -40,11 +41,11 @@ baasicMeteringService.get()
 .error(function (response, status, headers, config) {
   // perform error handling here
 });
-                **/  				
-                get: function (id, options) {
-                    return baasicApiHttp.get(routeService.get.expand(baasicApiService.getParams(id, options)));
-                },
-                 /**
+                **/
+        get: function (id, options) {
+          return baasicApp.metering.get(id, options);
+        },
+        /**
                  * Returns a promise that is resolved once the create metering action has been performed; this action creates a new metering resource.
                  * @method        
                  * @example 
@@ -59,11 +60,11 @@ baasicMeteringService.create({
 .error(function (response, status, headers, config) {
   // perform error handling here
 });
-                 **/ 				
-                create: function (data) {
-                    return baasicApiHttp.post(routeService.create.expand(), baasicApiService.createParams(data)[baasicConstants.modelPropertyName]);
-                },
-                /**
+                 **/
+        create: function (data) {
+          return baasicApp.metering.create(data);
+        },
+        /**
                  * Returns a promise that is resolved once the update metering action has been performed; this action updates a metering resource. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicMeteringRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
 ```
 var params = baasicApiService.removeParams(meteringData);
@@ -80,12 +81,11 @@ baasicMeteringService.update(meteringData)
 .error(function (response, status, headers, config) {
   // perform error handling here
 });
-				**/					
-                update: function (data) {
-                    var params = baasicApiService.updateParams(data);
-                    return baasicApiHttp.put(params[baasicConstants.modelPropertyName].links('put').href, params[baasicConstants.modelPropertyName]);
-                },
-                 /**
+				**/
+        update: function (data) {
+          return baasicApp.metering.update(data);
+        },
+        /**
                  * Returns a promise that is resolved once the remove action has been performed. This action will remove a metering resource from the system if successfully completed. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicMeteringRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
 ```
 var params = baasicApiService.removeParams(meteringData);
@@ -101,12 +101,11 @@ baasicMeteringService.remove(meteringData)
 .error(function (response, status, headers, config) {
   // perform error handling here
 });		
-				**/					
-                remove: function (data) {
-                    var params = baasicApiService.removeParams(data);
-                    return baasicApiHttp.delete(params[baasicConstants.modelPropertyName].links('delete').href);
-                },  
-                 /**
+				**/
+        remove: function (data) {
+          return baasicApp.metering.remove(data);
+        },
+        /**
                  * Returns a promise that is resolved once the purge action has been performed. This action will remove all metering resources from the system if successfully completed. 
                  * @method        
                  * @example 			 
@@ -117,18 +116,18 @@ baasicMeteringService.purge()
 .error(function (response, status, headers, config) {
   // perform error handling here
 });		
-				**/	                 
-                purge: function(){
-                    return baasicApiHttp.delete(routeService.purge.expand({})); 
-                },    
-                /**
-                * Provides direct access to `routeService`.
-                * @method        
-                * @example baasicMeteringService.routeService.get.expand(expandObject);
-                **/  							    
-				routeService: routeService,
-                batch: {
-                  /**
+				**/
+        purge: function () {
+          return baasicApp.metering.purge();
+        },
+        /**
+         * Provides direct access to `routeService`.
+         * @method        
+         * @example baasicMeteringService.routeService.get.expand(expandObject);
+         **/
+        routeService: baasicApp.metering.routeDefinition,
+        batch: {
+          /**
                   * Returns a promise that is resolved once the create data action has been performed; this action creates new data resources.
                   * @method batch.create       
                   * @example 
@@ -144,11 +143,11 @@ baasicMeteringService.purge()
   .error(function (response, status, headers, config) {
     // perform error handling here
   });
-                  **/ 				
-                  create: function (data) {
-                      return baasicApiHttp.post(routeService.batch.create.expand(), baasicApiService.createParams(data)[baasicConstants.modelPropertyName]);
-                  }, 
-                  /**
+                  **/
+          create: function (data) {
+            return baasicApp.metering.batch.create(data);
+          },
+          /**
                   * Returns a promise that is resolved once the update data action has been performed; this action updates specified data resources.
                   * @method batch.update       
                   * @example 
@@ -159,11 +158,11 @@ baasicMeteringService.purge()
   .error(function (response, status, headers, config) {
     // perform error handling here
   });
-                  **/ 				
-                  update: function (data) {
-                      return baasicApiHttp.post(routeService.batch.update.expand(), baasicApiService.updateParams(data)[baasicConstants.modelPropertyName]);
-                  },                                      
-                  /**
+                  **/
+          update: function (data) {
+            return baasicApp.metering.batch.update(data);
+          },
+          /**
                   * Returns a promise that is resolved once the remove action has been performed. This action will remove data resources from the system if successfully completed. 
                   * @method batch.remove       
                   * @example 			 
@@ -174,17 +173,13 @@ baasicMeteringService.purge()
   .error(function (response, status, headers, config) {
     // perform error handling here
   });		
-                  **/		                  
-                  remove: function(ids) {
-                    return baasicApiHttp({
-                        url: routeService.batch.remove.expand(),
-                        method: 'DELETE',
-                        data: ids
-                    });                         
-                  }
-                },             
-                statistics:{
-                   /**
+                  **/
+          remove: function (ids) {
+            return baasicApp.metering.batch.remove(ids);
+          }
+        },
+        statistics: {
+          /**
                    * Returns a promise that is resolved once the find action has been performed. Success response returns a list of metering resources matching the given criteria.
                    * @method        
                    * @example 
@@ -204,13 +199,13 @@ baasicMeteringService.purge()
   .error(function (response, status, headers, config) {
     // perform error handling here
   });    
-                  **/ 				
-                  find: function (options) {
-                      return baasicApiHttp.get(routeService.statistics.find.expand(baasicApiService.findParams(options)));
-                  }
-                },
-                acl: {
-                    /**
+                  **/
+          find: function (options) {
+            return baasicApp.metering.statistics.find(options);
+          }
+        },
+        acl: {
+          /**
                     * Returns a promise that is resolved once the get action has been performed. Success response returns a list of ACL policies established for the specified metering resource.
                     * @method acl.get       
                     * @example 
@@ -221,12 +216,11 @@ baasicMeteringService.acl.get({id: '<id>'})
 .error(function (response, status, headers, config) {
   // perform error handling here
 });
-                    **/ 					
-                    get: function (options) {
-                        var params = angular.copy(options);
-                        return baasicApiHttp.get(routeService.acl.get.expand(params));
-                    },
-                    /**
+                    **/
+          get: function (options) {
+            return baasicApp.metering.acl.get(options);
+          },
+          /**
                     * Returns a promise that is resolved once the update acl action has been performed, this action creates new ACL policy for the specified metering resource.
                     * @method acl.update      
                     * @example 
@@ -244,12 +238,11 @@ baasicMeteringService.acl.update(options)
 .error(function (response, status, headers, config) {
   // perform error handling here
 });
-				    **/							
-                    update: function (options) {
-                        var params = angular.copy(options);
-                        return baasicApiHttp.put(routeService.acl.get.expand(params), params[baasicConstants.modelPropertyName]);
-                    },
-                    /**
+				    **/
+          update: function (options) {
+            return baasicApp.metering.acl.update(options);
+          },
+          /**
                     * Returns a promise that is resolved once the removeByUser action has been performed. This action deletes ACL policy assigned to the specified user and metering resource.
                     * @method acl.deleteByUser      
                     * @example 
@@ -260,15 +253,11 @@ baasicMeteringService.acl.removeByUser('<id>', '<access-action>', '<username>')
 .error(function (response, status, headers, config) {
   // perform error handling here
 });
-				    **/						
-                    removeByUser: function (id, action, user, data) {
-                        var params = baasicApiService.removeParams(data);
-                        params.id = id;
-                        params.user = user;
-                        params.accessAction = action;
-                        return baasicApiHttp.delete(routeService.acl.deleteByUser.expand(params));
-                    },
-                    /**
+				    **/
+          removeByUser: function (id, action, user, data) {
+            return baasicApp.metering.acl.removeByUser(id, action, user, data);
+          },
+          /**
                     * Returns a promise that is resolved once the removeByRole action has been performed. This action deletes ACL policy assigned to the specified role and metering resource.
                     * @method acl.deleteByRole      
                     * @example 
@@ -279,17 +268,14 @@ baasicMeteringService.acl.removeByRole('<id>', '<access-action>', '<role-name>')
 .error(function (response, status, headers, config) {
   // perform error handling here
 });
-				    **/						
-                    removeByRole: function (id, action, role, data) {
-                        var params = baasicApiService.removeParams(data);
-                        params.id = id;
-                        params.role = role;
-                        params.accessAction = action;
-                        return baasicApiHttp.delete(routeService.acl.deleteByRole.expand(params));
-                    }
-                }
-            };
-        }]);
+				    **/
+          removeByRole: function (id, action, role, data) {
+            return baasicApp.metering.acl.removeByRole(id, action, role, data);
+          }
+        }
+      };
+    }
+  ]);
 }(angular, module));
 
 /**

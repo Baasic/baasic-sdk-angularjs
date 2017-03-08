@@ -1,14 +1,13 @@
-﻿
-
-/* globals module */
+﻿/* globals module */
 /**
  * @module baasicMeteringSettingsService
  * @description Baasic Metering Settings Service provides an easy way to consume Baasic Metering REST API end-points. In order to obtain a needed routes `baasicMeteringSettingsService` uses `baasicMeteringSettingsRouteService`.
-*/
+ */
 (function (angular, module, undefined) {
     'use strict';
-    module.service('baasicMeteringSettingsService', ['baasicApiHttp', 'baasicApiService', 'baasicConstants', 'baasicMeteringSettingsRouteService',
-        function (baasicApiHttp, baasicApiService, baasicConstants, routeService) {
+    module.service('baasicMeteringSettingsService', ['baasicApp',
+        function (baasicApps) {
+            var baasicApp = baasicApps.get();
             return {
                 /**
                 * Returns a promise that is resolved once the get action has been performed. Success response returns the metering resource.
@@ -21,9 +20,9 @@ baasicMeteringSettingsService.get()
 .error(function (response, status, headers, config) {
   // perform error handling here
 });
-                **/  				
+                **/
                 get: function (options) {
-                    return baasicApiHttp.get(routeService.get.expand(baasicApiService.getParams(options)));
+                    return baasicApp.metering.settings.get(options);
                 },
                 /**
                  * Returns a promise that is resolved once the update metering action has been performed; this action updates a metering resource. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicMeteringSettingsRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
@@ -42,19 +41,19 @@ baasicMeteringSettingsService.update(meteringSettings)
 .error(function (response, status, headers, config) {
   // perform error handling here
 });
-				**/					
+				**/
                 update: function (data) {
-                    var params = baasicApiService.updateParams(data);
-                    return baasicApiHttp.put(params[baasicConstants.modelPropertyName].links('put').href, params[baasicConstants.modelPropertyName]);
-                },                 
+                    return baasicApp.metering.settings.update(data);
+                },
                 /**
-                * Provides direct access to `routeService`.
-                * @method        
-                * @example baasicMeteringSettingsService.routeService.get.expand(expandObject);
-                **/  							    
-				        routeService: routeService
+                 * Provides direct access to `routeService`.
+                 * @method        
+                 * @example baasicMeteringSettingsService.routeService.get.expand(expandObject);
+                 **/
+                routeService: baasicApp.metering.settings.routeDefinition
             };
-        }]);
+        }
+    ]);
 }(angular, module));
 
 /**

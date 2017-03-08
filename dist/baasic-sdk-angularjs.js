@@ -10833,85 +10833,13 @@
 
     /* globals module */
     /**
-     * @module baasicMeteringCategoryRouteService
-     * @description Baasic Metering Category Route Service provides Baasic route templates which can be expanded to Baasic REST URIs. Various services can use Baasic Metering Category Route Service to obtain a needed routes while other routes will be obtained through HAL. By convention, all route services  use the same function names as their corresponding services.
-     */
-    (function (angular, module, undefined) {
-        'use strict';
-        module.service('baasicMeteringCategoryRouteService', ['baasicUriTemplateService', function (uriTemplateService) {
-            return {
-                /**
-                 * Parses find metering category route which can be expanded with additional options. Supported items are: 
-                 * - `searchQuery` - A string value used to identify metering resources using the phrase search.
-                 * - `page` - A value used to set the page number, i.e. to retrieve certain metering subset from the storage.
-                 * - `rpp` - A value used to limit the size of result set per page.
-                 * - `sort` - A string used to set the metering property to sort the result collection by.
-                 * - `embed` - Comma separated list of resources to be contained within the current representation.
-                 * @method        
-                 * @example baasicMeteringCategoryRouteService.find.expand({searchQuery: '<search-phrase>'});               
-                 **/
-                find: uriTemplateService.parse('metering/categories/{?searchQuery,page,rpp,sort,embed,fields}'),
-                /**
-                 * Parses get route; this route doesn't expose any properties.
-                 * @method        
-                 * @example baasicMeteringCategoryRouteService.get.expand({});               
-                 **/
-                get: uriTemplateService.parse('metering/categories/{id}/{?embed,fields}'),
-                /**
-                 * Parses create metering category route; this URI template does not expose any additional options.
-                 * @method        
-                 * @example baasicMeteringCategoryRouteService.create.expand({});              
-                 **/
-                create: uriTemplateService.parse('metering/categories'),
-                /**
-                 * Parses and expands URI templates based on [RFC6570](http://tools.ietf.org/html/rfc6570) specifications. For more information please visit the project [GitHub](https://github.com/Baasic/uritemplate-js) page.
-                 * @method
-                 * @example baasicMeteringCategoryRouteService.parse('<route>/{?embed,fields,options}').expand({embed: '<embedded-resource>'});
-                 **/
-                parse: uriTemplateService.parse,
-                batch: {
-                    /**
-                     * Parses create route; this URI template does not expose any additional options.
-                     * @method batch.create       
-                     * @example baasicMeteringCategoryRouteService.batch.create.expand({});              
-                     **/
-                    create: uriTemplateService.parse('metering/categories/batch'),
-                    /**
-                     * Parses remove route; this URI template does not expose any additional options.
-                     * @method batch.remove       
-                     * @example baasicMeteringCategoryRouteService.batch.remove.expand({});              
-                     **/
-                    remove: uriTemplateService.parse('metering/categories/batch'),
-                    /**
-                     * Parses update route; this URI template does not expose any additional options.
-                     * @method batch.update       
-                     * @example baasicMeteringCategoryRouteService.batch.update.expand({});              
-                     **/
-                    update: uriTemplateService.parse('metering/categories/batch')
-                }
-            };
-        }]);
-    }(angular, module));
-    /**
-     * @copyright (c) 2017 Mono Ltd
-     * @license MIT
-     * @author Mono Ltd
-     * @overview 
-     ***Notes:**
-     - Refer to the [REST API documentation](http://github.com/Baasic/baasic-rest-api/wiki) for detailed information about available Baasic REST API end-points.
-     - [URI Template](https://github.com/Baasic/uritemplate-js) syntax enables expanding the Baasic route templates to Baasic REST URIs providing it with an object that contains URI parameters.
-     - All end-point objects are transformed by the associated route service.
-     */
-
-
-    /* globals module */
-    /**
      * @module baasicMeteringCategoryService
      * @description Baasic Metering Category Service provides an easy way to consume Baasic Metering REST API end-points. In order to obtain a needed routes `baasicMeteringCategoryService` uses `baasicMeteringCategoryRouteService`.
      */
     (function (angular, module, undefined) {
         'use strict';
-        module.service('baasicMeteringCategoryService', ['baasicApiHttp', 'baasicApiService', 'baasicConstants', 'baasicMeteringCategoryRouteService', function (baasicApiHttp, baasicApiService, baasicConstants, routeService) {
+        module.service('baasicMeteringCategoryService', ['baasicApp', function (baasicApps) {
+            var baasicApp = baasicApps.get();
             return {
                 /**
                  * Returns a promise that is resolved once the find action has been performed. Success response returns a list of metering resources matching the given criteria.
@@ -10932,7 +10860,7 @@
                  });
                  **/
                 find: function (options) {
-                    return baasicApiHttp.get(routeService.find.expand(baasicApiService.findParams(options)));
+                    return baasicApp.metering.category.find(options);
                 },
                 /**
                  * Returns a promise that is resolved once the get action has been performed. Success response returns the metering resource.
@@ -10947,7 +10875,7 @@
                  });
                  **/
                 get: function (id, options) {
-                    return baasicApiHttp.get(routeService.get.expand(baasicApiService.getParams(id, options)));
+                    return baasicApp.metering.category.get(id, options);
                 },
                 /**
                  * Returns a promise that is resolved once the create metering action has been performed; this action creates a new metering resource.
@@ -10968,7 +10896,7 @@
                  });
                  **/
                 create: function (data) {
-                    return baasicApiHttp.post(routeService.create.expand(), baasicApiService.createParams(data)[baasicConstants.modelPropertyName]);
+                    return baasicApp.metering.category.create(data);
                 },
                 /**
                  * Returns a promise that is resolved once the update metering action has been performed; this action updates a metering resource. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicMeteringCategoryRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
@@ -10989,8 +10917,7 @@
                  });
                  **/
                 update: function (data) {
-                    var params = baasicApiService.updateParams(data);
-                    return baasicApiHttp.put(params[baasicConstants.modelPropertyName].links('put').href, params[baasicConstants.modelPropertyName]);
+                    return baasicApp.metering.category.update(data);
                 },
                 /**
                  * Returns a promise that is resolved once the remove action has been performed. This action will remove a metering resource from the system if successfully completed. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicMeteringCategoryRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
@@ -11010,15 +10937,14 @@
                  });
                  **/
                 remove: function (data) {
-                    var params = baasicApiService.removeParams(data);
-                    return baasicApiHttp.delete(params[baasicConstants.modelPropertyName].links('delete').href);
+                    return baasicApp.metering.category.remove(data);
                 },
                 /**
                  * Provides direct access to `routeService`.
                  * @method        
                  * @example baasicMeteringCategoryService.routeService.get.expand(expandObject);
                  **/
-                routeService: routeService,
+                routeService: baasicApp.metering.category.routeDefinition,
                 batch: {
                     /**
                      * Returns a promise that is resolved once the create category action has been performed; this action creates new category resources.
@@ -11040,7 +10966,7 @@
                      });
                      **/
                     create: function (data) {
-                        return baasicApiHttp.post(routeService.batch.create.expand(), baasicApiService.createParams(data)[baasicConstants.modelPropertyName]);
+                        return baasicApp.metering.category.batch.create(data);
                     },
                     /**
                      * Returns a promise that is resolved once the update category action has been performed; this action updates specified category resources.
@@ -11055,7 +10981,7 @@
                      });
                      **/
                     update: function (data) {
-                        return baasicApiHttp.post(routeService.batch.update.expand(), baasicApiService.updateParams(data)[baasicConstants.modelPropertyName]);
+                        return baasicApp.metering.category.batch.update(data);
                     },
                     /**
                      * Returns a promise that is resolved once the remove action has been performed. This action will remove category resources from the system if successfully completed. 
@@ -11070,11 +10996,7 @@
                      });		
                      **/
                     remove: function (ids) {
-                        return baasicApiHttp({
-                            url: routeService.batch.remove.expand(),
-                            method: 'DELETE',
-                            data: ids
-                        });
+                        return baasicApp.metering.category.batch.remove(ids);
                     }
                 }
             };
@@ -11090,164 +11012,6 @@
      - Refer to the [Baasic REST API](http://dev.baasic.com/api/reference/home) for detailed information about available Baasic REST API end-points.
      - All end-point objects are transformed by the associated route service.
      */
-
-    /* globals module */
-    /**
-     * @module baasicMeteringRouteService
-     * @description Baasic Metering Route Service provides Baasic route templates which can be expanded to Baasic REST URIs. Various services can use Baasic Metering Route Service to obtain a needed routes while other routes will be obtained through HAL. By convention, all route services  use the same function names as their corresponding services.
-     */
-    (function (angular, module, undefined) {
-        'use strict';
-        module.service('baasicMeteringRouteService', ['baasicUriTemplateService', function (uriTemplateService) {
-            return {
-                /**
-                 * Parses find metering route which can be expanded with additional options. Supported items are: 
-                 * - `applicationId` - The application identifier.
-                 * - `categories` - The metering categories  in CSV format.
-                 * - `from` - The from date.
-                 * - `to` - The to date.
-                 * - `names` - The name of the resource inside the category in CSV format.
-                 * - `moduleNames` - The name of the resource inside the category in CSV format.
-                 * - `statuses` - The operation status in CSV format.
-                 * - `endpoints` - The back-end endpoint in CSV format.
-                 * - `sources` - The metering collector source in CSV format.
-                 * - `searchQuery` - A string value used to identify metering resources using the phrase search.
-                 * - `page` - A value used to set the page number, i.e. to retrieve certain metering subset from the storage.
-                 * - `rpp` - A value used to limit the size of result set per page.
-                 * - `sort` - A string used to set the metering property to sort the result collection by.
-                 * - `embed` - Comma separated list of resources to be contained within the current representation.
-                 * @method        
-                 * @example baasicMeteringRouteService.find.expand({searchQuery: '<search-phrase>'});               
-                 **/
-                find: uriTemplateService.parse('metering/data/{?applicationId,searchQuery,categories,from,to,names,moduleNames,statuses,endpoints,sources,page,rpp,sort,embed,fields}'),
-                /**
-                 * Parses get route; this route doesn't expose any properties.
-                 * @method        
-                 * @example baasicMeteringRouteService.get.expand({});               
-                 **/
-                get: uriTemplateService.parse('metering/data/{id}/{?embed,fields}'),
-                /**
-                 * Parses create metering route; this URI template does not expose any additional options.
-                 * @method        
-                 * @example baasicMeteringRouteService.create.expand({});              
-                 **/
-                create: uriTemplateService.parse('metering/data'),
-                /**
-                 * Parses purge metering data route: this URI template does not expose any additional options.
-                 * @method
-                 * @example baasicMeteringRouteService.purge.expand({});  
-                 **/
-                purge: uriTemplateService.parse('metering/data/purge'),
-                /**
-                 * Parses and expands URI templates based on [RFC6570](http://tools.ietf.org/html/rfc6570) specifications. For more information please visit the project [GitHub](https://github.com/Baasic/uritemplate-js) page.
-                 * @method
-                 * @example baasicMeteringRouteService.parse('<route>/{?embed,fields,options}').expand({embed: '<embedded-resource>'});
-                 **/
-                parse: uriTemplateService.parse,
-                statistics: {
-                    /**
-                     * Parses find metering route which can be expanded with additional options. Supported items are: 
-                     * - `category` - The metering category.
-                     * - `applicationId` - The application identifier.
-                     * - `rateBy` - The sampling rate by minute,hour,day,week, month or year.
-                     * - `from` - The from date.
-                     * - `to` - The to date.
-                     * - `names` - The name of the resource inside the category in CSV format.
-                     * - `moduleNames` - The name of the resource inside the category in CSV format.
-                     * - `statuses` - The operation status in CSV format.
-                     * - `endpoints` - The back-end endpoint in CSV format.
-                     * - `sources` - The metering collector source in CSV format.                    
-                     * - `page` - A value used to set the page number, i.e. to retrieve certain metering subset from the storage.
-                     * - `rpp` - A value used to limit the size of result set per page.
-                     * - `sort` - A string used to set the metering property to sort the result collection by.
-                     * - `embed` - Comma separated list of resources to be contained within the current representation.
-                     * @method        
-                     * @example baasicMeteringRouteService.statistics.find.expand({category: '<category-name-or-id>'});               
-                     **/
-                    find: uriTemplateService.parse('metering/statistics/{category}/{?applicationIds,rateBy,from,to,names,moduleNames,statuses,endpoints,sources,page,rpp,sort,embed,fields}'),
-                },
-                batch: {
-                    /**
-                     * Parses create route; this URI template does not expose any additional options.
-                     * @method batch.create       
-                     * @example baasicMeteringRouteService.batch.create.expand({});              
-                     **/
-                    create: uriTemplateService.parse('metering/data/batch'),
-                    /**
-                     * Parses remove route; this URI template does not expose any additional options.
-                     * @method batch.remove       
-                     * @example baasicMeteringRouteService.batch.remove.expand({});              
-                     **/
-                    remove: uriTemplateService.parse('metering/data/batch'),
-                    /**
-                     * Parses update route; this URI template does not expose any additional options.
-                     * @method batch.update       
-                     * @example baasicMeteringRouteService.batch.update.expand({});              
-                     **/
-                    update: uriTemplateService.parse('metering/data/batch')
-                },
-                acl: {
-                    /**
-                     * Parses get metering acl route; this URI template should be expanded with the Id of the metering.					
-                     * @method acl.get       
-                     * @example 
-                     baasicMeteringRouteService.acl.get.expand(
-                     {id: '<id>'}
-                     );
-                     **/
-                    get: uriTemplateService.parse('metering/data/{id}/acl/{?fields}'),
-                    /**
-                     * Parses update metering acl route; this URI template should be expanded with the Id of the metering.					
-                     * @method acl.update       
-                     * @example 
-                     baasicMeteringRouteService.acl.update.expand(
-                     {id: '<id>'}
-                     );
-                     **/
-                    update: uriTemplateService.parse('metering/data/{id}/acl/{?fields}'),
-                    /**
-                     * Parses deleteByUser metering acl route which can be expanded with additional options. Supported items are:
-                     * - `id` - Id of the metering.
-                     * - `accessAction` - Action abbreviation which identifies ACL policy assigned to the specified user and metering resource.
-                     * - `user` - A value which uniquely identifies user for which ACL policy needs to be removed.					
-                     * @method acl.deleteByUser       
-                     * @example 
-                     baasicMeteringRouteService.acl.deleteByUser.expand({
-                     id: '<id>', 
-                     accessAction: '<access-action>', 
-                     user: '<username>'
-                     });
-                     **/
-                    deleteByUser: uriTemplateService.parse('metering/data/{id}/acl/actions/{accessAction}/users/{user}/'),
-                    /**
-                     * Parses deleteByUser metering acl route which can be expanded with additional options. Supported items are:
-                     * - `id` - Id of the metering.
-                     * - `accessAction` - Action abbreviation which identifies ACL policy assigned to the specified role and metering resource.
-                     * - `role` - A value which uniquely identifies role for which ACL policy needs to be removed.					
-                     * @method acl.deleteByRole       
-                     * @example 
-                     baasicMeteringRouteService.acl.deleteByRole.expand({
-                     id: '<id>', 
-                     accessAction: '<access-action>', 
-                     role: '<role-name>'
-                     });
-                     **/
-                    deleteByRole: uriTemplateService.parse('metering/data/{id}/acl/actions/{accessAction}/roles/{role}/')
-                }
-            };
-        }]);
-    }(angular, module));
-    /**
-     * @copyright (c) 2017 Mono Ltd
-     * @license MIT
-     * @author Mono Ltd
-     * @overview 
-     ***Notes:**
-     - Refer to the [Baasic REST API](http://dev.baasic.com/api/reference/home) for detailed information about available Baasic REST API end-points.
-     - [URI Template](https://github.com/Baasic/uritemplate-js) syntax enables expanding the Baasic route templates to Baasic REST URIs providing it with an object that contains URI parameters.
-     - All end-point objects are transformed by the associated route service.
-     */
-
     /* globals module */
     /**
      * @module baasicMeteringService
@@ -11255,7 +11019,8 @@
      */
     (function (angular, module, undefined) {
         'use strict';
-        module.service('baasicMeteringService', ['baasicApiHttp', 'baasicApiService', 'baasicConstants', 'baasicMeteringRouteService', function (baasicApiHttp, baasicApiService, baasicConstants, routeService) {
+        module.service('baasicMeteringService', ['baasicApp', function (baasicApps) {
+            var baasicApp = baasicApps.get();
             return {
                 /**
                  * Returns a promise that is resolved once the find action has been performed. Success response returns a list of metering resources matching the given criteria.
@@ -11276,7 +11041,7 @@
                  });
                  **/
                 find: function (options) {
-                    return baasicApiHttp.get(routeService.find.expand(baasicApiService.findParams(options)));
+                    return baasicApp.metering.find(options);
                 },
                 /**
                  * Returns a promise that is resolved once the get action has been performed. Success response returns the metering resource.
@@ -11291,7 +11056,7 @@
                  });
                  **/
                 get: function (id, options) {
-                    return baasicApiHttp.get(routeService.get.expand(baasicApiService.getParams(id, options)));
+                    return baasicApp.metering.get(id, options);
                 },
                 /**
                  * Returns a promise that is resolved once the create metering action has been performed; this action creates a new metering resource.
@@ -11310,7 +11075,7 @@
                  });
                  **/
                 create: function (data) {
-                    return baasicApiHttp.post(routeService.create.expand(), baasicApiService.createParams(data)[baasicConstants.modelPropertyName]);
+                    return baasicApp.metering.create(data);
                 },
                 /**
                  * Returns a promise that is resolved once the update metering action has been performed; this action updates a metering resource. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicMeteringRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
@@ -11331,8 +11096,7 @@
                  });
                  **/
                 update: function (data) {
-                    var params = baasicApiService.updateParams(data);
-                    return baasicApiHttp.put(params[baasicConstants.modelPropertyName].links('put').href, params[baasicConstants.modelPropertyName]);
+                    return baasicApp.metering.update(data);
                 },
                 /**
                  * Returns a promise that is resolved once the remove action has been performed. This action will remove a metering resource from the system if successfully completed. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicMeteringRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
@@ -11352,8 +11116,7 @@
                  });
                  **/
                 remove: function (data) {
-                    var params = baasicApiService.removeParams(data);
-                    return baasicApiHttp.delete(params[baasicConstants.modelPropertyName].links('delete').href);
+                    return baasicApp.metering.remove(data);
                 },
                 /**
                  * Returns a promise that is resolved once the purge action has been performed. This action will remove all metering resources from the system if successfully completed. 
@@ -11368,14 +11131,14 @@
                  });
                  **/
                 purge: function () {
-                    return baasicApiHttp.delete(routeService.purge.expand({}));
+                    return baasicApp.metering.purge();
                 },
                 /**
                  * Provides direct access to `routeService`.
                  * @method        
                  * @example baasicMeteringService.routeService.get.expand(expandObject);
                  **/
-                routeService: routeService,
+                routeService: baasicApp.metering.routeDefinition,
                 batch: {
                     /**
                      * Returns a promise that is resolved once the create data action has been performed; this action creates new data resources.
@@ -11395,7 +11158,7 @@
                      });
                      **/
                     create: function (data) {
-                        return baasicApiHttp.post(routeService.batch.create.expand(), baasicApiService.createParams(data)[baasicConstants.modelPropertyName]);
+                        return baasicApp.metering.batch.create(data);
                     },
                     /**
                      * Returns a promise that is resolved once the update data action has been performed; this action updates specified data resources.
@@ -11410,7 +11173,7 @@
                      });
                      **/
                     update: function (data) {
-                        return baasicApiHttp.post(routeService.batch.update.expand(), baasicApiService.updateParams(data)[baasicConstants.modelPropertyName]);
+                        return baasicApp.metering.batch.update(data);
                     },
                     /**
                      * Returns a promise that is resolved once the remove action has been performed. This action will remove data resources from the system if successfully completed. 
@@ -11425,11 +11188,7 @@
                      });		
                      **/
                     remove: function (ids) {
-                        return baasicApiHttp({
-                            url: routeService.batch.remove.expand(),
-                            method: 'DELETE',
-                            data: ids
-                        });
+                        return baasicApp.metering.batch.remove(ids);
                     }
                 },
                 statistics: {
@@ -11455,7 +11214,7 @@
                      });    
                      **/
                     find: function (options) {
-                        return baasicApiHttp.get(routeService.statistics.find.expand(baasicApiService.findParams(options)));
+                        return baasicApp.metering.statistics.find(options);
                     }
                 },
                 acl: {
@@ -11472,8 +11231,7 @@
                      });
                      **/
                     get: function (options) {
-                        var params = angular.copy(options);
-                        return baasicApiHttp.get(routeService.acl.get.expand(params));
+                        return baasicApp.metering.acl.get(options);
                     },
                     /**
                      * Returns a promise that is resolved once the update acl action has been performed, this action creates new ACL policy for the specified metering resource.
@@ -11495,8 +11253,7 @@
                      });
                      **/
                     update: function (options) {
-                        var params = angular.copy(options);
-                        return baasicApiHttp.put(routeService.acl.get.expand(params), params[baasicConstants.modelPropertyName]);
+                        return baasicApp.metering.acl.update(options);
                     },
                     /**
                      * Returns a promise that is resolved once the removeByUser action has been performed. This action deletes ACL policy assigned to the specified user and metering resource.
@@ -11511,11 +11268,7 @@
                      });
                      **/
                     removeByUser: function (id, action, user, data) {
-                        var params = baasicApiService.removeParams(data);
-                        params.id = id;
-                        params.user = user;
-                        params.accessAction = action;
-                        return baasicApiHttp.delete(routeService.acl.deleteByUser.expand(params));
+                        return baasicApp.metering.acl.removeByUser(id, action, user, data);
                     },
                     /**
                      * Returns a promise that is resolved once the removeByRole action has been performed. This action deletes ACL policy assigned to the specified role and metering resource.
@@ -11530,11 +11283,7 @@
                      });
                      **/
                     removeByRole: function (id, action, role, data) {
-                        var params = baasicApiService.removeParams(data);
-                        params.id = id;
-                        params.role = role;
-                        params.accessAction = action;
-                        return baasicApiHttp.delete(routeService.acl.deleteByRole.expand(params));
+                        return baasicApp.metering.acl.removeByRole(id, action, role, data);
                     }
                 }
             };
@@ -11550,44 +11299,6 @@
      - Refer to the [Baasic REST API](http://dev.baasic.com/api/reference/home) for detailed information about available Baasic REST API end-points.
      - All end-point objects are transformed by the associated route service.
      */
-
-    /* globals module */
-    /**
-     * @module baasicMeteringSettingsRouteService
-     * @description Baasic Metering Settings Route Service provides Baasic route templates which can be expanded to Baasic REST URIs. Various services can use Baasic Metering settings Route Service to obtain a needed routes while other routes will be obtained through HAL. By convention, all route services  use the same function names as their corresponding services.
-     */
-    (function (angular, module, undefined) {
-        'use strict';
-        module.service('baasicMeteringSettingsRouteService', ['baasicUriTemplateService', function (uriTemplateService) {
-            return {
-                /**
-                 * Parses get route; this route doesn't expose any properties.
-                 * @method        
-                 * @example baasicMeteringSettingsRouteService.get.expand({});               
-                 **/
-                get: uriTemplateService.parse('metering/settings/{id}/{?embed,fields}'),
-                /**
-                 * Parses and expands URI templates based on [RFC6570](http://tools.ietf.org/html/rfc6570) specifications. For more information please visit the project [GitHub](https://github.com/Baasic/uritemplate-js) page.
-                 * @method
-                 * @example baasicMeteringSettingsRouteService.parse('<route>/{?embed,fields,options}').expand({embed: '<embedded-resource>'});
-                 **/
-                parse: uriTemplateService.parse
-            };
-        }]);
-    }(angular, module));
-    /**
-     * @copyright (c) 2017 Mono Ltd
-     * @license MIT
-     * @author Mono Ltd
-     * @overview 
-     ***Notes:**
-     - Refer to the [Baasic REST API](http://dev.baasic.com/api/reference/home) for detailed information about available Baasic REST API end-points.
-     - [URI Template](https://github.com/Baasic/uritemplate-js) syntax enables expanding the Baasic route templates to Baasic REST URIs providing it with an object that contains URI parameters.
-     - All end-point objects are transformed by the associated route service.
-     */
-
-
-
     /* globals module */
     /**
      * @module baasicMeteringSettingsService
@@ -11595,7 +11306,8 @@
      */
     (function (angular, module, undefined) {
         'use strict';
-        module.service('baasicMeteringSettingsService', ['baasicApiHttp', 'baasicApiService', 'baasicConstants', 'baasicMeteringSettingsRouteService', function (baasicApiHttp, baasicApiService, baasicConstants, routeService) {
+        module.service('baasicMeteringSettingsService', ['baasicApp', function (baasicApps) {
+            var baasicApp = baasicApps.get();
             return {
                 /**
                  * Returns a promise that is resolved once the get action has been performed. Success response returns the metering resource.
@@ -11610,7 +11322,7 @@
                  });
                  **/
                 get: function (options) {
-                    return baasicApiHttp.get(routeService.get.expand(baasicApiService.getParams(options)));
+                    return baasicApp.metering.settings.get(options);
                 },
                 /**
                  * Returns a promise that is resolved once the update metering action has been performed; this action updates a metering resource. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicMeteringSettingsRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
@@ -11631,15 +11343,14 @@
                  });
                  **/
                 update: function (data) {
-                    var params = baasicApiService.updateParams(data);
-                    return baasicApiHttp.put(params[baasicConstants.modelPropertyName].links('put').href, params[baasicConstants.modelPropertyName]);
+                    return baasicApp.metering.settings.update(data);
                 },
                 /**
                  * Provides direct access to `routeService`.
                  * @method        
                  * @example baasicMeteringSettingsService.routeService.get.expand(expandObject);
                  **/
-                routeService: routeService
+                routeService: baasicApp.metering.settings.routeDefinition
             };
         }]);
     }(angular, module));
@@ -11653,7 +11364,6 @@
      - Refer to the [Baasic REST API](http://dev.baasic.com/api/reference/home) for detailed information about available Baasic REST API end-points.
      - All end-point objects are transformed by the associated route service.
      */
-
     /* exported module */
     /** 
      * @description The angular.module is a global place for creating, registering or retrieving modules. All modules should be registered in an application using this mechanism. An angular module is a container for the different parts of your app - services, directives etc. In order to use `baasic.notifications` module functionality it must be added as a dependency to your app.
