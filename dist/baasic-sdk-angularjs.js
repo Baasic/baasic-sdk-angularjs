@@ -32,58 +32,13 @@
 
     /* globals module */
     /**
-     * @module baasicApplicationSettingsRouteService
-     * @description Baasic Application Settings Route Service provides Baasic route templates which can be expanded to Baasic REST URIs. Various services can use Baasic Application Settings Route Service to obtain needed routes while other routes will be obtained through HAL. By convention, all route services  use the same function names as their corresponding services.
-     */
-    (function (angular, module, undefined) {
-        'use strict';
-        module.service('baasicApplicationSettingsRouteService', ['baasicUriTemplateService', function (uriTemplateService) {
-            return {
-                /**
-                 * Parses get route; this route doesn't expose any properties.
-                 * @method        
-                 * @example baasicApplicationSettingsRouteService.get.expand({});               
-                 **/
-                get: uriTemplateService.parse('applications/{?embed,fields}'),
-                /**
-                 * Parses update route; this route doesn't expose any properties.
-                 * @method        
-                 * @example baasicApplicationSettingsRouteService.update.expand({});               
-                 **/
-                update: uriTemplateService.parse('applications/'),
-                /**
-                 * Parses and expands URI templates based on [RFC6570](http://tools.ietf.org/html/rfc6570) specifications. For more information please visit the project [GitHub](https://github.com/Baasic/uritemplate-js) page.
-                 * @method
-                 * @example 
-                 baasicApplicationSettingsRouteService.parse(
-                 '<route>/{?embed,fields,options}'
-                 ).expand(
-                 {embed: '<embedded-resource>'}
-                 );
-                 **/
-                parse: uriTemplateService.parse
-            };
-        }]);
-    }(angular, module));
-    /**
-     * @copyright (c) 2017 Mono Ltd
-     * @license MIT
-     * @author Mono Ltd
-     * @overview 
-     ***Notes:**
-     - Refer to the [Baasic REST API](http://dev.baasic.com/api/reference/home) for detailed information about available Baasic REST API end-points.
-     - [URI Template](https://github.com/Baasic/uritemplate-js) syntax enables expanding the Baasic route templates to Baasic REST URIs providing it with an object that contains URI parameters.
-     - All end-point objects are transformed by the associated route service.
-     */
-
-    /* globals module */
-    /**
      * @module baasicApplicationSettingsService
      * @description Baasic Application Settings Service provides an easy way to consume Baasic Application Settings REST API end-points. In order to obtain needed routes `baasicApplicationSettingsService` uses `baasicApplicationSettingsRouteService`.
      */
     (function (angular, module, undefined) {
         'use strict';
-        module.service('baasicApplicationSettingsService', ['baasicApiHttp', 'baasicApiService', 'baasicConstants', 'baasicApplicationSettingsRouteService', function (baasicApiHttp, baasicApiService, baasicConstants, applicationSettingsRouteService) {
+        module.service('baasicApplicationSettingsService', ['baasicApp', function (baasicApps) {
+            var baasicApp = baasicApps.get();
             return {
                 /**
                  * Returns a promise that is resolved once the get action has been performed. Success response returns the application settings resource.
@@ -98,7 +53,7 @@
                  });
                  **/
                 get: function (options) {
-                    return baasicApiHttp.get(applicationSettingsRouteService.get.expand(baasicApiService.getParams(options))).success(function (appSettings) {
+                    return baasicApp.applicationSettings.get(options).success(function (appSettings) {
                         appSettings.origins = appSettings.origins || [];
                     });
                 },
@@ -121,12 +76,9 @@
                  });
                  **/
                 update: function (data) {
-                    var params = baasicApiService.updateParams(data);
-                    var model = params[baasicConstants.modelPropertyName];
-                    return baasicApiHttp.put(model.links('put').href, model);
+                    return baasicApp.applicationSettingModule.update(data);
                 },
-
-                routeService: applicationSettingsRouteService
+                routeService: baasicApp.applicationSettings.routeDefinition
             };
         }]);
     }(angular, module));
@@ -140,7 +92,6 @@
      - Refer to the [Baasic REST API](http://dev.baasic.com/api/reference/home) for detailed information about available Baasic REST API end-points.
      - All end-point objects are transformed by the associated route service.
      */
-
     /* exported module */
     /** 
      * @description The angular.module is a global place for creating, registering or retrieving modules. All modules should be registered in an application using this mechanism.  An angular module is a container for the different parts of your app - services, directives etc. In order to use `baasic.article` module functionality it must be added as a dependency to your app.
@@ -8116,7 +8067,7 @@
                  });
                  **/
                 get: function (options) {
-                    return baasicApp.membership.lookups.get(options);
+                    return baasicApp.membershipModule.lookups.get(options);
                 }
             };
         }]);
@@ -8266,7 +8217,7 @@
                  });
                  **/
                 find: function (schemaName, options) {
-                    return baasicApp.dynamicResource.find(schemaName, options);
+                    return baasicApp.dynamicResourceModule.find(schemaName, options);
                 },
                 /**
                  * Returns a promise that is resolved once the get action has been performed. Success response returns the specified dynamic resource.
@@ -8281,7 +8232,7 @@
                  });
                  **/
                 get: function (schemaName, id, options) {
-                    return baasicApp.dynamicResource.get(schemaName, id, options);
+                    return baasicApp.dynamicResourceModule.get(schemaName, id, options);
                 },
                 /**
                  * Returns a promise that is resolved once the create dynamic resource action has been performed; this action creates a new dynamic resource item.
@@ -8299,7 +8250,7 @@
                  });
                  **/
                 create: function (schemaName, data) {
-                    return baasicApp.dynamicResource.create(schemaName, data);
+                    return baasicApp.dynamicResourceModule.create(schemaName, data);
                 },
                 /**
                  * Returns a promise that is resolved once the update action has been performed; this action updates a dynamic resource item. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicDynamicResourceRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
@@ -8322,7 +8273,7 @@
                  });
                  **/
                 update: function (data, options) {
-                    return baasicApp.dynamicResource.update(data, options);
+                    return baasicApp.dynamicResourceModule.update(data, options);
                 },
                 /**
                  * Returns a promise that is resolved once the patch action has been performed; this action patches an existing dynamic resource. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicDynamicResourceRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
@@ -8346,7 +8297,7 @@
                  });
                  **/
                 patch: function (data, options) {
-                    return baasicApp.dynamicResource.patch(data, options);
+                    return baasicApp.dynamicResourceModule.patch(data, options);
                 },
                 /**
                  * Returns a promise that is resolved once the remove action has been performed. This action will remove a dynamic resource from the system if successfully completed. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicDynamicResourceRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
@@ -8368,7 +8319,7 @@
                  });
                  **/
                 remove: function (data, options) {
-                    return baasicApp.dynamicResource.remvoe(data, options);
+                    return baasicApp.dynamicResourceModule.remvoe(data, options);
                 },
                 /**
                  * Provides direct access to `baasicDynamicResourceRouteService`.
@@ -8390,7 +8341,7 @@
                      });
                      **/
                     get: function (options) {
-                        return baasicApp.dynamicResource.acl.get(options);
+                        return baasicApp.dynamicResourceModule.acl.get(options);
                     },
                     /**
                      * Returns a promise that is resolved once the update acl action has been performed; this action creates new ACL policy for the specified dynamic resource.
@@ -8405,7 +8356,7 @@
                      });
                      **/
                     update: function (options) {
-                        return baasicApp.dynamicResource.acl.update(options);
+                        return baasicApp.dynamicResourceModule.acl.update(options);
                     },
                     /**
                      * Returns a promise that is resolved once the removeByUser action has been performed. This action deletes ACL policy assigned to the specified user and dynamic resource.
@@ -8421,7 +8372,7 @@
                      });
                      **/
                     removeByUser: function (action, user, data) {
-                        return baasicApp.dynamicResource.acl.removeByUser(action, user, data);
+                        return baasicApp.dynamicResourceModule.acl.removeByUser(action, user, data);
                     },
                     /**
                      * Returns a promise that is resolved once the removeByRole action has been performed. This action deletes ACL policy assigned to the specified role and dynamic resource.
@@ -8437,7 +8388,7 @@
                      });
                      **/
                     removeByRole: function (action, role, data) {
-                        return baasicApp.dynamicResource.acl.removeByRole(action, role, data);
+                        return baasicApp.dynamicResourceModule.acl.removeByRole(action, role, data);
                     },
                     routeService: baasicApp.dynamicResource.acl.routeDefinition
                 }
@@ -8478,7 +8429,7 @@
                  });
                  **/
                 find: function (options) {
-                    return baasicApp.dynamicResource.schema.find(options);
+                    return baasicApp.dynamicResourceModule.schema.find(options);
                 },
                 /**
                  * Returns a promise that is resolved once the get action has been performed. Success response returns the specified dynamic resource schema.
@@ -8493,7 +8444,7 @@
                  });
                  **/
                 get: function (name, options) {
-                    return baasicApp.dynamicResource.schema.get(name, options);
+                    return baasicApp.dynamicResourceModule.schema.get(name, options);
                 },
                 /**
                  * Returns a promise that is resolved once the create action has been performed; this action creates a new dynamic resource schema item.
@@ -8526,7 +8477,7 @@
                  });
                  **/
                 create: function (data) {
-                    return baasicApp.dynamicResource.schema.create(data);
+                    return baasicApp.dynamicResourceModule.schema.create(data);
                 },
                 /**
                  * Returns a promise that is resolved once the update dynamic resource schema action has been performed; this action updates a dynamic resource schema item. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicDynamicSchemaRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
@@ -8547,7 +8498,7 @@
                  });
                  **/
                 update: function (data) {
-                    return baasicApp.dynamicResource.schema.update(data);
+                    return baasicApp.dynamicResourceModule.schema.update(data);
                 },
                 /**
                  * Returns a promise that is resolved once the remove action has been performed. This action will remove a dynamic resource schema item from the system if successfully completed. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicDynamicSchemaRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
@@ -8567,7 +8518,7 @@
                  });
                  **/
                 remove: function (data) {
-                    return baasicApp.dynamicResource.schema.remove(data);
+                    return baasicApp.dynamicResourceModule.schema.remove(data);
                 },
                 /**
                  * Returns a promise that is resolved once the generate schema action has been performed. Success response returns a schema generated based on the json input.
@@ -8585,7 +8536,7 @@
                  });
                  **/
                 generate: function (data) {
-                    return baasicApp.dynamicResource.schema.generate(data);
+                    return baasicApp.dynamicResourceModule.schema.generate(data);
                 },
                 /**
                  * Provides direct access to `baasicDynamicSchemaRouteService`.
@@ -8656,7 +8607,7 @@
                  });
                  **/
                 find: function (options) {
-                    return baasicApp.files.find(options);
+                    return baasicApp.fileModule.find(options);
                 },
 
                 /**
@@ -8672,7 +8623,7 @@
                  });
                  **/
                 get: function (id, options) {
-                    return baasicApp.files.get(id, options);
+                    return baasicApp.fileModule.get(id, options);
                 },
 
                 /**
@@ -8730,7 +8681,7 @@
                  });
                  **/
                 unlink: function (data, options) {
-                    return baasicApp.files.unlink(data, options);
+                    return baasicApp.fileModule.unlink(data, options);
                 },
 
                 /**
@@ -8752,7 +8703,7 @@
                  });
                  **/
                 update: function (data) {
-                    return baasicApp.files.update(data);
+                    return baasicApp.fileModule.update(data);
                 },
 
                 /**
@@ -8768,7 +8719,7 @@
                  });
                  **/
                 link: function (data) {
-                    return baasicApp.files.link(data);
+                    return baasicApp.fileModule.link(data);
                 },
 
                 streams: {
@@ -8794,7 +8745,7 @@
                      });
                      **/
                     get: function (data) {
-                        return baasicApp.files.streams.get(data);
+                        return baasicApp.fileModule.streams.get(data);
                     },
 
                     /**
@@ -8819,7 +8770,7 @@
                      });
                      **/
                     getBlob: function (data) {
-                        return baasicApp.files.streams.getBlob(data);
+                        return baasicApp.fileModule.streams.getBlob(data);
                     },
 
                     /**
@@ -8844,7 +8795,7 @@
                      });
                      **/
                     update: function (data, stream) {
-                        return baasicApp.files.streams.update(data, stream);
+                        return baasicApp.fileModule.streams.update(data, stream);
                     },
 
                     /**
@@ -8860,7 +8811,7 @@
                      });
                      **/
                     create: function (data, stream) {
-                        return baasicApp.files.streams.create(data, stream);
+                        return baasicApp.fileModule.streams.create(data, stream);
                     },
                     routeService: baasicApp.files.streams.routeDefinition
                 },
@@ -8913,7 +8864,7 @@
                      });
                      **/
                     unlink: function (data) {
-                        return baasicApp.files.batch.unlink(data);
+                        return baasicApp.fileModule.batch.unlink(data);
                     },
                     /**
                      * Returns a promise that is resolved once the update action has been performed; this action updates specified file resources.
@@ -8928,7 +8879,7 @@
                      });
                      **/
                     update: function (data) {
-                        return baasicApp.files.batch.update(data);
+                        return baasicApp.fileModule.batch.update(data);
                     },
 
                     /**
@@ -8944,7 +8895,7 @@
                      });
                      **/
                     link: function (data) {
-                        return baasicApp.files.batch.link(data);
+                        return baasicApp.fileModule.batch.link(data);
                     },
                     routeService: baasicApp.files.batch.routeDefinition
                 },
@@ -8963,7 +8914,7 @@
                      });
                      **/
                     get: function (options) {
-                        return baasicApp.files.acl.get(options);
+                        return baasicApp.fileModule.acl.get(options);
                     },
                     /**
                      * Returns a promise that is resolved once the update acl action has been performed, this action creates new ACL policy for the specified file resource.
@@ -8985,7 +8936,7 @@
                      });
                      **/
                     update: function (options) {
-                        return baasicApp.files.acl.update(options);
+                        return baasicApp.fileModule.acl.update(options);
                     },
                     /**
                      * Returns a promise that is resolved once the removeByUser action has been performed. This action deletes ACL policy assigned to the specified user and file resource.
@@ -9000,7 +8951,7 @@
                      });
                      **/
                     removeByUser: function (fileEntryId, action, user, data) {
-                        return baasicApp.files.acl.removeByUser(fileEntryId, action, user, data);
+                        return baasicApp.fileModule.acl.removeByUser(fileEntryId, action, user, data);
                     },
                     /**
                      * Returns a promise that is resolved once the removeByRole action has been performed. This action deletes ACL policy assigned to the specified role and file resource.
@@ -9015,7 +8966,7 @@
                      });
                      **/
                     removeByRole: function (fileEntryId, action, role, data) {
-                        return baasicApp.files.acl.removeByRole(fileEntryId, action, role, data);
+                        return baasicApp.fileModule.acl.removeByRole(fileEntryId, action, role, data);
                     }
                 },
                 routeService: baasicApp.files.acl.routeDefinition
@@ -9058,7 +9009,7 @@
                  });
                  **/
                 find: function (options) {
-                    return baasicApp.mediaVault.find(options);
+                    return baasicApp.mediaVaultModule.find(options);
                 },
 
                 /**
@@ -9074,7 +9025,7 @@
                  });
                  **/
                 get: function (id, options) {
-                    return baasicApp.mediaVault.get(id, options);
+                    return baasicApp.mediaVaultModule.get(id, options);
                 },
 
                 /**
@@ -9103,7 +9054,7 @@
                  });
                  **/
                 remove: function (data, options) {
-                    return baasicApp.mediaVault.remove(data, options);
+                    return baasicApp.mediaVaultModule.remove(data, options);
                 },
 
                 /**
@@ -9125,7 +9076,7 @@
                  });
                  **/
                 update: function (data) {
-                    return baasicApp.mediaVault.update(data);
+                    return baasicApp.mediaVaultModule.update(data);
                 },
 
                 streams: {
@@ -9151,7 +9102,7 @@
                      });
                      **/
                     get: function (data) {
-                        return baasicApp.mediaVault.streams.get(data);
+                        return baasicApp.mediaVaultModule.streams.get(data);
                     },
 
                     /**
@@ -9176,7 +9127,7 @@
                      });
                      **/
                     getBlob: function (data) {
-                        return baasicApp.mediaVault.streams.getBlob(data);
+                        return baasicApp.mediaVaultModule.streams.getBlob(data);
                     },
 
                     /**
@@ -9201,7 +9152,7 @@
                      });
                      **/
                     update: function (data, stream) {
-                        return baasicApp.mediaVault.streams.update(data, streams);
+                        return baasicApp.mediaVaultModule.streams.update(data, streams);
                     },
 
                     /**
@@ -9217,7 +9168,7 @@
                      });
                      **/
                     create: function (data, stream) {
-                        return baasicApp.mediaVault.streams.create(data, stream);
+                        return baasicApp.mediaVaultModule.streams.create(data, stream);
                     },
                     routeService: baasicApp.mediaVault.streams.routeDefinition
                 },
@@ -9245,7 +9196,7 @@
                      });
                      **/
                     remove: function (data) {
-                        return baasicApp.mediaVault.batch.remove(data);
+                        return baasicApp.mediaVaultModule.batch.remove(data);
                     },
                     /**
                      * Returns a promise that is resolved once the update action has been performed; this action updates specified media vault resources.
@@ -9260,7 +9211,7 @@
                      });
                      **/
                     update: function (data) {
-                        return baasicApp.mediaVault.batch.update(data);
+                        return baasicApp.mediaVaultModule.batch.update(data);
                     },
                     routeService: baasicApp.mediaVault.batch.routeDefinition
                 },
@@ -9279,7 +9230,7 @@
                      });
                      **/
                     get: function () {
-                        return baasicApp.mediaVault.settings.get();
+                        return baasicApp.mediaVaultModule.settings.get();
                     },
 
                     /**
@@ -9295,7 +9246,7 @@
                      });
                      **/
                     update: function (data) {
-                        return baasicApp.mediaVault.settings.update(data);
+                        return baasicApp.mediaVaultModule.settings.update(data);
                     },
                     routeService: baasicApp.mediaVault.settings.routeDefinition
                 },
@@ -9320,7 +9271,7 @@
                      });
                      **/
                     find: function (options) {
-                        return baasicApp.mediaVault.processingProviderSettings.find(options);
+                        return baasicApp.mediaVaultModule.processingProviderSettings.find(options);
                     },
 
                     /**
@@ -9336,7 +9287,7 @@
                      });
                      **/
                     get: function (id, options) {
-                        return baasicApp.mediaVault.processingProviderSettings.get(id, options);
+                        return baasicApp.mediaVaultModule.processingProviderSettings.get(id, options);
                     },
 
                     /**
@@ -9358,7 +9309,7 @@
                      });
                      **/
                     update: function (data) {
-                        return baasicApp.mediaVault.processingProviderSettings.update(data);
+                        return baasicApp.mediaVaultModule.processingProviderSettings.update(data);
                     },
                     routeService: baasicApp.mediaVault.processingProviderSettings.routeDefinition
                 },
@@ -9427,7 +9378,7 @@
                  });
                  **/
                 find: function (options) {
-                    return baasicApp.keyValue.get(options);
+                    return baasicApp.keyValueModule.get(options);
                 },
                 /**
                  * Returns a promise that is resolved once the get action has been performed. Success response returns the specified key value resource.
@@ -9442,7 +9393,7 @@
                  });
                  **/
                 get: function (id, options) {
-                    return baasicApp.keyValue.get(id, options);
+                    return baasicApp.keyValueModule.get(id, options);
                 },
                 /**
                  * Returns a promise that is resolved once the create key value action has been performed; this action creates a new key value resource.
@@ -9460,7 +9411,7 @@
                  });
                  **/
                 create: function (data) {
-                    return baasicApp.keyValue.post(data);
+                    return baasicApp.keyValueModule.post(data);
                 },
                 /**
                  * Returns a promise that is resolved once the update key value action has been performed; this action updates a key value resource. 
@@ -9477,7 +9428,7 @@
                  });
                  **/
                 update: function (data) {
-                    return baasicApp.keyValue.put(data);
+                    return baasicApp.keyValueModule.put(data);
                 },
                 /**
                  * Returns a promise that is resolved once the remove action has been performed. This action will remove a key value resource from the system if successfully completed. 
@@ -9493,7 +9444,7 @@
                  });
                  **/
                 remove: function (data) {
-                    return baasicApp.keyValue.delete(data);
+                    return baasicApp.keyValueModule.delete(data);
                 },
                 /**
                  * Provides direct access to routeDefinition.
@@ -9564,7 +9515,7 @@
                  .finally (function () {});
                  **/
                 login: function login(data) {
-                    return baasicApp.membership.login.login(data);
+                    return baasicApp.membershipModule.login.login(data);
                 },
                 /**
                  * Returns a promise that is resolved once the loadUserData action has been performed. This action retrieves the account information of the currently logged in user. Retrieved account information will contain permission collection which identifies access policies assigned to the user and application sections.
@@ -9580,7 +9531,7 @@
                  .finally (function () {});
                  */
                 loadUserData: function loadUserData(data) {
-                    return baasicApp.membership.login.loadUserData(data);
+                    return baasicApp.membershipModule.login.loadUserData(data);
                 },
                 /**
                  * Returns a promise that is resolved once the logout action has been performed. This action invalidates user token logging the user out of the system.
@@ -9594,7 +9545,7 @@
                  .finally (function () {});
                  */
                 logout: function logout(token, type) {
-                    return baasicApp.membership.login.logout(token, type);
+                    return baasicApp.membershipModule.login.logout(token, type);
                 },
                 /**
                  * Provides direct access to route definition.
@@ -9616,7 +9567,7 @@
                      });
                      **/
                     get: function (provider, returnUrl) {
-                        return baasicApp.membership.loginSocial.get(provider, returnUrl);
+                        return baasicApp.membershipModule.loginSocial.get(provider, returnUrl);
                     },
                     /**
                      * Returns a promise that is resolved once the post action has been performed. This action logs user into the application and success response returns the token resource.
@@ -9640,7 +9591,7 @@
                      });
                      **/
                     post: function (provider, data, options) {
-                        return baasicApp.membership.loginSocial.post(provider, data, options);
+                        return baasicApp.membershipModule.loginSocial.post(provider, data, options);
                     },
                     /**
                      * Parses social provider response parameters.
@@ -9648,7 +9599,7 @@
                      * @example baasicLoginService.social.parseResponse('<provider>');
                      **/
                     parseResponse: function (provider, returnUrl) {
-                        return baasicApp.membership.loginSocial.parseResponse(provider, returnUrl);
+                        return baasicApp.membershipModule.loginSocial.parseResponse(provider, returnUrl);
                     },
                     /**
                      * Provides direct access to route definition.
@@ -9696,7 +9647,7 @@
                  .finally (function () {});
                  */
                 requestReset: function (data) {
-                    return baasicApp.membership.passwordRecovery.requestReset(data);
+                    return baasicApp.membershipModule.passwordRecovery.requestReset(data);
                 },
                 /**
                  * Returns a promise that is resolved once the password reset action is completed. This updates user's password selection.
@@ -9715,7 +9666,7 @@
                  .finally (function () {});
                  */
                 reset: function (data) {
-                    return baasicApp.membership.passwordRecovery.reset(data);
+                    return baasicApp.membershipModule.passwordRecovery.reset(data);
                 },
                 /**
                  * Provides direct access to route definition.
@@ -9764,7 +9715,7 @@
                  .finally (function () {});
                  **/
                 create: function (data) {
-                    return baasicApp.membership.register.create(data);
+                    return baasicApp.membershipModule.register.create(data);
                 },
                 /**
                  * Returns a promise that is resolved once the account activation action has been performed; this action activates a user account and success response returns the token resource.
@@ -9782,7 +9733,7 @@
                  .finally (function () {});
                  **/
                 activate: function (data) {
-                    return baasicApp.membership.register.activate(data);
+                    return baasicApp.membershipModule.register.activate(data);
                 },
                 /**
                  * Provides direct access to route definition.
@@ -9828,7 +9779,7 @@
                  });
                  **/
                 find: function (options) {
-                    return baasicApp.membership.role.find(options);
+                    return baasicApp.membershipModule.role.find(options);
                 },
                 /**
                  * Returns a promise that is resolved once the get action has been performed. Success response returns the specified role resource.
@@ -9843,7 +9794,7 @@
                  });
                  **/
                 get: function (id, options) {
-                    return baasicApp.membership.role.get(id, options);
+                    return baasicApp.membershipModule.role.get(id, options);
                 },
                 /**
                  * Returns a promise that is resolved once the create action has been performed; this action creates a role.
@@ -9861,7 +9812,7 @@
                  });
                  **/
                 create: function (data) {
-                    return baasicApp.membership.role.create(data);
+                    return baasicApp.membershipModule.role.create(data);
                 },
                 /**
                  * Returns a promise that is resolved once the update role action has been performed; this action updates a role. 
@@ -9879,7 +9830,7 @@
                  
                  **/
                 update: function (data) {
-                    return baasicApp.membership.role.update(data);
+                    return baasicApp.membershipModule.role.update(data);
                 },
                 /**
                  * Returns a promise that is resolved once the remove role action has been performed. This action will remove a role from the system, if completed successfully. 
@@ -9895,7 +9846,7 @@
                  });
                  **/
                 remove: function (data) {
-                    return baasicApp.membership.role.remove(data);
+                    return baasicApp.membershipModule.role.remove(data);
                 },
                 /**
                  * Provides direct access to route definition.
@@ -9935,7 +9886,7 @@
                  });
                  **/
                 exists: function (username, options) {
-                    return baasicApp.membership.user.exists(username, options);
+                    return baasicApp.membershipModule.user.exists(username, options);
                 },
                 /**
                  * Returns a promise that is resolved once the find action has been performed. Success response returns a list of user resources matching the given criteria.
@@ -9956,7 +9907,7 @@
                  });
                  **/
                 find: function (options) {
-                    return baasicApp.membership.user.find(options);
+                    return baasicApp.membershipModule.user.find(options);
                 },
                 /**
                  * Returns a promise that is resolved once the get action has been performed. Success response returns the specified user resource.
@@ -9974,7 +9925,7 @@
                  });
                  **/
                 get: function (options) {
-                    return baasicApp.membership.user.get(options.username, options);
+                    return baasicApp.membershipModule.user.get(options.username, options);
                 },
                 /**
                  * Returns a promise that is resolved once the create user action has been performed; this action creates a new user.
@@ -9997,7 +9948,7 @@
                  });
                  **/
                 create: function (data) {
-                    return baasicApp.membership.user.create(data);
+                    return baasicApp.membershipModule.user.create(data);
                 },
                 /**
                  * Returns a promise that is resolved once the update user action has been performed; this action updates a user. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicUserRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
@@ -10019,7 +9970,7 @@
                  });
                  **/
                 update: function (data) {
-                    return baasicApp.membership.user.update(data);
+                    return baasicApp.membershipModule.user.update(data);
                 },
                 /**
                  * Returns a promise that is resolved once the remove user action has been performed. This action will remove a user from the system if successfully completed. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicUserRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
@@ -10039,7 +9990,7 @@
                  });
                  **/
                 remove: function (data) {
-                    return baasicApp.membership.user.remove(data);
+                    return baasicApp.membershipModule.user.remove(data);
                 },
                 /**
                  * Returns a promise that is resolved once the unlock user action has been performed. This action will unlock the user resource which was previously locked either manually or automatically by the system. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicUserRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
@@ -10059,7 +10010,7 @@
                  });
                  **/
                 unlock: function (data) {
-                    return baasicApp.membership.user.unlock(data);
+                    return baasicApp.membershipModule.user.unlock(data);
                 },
                 /**
                  * Returns a promise that is resolved once the lock user action has been performed. This action will lock the user resource out of the system. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicUserRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
@@ -10079,7 +10030,7 @@
                  });
                  **/
                 lock: function (data) {
-                    return baasicApp.membership.user.lock(data);
+                    return baasicApp.membershipModule.user.lock(data);
                 },
                 /**
                  * Returns a promise that is resolved once the approve user action has been performed. This action will mark the user resource as 'approved' in the system. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicUserRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
@@ -10099,7 +10050,7 @@
                  });
                  **/
                 approve: function (data) {
-                    return baasicApp.membership.user.approve(data);
+                    return baasicApp.membershipModule.user.approve(data);
                 },
                 /**
                  * Returns a promise that is resolved once the disapprove user action has been performed. This action will mark the user resource as 'not approved' in the system. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicUserRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
@@ -10119,7 +10070,7 @@
                  });
                  **/
                 disapprove: function (data) {
-                    return baasicApp.membership.user.disapprove(data);
+                    return baasicApp.membershipModule.user.disapprove(data);
                 },
                 /**
                  * Returns a promise that is resolved once the changePassword action has been performed. This action will update user's password selection.
@@ -10138,7 +10089,7 @@
                  .finally (function () {});
                  **/
                 changePassword: function (username, data) {
-                    return baasicApp.membership.user.changePassword(username, data);
+                    return baasicApp.membershipModule.user.changePassword(username, data);
                 },
                 /**
                  * Provides direct access to `baasicUserRouteService`.
@@ -10160,7 +10111,7 @@
                      });
                      **/
                     get: function (username) {
-                        return baasicApp.membership.user.socialLogin.get(username);
+                        return baasicApp.membershipModule.user.socialLogin.get(username);
                     },
                     /**
                      * Returns a promise that is resolved once the remove action has been performed. This action removes the user resource social login connection from the specified provider.
@@ -10175,7 +10126,7 @@
                      });
                      **/
                     remove: function (username, provider) {
-                        return baasicApp.membership.user.socialLogin.remove(username, provider);
+                        return baasicApp.membershipModule.user.socialLogin.remove(username, provider);
                     }
                 }
             };
@@ -10242,7 +10193,7 @@
                  });
                  **/
                 find: function (options) {
-                    return baasicApp.metering.category.find(options);
+                    return baasicApp.meteringModule.category.find(options);
                 },
                 /**
                  * Returns a promise that is resolved once the get action has been performed. Success response returns the metering resource.
@@ -10257,7 +10208,7 @@
                  });
                  **/
                 get: function (id, options) {
-                    return baasicApp.metering.category.get(id, options);
+                    return baasicApp.meteringModule.category.get(id, options);
                 },
                 /**
                  * Returns a promise that is resolved once the create metering action has been performed; this action creates a new metering resource.
@@ -10278,7 +10229,7 @@
                  });
                  **/
                 create: function (data) {
-                    return baasicApp.metering.category.create(data);
+                    return baasicApp.meteringModule.category.create(data);
                 },
                 /**
                  * Returns a promise that is resolved once the update metering action has been performed; this action updates a metering resource. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicMeteringCategoryRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
@@ -10299,7 +10250,7 @@
                  });
                  **/
                 update: function (data) {
-                    return baasicApp.metering.category.update(data);
+                    return baasicApp.meteringModule.category.update(data);
                 },
                 /**
                  * Returns a promise that is resolved once the remove action has been performed. This action will remove a metering resource from the system if successfully completed. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicMeteringCategoryRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
@@ -10319,7 +10270,7 @@
                  });
                  **/
                 remove: function (data) {
-                    return baasicApp.metering.category.remove(data);
+                    return baasicApp.meteringModule.category.remove(data);
                 },
                 /**
                  * Provides direct access to `routeService`.
@@ -10348,7 +10299,7 @@
                      });
                      **/
                     create: function (data) {
-                        return baasicApp.metering.category.batch.create(data);
+                        return baasicApp.meteringModule.category.batch.create(data);
                     },
                     /**
                      * Returns a promise that is resolved once the update category action has been performed; this action updates specified category resources.
@@ -10363,7 +10314,7 @@
                      });
                      **/
                     update: function (data) {
-                        return baasicApp.metering.category.batch.update(data);
+                        return baasicApp.meteringModule.category.batch.update(data);
                     },
                     /**
                      * Returns a promise that is resolved once the remove action has been performed. This action will remove category resources from the system if successfully completed. 
@@ -10378,7 +10329,7 @@
                      });		
                      **/
                     remove: function (ids) {
-                        return baasicApp.metering.category.batch.remove(ids);
+                        return baasicApp.meteringModule.category.batch.remove(ids);
                     }
                 }
             };
@@ -10423,7 +10374,7 @@
                  });
                  **/
                 find: function (options) {
-                    return baasicApp.metering.find(options);
+                    return baasicApp.meteringModule.find(options);
                 },
                 /**
                  * Returns a promise that is resolved once the get action has been performed. Success response returns the metering resource.
@@ -10438,7 +10389,7 @@
                  });
                  **/
                 get: function (id, options) {
-                    return baasicApp.metering.get(id, options);
+                    return baasicApp.meteringModule.get(id, options);
                 },
                 /**
                  * Returns a promise that is resolved once the create metering action has been performed; this action creates a new metering resource.
@@ -10457,7 +10408,7 @@
                  });
                  **/
                 create: function (data) {
-                    return baasicApp.metering.create(data);
+                    return baasicApp.meteringModule.create(data);
                 },
                 /**
                  * Returns a promise that is resolved once the update metering action has been performed; this action updates a metering resource. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicMeteringRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
@@ -10478,7 +10429,7 @@
                  });
                  **/
                 update: function (data) {
-                    return baasicApp.metering.update(data);
+                    return baasicApp.meteringModule.update(data);
                 },
                 /**
                  * Returns a promise that is resolved once the remove action has been performed. This action will remove a metering resource from the system if successfully completed. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicMeteringRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
@@ -10498,7 +10449,7 @@
                  });
                  **/
                 remove: function (data) {
-                    return baasicApp.metering.remove(data);
+                    return baasicApp.meteringModule.remove(data);
                 },
                 /**
                  * Returns a promise that is resolved once the purge action has been performed. This action will remove all metering resources from the system if successfully completed. 
@@ -10513,7 +10464,7 @@
                  });
                  **/
                 purge: function () {
-                    return baasicApp.metering.purge();
+                    return baasicApp.meteringModule.purge();
                 },
                 /**
                  * Provides direct access to `routeService`.
@@ -10540,7 +10491,7 @@
                      });
                      **/
                     create: function (data) {
-                        return baasicApp.metering.batch.create(data);
+                        return baasicApp.meteringModule.batch.create(data);
                     },
                     /**
                      * Returns a promise that is resolved once the update data action has been performed; this action updates specified data resources.
@@ -10555,7 +10506,7 @@
                      });
                      **/
                     update: function (data) {
-                        return baasicApp.metering.batch.update(data);
+                        return baasicApp.meteringModule.batch.update(data);
                     },
                     /**
                      * Returns a promise that is resolved once the remove action has been performed. This action will remove data resources from the system if successfully completed. 
@@ -10570,7 +10521,7 @@
                      });		
                      **/
                     remove: function (ids) {
-                        return baasicApp.metering.batch.remove(ids);
+                        return baasicApp.meteringModule.batch.remove(ids);
                     }
                 },
                 statistics: {
@@ -10596,7 +10547,7 @@
                      });    
                      **/
                     find: function (options) {
-                        return baasicApp.metering.statistics.find(options);
+                        return baasicApp.meteringModule.statistics.find(options);
                     }
                 },
                 acl: {
@@ -10613,7 +10564,7 @@
                      });
                      **/
                     get: function (options) {
-                        return baasicApp.metering.acl.get(options);
+                        return baasicApp.meteringModule.acl.get(options);
                     },
                     /**
                      * Returns a promise that is resolved once the update acl action has been performed, this action creates new ACL policy for the specified metering resource.
@@ -10635,7 +10586,7 @@
                      });
                      **/
                     update: function (options) {
-                        return baasicApp.metering.acl.update(options);
+                        return baasicApp.meteringModule.acl.update(options);
                     },
                     /**
                      * Returns a promise that is resolved once the removeByUser action has been performed. This action deletes ACL policy assigned to the specified user and metering resource.
@@ -10650,7 +10601,7 @@
                      });
                      **/
                     removeByUser: function (id, action, user, data) {
-                        return baasicApp.metering.acl.removeByUser(id, action, user, data);
+                        return baasicApp.meteringModule.acl.removeByUser(id, action, user, data);
                     },
                     /**
                      * Returns a promise that is resolved once the removeByRole action has been performed. This action deletes ACL policy assigned to the specified role and metering resource.
@@ -10665,7 +10616,7 @@
                      });
                      **/
                     removeByRole: function (id, action, role, data) {
-                        return baasicApp.metering.acl.removeByRole(id, action, role, data);
+                        return baasicApp.meteringModule.acl.removeByRole(id, action, role, data);
                     }
                 }
             };
@@ -10704,7 +10655,7 @@
                  });
                  **/
                 get: function (options) {
-                    return baasicApp.metering.settings.get(options);
+                    return baasicApp.meteringModule.settings.get(options);
                 },
                 /**
                  * Returns a promise that is resolved once the update metering action has been performed; this action updates a metering resource. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicMeteringSettingsRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
@@ -10725,7 +10676,7 @@
                  });
                  **/
                 update: function (data) {
-                    return baasicApp.metering.settings.update(data);
+                    return baasicApp.meteringModule.settings.update(data);
                 },
                 /**
                  * Provides direct access to `routeService`.
@@ -10800,7 +10751,7 @@
                      });
                      */
                     create: function (data) {
-                        return baasicApp.notifications.publish.create(data);
+                        return baasicApp.notificationModule.publish.create(data);
                     },
                     batch: {
                         /**
@@ -10824,7 +10775,7 @@
                          });
                          */
                         create: function (data) {
-                            return baasicApp.notifications.publish.batch.create(data);
+                            return baasicApp.notificationModule.publish.batch.create(data);
                         }
                     }
                 },
@@ -10846,7 +10797,7 @@
                          });
                          */
                         create: function (data) {
-                            return baasicApp.notifications.subscriptions.users.create(data);
+                            return baasicApp.notificationModule.subscriptions.users.create(data);
                         },
 
                         /**
@@ -10871,7 +10822,7 @@
                          });
                          */
                         find: function (options) {
-                            return baasicApp.notifications.subscriptions.users.find(options);
+                            return baasicApp.notificationModule.subscriptions.users.find(options);
                         },
 
                         /**
@@ -10887,7 +10838,7 @@
                          });
                          */
                         get: function (id, options) {
-                            return baasicApp.notifications.subscriptions.users.get(id, options);
+                            return baasicApp.notificationModule.subscriptions.users.get(id, options);
                         },
 
                         /**
@@ -10908,7 +10859,7 @@
                          });
                          */
                         remove: function (data) {
-                            return baasicApp.notifications.subscriptions.users.remove(data);
+                            return baasicApp.notificationModule.subscriptions.users.remove(data);
                         },
 
                         /**
@@ -10930,7 +10881,7 @@
                          });
                          */
                         update: function (data) {
-                            return baasicApp.notifications.subscriptions.users.update(data);
+                            return baasicApp.notificationModule.subscriptions.users.update(data);
                         },
                         batch: {
                             /**
@@ -10949,7 +10900,7 @@
                              });
                              */
                             create: function (data) {
-                                return baasicApp.notifications.subscriptions.batch.create(data);
+                                return baasicApp.notificationModule.subscriptions.batch.create(data);
                             },
 
                             /**
@@ -10965,7 +10916,7 @@
                              });
                              */
                             remove: function (ids) {
-                                return baasicApp.notifications.subscriptions.batch.remove(ids);
+                                return baasicApp.notificationModule.subscriptions.batch.remove(ids);
                             },
 
                             /**
@@ -10981,7 +10932,7 @@
                              });
                              */
                             update: function (data) {
-                                return baasicApp.notifications.subscriptions.batch.update(data);
+                                return baasicApp.notificationModule.subscriptions.batch.update(data);
                             }
                         }
                     },
@@ -11002,7 +10953,7 @@
                          });
                          */
                         create: function (data) {
-                            return baasicApp.notifications.subscriptions.anonymous.create(data);
+                            return baasicApp.notificationModule.subscriptions.anonymous.create(data);
                         },
 
                         /**
@@ -11027,7 +10978,7 @@
                          });
                          */
                         find: function (options) {
-                            return baasicApp.notifications.subscriptions.anonymous.find(options);
+                            return baasicApp.notificationModule.subscriptions.anonymous.find(options);
                         },
 
                         /**
@@ -11043,7 +10994,7 @@
                          });
                          */
                         get: function (id, options) {
-                            return baasicApp.notifications.subscriptions.anonymous.get(id, options);
+                            return baasicApp.notificationModule.subscriptions.anonymous.get(id, options);
                         },
 
                         /**
@@ -11064,7 +11015,7 @@
                          });
                          */
                         remove: function (data) {
-                            return baasicApp.notifications.subscriptions.anonymous.remove(data);
+                            return baasicApp.notificationModule.subscriptions.anonymous.remove(data);
                         },
 
                         /**
@@ -11086,7 +11037,7 @@
                          });
                          */
                         update: function (data) {
-                            return baasicApp.notifications.subscriptions.anonymous.update(data);
+                            return baasicApp.notificationModule.subscriptions.anonymous.update(data);
                         },
                         batch: {
                             /**
@@ -11105,7 +11056,7 @@
                              });
                              */
                             create: function (data) {
-                                return baasicApp.notifications.subscriptions.anonymous.batch.create(data);
+                                return baasicApp.notificationModule.subscriptions.anonymous.batch.create(data);
                             },
 
                             /**
@@ -11121,7 +11072,7 @@
                              });
                              */
                             remove: function (ids) {
-                                return baasicApp.notifications.subscriptions.anonymous.batch.remove(ids);
+                                return baasicApp.notificationModule.subscriptions.anonymous.batch.remove(ids);
                             },
 
                             /**
@@ -11137,7 +11088,7 @@
                              });
                              */
                             update: function (data) {
-                                return baasicApp.notifications.subscriptions.anonymous.batch.update(data);
+                                return baasicApp.notificationModule.subscriptions.anonymous.batch.update(data);
                             }
                         }
                     }
@@ -11161,7 +11112,7 @@
                          });
                          */
                         create: function (data) {
-                            return baasicApp.notifications.registrations.users.create(data);
+                            return baasicApp.notificationModule.registrations.users.create(data);
                         },
 
                         /**
@@ -11186,7 +11137,7 @@
                          });
                          */
                         find: function (options) {
-                            return baasicApp.notifications.registrations.users.find(options);
+                            return baasicApp.notificationModule.registrations.users.find(options);
                         },
 
                         /**
@@ -11202,7 +11153,7 @@
                          });
                          */
                         get: function (id, options) {
-                            return baasicApp.notifications.registrations.users.get(id, options);
+                            return baasicApp.notificationModule.registrations.users.get(id, options);
                         },
 
                         /**
@@ -11223,7 +11174,7 @@
                          });
                          */
                         remove: function (data) {
-                            return baasicApp.notifications.registrations.users.remove(data);
+                            return baasicApp.notificationModule.registrations.users.remove(data);
                         },
 
                         /**
@@ -11245,7 +11196,7 @@
                          });
                          */
                         update: function (data) {
-                            return baasicApp.notifications.registrations.users.update(data);
+                            return baasicApp.notificationModule.registrations.users.update(data);
                         },
                         batch: {
                             /**
@@ -11265,7 +11216,7 @@
                              });
                              */
                             create: function (data) {
-                                return baasicApp.notifications.registrations.users.batch.create(data);
+                                return baasicApp.notificationModule.registrations.users.batch.create(data);
                             },
 
                             /**
@@ -11281,7 +11232,7 @@
                              });
                              */
                             remove: function (ids) {
-                                return baasicApp.notifications.registrations.users.batch.remove(ids);
+                                return baasicApp.notificationModule.registrations.users.batch.remove(ids);
                             },
 
                             /**
@@ -11297,7 +11248,7 @@
                              });
                              */
                             update: function (data) {
-                                return baasicApp.notifications.registrations.users.batch.update(data);
+                                return baasicApp.notificationModule.registrations.users.batch.update(data);
                             }
                         }
                     },
@@ -11319,7 +11270,7 @@
                          });
                          */
                         create: function (data) {
-                            return baasicApp.notifications.registrations.anonymous.create(data);
+                            return baasicApp.notificationModule.registrations.anonymous.create(data);
                         },
 
                         /**
@@ -11343,7 +11294,7 @@
                          });
                          */
                         find: function (options) {
-                            return baasicApp.notifications.registrations.anonymous.find(options);
+                            return baasicApp.notificationModule.registrations.anonymous.find(options);
                         },
 
                         /**
@@ -11359,7 +11310,7 @@
                          });
                          */
                         get: function (id, options) {
-                            return baasicApp.notifications.registrations.anonymous.get(id, options);
+                            return baasicApp.notificationModule.registrations.anonymous.get(id, options);
                         },
 
                         /**
@@ -11380,7 +11331,7 @@
                          });
                          */
                         remove: function (data) {
-                            return baasicApp.notifications.registrations.anonymous.remove(data);
+                            return baasicApp.notificationModule.registrations.anonymous.remove(data);
                         },
 
                         /**
@@ -11402,7 +11353,7 @@
                          });
                          */
                         update: function (data) {
-                            return baasicApp.notifications.registrations.anonymous.update(data);
+                            return baasicApp.notificationModule.registrations.anonymous.update(data);
                         },
                         batch: {
                             /**
@@ -11422,7 +11373,7 @@
                              });
                              */
                             create: function (data) {
-                                return baasicApp.notifications.registrations.anonymous.batch.create(data);
+                                return baasicApp.notificationModule.registrations.anonymous.batch.create(data);
                             },
 
                             /**
@@ -11438,7 +11389,7 @@
                              });
                              */
                             remove: function (ids) {
-                                return baasicApp.notifications.registrations.anonymous.batch.remove(ids);
+                                return baasicApp.notificationModule.registrations.anonymous.batch.remove(ids);
                             },
 
                             /**
@@ -11454,7 +11405,7 @@
                              });
                              */
                             update: function (data) {
-                                return baasicApp.notifications.registrations.anonymous.batch.update(data);
+                                return baasicApp.notificationModule.registrations.anonymous.batch.update(data);
                             }
                         }
                     }
@@ -11473,7 +11424,7 @@
                      });
                      */
                     get: function (provider) {
-                        return baasicApp.notifications.settings.get(provider);
+                        return baasicApp.notificationModule.settings.get(provider);
                     },
 
                     /**
@@ -11494,7 +11445,7 @@
                      });
                      */
                     update: function (data) {
-                        return baasicApp.notifications.settings.update(data);
+                        return baasicApp.notificationModule.settings.update(data);
                     }
                 },
 
@@ -11730,7 +11681,7 @@
                  });
                  **/
                 find: function (section, options) {
-                    return baasicApp.membership.permissions.find(section, options);
+                    return baasicApp.membershipModule.permissions.find(section, options);
                 },
                 /**
                  * Returns a promise that is resolved once the getActions action has been performed. Success response returns a list of access policies that match the specified search parameters.
@@ -11747,7 +11698,7 @@
                  });
                  **/
                 getActions: function (options) {
-                    return baasicApp.membership.permissions.getActions(options);
+                    return baasicApp.membershipModule.permissions.getActions(options);
                 },
                 /**
                  * Returns a promise that is resolved once the getPermissionSubjects action has been performed. Success response returns a list of matching user and role resources.
@@ -11794,7 +11745,7 @@
                  });
                  **/
                 create: function (data) {
-                    return baasicApp.membership.permissions.create(data);
+                    return baasicApp.membershipModule.permissions.create(data);
                 },
                 /**
                  * Returns a promise that is resolved once the remove action has been performed. If the action is successfully complete, an access policy assigned to the specified role and section will be removed. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicPermissionsService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
@@ -11814,7 +11765,7 @@
                  });
                  **/
                 remove: function (data) {
-                    return baasicApp.membership.permissions.remove(data);
+                    return baasicApp.membershipModule.permissions.remove(data);
                 },
                 /**
                  * Creates a new in-memory permission object.
@@ -11831,7 +11782,7 @@
                  baasicPermissionsService.createPermission('<section-Name>', actionCollection, subjectItem);
                  **/
                 createPermission: function (section, actionCollection, membershipItem) {
-                    return baasicApp.membership.permissions.createPermission(section, actionCollection, membershipItem);
+                    return baasicApp.membershipModule.permissions.createPermission(section, actionCollection, membershipItem);
                 },
                 /**
                  * Finds a permission in a given permission collection.
@@ -11839,7 +11790,7 @@
                  * @example baasicPermissionsService.findPermission(permissionObj, permissionCollection);
                  **/
                 findPermission: function (permission, permissionCollection) {
-                    return baasicApp.membership.permissions.findPermission(permission, permissionCollection);
+                    return baasicApp.membershipModule.permissions.findPermission(permission, permissionCollection);
                 },
                 /**
                  * Checks if a permission object exists in a given permission collection.
@@ -11847,7 +11798,7 @@
                  * @example baasicPermissionsService.exists(permissionObj, permissionCollection);
                  **/
                 exists: function (permission, permissionCollection) {
-                    return baasicApp.membership.permissions.exists(permission, permissionCollection);
+                    return baasicApp.membershipModule.permissions.exists(permission, permissionCollection);
                 },
                 /**
                  * Returns a promise that is resolved once the togglePermission action has been completed. The action will internally either call a `remove` or `create` action based on given criteria.
@@ -11855,7 +11806,7 @@
                  * @example baasicPermissionsService.togglePermission(permissionObj, action);
                  **/
                 togglePermission: function (permission, action) {
-                    return baasicApp.membership.permissions.togglePermission(permission, action);
+                    return baasicApp.membershipModule.permissions.togglePermission(permission, action);
                 },
                 /**
                  * Fetches and returns and object containing all existing module permissions.
@@ -11863,7 +11814,7 @@
                  * @example baasicPermissionsService.getModulePermissions('<section-name>');
                  **/
                 getModulePermissions: function (section) {
-                    return baasicApp.membership.permissions.getModulePermissions(section);
+                    return baasicApp.membershipModule.permissions.getModulePermissions(section);
                 },
                 /**
                  * Provides direct access to `baasicPermissionsRouteService`.
@@ -12051,7 +12002,7 @@
                  });
                  **/
                 find: function (options) {
-                    return baasicApp.templating.find(options);
+                    return baasicApp.templatingModule.find(options);
                 },
                 /**
                  * Returns a promise that is resolved once the get action has been performed. Success response returns the specified template resource.
@@ -12066,7 +12017,7 @@
                  });
                  **/
                 get: function (id, options) {
-                    return baasicApp.templating.get(id, options);
+                    return baasicApp.templatingModule.get(id, options);
                 },
                 /**
                  * Returns a promise that is resolved once the create template action has been performed; this action creates a new template resource.
@@ -12084,7 +12035,7 @@
                  });
                  **/
                 create: function (data) {
-                    return baasicApp.templating.create(data);
+                    return baasicApp.templatingModule.create(data);
                 },
                 /**
                  * Returns a promise that is resolved once the update template action has been performed; this action updates a template resource. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicTemplatingRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
@@ -12105,7 +12056,7 @@
                  });
                  **/
                 update: function (data) {
-                    return baasicApp.templating.update(data);
+                    return baasicApp.templatingModule.update(data);
                 },
                 /**
                  * Returns a promise that is resolved once the remove action has been performed. This action will remove a template resource from the system if successfully completed. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicTemplatingRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
@@ -12125,7 +12076,7 @@
                  });
                  **/
                 remove: function (data) {
-                    return baasicApp.templating.remove(data);
+                    return baasicApp.templatingModule.remove(data);
                 },
                 /**
                  * Provides direct access to `baasicKeyValueRouteService`.
@@ -12150,7 +12101,7 @@
                      });
                      **/
                     create: function (data) {
-                        return baasicApp.templating.batch.create(data);
+                        return baasicApp.templatingModule.batch.create(data);
                     },
                     /**
                      * Returns a promise that is resolved once the update action has been performed; this action updates specified template resources.
@@ -12165,7 +12116,7 @@
                      });
                      **/
                     update: function (data) {
-                        return baasicApp.templating.batch.update(data);
+                        return baasicApp.templatingModule.batch.update(data);
                     },
                     /**
                      * Returns a promise that is resolved once the remove action has been performed. This action will remove template resources from the system if successfully completed. 
@@ -12180,7 +12131,7 @@
                      });		
                      **/
                     remove: function (ids) {
-                        return baasicApp.templating.batch.remove(ids);
+                        return baasicApp.templatingModule.batch.remove(ids);
                     }
                 }
             };
@@ -12246,7 +12197,7 @@
                  });
                  **/
                 create: function (data) {
-                    return baasicApp.userProfile.company.create(data);
+                    return baasicApp.userProfileModule.company.create(data);
                 },
                 /**
                  * Returns a promise that is resolved once the find action has been performed. Success response returns a list of company resources matching the given criteria.
@@ -12267,7 +12218,7 @@
                  });
                  **/
                 find: function (options) {
-                    return baasicApp.userProfile.company.find(options);
+                    return baasicApp.userProfileModule.company.find(options);
                 },
                 /**
                  * Returns a promise that is resolved once the get action has been performed. Success response returns the company resource.
@@ -12282,7 +12233,7 @@
                  });
                  **/
                 get: function (id, options) {
-                    return baasicApp.userProfile.company.get(id, options);
+                    return baasicApp.userProfileModule.company.get(id, options);
                 },
                 /**
                  * Returns a promise that is resolved once the remove action has been performed. This action will remove a company resource from the system if successfully completed. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicCompanyRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
@@ -12302,7 +12253,7 @@
                  });
                  **/
                 remove: function (data) {
-                    return baasicApp.userProfile.company.remove(data);
+                    return baasicApp.userProfileModule.company.remove(data);
                 },
                 /**
                  * Returns a promise that is resolved once the update company action has been performed; this action updates a company resource. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicCompanyRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
@@ -12323,7 +12274,7 @@
                  });
                  **/
                 update: function (data) {
-                    return baasicApp.userProfile.company.update(data);
+                    return baasicApp.userProfileModule.company.update(data);
                 },
                 batch: {
                     /**
@@ -12343,7 +12294,7 @@
                      });
                      **/
                     create: function (data) {
-                        return baasicApp.userProfile.company.batch.create(data);
+                        return baasicApp.userProfileModule.company.batch.create(data);
                     },
                     /**
                      * Returns a promise that is resolved once the update company action has been performed; this action updates specified company resources.
@@ -12358,7 +12309,7 @@
                      });
                      **/
                     update: function (data) {
-                        return baasicApp.userProfile.company.batch.update(data);
+                        return baasicApp.userProfileModule.company.batch.update(data);
                     },
                     /**
                      * Returns a promise that is resolved once the remove action has been performed. This action will remove company resources from the system if successfully completed. 
@@ -12373,7 +12324,7 @@
                      });		
                      **/
                     remove: function (ids) {
-                        return baasicApp.userProfile.company.batch.remove(ids);
+                        return baasicApp.userProfileModule.company.batch.remove(ids);
                     }
                 }
             };
@@ -12413,7 +12364,7 @@
                  });
                  **/
                 create: function (data) {
-                    return baasicApp.userProfile.organization.create(data);
+                    return baasicApp.userProfileModule.organization.create(data);
                 },
                 /**
                  * Returns a promise that is resolved once the find action has been performed. Success response returns a list of organization resources matching the given criteria.
@@ -12434,7 +12385,7 @@
                  });
                  **/
                 find: function (options) {
-                    return baasicApp.userProfile.organization.find(options);
+                    return baasicApp.userProfileModule.organization.find(options);
                 },
                 /**
                  * Returns a promise that is resolved once the get action has been performed. Success response returns the organization resource.
@@ -12449,7 +12400,7 @@
                  });
                  **/
                 get: function (id, options) {
-                    return baasicApp.userProfile.organization.get(id, options);
+                    return baasicApp.userProfileModule.organization.get(id, options);
                 },
                 /**
                  * Returns a promise that is resolved once the remove action has been performed. This action will remove an organization resource from the system if successfully completed. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicOrganizationRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
@@ -12469,7 +12420,7 @@
                  });
                  **/
                 remove: function (data) {
-                    return baasicApp.userProfile.organization.remove(params[baasicConstants.modelPropertyName].links('delete').href);
+                    return baasicApp.userProfileModule.organization.remove(params[baasicConstants.modelPropertyName].links('delete').href);
                 },
                 /**
                  * Returns a promise that is resolved once the update organization action has been performed; this action updates an organization resource. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicOrganizationRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
@@ -12490,7 +12441,7 @@
                  });
                  **/
                 update: function (data) {
-                    return baasicApp.userProfile.organization.update(data);
+                    return baasicApp.userProfileModule.organization.update(data);
                 },
                 batch: {
                     /**
@@ -12510,7 +12461,7 @@
                      });
                      **/
                     create: function (data) {
-                        return baasicApp.userProfile.organization.batch.create(data);
+                        return baasicApp.userProfileModule.organization.batch.create(data);
                     },
                     /**
                      * Returns a promise that is resolved once the update organization action has been performed; this action updates specified organization resources.
@@ -12525,7 +12476,7 @@
                      });
                      **/
                     update: function (data) {
-                        return baasicApp.userProfile.organization.batch.update(data);
+                        return baasicApp.userProfileModule.organization.batch.update(data);
                     },
                     /**
                      * Returns a promise that is resolved once the remove action has been performed. This action will remove organization resources from the system if successfully completed. 
@@ -12540,7 +12491,7 @@
                      });		
                      **/
                     remove: function (ids) {
-                        return baasicApp.userProfile.organization.batch.remove(ids);
+                        return baasicApp.userProfileModule.organization.batch.remove(ids);
                     }
                 }
             };
@@ -12580,7 +12531,7 @@
                  });
                  **/
                 create: function (data) {
-                    return baasicApp.userProfile.skill.create(data);
+                    return baasicApp.userProfileModule.skill.create(data);
                 },
                 /**
                  * Returns a promise that is resolved once the find action has been performed. Success response returns a list of skill resources matching the given criteria.
@@ -12601,7 +12552,7 @@
                  });
                  **/
                 find: function (options) {
-                    return baasicApp.userProfile.skill.find(options);
+                    return baasicApp.userProfileModule.skill.find(options);
                 },
                 /**
                  * Returns a promise that is resolved once the get action has been performed. Success response returns the skill resource.
@@ -12616,7 +12567,7 @@
                  });
                  **/
                 get: function (id, options) {
-                    return baasicApp.userProfile.skill.get(id, options);
+                    return baasicApp.userProfileModule.skill.get(id, options);
                 },
                 /**
                  * Returns a promise that is resolved once the remove action has been performed. This action will remove a skill resource from the system if successfully completed. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicSkillRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
@@ -12636,7 +12587,7 @@
                  });
                  **/
                 remove: function (data) {
-                    return baasicApp.userProfile.skill.remove(data);
+                    return baasicApp.userProfileModule.skill.remove(data);
                 },
                 /**
                  * Returns a promise that is resolved once the update skill action has been performed; this action updates a skill resource. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicSkillRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
@@ -12657,7 +12608,7 @@
                  });
                  **/
                 update: function (data) {
-                    return baasicApp.userProfile.skill.update(data);
+                    return baasicApp.userProfileModule.skill.update(data);
                 },
                 batch: {
                     /**
@@ -12677,7 +12628,7 @@
                      });
                      **/
                     create: function (data) {
-                        return baasicApp.userProfile.skill.batch.create(data);
+                        return baasicApp.userProfileModule.skill.batch.create(data);
                     },
                     /**
                      * Returns a promise that is resolved once the update skill action has been performed; this action updates specified skill resources.
@@ -12692,7 +12643,7 @@
                      });
                      **/
                     update: function (data) {
-                        return baasicApp.userProfile.skill.batch.update(data);
+                        return baasicApp.userProfileModule.skill.batch.update(data);
                     },
                     /**
                      * Returns a promise that is resolved once the remove action has been performed. This action will remove skill resources from the system if successfully completed. 
@@ -12707,7 +12658,7 @@
                      });		
                      **/
                     remove: function (ids) {
-                        return baasicApp.userProfile.skill.batch.remove(ids);
+                        return baasicApp.userProfileModule.skill.batch.remove(ids);
                     }
                 }
             };
@@ -12747,7 +12698,7 @@
                  });
                  **/
                 create: function (data) {
-                    return baasicApp.userProfile.profile.education.create(data);
+                    return baasicApp.userProfileModule.profile.education.create(data);
                 },
                 /**
                  * Returns a promise that is resolved once the find action has been performed. Success response returns a list of user education resources matching the given criteria.
@@ -12768,7 +12719,7 @@
                  });
                  **/
                 find: function (options) {
-                    return baasicApp.userProfile.profile.education.find(options);
+                    return baasicApp.userProfileModule.profile.education.find(options);
                 },
                 /**
                  * Returns a promise that is resolved once the get action has been performed. Success response returns the user education resource.
@@ -12783,7 +12734,7 @@
                  });
                  **/
                 get: function (id, options) {
-                    return baasicApp.userProfile.profile.education.get(id, options);
+                    return baasicApp.userProfileModule.profile.education.get(id, options);
                 },
                 /**
                  * Returns a promise that is resolved once the remove action has been performed. This action will remove a user education resource from the system if successfully completed. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicUserEducationRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
@@ -12803,7 +12754,7 @@
                  });
                  **/
                 remove: function (data) {
-                    return baasicApp.userProfile.profile.education.remove(data);
+                    return baasicApp.userProfileModule.profile.education.remove(data);
                 },
                 /**
                  * Returns a promise that is resolved once the update user education action has been performed; this action updates a user education resource. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicUserEducationRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
@@ -12824,7 +12775,7 @@
                  });
                  **/
                 update: function (data) {
-                    return baasicApp.userProfile.profile.education.update(data);
+                    return baasicApp.userProfileModule.profile.education.update(data);
                 }
             };
         }]);
@@ -12859,7 +12810,7 @@
                  });
                  **/
                 get: function (id, options) {
-                    return baasicApp.userProfile.profile.avatar.get(id, options);
+                    return baasicApp.userProfileModule.profile.avatar.get(id, options);
                 },
 
                 /**
@@ -12880,7 +12831,7 @@
                  });
                  **/
                 unlink: function (data, options) {
-                    return baasicApp.userProfile.profile.avatar.unlink(data, options);
+                    return baasicApp.userProfileModule.profile.avatar.unlink(data, options);
                 },
 
                 /**
@@ -12902,7 +12853,7 @@
                  });
                  **/
                 update: function (data) {
-                    return baasicApp.userProfile.profile.avatar.update(data);
+                    return baasicApp.userProfileModule.profile.avatar.update(data);
                 },
 
                 /**
@@ -12918,7 +12869,7 @@
                  });
                  **/
                 link: function (id, data) {
-                    return baasicApp.userProfile.profile.avatar.link(id, data);
+                    return baasicApp.userProfileModule.profile.avatar.link(id, data);
                 },
                 routeService: baasicApp.userProfile.profile.avatar.routeDefinition,
                 streams: {
@@ -12944,7 +12895,7 @@
                      });
                      **/
                     get: function (data) {
-                        return baasicApp.userProfile.profile.avatar.streams.get(data);
+                        return baasicApp.userProfileModule.profile.avatar.streams.get(data);
                     },
 
                     /**
@@ -12969,7 +12920,7 @@
                      });
                      **/
                     getBlob: function (data) {
-                        return baasicApp.userProfile.profile.avatar.streams.getBlob(data);
+                        return baasicApp.userProfileModule.profile.avatar.streams.getBlob(data);
                     },
 
                     /**
@@ -12994,7 +12945,7 @@
                      });
                      **/
                     update: function (data, stream) {
-                        return baasicApp.userProfile.profile.avatar.streams.update(data, stream);
+                        return baasicApp.userProfileModule.profile.avatar.streams.update(data, stream);
                     },
 
                     /**
@@ -13010,7 +12961,7 @@
                      });
                      **/
                     create: function (id, data, stream) {
-                        return baasicApp.userProfile.profile.avatar.streams.create(id, data, stream);
+                        return baasicApp.userProfileModule.profile.avatar.streams.create(id, data, stream);
                     },
                     routeService: baasicApp.userProfile.profile.avatar.streams.routeDefinition,
                 }
@@ -13053,7 +13004,7 @@
                  });
                  **/
                 find: function (options) {
-                    return baasicApp.userProfile.profile.find(options);
+                    return baasicApp.userProfileModule.profile.find(options);
                 },
                 /**
                  * Returns a promise that is resolved once the get action has been performed. Success response returns the user profile resource.
@@ -13068,7 +13019,7 @@
                  });
                  **/
                 get: function (id, options) {
-                    return baasicApp.userProfile.profile.get(id, options);
+                    return baasicApp.userProfileModule.profile.get(id, options);
                 },
                 /**
                  * Returns a promise that is resolved once the create user profile action has been performed; this action creates a new user profile resource.
@@ -13087,7 +13038,7 @@
                  });
                  **/
                 create: function (data) {
-                    return baasicApp.userProfile.profile.create(data);
+                    return baasicApp.userProfileModule.profile.create(data);
                 },
                 /**
                  * Returns a promise that is resolved once the update user profile action has been performed; this action updates a user profile resource. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicUserProfileRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
@@ -13108,7 +13059,7 @@
                  });
                  **/
                 update: function (data) {
-                    return baasicApp.userProfile.profile.update(data);
+                    return baasicApp.userProfileModule.profile.update(data);
                 },
                 /**
                  * Returns a promise that is resolved once the remove action has been performed. This action will remove a user profile resource from the system if successfully completed. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicUserProfileRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
@@ -13128,7 +13079,7 @@
                  });
                  **/
                 remove: function (data) {
-                    return baasicApp.userProfile.profile.remove(data);
+                    return baasicApp.userProfileModule.profile.remove(data);
                 },
                 acl: {
                     /**
@@ -13144,7 +13095,7 @@
                      });
                      **/
                     get: function (options) {
-                        return baasicApp.userProfile.profile.get(options);
+                        return baasicApp.userProfileModule.profile.get(options);
                     },
                     /**
                      * Returns a promise that is resolved once the update acl action has been performed, this action creates new ACL policy for the specified user profile resource.
@@ -13166,7 +13117,7 @@
                      });
                      **/
                     update: function (options) {
-                        return baasicApp.userProfile.profile.update(options);
+                        return baasicApp.userProfileModule.profile.update(options);
                     },
                     /**
                      * Returns a promise that is resolved once the removeByUser action has been performed. This action deletes ACL policy assigned to the specified user and user profile resource.
@@ -13181,7 +13132,7 @@
                      });
                      **/
                     removeByUser: function (profileId, action, user, data) {
-                        return baasicApp.userProfile.profile.removeByUser(profileId, action, user, data);
+                        return baasicApp.userProfileModule.profile.removeByUser(profileId, action, user, data);
                     },
                     /**
                      * Returns a promise that is resolved once the removeByRole action has been performed. This action deletes ACL policy assigned to the specified role and user profile resource.
@@ -13196,7 +13147,7 @@
                      });
                      **/
                     removeByRole: function (profileId, action, role, data) {
-                        return baasicApp.userProfile.profile.removeByRole(profileId, action, role, data);
+                        return baasicApp.userProfileModule.profile.removeByRole(profileId, action, role, data);
                     }
                 },
                 /**
@@ -13244,7 +13195,7 @@
                  });
                  **/
                 create: function (data) {
-                    return baasicApp.userProfile.profile.skill.create(data);
+                    return baasicApp.userProfileModule.profile.skill.create(data);
                 },
                 /**
                  * Returns a promise that is resolved once the find action has been performed. Success response returns a list of user skill resources matching the given criteria.
@@ -13265,7 +13216,7 @@
                  });
                  **/
                 find: function (options) {
-                    return baasicApp.userProfile.profile.skill.find(options);
+                    return baasicApp.userProfileModule.profile.skill.find(options);
                 },
                 /**
                  * Returns a promise that is resolved once the get action has been performed. Success response returns the user skill resource.
@@ -13280,7 +13231,7 @@
                  });
                  **/
                 get: function (id, options) {
-                    return baasicApp.userProfile.profile.skill.get(id, options);
+                    return baasicApp.userProfileModule.profile.skill.get(id, options);
                 },
                 /**
                  * Returns a promise that is resolved once the remove action has been performed. This action will remove a user skill resource from the system if successfully completed. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicUserSkillRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
@@ -13300,7 +13251,7 @@
                  });
                  **/
                 remove: function (data) {
-                    return baasicApp.userProfile.profile.skill.remove(data);
+                    return baasicApp.userProfileModule.profile.skill.remove(data);
                 },
                 /**
                  * Returns a promise that is resolved once the update user skill action has been performed; this action updates a user skill resource. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicUserSkillRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
@@ -13321,7 +13272,7 @@
                  });
                  **/
                 update: function (data) {
-                    return baasicApp.userProfile.profile.skill.update(data);
+                    return baasicApp.userProfileModule.profile.skill.update(data);
                 }
             };
         }]);
@@ -13358,7 +13309,7 @@
                  });
                  **/
                 create: function (data) {
-                    return baasicApp.userProfile.profile.work.create(data);
+                    return baasicApp.userProfileModule.profile.work.create(data);
                 },
                 /**
                  * Returns a promise that is resolved once the find action has been performed. Success response returns a list of user work resources matching the given criteria.
@@ -13379,7 +13330,7 @@
                  });
                  **/
                 find: function (options) {
-                    return baasicApp.userProfile.profile.work.find(options);
+                    return baasicApp.userProfileModule.profile.work.find(options);
                 },
                 /**
                  * Returns a promise that is resolved once the get action has been performed. Success response returns the user work resource.
@@ -13394,7 +13345,7 @@
                  });
                  **/
                 get: function (id, options) {
-                    return baasicApp.userProfile.profile.work.get(id, options);
+                    return baasicApp.userProfileModule.profile.work.get(id, options);
                 },
                 /**
                  * Returns a promise that is resolved once the remove action has been performed. This action will remove a user work resource from the system if successfully completed. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicUserWorkRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
@@ -13414,7 +13365,7 @@
                  });
                  **/
                 remove: function (data) {
-                    return baasicApp.userProfile.profile.work.remove(data);
+                    return baasicApp.userProfileModule.profile.work.remove(data);
                 },
                 /**
                  * Returns a promise that is resolved once the update user work action has been performed; this action updates a user work resource. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicUserWorkRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
@@ -13435,7 +13386,7 @@
                  });
                  **/
                 update: function (data) {
-                    return baasicApp.userProfile.profile.work.update(data);
+                    return baasicApp.userProfileModule.profile.work.update(data);
                 }
             };
         }]);
@@ -13502,7 +13453,7 @@
                  });
                  **/
                 find: function (options) {
-                    return baasicApp.valueSet.get(options);
+                    return baasicApp.valueSetModule.get(options);
                 },
                 /**
                  * Returns a promise that is resolved once the get action has been performed. Success response returns the specified value set resource.
@@ -13517,7 +13468,7 @@
                  });
                  **/
                 get: function (setName, options) {
-                    return baasicApp.valueSet.get(setName, options);
+                    return baasicApp.valueSetModule.get(setName, options);
                 },
                 /**
                  * Returns a promise that is resolved once the create value set action has been performed; this action creates a new value set resource.
@@ -13536,7 +13487,7 @@
                  });
                  **/
                 create: function (data) {
-                    return baasicApp.valueSet.post(data);
+                    return baasicApp.valueSetModule.post(data);
                 },
                 /**
                  * Returns a promise that is resolved once the update value set action has been performed; this action updates a value set resource. 
@@ -13553,7 +13504,7 @@
                  });
                  **/
                 update: function (data) {
-                    return baasicApp.valueSet.put(data);
+                    return baasicApp.valueSetModule.put(data);
                 },
                 /**
                  * Returns a promise that is resolved once the remove action has been performed. This action will delete a value set resource if the action is completed successfully. 
@@ -13569,7 +13520,7 @@
                  });
                  **/
                 remove: function (data) {
-                    return baasicApp.valueSet.delete(data);
+                    return baasicApp.valueSetModule.delete(data);
                 },
                 /**
                  * Provides direct access to route defintion.
@@ -13598,7 +13549,7 @@
                      });
                      **/
                     find: function (options) {
-                        return baasicApp.valueSet.items.get(options);
+                        return baasicApp.valueSetModule.items.get(options);
                     },
                     /**
                      * Returns a promise that is resolved once the get action has been performed. Success response returns the specified value set item resource.
@@ -13613,7 +13564,7 @@
                      });
                      **/
                     get: function (setName, id, options) {
-                        return baasicApp.valueSet.items.get(setName, id, options);
+                        return baasicApp.valueSetModule.items.get(setName, id, options);
                     },
                     /**
                      * Returns a promise that is resolved once the create value set item action has been performed; this action creates a new value set item resource.
@@ -13631,7 +13582,7 @@
                      });
                      **/
                     create: function (data) {
-                        return baasicApp.valueSet.items.post(data);
+                        return baasicApp.valueSetModule.items.post(data);
                     },
                     /**
                      * Returns a promise that is resolved once the update value set item action has been performed; this action updates a value set item resource. 
@@ -13648,7 +13599,7 @@
                      });
                      **/
                     update: function (data) {
-                        return baasicApp.valueSet.items.put(data);
+                        return baasicApp.valueSetModule.items.put(data);
                     },
                     /**
                      * Returns a promise that is resolved once the remove action has been performed. This action will delete a value set item if the action is completed successfully. 
@@ -13664,7 +13615,7 @@
                      });
                      **/
                     remove: function (data) {
-                        return baasicApp.valueSet.items.delete(data);
+                        return baasicApp.valueSetModule.items.delete(data);
                     }
                 }
             };
