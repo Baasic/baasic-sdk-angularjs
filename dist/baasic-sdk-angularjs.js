@@ -7842,12 +7842,34 @@
             return proxyMethod;
         };
 
-        module.service('baasicApiHttp', ['baasicApp', function baasicApiHttp(baasicApp) {
+        module.service('baasicApiHttp', ['$q', 'baasicApp', function baasicApiHttp($q, baasicApp) {
             var proxy = proxyFactory(baasicApp.get());
 
             proxy.createNew = function (app) {
                 return proxyFactory(app);
             };
+
+            proxy.createHttpDefer = function () {
+                var deferred = $q.defer(),
+                    promise = deferred.promise;
+
+                promise.success = function (fn) {
+                    promise.then(function (response) {
+                        fn(response.data, response.status, response.headers, response.config);
+                    }, null);
+                    return promise;
+                };
+
+                promise.error = function (fn) {
+                    promise.then(null, function (response) {
+                        fn(response.data, response.status, response.headers, response.config);
+                    });
+                    return promise;
+                };
+
+                return deferred;
+            };
+
 
             return proxy;
         }]);
@@ -8217,129 +8239,13 @@
     var module = angular.module("baasic.dynamicResource", ["baasic.api"]); /* globals module */
     module.config(["$provide", function config($provide) {}]);
     /**
-     * @module baasicDynamicResourceRouteService
-     * @description Baasic Dynamic Resource Route Service provides Baasic route templates which can be expanded to Baasic REST URIs. Various services can use Baasic Dynamic Resource Route Service to obtain needed routes while other routes will be obtained through HAL. By convention, all route services  use the same function names as their corresponding services.
-     */
-    (function (angular, module, undefined) {
-        "use strict";
-        module.service("baasicDynamicResourceRouteService", ["baasicUriTemplateService", function (uriTemplateService) {
-            return {
-                /**
-                 * Parses find route which can be expanded with additional options. Supported items are: 
-                 * - `schemaName` - Name of the dynamic resource schema.
-                 * - `searchQuery` - A string referencing dynamic resource properties using the phrase or BQL (Baasic Query Language) search.
-                 * - `page` - A value used to set the page number, i.e. to retrieve certain dynamic resource subset from the storage.
-                 * - `rpp` - A value used to limit the size of result set per page.
-                 * - `sort` - A string used to set the dynamic resource property to sort the result collection by.
-                 * - `embed` - Comma separated list of resources to be contained within the current representation.
-                 * @method      
-                 * @example 
-                 baasicDynamicResourceRouteService.find.expand({
-                 schemaName: '<schema-name>', 
-                 searchQuery: '<search-phrase>'
-                 });
-                 **/
-                find: uriTemplateService.parse("resources/{schemaName}/{?searchQuery,page,rpp,sort,embed,fields}"),
-                /**
-                 * Parses get route which must be expanded with the name of the previously created dynamic resource schema in the system and the Id of the previously created dynamic resource. Additional expand supported items are:
-                 * - `embed` - Comma separated list of resources to be contained within the current representation.
-                 * @method      
-                 * @example 
-                 baasicDynamicResourceRouteService.find.expand({
-                 schemaName: '<schema-name>', 
-                 id: '<schema-id>'
-                 });
-                 **/
-                get: uriTemplateService.parse("resources/{schemaName}/{id}/{?embed,fields}"),
-                /**
-                 * Parses create route, this URI template doesn't expose any additional properties.
-                 * @method      
-                 * @example baasicDynamicResourceRouteService.create.expand({});              
-                 **/
-                create: uriTemplateService.parse("resources/{schemaName}"),
-                /**
-                 * Parses and expands URI templates based on [RFC6570](http://tools.ietf.org/html/rfc6570) specifications. For more information please visit the project [GitHub](https://github.com/Baasic/uritemplate-js) page.
-                 * @method
-                 * @example 
-                 baasicDynamicResourceRouteService.parse(
-                 '<route>/{?embed,fields,options}'
-                 ).expand(
-                 {embed: '<embedded-resource>'}
-                 );
-                 **/
-                parse: uriTemplateService.parse,
-                acl: {
-                    /**
-                     * Parses get acl route; this URI template should be expanded with the Id of the dynamic resource and name of the dynamic resource schema.					
-                     * @method acl.get       
-                     * @example 
-                     baasicDynamicResourceRouteService.acl.get.expand({
-                     id: '<dynamic-resource-id>', 
-                     schemaName: '<schema-name>'
-                     });
-                     **/
-                    get: uriTemplateService.parse("resources/{schemaName}/{id}/acl/{?fields}"),
-                    /**
-                     * Parses update acl route; this URI template should be expanded with the Id of the dynamic resource and name of the dynamic resource schema.			
-                     * @method acl.update       
-                     * @example 
-                     baasicDynamicResourceRouteService.acl.update.expand({
-                     id: '<dynamic-resource-id>', 
-                     schemaName: '<schema-name>'
-                     });
-                     **/
-                    update: uriTemplateService.parse("resources/{schemaName}/{id}/acl/{?fields}"),
-                    /**
-                     * Parses deleteByUser acl route which can be expanded with additional options. Supported items are:
-                     * - `schemaName` - Name of the dynamic resource schema.
-                     * - `id` - Id of the dynamic resource.
-                     * - `accessAction` - Action abbreviation which identifies ACL policy assigned to the specified user and dynamic resource item.
-                     * - `user` - A value which uniquely identifies user for which ACL policy needs to be removed.					
-                     * @method acl.deleteByUser       
-                     * @example 
-                     baasicDynamicResourceRouteService.acl.deleteByUser.expand({
-                     schemaName: '<schema-name>', 
-                     id: '<dynamic-resource-id>', 
-                     accessAction: '<access-action>', 
-                     user: '<username>'
-                     });
-                     **/
-                    deleteByUser: uriTemplateService.parse("resources/{schemaName}/{id}/acl/actions/{accessAction}/users/{user}/"),
-                    /**
-                     * Parses deleteByRole acl route which can be expanded with additional options. Supported items are:
-                     * - `schemaName` - Name of the dynamic resource schema.
-                     * - `id` - Id of the dynamic resource.
-                     * - `accessAction` - Action abbreviation which identifies ACL policy assigned to the specified role and dynamic resource item.
-                     * - `role` - A value which uniquely identifies role for which ACL policy needs to be removed.					
-                     * @method acl.deleteByRole       
-                     * @example 
-                     baasicDynamicResourceRouteService.acl.deleteByRole.expand({
-                     schemaName: '<schema-name>', 
-                     id: '<dynamic-resource-id>', 
-                     accessAction: '<access-action>', 
-                     role: '<role-name>'
-                     });
-                     **/
-                    deleteByRole: uriTemplateService.parse("resources/{schemaName}/{id}/acl/actions/{accessAction}/roles/{role}/")
-                }
-            };
-        }]);
-    }(angular, module));
-    /**
-     * @overview 
-     ***Notes:**
-     - Refer to the [Baasic REST API](http://dev.baasic.com/api/reference/home) for detailed information about available Baasic REST API end-points.
-     - [URI Template](https://github.com/Baasic/uritemplate-js) syntax enables expanding the Baasic route templates to Baasic REST URIs providing it with an object that contains URI parameters.
-     - All end-point objects are transformed by the associated route service.
-     */
-
-    /**
      * @module baasicDynamicResourceService
      * @description Baasic Dynamic Resource Service provides an easy way to consume Baasic Dynamic Resource REST API end-points. In order to obtain needed routes `baasicDynamicResourceService` uses `baasicDynamicResourceRouteService`.
      */
     (function (angular, module, undefined) {
         "use strict";
-        module.service("baasicDynamicResourceService", ["baasicApiHttp", "baasicApiService", "baasicConstants", "baasicDynamicResourceRouteService", function (baasicApiHttp, baasicApiService, baasicConstants, dynamicResourceRouteService) {
+        module.service("baasicDynamicResourceService", ["baasicApp", function (baasicApps) {
+            var baasicApp = baasicApps.get();
             return {
                 /**
                  * Returns a promise that is resolved once the find action has been performed. Success response returns a list of dynamic resources matching the given criteria.
@@ -8360,9 +8266,7 @@
                  });
                  **/
                 find: function (schemaName, options) {
-                    return baasicApiHttp.get(dynamicResourceRouteService.find.expand(baasicApiService.findParams(angular.extend({
-                        schemaName: schemaName
-                    }, options))));
+                    return baasicApp.dynamicResource.find(schemaName, options);
                 },
                 /**
                  * Returns a promise that is resolved once the get action has been performed. Success response returns the specified dynamic resource.
@@ -8377,9 +8281,7 @@
                  });
                  **/
                 get: function (schemaName, id, options) {
-                    return baasicApiHttp.get(dynamicResourceRouteService.get.expand(baasicApiService.getParams(id, angular.extend({
-                        schemaName: schemaName
-                    }, options))));
+                    return baasicApp.dynamicResource.get(schemaName, id, options);
                 },
                 /**
                  * Returns a promise that is resolved once the create dynamic resource action has been performed; this action creates a new dynamic resource item.
@@ -8397,8 +8299,7 @@
                  });
                  **/
                 create: function (schemaName, data) {
-                    var params = baasicApiService.getParams(schemaName, data, 'schemaName');
-                    return baasicApiHttp.post(dynamicResourceRouteService.create.expand(params), baasicApiService.createParams(params)[baasicConstants.modelPropertyName]);
+                    return baasicApp.dynamicResource.create(schemaName, data);
                 },
                 /**
                  * Returns a promise that is resolved once the update action has been performed; this action updates a dynamic resource item. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicDynamicResourceRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
@@ -8421,10 +8322,7 @@
                  });
                  **/
                 update: function (data, options) {
-                    var opt = angular.extend({}, options);
-                    var params = baasicApiService.updateParams(data);
-                    var url = dynamicResourceRouteService.parse(params[baasicConstants.modelPropertyName].links('put').href).expand(opt);
-                    return baasicApiHttp.put(url, params[baasicConstants.modelPropertyName]);
+                    return baasicApp.dynamicResource.update(data, options);
                 },
                 /**
                  * Returns a promise that is resolved once the patch action has been performed; this action patches an existing dynamic resource. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicDynamicResourceRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
@@ -8448,10 +8346,7 @@
                  });
                  **/
                 patch: function (data, options) {
-                    var opt = angular.extend({}, options);
-                    var params = baasicApiService.updateParams(data);
-                    var url = dynamicResourceRouteService.parse(params[baasicConstants.modelPropertyName].links('patch').href).expand(opt);
-                    return baasicApiHttp.patch(url, params[baasicConstants.modelPropertyName]);
+                    return baasicApp.dynamicResource.patch(data, options);
                 },
                 /**
                  * Returns a promise that is resolved once the remove action has been performed. This action will remove a dynamic resource from the system if successfully completed. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicDynamicResourceRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
@@ -8473,17 +8368,14 @@
                  });
                  **/
                 remove: function (data, options) {
-                    var opt = angular.extend({}, options);
-                    var params = baasicApiService.removeParams(data);
-                    var url = dynamicResourceRouteService.parse(params[baasicConstants.modelPropertyName].links('delete').href).expand(opt);
-                    return baasicApiHttp.delete(url);
+                    return baasicApp.dynamicResource.remvoe(data, options);
                 },
                 /**
                  * Provides direct access to `baasicDynamicResourceRouteService`.
                  * @method        
                  * @example baasicDynamicResourceService.routeService.get.expand(expandObject);
                  **/
-                routeService: dynamicResourceRouteService,
+                routeService: baasicApp.dynamicResource.routeDefinition,
                 acl: {
                     /**
                      * Returns a promise that is resolved once the get action has been performed. Success response returns a list of ACL policies established for the specified dynamic resource.
@@ -8498,8 +8390,7 @@
                      });
                      **/
                     get: function (options) {
-                        var params = angular.extend({}, options);
-                        return baasicApiHttp.get(dynamicResourceRouteService.acl.get.expand(params));
+                        return baasicApp.dynamicResource.acl.get(options);
                     },
                     /**
                      * Returns a promise that is resolved once the update acl action has been performed; this action creates new ACL policy for the specified dynamic resource.
@@ -8514,8 +8405,7 @@
                      });
                      **/
                     update: function (options) {
-                        var params = angular.extend({}, options);
-                        return baasicApiHttp.put(dynamicResourceRouteService.acl.get.expand(params), params[baasicConstants.modelPropertyName]);
+                        return baasicApp.dynamicResource.acl.update(options);
                     },
                     /**
                      * Returns a promise that is resolved once the removeByUser action has been performed. This action deletes ACL policy assigned to the specified user and dynamic resource.
@@ -8531,10 +8421,7 @@
                      });
                      **/
                     removeByUser: function (action, user, data) {
-                        var params = baasicApiService.removeParams(data);
-                        params.user = user;
-                        params.accessAction = action;
-                        return baasicApiHttp.delete(dynamicResourceRouteService.acl.deleteByUser.expand(params));
+                        return baasicApp.dynamicResource.acl.removeByUser(action, user, data);
                     },
                     /**
                      * Returns a promise that is resolved once the removeByRole action has been performed. This action deletes ACL policy assigned to the specified role and dynamic resource.
@@ -8550,11 +8437,9 @@
                      });
                      **/
                     removeByRole: function (action, role, data) {
-                        var params = baasicApiService.removeParams(data);
-                        params.role = role;
-                        params.accessAction = action;
-                        return baasicApiHttp.delete(dynamicResourceRouteService.acl.deleteByRole.expand(params));
-                    }
+                        return baasicApp.dynamicResource.acl.removeByRole(action, role, data);
+                    },
+                    routeService: baasicApp.dynamicResource.acl.routeDefinition
                 }
             };
         }]);
@@ -8565,80 +8450,14 @@
      - Refer to the [Baasic REST API](http://dev.baasic.com/api/reference/home) for detailed information about available Baasic REST API end-points.
      - All end-point objects are transformed by the associated route service.
      */
-
-    /**
-     * @module baasicDynamicSchemaRouteService
-     * @description Baasic Dynamic Schema Route Service provides Baasic route templates which can be expanded to Baasic REST URIs. Various services can use Baasic Dynamic Schema Route Service to obtain needed routes while other routes will be obtained through HAL. By convention, all route services  use the same function names as their corresponding services.
-     */
-
-    (function (angular, module, undefined) {
-        "use strict";
-        module.service("baasicDynamicSchemaRouteService", ["baasicUriTemplateService", function (uriTemplateService) {
-            return {
-                /**
-                 * Parses find route which can be expanded with additional options. Supported items are: 
-                 * - `searchQuery` - A string referencing dynamic resource schema properties using the phrase or BQL (Baasic Query Language) search.
-                 * - `page` - A value used to set the page number, i.e. to retrieve certain dynamic resource schema subset from the storage.
-                 * - `rpp` - A value used to limit the size of result set per page.
-                 * - `sort` - A string used to set the dynamic resource schema property to sort the result collection by.
-                 * - `embed` - Comma separated list of resources to be contained within the current representation.
-                 * @method      
-                 * @example 
-                 baasicDynamicSchemaRouteService.find.expand(
-                 {searchQuery: '<search-phrase>'}
-                 );
-                 **/
-                find: uriTemplateService.parse("schemas/{?searchQuery,page,rpp,sort,embed,fields}"),
-                /**
-                 * Parses get route which must be expanded with name of the previously created dynamic resource schema. Additional expand supported items are:
-                 * - `embed` - Comma separated list of resources to be contained within the current representation.
-                 * @method      
-                 * @example 
-                 baasicDynamicSchemaRouteService.find.expand(
-                 {name: '<schema-name>'}
-                 );
-                 **/
-                get: uriTemplateService.parse("schemas/{name}/{?embed,fields}"),
-                /**
-                 * Parses create route; this URI template doesn't expose any additional properties.
-                 * @method      
-                 * @example baasicDynamicSchemaRouteService.create.expand({});              
-                 **/
-                generate: uriTemplateService.parse("schemas/generate"),
-                /**
-                 * Parses create route; this URI template doesn't expose any additional properties.
-                 * @method      
-                 * @example baasicDynamicSchemaRouteService.create.expand({});              
-                 **/
-                create: uriTemplateService.parse("schemas"),
-                /**
-                 * Parses and expands URI templates based on [RFC6570](http://tools.ietf.org/html/rfc6570) specifications. For more information please visit the project [GitHub](https://github.com/Baasic/uritemplate-js) page.
-                 * @method
-                 * @example 
-                 baasicDynamicSchemaRouteService.parse(
-                 '<route>/{?embed,fields,options}'
-                 ).expand(
-                 {embed: '<embedded-resource>'}
-                 );
-                 **/
-                parse: uriTemplateService.parse
-            };
-        }]);
-    }(angular, module));
-    /**
-     * @overview 
-     ***Notes:**
-     - Refer to the [Baasic REST API](http://dev.baasic.com/api/reference/home) for detailed information about available Baasic REST API end-points.
-     - [URI Template](https://github.com/Baasic/uritemplate-js) syntax enables expanding the Baasic route templates to Baasic REST URIs providing it with an object that contains URI parameters.
-     - All end-point objects are transformed by the associated route service.
-     */
     /**
      * @module baasicDynamicSchemaService
      * @description Baasic Dynamic Schema Service provides an easy way to consume Baasic Dynamic Schema REST API end-points. In order to obtain needed routes `baasicDynamicSchemaService` uses `baasicDynamicSchemaRouteService`.
      */
     (function (angular, module, undefined) {
         "use strict";
-        module.service("baasicDynamicSchemaService", ["baasicApiHttp", "baasicApiService", "baasicConstants", "baasicDynamicSchemaRouteService", function (baasicApiHttp, baasicApiService, baasicConstants, dynamicSchemaRouteService) {
+        module.service("baasicDynamicSchemaService", ["baasicApp", function (baasicApps) {
+            var baasicApp = baasicApps.get();
             return {
                 /**
                  * Returns a promise that is resolved once the find action has been performed. Success response returns a list of dynamic resource schemas matching the given criteria.
@@ -8659,7 +8478,7 @@
                  });
                  **/
                 find: function (options) {
-                    return baasicApiHttp.get(dynamicSchemaRouteService.find.expand(baasicApiService.findParams(options)));
+                    return baasicApp.dynamicResource.schema.find(options);
                 },
                 /**
                  * Returns a promise that is resolved once the get action has been performed. Success response returns the specified dynamic resource schema.
@@ -8674,7 +8493,7 @@
                  });
                  **/
                 get: function (name, options) {
-                    return baasicApiHttp.get(dynamicSchemaRouteService.get.expand(baasicApiService.getParams(name, options, 'name')));
+                    return baasicApp.dynamicResource.schema.get(name, options);
                 },
                 /**
                  * Returns a promise that is resolved once the create action has been performed; this action creates a new dynamic resource schema item.
@@ -8707,7 +8526,7 @@
                  });
                  **/
                 create: function (data) {
-                    return baasicApiHttp.post(dynamicSchemaRouteService.create.expand({}), baasicApiService.createParams(data)[baasicConstants.modelPropertyName]);
+                    return baasicApp.dynamicResource.schema.create(data);
                 },
                 /**
                  * Returns a promise that is resolved once the update dynamic resource schema action has been performed; this action updates a dynamic resource schema item. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicDynamicSchemaRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
@@ -8728,8 +8547,7 @@
                  });
                  **/
                 update: function (data) {
-                    var params = baasicApiService.updateParams(data);
-                    return baasicApiHttp.put(params[baasicConstants.modelPropertyName].links('put').href, params[baasicConstants.modelPropertyName]);
+                    return baasicApp.dynamicResource.schema.update(data);
                 },
                 /**
                  * Returns a promise that is resolved once the remove action has been performed. This action will remove a dynamic resource schema item from the system if successfully completed. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicDynamicSchemaRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
@@ -8749,8 +8567,7 @@
                  });
                  **/
                 remove: function (data) {
-                    var params = baasicApiService.removeParams(data);
-                    return baasicApiHttp.delete(params[baasicConstants.modelPropertyName].links('delete').href);
+                    return baasicApp.dynamicResource.schema.remove(data);
                 },
                 /**
                  * Returns a promise that is resolved once the generate schema action has been performed. Success response returns a schema generated based on the json input.
@@ -8768,14 +8585,14 @@
                  });
                  **/
                 generate: function (data) {
-                    return baasicApiHttp.post(dynamicSchemaRouteService.generate.expand({}), baasicApiService.createParams(data)[baasicConstants.modelPropertyName]);
+                    return baasicApp.dynamicResource.schema.generate(data);
                 },
                 /**
                  * Provides direct access to `baasicDynamicSchemaRouteService`.
                  * @method        
                  * @example baasicDynamicSchemaService.routeService.get.expand(expandObject);
                  **/
-                routeService: dynamicSchemaRouteService
+                routeService: baasicApp.dynamicResource.schema.routeDefinition
             };
         }]);
     }(angular, module));
@@ -8785,7 +8602,6 @@
      - Refer to the [Baasic REST API](http://dev.baasic.com/api/reference/home) for detailed information about available Baasic REST API end-points.
      - All end-point objects are transformed by the associated route service.
      */
-
     /* exported module */
 
     /** 
@@ -9045,7 +8861,8 @@
                      **/
                     create: function (data, stream) {
                         return baasicApp.files.streams.create(data, stream);
-                    }
+                    },
+                    routeService: baasicApp.files.streams.routeDefinition
                 },
 
                 batch: {
@@ -9128,7 +8945,8 @@
                      **/
                     link: function (data) {
                         return baasicApp.files.batch.link(data);
-                    }
+                    },
+                    routeService: baasicApp.files.batch.routeDefinition
                 },
 
                 acl: {
@@ -9200,6 +9018,7 @@
                         return baasicApp.files.acl.removeByRole(fileEntryId, action, role, data);
                     }
                 },
+                routeService: baasicApp.files.acl.routeDefinition
             };
         }]);
     }(angular, module));
@@ -9399,7 +9218,8 @@
                      **/
                     create: function (data, stream) {
                         return baasicApp.mediaVault.streams.create(data, stream);
-                    }
+                    },
+                    routeService: baasicApp.mediaVault.streams.routeDefinition
                 },
 
                 batch: {
@@ -9441,7 +9261,8 @@
                      **/
                     update: function (data) {
                         return baasicApp.mediaVault.batch.update(data);
-                    }
+                    },
+                    routeService: baasicApp.mediaVault.batch.routeDefinition
                 },
 
                 settings: {
@@ -9475,7 +9296,8 @@
                      **/
                     update: function (data) {
                         return baasicApp.mediaVault.settings.update(data);
-                    }
+                    },
+                    routeService: baasicApp.mediaVault.settings.routeDefinition
                 },
 
                 processingProviderSettings: {
@@ -9537,8 +9359,10 @@
                      **/
                     update: function (data) {
                         return baasicApp.mediaVault.processingProviderSettings.update(data);
-                    }
-                }
+                    },
+                    routeService: baasicApp.mediaVault.processingProviderSettings.routeDefinition
+                },
+                routeService: baasicApp.mediaVault.routeDefinition
             };
         }]);
     }(angular, module));
@@ -11888,7 +11712,7 @@
      */
     (function (angular, module, undefined) {
         'use strict';
-        module.service('baasicPermissionsService', ['baasicApp', 'baasicAuthorizationService', function (baasicApps, authService) {
+        module.service('baasicPermissionsService', ['baasicApiHttp', 'baasicApp', 'baasicAuthorizationService', function (baasicApiHttp, baasicApps, authService) {
             var baasicApp = baasicApps.get();
             return {
                 /**
@@ -11942,7 +11766,15 @@
                  });
                  **/
                 getPermissionSubjects: function (options) {
-                    return baasicApp.membership.permissions.getPermissionSubjects(options);
+                    var deferred = baasicApiHttp.createHttpDefer();
+
+                    baasicApp.membership.permissions.getPermissionSubjects(options).then(function (data) {
+                        deferred.resolve(data);
+                    }, function (data) {
+                        deferred.rejact(data);
+                    });
+
+                    return deferred.promise;
                 },
                 /**
                  * Returns a promise that is resolved once the create action has been performed; this action creates a new permission resource.

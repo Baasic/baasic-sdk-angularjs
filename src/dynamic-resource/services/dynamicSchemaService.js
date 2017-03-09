@@ -1,13 +1,14 @@
 ﻿/**
  * @module baasicDynamicSchemaService
  * @description Baasic Dynamic Schema Service provides an easy way to consume Baasic Dynamic Schema REST API end-points. In order to obtain needed routes `baasicDynamicSchemaService` uses `baasicDynamicSchemaRouteService`.
-*/
+ */
 (function (angular, module, undefined) {
-    "use strict";
-    module.service("baasicDynamicSchemaService", ["baasicApiHttp", "baasicApiService", "baasicConstants", "baasicDynamicSchemaRouteService",
-        function (baasicApiHttp, baasicApiService, baasicConstants, dynamicSchemaRouteService) {
-            return {
-                 /**
+  "use strict";
+  module.service("baasicDynamicSchemaService", ["baasicApp",
+    function (baasicApps) {
+      var baasicApp = baasicApps.get();
+      return {
+        /**
                  * Returns a promise that is resolved once the find action has been performed. Success response returns a list of dynamic resource schemas matching the given criteria.
                  * @method        
                  * @example 
@@ -24,11 +25,11 @@ baasicDynamicSchemaService.find({
 .error(function (response, status, headers, config) {
   // perform error handling here
 });    
-                 **/ 				
-                find: function (options) {
-                    return baasicApiHttp.get(dynamicSchemaRouteService.find.expand(baasicApiService.findParams(options)));
-                },
-                 /**
+                 **/
+        find: function (options) {
+          return baasicApp.dynamicResource.schema.find(options);
+        },
+        /**
                  * Returns a promise that is resolved once the get action has been performed. Success response returns the specified dynamic resource schema.
                  * @method        
                  * @example 
@@ -39,11 +40,11 @@ baasicDynamicSchemaService.get('<schema-name>')
 .error(function (response, status, headers, config) {
   // perform error handling here
 });
-                **/ 				
-                get: function (name, options) {
-                    return baasicApiHttp.get(dynamicSchemaRouteService.get.expand(baasicApiService.getParams(name, options, 'name')));
-                },
-                /**
+                **/
+        get: function (name, options) {
+          return baasicApp.dynamicResource.schema.get(name, options);
+        },
+        /**
                 * Returns a promise that is resolved once the create action has been performed; this action creates a new dynamic resource schema item.
                 * @method        
                 * @example 
@@ -72,11 +73,11 @@ baasicDynamicSchemaService.create({
 .error(function (response, status, headers, config) {
   // perform error handling here
 });
-                **/ 				
-                create: function (data) {
-                    return baasicApiHttp.post(dynamicSchemaRouteService.create.expand({}), baasicApiService.createParams(data)[baasicConstants.modelPropertyName]);
-                },
-                 /**
+                **/
+        create: function (data) {
+          return baasicApp.dynamicResource.schema.create(data);
+        },
+        /**
                  * Returns a promise that is resolved once the update dynamic resource schema action has been performed; this action updates a dynamic resource schema item. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicDynamicSchemaRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
 ```
 var params = baasicApiService.removeParams(dynamicResourceSchema);
@@ -93,12 +94,11 @@ baasicDynamicSchemaService.update(dynamicResourceSchema)
 .error(function (response, status, headers, config) {
   // perform error handling here
 });
-				**/						
-                update: function (data) {
-                    var params = baasicApiService.updateParams(data);
-                    return baasicApiHttp.put(params[baasicConstants.modelPropertyName].links('put').href, params[baasicConstants.modelPropertyName]);
-                },
-                /**
+				**/
+        update: function (data) {
+          return baasicApp.dynamicResource.schema.update(data);
+        },
+        /**
                 * Returns a promise that is resolved once the remove action has been performed. This action will remove a dynamic resource schema item from the system if successfully completed. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicDynamicSchemaRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
 ```
 var params = baasicApiService.removeParams(dynamicResourceSchema);
@@ -114,12 +114,11 @@ baasicDynamicSchemaService.remove(dynamicResourceSchema)
 .error(function (response, status, headers, config) {
   // perform error handling here
 });		
-				**/					
-                remove: function (data) {
-                    var params = baasicApiService.removeParams(data);
-                    return baasicApiHttp.delete(params[baasicConstants.modelPropertyName].links('delete').href);
-                },
-                /**
+				**/
+        remove: function (data) {
+          return baasicApp.dynamicResource.schema.remove(data);
+        },
+        /**
                 * Returns a promise that is resolved once the generate schema action has been performed. Success response returns a schema generated based on the json input.
                 * @method        
                 * @example 			 
@@ -133,18 +132,19 @@ baasicDynamicSchemaService.generate({
 .error(function (response, status, headers, config) {
   // perform error handling here
 });		
-				**/					
-                generate: function (data) {
-                    return baasicApiHttp.post(dynamicSchemaRouteService.generate.expand({}), baasicApiService.createParams(data)[baasicConstants.modelPropertyName]);
-                },
-                /**
-                * Provides direct access to `baasicDynamicSchemaRouteService`.
-                * @method        
-                * @example baasicDynamicSchemaService.routeService.get.expand(expandObject);
-                **/                
-                routeService: dynamicSchemaRouteService
-            };
-        }]);
+				**/
+        generate: function (data) {
+          return baasicApp.dynamicResource.schema.generate(data);
+        },
+        /**
+         * Provides direct access to `baasicDynamicSchemaRouteService`.
+         * @method        
+         * @example baasicDynamicSchemaService.routeService.get.expand(expandObject);
+         **/
+        routeService: baasicApp.dynamicResource.schema.routeDefinition
+      };
+    }
+  ]);
 }(angular, module));
 /**
  * @overview 

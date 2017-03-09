@@ -188,7 +188,8 @@ baasicMediaVaultService.streams.create('<path>', <blob>)
                     **/
                     create: function (data, stream) {
                         return baasicApp.mediaVault.streams.create(data, stream);
-                    }
+                    },
+                    routeService: baasicApp.mediaVault.streams.routeDefinition
                 },
 
                 batch: {
@@ -230,7 +231,8 @@ baasicMediaVaultService.batch.update(files)
                   **/
                     update: function (data) {
                         return baasicApp.mediaVault.batch.update(data);
-                    }
+                    },
+                    routeService: baasicApp.mediaVault.batch.routeDefinition
                 },
 
                 settings: {
@@ -264,7 +266,8 @@ baasicMediaVaultService.settings.update(mediaVaultSettings)
                   **/
                     update: function (data) {
                         return baasicApp.mediaVault.settings.update(data);
-                    }
+                    },
+                    routeService: baasicApp.mediaVault.settings.routeDefinition
                 },
 
                 processingProviderSettings: {
@@ -326,8 +329,10 @@ baasicMediaVaultService.processingProviderSettings.update(processingProviderSett
 				  **/
                     update: function (data) {
                         return baasicApp.mediaVault.processingProviderSettings.update(data);
-                    }
-                }
+                    },
+                    routeService: baasicApp.mediaVault.processingProviderSettings.routeDefinition
+                },
+                routeService: baasicApp.mediaVault.routeDefinition
             };
         }
     ]);

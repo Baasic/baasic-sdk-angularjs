@@ -73,12 +73,34 @@
         return proxyMethod;
     };
 
-    module.service('baasicApiHttp', ['baasicApp', function baasicApiHttp(baasicApp) {
+    module.service('baasicApiHttp', ['$q', 'baasicApp', function baasicApiHttp($q, baasicApp) {
         var proxy = proxyFactory(baasicApp.get());
 
         proxy.createNew = function (app) {
             return proxyFactory(app);
         };
+
+        proxy.createHttpDefer = function () {
+            var deferred = $q.defer(),
+                promise = deferred.promise;
+
+            promise.success = function (fn) {
+                promise.then(function (response) {
+                    fn(response.data, response.status, response.headers, response.config);
+                }, null);
+                return promise;
+            };
+
+            promise.error = function (fn) {
+                promise.then(null, function (response) {
+                    fn(response.data, response.status, response.headers, response.config);
+                });
+                return promise;
+            };
+
+            return deferred;
+        };
+
 
         return proxy;
     }]);
