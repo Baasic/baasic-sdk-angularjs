@@ -26,7 +26,7 @@ baasicUserEducationService.create({
 });
                 **/
         create: function (data) {
-          return baasicApp.userProfile.profile.education.create(data);
+          return baasicApp.userProfileModule.profile.education.create(data);
         },
         /**
                  * Returns a promise that is resolved once the find action has been performed. Success response returns a list of user education resources matching the given criteria.
@@ -47,7 +47,7 @@ baasicUserEducationService.find({
 });    
                 **/
         find: function (options) {
-          return baasicApp.userProfile.profile.education.find(options);
+          return baasicApp.userProfileModule.profile.education.find(options);
         },
         /**
                 * Returns a promise that is resolved once the get action has been performed. Success response returns the user education resource.
@@ -62,7 +62,7 @@ baasicUserEducationService.get()
 });
                 **/
         get: function (id, options) {
-          return baasicApp.userProfile.profile.education.get(id, options);
+          return baasicApp.userProfileModule.profile.education.get(id, options);
         },
         /**
                  * Returns a promise that is resolved once the remove action has been performed. This action will remove a user education resource from the system if successfully completed. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicUserEducationRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
@@ -82,7 +82,7 @@ baasicUserEducationService.remove(education)
 });		
 				        **/
         remove: function (data) {
-          return baasicApp.userProfile.profile.education.remove(data);
+          return baasicApp.userProfileModule.profile.education.remove(data);
         },
         /**
                  * Returns a promise that is resolved once the update user education action has been performed; this action updates a user education resource. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicUserEducationRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
@@ -103,7 +103,7 @@ baasicUserEducationService.update(education)
 });
 				        **/
         update: function (data) {
-          return baasicApp.userProfile.profile.education.update(data);
+          return baasicApp.userProfileModule.profile.education.update(data);
         }
       };
     }

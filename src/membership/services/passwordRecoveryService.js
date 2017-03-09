@@ -28,7 +28,7 @@ baasicPasswordRecoveryService.requestReset({
 .finally (function () {});				
 				*/
                 requestReset: function (data) {
-                    return baasicApp.membership.passwordRecovery.requestReset(data);
+                    return baasicApp.membershipModule.passwordRecovery.requestReset(data);
                 },
                 /**
 				* Returns a promise that is resolved once the password reset action is completed. This updates user's password selection.
@@ -47,7 +47,7 @@ baasicPasswordRecoveryService.reset({
 .finally (function () {});				
 				*/
                 reset: function (data) {
-                    return baasicApp.membership.passwordRecovery.reset(data);
+                    return baasicApp.membershipModule.passwordRecovery.reset(data);
                 },
                 /**
                  * Provides direct access to route definition.

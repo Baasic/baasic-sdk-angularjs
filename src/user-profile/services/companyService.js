@@ -26,7 +26,7 @@ baasicCompanyService.create({
 });
                 **/
         create: function (data) {
-          return baasicApp.userProfile.company.create(data);
+          return baasicApp.userProfileModule.company.create(data);
         },
         /**
                  * Returns a promise that is resolved once the find action has been performed. Success response returns a list of company resources matching the given criteria.
@@ -47,7 +47,7 @@ baasicCompanyService.find({
 });    
                 **/
         find: function (options) {
-          return baasicApp.userProfile.company.find(options);
+          return baasicApp.userProfileModule.company.find(options);
         },
         /**
                 * Returns a promise that is resolved once the get action has been performed. Success response returns the company resource.
@@ -62,7 +62,7 @@ baasicCompanyService.get()
 });
                 **/
         get: function (id, options) {
-          return baasicApp.userProfile.company.get(id, options);
+          return baasicApp.userProfileModule.company.get(id, options);
         },
         /**
                  * Returns a promise that is resolved once the remove action has been performed. This action will remove a company resource from the system if successfully completed. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicCompanyRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
@@ -82,7 +82,7 @@ baasicCompanyService.remove(company)
 });		
 				        **/
         remove: function (data) {
-          return baasicApp.userProfile.company.remove(data);
+          return baasicApp.userProfileModule.company.remove(data);
         },
         /**
                  * Returns a promise that is resolved once the update company action has been performed; this action updates a company resource. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicCompanyRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
@@ -103,7 +103,7 @@ baasicCompanyService.update(company)
 });
 				        **/
         update: function (data) {
-          return baasicApp.userProfile.company.update(data);
+          return baasicApp.userProfileModule.company.update(data);
         },
         batch: {
           /**
@@ -123,7 +123,7 @@ baasicCompanyService.update(company)
   });
                   **/
           create: function (data) {
-            return baasicApp.userProfile.company.batch.create(data);
+            return baasicApp.userProfileModule.company.batch.create(data);
           },
           /**
                   * Returns a promise that is resolved once the update company action has been performed; this action updates specified company resources.
@@ -138,7 +138,7 @@ baasicCompanyService.update(company)
   });
                   **/
           update: function (data) {
-            return baasicApp.userProfile.company.batch.update(data);
+            return baasicApp.userProfileModule.company.batch.update(data);
           },
           /**
                   * Returns a promise that is resolved once the remove action has been performed. This action will remove company resources from the system if successfully completed. 
@@ -153,7 +153,7 @@ baasicCompanyService.update(company)
   });		
                   **/
           remove: function (ids) {
-            return baasicApp.userProfile.company.batch.remove(ids);
+            return baasicApp.userProfileModule.company.batch.remove(ids);
           }
         }
       };

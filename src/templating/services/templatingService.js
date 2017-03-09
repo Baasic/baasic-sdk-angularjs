@@ -29,7 +29,7 @@ baasicTemplatingService.find({
 });    
                 **/
                 find: function (options) {
-                    return baasicApp.templating.find(options);
+                    return baasicApp.templatingModule.find(options);
                 },
                 /**
                 * Returns a promise that is resolved once the get action has been performed. Success response returns the specified template resource.
@@ -44,7 +44,7 @@ baasicTemplatingService.get('<template-id>')
 });
                 **/
                 get: function (id, options) {
-                    return baasicApp.templating.get(id, options);
+                    return baasicApp.templatingModule.get(id, options);
                 },
                 /**
                 * Returns a promise that is resolved once the create template action has been performed; this action creates a new template resource.
@@ -62,7 +62,7 @@ baasicTemplatingService.create({
 });
                 **/
                 create: function (data) {
-                    return baasicApp.templating.create(data);
+                    return baasicApp.templatingModule.create(data);
                 },
                 /**
                 * Returns a promise that is resolved once the update template action has been performed; this action updates a template resource. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicTemplatingRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
@@ -83,7 +83,7 @@ baasicTemplatingService.update(template)
 });
                **/
                 update: function (data) {
-                    return baasicApp.templating.update(data);
+                    return baasicApp.templatingModule.update(data);
                 },
                 /**
                 * Returns a promise that is resolved once the remove action has been performed. This action will remove a template resource from the system if successfully completed. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicTemplatingRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
@@ -103,7 +103,7 @@ baasicTemplatingService.remove(template)
 });		
                **/
                 remove: function (data) {
-                    return baasicApp.templating.remove(data);
+                    return baasicApp.templatingModule.remove(data);
                 },
                 /**
                  * Provides direct access to `baasicKeyValueRouteService`.
@@ -128,7 +128,7 @@ baasicTemplatingService.remove(template)
     });
                     **/
                     create: function (data) {
-                        return baasicApp.templating.batch.create(data);
+                        return baasicApp.templatingModule.batch.create(data);
                     },
                     /**
                     * Returns a promise that is resolved once the update action has been performed; this action updates specified template resources.
@@ -143,7 +143,7 @@ baasicTemplatingService.remove(template)
     });
                     **/
                     update: function (data) {
-                        return baasicApp.templating.batch.update(data);
+                        return baasicApp.templatingModule.batch.update(data);
                     },
                     /**
                     * Returns a promise that is resolved once the remove action has been performed. This action will remove template resources from the system if successfully completed. 
@@ -158,7 +158,7 @@ baasicTemplatingService.remove(template)
     });		
                     **/
                     remove: function (ids) {
-                        return baasicApp.templating.batch.remove(ids);
+                        return baasicApp.templatingModule.batch.remove(ids);
                     }
                 }
             };

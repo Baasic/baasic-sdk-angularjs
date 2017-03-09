@@ -28,7 +28,7 @@ baasicMeteringCategoryService.find({
 });    
                  **/
         find: function (options) {
-          return baasicApp.metering.category.find(options);
+          return baasicApp.meteringModule.category.find(options);
         },
         /**
                 * Returns a promise that is resolved once the get action has been performed. Success response returns the metering resource.
@@ -43,7 +43,7 @@ baasicMeteringCategoryService.get()
 });
                 **/
         get: function (id, options) {
-          return baasicApp.metering.category.get(id, options);
+          return baasicApp.meteringModule.category.get(id, options);
         },
         /**
                  * Returns a promise that is resolved once the create metering action has been performed; this action creates a new metering resource.
@@ -64,7 +64,7 @@ baasicMeteringCategoryService.create({
 });
                  **/
         create: function (data) {
-          return baasicApp.metering.category.create(data);
+          return baasicApp.meteringModule.category.create(data);
         },
         /**
                  * Returns a promise that is resolved once the update metering action has been performed; this action updates a metering resource. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicMeteringCategoryRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
@@ -85,7 +85,7 @@ baasicMeteringCategoryService.update(meteringCategory)
 });
 				**/
         update: function (data) {
-          return baasicApp.metering.category.update(data);
+          return baasicApp.meteringModule.category.update(data);
         },
         /**
                  * Returns a promise that is resolved once the remove action has been performed. This action will remove a metering resource from the system if successfully completed. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicMeteringCategoryRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
@@ -105,7 +105,7 @@ baasicMeteringCategoryService.remove(meteringCategory)
 });		
 				**/
         remove: function (data) {
-          return baasicApp.metering.category.remove(data);
+          return baasicApp.meteringModule.category.remove(data);
         },
         /**
          * Provides direct access to `routeService`.
@@ -134,7 +134,7 @@ baasicMeteringCategoryService.remove(meteringCategory)
   });
                   **/
           create: function (data) {
-            return baasicApp.metering.category.batch.create(data);
+            return baasicApp.meteringModule.category.batch.create(data);
           },
           /**
                   * Returns a promise that is resolved once the update category action has been performed; this action updates specified category resources.
@@ -149,7 +149,7 @@ baasicMeteringCategoryService.remove(meteringCategory)
   });
                   **/
           update: function (data) {
-            return baasicApp.metering.category.batch.update(data);
+            return baasicApp.meteringModule.category.batch.update(data);
           },
           /**
                   * Returns a promise that is resolved once the remove action has been performed. This action will remove category resources from the system if successfully completed. 
@@ -164,7 +164,7 @@ baasicMeteringCategoryService.remove(meteringCategory)
   });		
                   **/
           remove: function (ids) {
-            return baasicApp.metering.category.batch.remove(ids);
+            return baasicApp.meteringModule.category.batch.remove(ids);
           }
         }
       };

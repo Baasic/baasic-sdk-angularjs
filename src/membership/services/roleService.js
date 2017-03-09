@@ -28,7 +28,7 @@ baasicRoleService.find({
 });    
                  **/
         find: function (options) {
-          return baasicApp.membership.role.find(options);
+          return baasicApp.membershipModule.role.find(options);
         },
         /**
                  * Returns a promise that is resolved once the get action has been performed. Success response returns the specified role resource.
@@ -43,7 +43,7 @@ baasicRoleService.get('<role-id>')
 });
                  **/
         get: function (id, options) {
-          return baasicApp.membership.role.get(id, options);
+          return baasicApp.membershipModule.role.get(id, options);
         },
         /**
                  * Returns a promise that is resolved once the create action has been performed; this action creates a role.
@@ -61,7 +61,7 @@ baasicRoleService.create({
 });
                  **/
         create: function (data) {
-          return baasicApp.membership.role.create(data);
+          return baasicApp.membershipModule.role.create(data);
         },
         /**
                  * Returns a promise that is resolved once the update role action has been performed; this action updates a role. 
@@ -79,7 +79,7 @@ baasicRoleService.update(role)
 
 				**/
         update: function (data) {
-          return baasicApp.membership.role.update(data);
+          return baasicApp.membershipModule.role.update(data);
         },
         /**
                  * Returns a promise that is resolved once the remove role action has been performed. This action will remove a role from the system, if completed successfully. 
@@ -95,7 +95,7 @@ baasicRoleService.remove(role)
 });		
 				**/
         remove: function (data) {
-          return baasicApp.membership.role.remove(data);
+          return baasicApp.membershipModule.role.remove(data);
         },
         /**
          * Provides direct access to route definition.

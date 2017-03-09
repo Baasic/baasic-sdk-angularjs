@@ -26,7 +26,7 @@ baasicOrganizationService.create({
 });
                 **/
         create: function (data) {
-          return baasicApp.userProfile.organization.create(data);
+          return baasicApp.userProfileModule.organization.create(data);
         },
         /**
                  * Returns a promise that is resolved once the find action has been performed. Success response returns a list of organization resources matching the given criteria.
@@ -47,7 +47,7 @@ baasicOrganizationService.find({
 });    
                 **/
         find: function (options) {
-          return baasicApp.userProfile.organization.find(options);
+          return baasicApp.userProfileModule.organization.find(options);
         },
         /**
                 * Returns a promise that is resolved once the get action has been performed. Success response returns the organization resource.
@@ -62,7 +62,7 @@ baasicOrganizationService.get()
 });
                 **/
         get: function (id, options) {
-          return baasicApp.userProfile.organization.get(id, options);
+          return baasicApp.userProfileModule.organization.get(id, options);
         },
         /**
                  * Returns a promise that is resolved once the remove action has been performed. This action will remove an organization resource from the system if successfully completed. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicOrganizationRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
@@ -82,7 +82,7 @@ baasicOrganizationService.remove(organization)
 });		
 				        **/
         remove: function (data) {
-          return baasicApp.userProfile.organization.remove(params[baasicConstants.modelPropertyName].links('delete').href);
+          return baasicApp.userProfileModule.organization.remove(params[baasicConstants.modelPropertyName].links('delete').href);
         },
         /**
                  * Returns a promise that is resolved once the update organization action has been performed; this action updates an organization resource. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicOrganizationRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
@@ -103,7 +103,7 @@ baasicOrganizationService.update(organization)
 });
 				        **/
         update: function (data) {
-          return baasicApp.userProfile.organization.update(data);
+          return baasicApp.userProfileModule.organization.update(data);
         },
         batch: {
           /**
@@ -123,7 +123,7 @@ baasicOrganizationService.update(organization)
   });
                   **/
           create: function (data) {
-            return baasicApp.userProfile.organization.batch.create(data);
+            return baasicApp.userProfileModule.organization.batch.create(data);
           },
           /**
                   * Returns a promise that is resolved once the update organization action has been performed; this action updates specified organization resources.
@@ -138,7 +138,7 @@ baasicOrganizationService.update(organization)
   });
                   **/
           update: function (data) {
-            return baasicApp.userProfile.organization.batch.update(data);
+            return baasicApp.userProfileModule.organization.batch.update(data);
           },
           /**
                   * Returns a promise that is resolved once the remove action has been performed. This action will remove organization resources from the system if successfully completed. 
@@ -153,7 +153,7 @@ baasicOrganizationService.update(organization)
   });		
                   **/
           remove: function (ids) {
-            return baasicApp.userProfile.organization.batch.remove(ids);
+            return baasicApp.userProfileModule.organization.batch.remove(ids);
           }
         }
       };

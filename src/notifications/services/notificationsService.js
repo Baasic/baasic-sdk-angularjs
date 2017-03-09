@@ -31,7 +31,7 @@ baasicNotificationsService.publish.create({
 });
                      */
                     create: function (data) {
-                        return baasicApp.notifications.publish.create(data);
+                        return baasicApp.notificationModule.publish.create(data);
                     },
                     batch: {
                         /**
@@ -55,7 +55,7 @@ baasicNotificationsService.publish.create([{
 });
                         */
                         create: function (data) {
-                            return baasicApp.notifications.publish.batch.create(data);
+                            return baasicApp.notificationModule.publish.batch.create(data);
                         }
                     }
                 },
@@ -77,7 +77,7 @@ baasicNotificationsService.subscriptions.users.create({
 });
                         */
                         create: function (data) {
-                            return baasicApp.notifications.subscriptions.users.create(data);
+                            return baasicApp.notificationModule.subscriptions.users.create(data);
                         },
 
                         /**
@@ -102,7 +102,7 @@ baasicNotificationsService.subscriptions.users.find({
 });    
                         */
                         find: function (options) {
-                            return baasicApp.notifications.subscriptions.users.find(options);
+                            return baasicApp.notificationModule.subscriptions.users.find(options);
                         },
 
                         /**
@@ -118,7 +118,7 @@ baasicNotificationsService.subscriptions.users.get('<subscription-id>')
 });
                         */
                         get: function (id, options) {
-                            return baasicApp.notifications.subscriptions.users.get(id, options);
+                            return baasicApp.notificationModule.subscriptions.users.get(id, options);
                         },
 
                         /**
@@ -139,7 +139,7 @@ baasicNotificationsService.subscriptions.users.remove(subscription)
 });		
                         */
                         remove: function (data) {
-                            return baasicApp.notifications.subscriptions.users.remove(data);
+                            return baasicApp.notificationModule.subscriptions.users.remove(data);
                         },
 
                         /**
@@ -161,7 +161,7 @@ baasicNotificationsService.subscriptions.users.update(subscription)
 });
 				        */
                         update: function (data) {
-                            return baasicApp.notifications.subscriptions.users.update(data);
+                            return baasicApp.notificationModule.subscriptions.users.update(data);
                         },
                         batch: {
                             /**
@@ -180,7 +180,7 @@ baasicNotificationsService.subscriptions.users.batch.create([{
 });
                             */
                             create: function (data) {
-                                return baasicApp.notifications.subscriptions.batch.create(data);
+                                return baasicApp.notificationModule.subscriptions.batch.create(data);
                             },
 
                             /**
@@ -196,7 +196,7 @@ baasicNotificationsService.subscriptions.users.batch.remove(subscriptionIds)
 });		
                             */
                             remove: function (ids) {
-                                return baasicApp.notifications.subscriptions.batch.remove(ids);
+                                return baasicApp.notificationModule.subscriptions.batch.remove(ids);
                             },
 
                             /**
@@ -212,7 +212,7 @@ baasicNotificationsService.subscriptions.users.batch.update(subscriptions)
 });
                             */
                             update: function (data) {
-                                return baasicApp.notifications.subscriptions.batch.update(data);
+                                return baasicApp.notificationModule.subscriptions.batch.update(data);
                             }
                         }
                     },
@@ -233,7 +233,7 @@ baasicNotificationsService.subscriptions.anonymous.create({
 });
                         */
                         create: function (data) {
-                            return baasicApp.notifications.subscriptions.anonymous.create(data);
+                            return baasicApp.notificationModule.subscriptions.anonymous.create(data);
                         },
 
                         /**
@@ -258,7 +258,7 @@ baasicNotificationsService.subscriptions.anonymous.find({
 });    
                         */
                         find: function (options) {
-                            return baasicApp.notifications.subscriptions.anonymous.find(options);
+                            return baasicApp.notificationModule.subscriptions.anonymous.find(options);
                         },
 
                         /**
@@ -274,7 +274,7 @@ baasicNotificationsService.subscriptions.anonymous.get('<subscription-id>')
 });
                         */
                         get: function (id, options) {
-                            return baasicApp.notifications.subscriptions.anonymous.get(id, options);
+                            return baasicApp.notificationModule.subscriptions.anonymous.get(id, options);
                         },
 
                         /**
@@ -295,7 +295,7 @@ baasicNotificationsService.subscriptions.anonymous.remove(subscription)
 });		
 				        */
                         remove: function (data) {
-                            return baasicApp.notifications.subscriptions.anonymous.remove(data);
+                            return baasicApp.notificationModule.subscriptions.anonymous.remove(data);
                         },
 
                         /**
@@ -317,7 +317,7 @@ baasicNotificationsService.update(subscription)
 });
 				        */
                         update: function (data) {
-                            return baasicApp.notifications.subscriptions.anonymous.update(data);
+                            return baasicApp.notificationModule.subscriptions.anonymous.update(data);
                         },
                         batch: {
                             /**
@@ -336,7 +336,7 @@ baasicNotificationsService.subscriptions.anonymous.batch.create([{
 });
                             */
                             create: function (data) {
-                                return baasicApp.notifications.subscriptions.anonymous.batch.create(data);
+                                return baasicApp.notificationModule.subscriptions.anonymous.batch.create(data);
                             },
 
                             /**
@@ -352,7 +352,7 @@ baasicNotificationsService.subscriptions.anonymous.batch.remove(subscriptionIds)
 });		
                             */
                             remove: function (ids) {
-                                return baasicApp.notifications.subscriptions.anonymous.batch.remove(ids);
+                                return baasicApp.notificationModule.subscriptions.anonymous.batch.remove(ids);
                             },
 
                             /**
@@ -368,7 +368,7 @@ baasicNotificationsService.subscriptions.anonymous.batch.update(subscriptions)
 });
                             */
                             update: function (data) {
-                                return baasicApp.notifications.subscriptions.anonymous.batch.update(data);
+                                return baasicApp.notificationModule.subscriptions.anonymous.batch.update(data);
                             }
                         }
                     }
@@ -392,7 +392,7 @@ baasicNotificationsService.registrations.users.create({
 });
                         */
                         create: function (data) {
-                            return baasicApp.notifications.registrations.users.create(data);
+                            return baasicApp.notificationModule.registrations.users.create(data);
                         },
 
                         /**
@@ -417,7 +417,7 @@ baasicNotificationsService.registrations.users.find({
 });    
                         */
                         find: function (options) {
-                            return baasicApp.notifications.registrations.users.find(options);
+                            return baasicApp.notificationModule.registrations.users.find(options);
                         },
 
                         /**
@@ -433,7 +433,7 @@ baasicNotificationsService.registrations.users.get('<registration-id>')
 });
                         */
                         get: function (id, options) {
-                            return baasicApp.notifications.registrations.users.get(id, options);
+                            return baasicApp.notificationModule.registrations.users.get(id, options);
                         },
 
                         /**
@@ -454,7 +454,7 @@ baasicNotificationsService.registrations.users.remove(registration)
 });		
 				        */
                         remove: function (data) {
-                            return baasicApp.notifications.registrations.users.remove(data);
+                            return baasicApp.notificationModule.registrations.users.remove(data);
                         },
 
                         /**
@@ -476,7 +476,7 @@ baasicNotificationsService.registrations.users.remove(registration)
                             });
 				        */
                         update: function (data) {
-                            return baasicApp.notifications.registrations.users.update(data);
+                            return baasicApp.notificationModule.registrations.users.update(data);
                         },
                         batch: {
                             /**
@@ -496,7 +496,7 @@ baasicNotificationsService.registrations.users.batch.create([{
 });
                             */
                             create: function (data) {
-                                return baasicApp.notifications.registrations.users.batch.create(data);
+                                return baasicApp.notificationModule.registrations.users.batch.create(data);
                             },
 
                             /**
@@ -512,7 +512,7 @@ baasicNotificationsService.registrations.users.batch.remove(subscriptionIds)
 });		
                             */
                             remove: function (ids) {
-                                return baasicApp.notifications.registrations.users.batch.remove(ids);
+                                return baasicApp.notificationModule.registrations.users.batch.remove(ids);
                             },
 
                             /**
@@ -528,7 +528,7 @@ baasicNotificationsService.registrations.users.batch.update(registrations)
 });
                             */
                             update: function (data) {
-                                return baasicApp.notifications.registrations.users.batch.update(data);
+                                return baasicApp.notificationModule.registrations.users.batch.update(data);
                             }
                         }
                     },
@@ -550,7 +550,7 @@ baasicNotificationsService.registrations.anonymous.create({
 });
                         */
                         create: function (data) {
-                            return baasicApp.notifications.registrations.anonymous.create(data);
+                            return baasicApp.notificationModule.registrations.anonymous.create(data);
                         },
 
                         /**
@@ -574,7 +574,7 @@ baasicNotificationsService.registrations.anonymous.find({
 });    
                         */
                         find: function (options) {
-                            return baasicApp.notifications.registrations.anonymous.find(options);
+                            return baasicApp.notificationModule.registrations.anonymous.find(options);
                         },
 
                         /**
@@ -590,7 +590,7 @@ baasicNotificationsService.registrations.anonymous.get('<registration-id>')
 });
                         */
                         get: function (id, options) {
-                            return baasicApp.notifications.registrations.anonymous.get(id, options);
+                            return baasicApp.notificationModule.registrations.anonymous.get(id, options);
                         },
 
                         /**
@@ -611,7 +611,7 @@ baasicNotificationsService.registrations.anonymous.remove(registration)
 });		
 				        */
                         remove: function (data) {
-                            return baasicApp.notifications.registrations.anonymous.remove(data);
+                            return baasicApp.notificationModule.registrations.anonymous.remove(data);
                         },
 
                         /**
@@ -633,7 +633,7 @@ baasicNotificationsService.update(registration)
 });
 				        */
                         update: function (data) {
-                            return baasicApp.notifications.registrations.anonymous.update(data);
+                            return baasicApp.notificationModule.registrations.anonymous.update(data);
                         },
                         batch: {
                             /**
@@ -653,7 +653,7 @@ baasicNotificationsService.registrations.anonymous.batch.create([{
 });
                             */
                             create: function (data) {
-                                return baasicApp.notifications.registrations.anonymous.batch.create(data);
+                                return baasicApp.notificationModule.registrations.anonymous.batch.create(data);
                             },
 
                             /**
@@ -669,7 +669,7 @@ baasicNotificationsService.registrations.anonymous.batch.remove(subscriptionIds)
 });		
                             */
                             remove: function (ids) {
-                                return baasicApp.notifications.registrations.anonymous.batch.remove(ids);
+                                return baasicApp.notificationModule.registrations.anonymous.batch.remove(ids);
                             },
 
                             /**
@@ -685,7 +685,7 @@ baasicNotificationsService.registrations.anonymous.batch.update(registrations)
 });
                             */
                             update: function (data) {
-                                return baasicApp.notifications.registrations.anonymous.batch.update(data);
+                                return baasicApp.notificationModule.registrations.anonymous.batch.update(data);
                             }
                         }
                     }
@@ -704,7 +704,7 @@ baasicNotificationsService.settings.get('<provider-name>')
 });
                     */
                     get: function (provider) {
-                        return baasicApp.notifications.settings.get(provider);
+                        return baasicApp.notificationModule.settings.get(provider);
                     },
 
                     /**
@@ -725,7 +725,7 @@ baasicNotificationsService.update(settings)
 });
                     */
                     update: function (data) {
-                        return baasicApp.notifications.settings.update(data);
+                        return baasicApp.notificationModule.settings.update(data);
                     }
                 },
 

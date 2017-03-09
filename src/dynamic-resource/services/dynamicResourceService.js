@@ -27,7 +27,7 @@ baasicDynamicResourceService.find('<schema-name>', {
 });    
                 **/
         find: function (schemaName, options) {
-          return baasicApp.dynamicResource.find(schemaName, options);
+          return baasicApp.dynamicResourceModule.find(schemaName, options);
         },
         /**
                  * Returns a promise that is resolved once the get action has been performed. Success response returns the specified dynamic resource.
@@ -42,7 +42,7 @@ baasicDynamicResourceService.get('<schema-name>', '<dynamic-resource-id>')
 });
                 **/
         get: function (schemaName, id, options) {
-          return baasicApp.dynamicResource.get(schemaName, id, options);
+          return baasicApp.dynamicResourceModule.get(schemaName, id, options);
         },
         /**
                  * Returns a promise that is resolved once the create dynamic resource action has been performed; this action creates a new dynamic resource item.
@@ -60,7 +60,7 @@ baasicDynamicResourceService.create('<schema-name>', {
 });
                  **/
         create: function (schemaName, data) {
-          return baasicApp.dynamicResource.create(schemaName, data);
+          return baasicApp.dynamicResourceModule.create(schemaName, data);
         },
         /**
                  * Returns a promise that is resolved once the update action has been performed; this action updates a dynamic resource item. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicDynamicResourceRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
@@ -83,7 +83,7 @@ baasicDynamicResourceService.update(dynamicResource, {
 });
 				**/
         update: function (data, options) {
-          return baasicApp.dynamicResource.update(data, options);
+          return baasicApp.dynamicResourceModule.update(data, options);
         },
         /**
                  * Returns a promise that is resolved once the patch action has been performed; this action patches an existing dynamic resource. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicDynamicResourceRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
@@ -107,7 +107,7 @@ baasicDynamicResourceService.update(dynamicResource, {
 });
 				**/
         patch: function (data, options) {
-          return baasicApp.dynamicResource.patch(data, options);
+          return baasicApp.dynamicResourceModule.patch(data, options);
         },
         /**
                  * Returns a promise that is resolved once the remove action has been performed. This action will remove a dynamic resource from the system if successfully completed. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicDynamicResourceRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
@@ -129,7 +129,7 @@ baasicDynamicResourceService.remove(dynamicResource, {
 });		
 				**/
         remove: function (data, options) {
-          return baasicApp.dynamicResource.remvoe(data, options);
+          return baasicApp.dynamicResourceModule.remvoe(data, options);
         },
         /**
          * Provides direct access to `baasicDynamicResourceRouteService`.
@@ -151,7 +151,7 @@ baasicDynamicResourceService.acl.get({id: '<dynamic-resource-id>', schemaName: '
 });
                     **/
           get: function (options) {
-            return baasicApp.dynamicResource.acl.get(options);
+            return baasicApp.dynamicResourceModule.acl.get(options);
           },
           /**
                     * Returns a promise that is resolved once the update acl action has been performed; this action creates new ACL policy for the specified dynamic resource.
@@ -166,7 +166,7 @@ baasicDynamicResourceService.acl.update({id: '<dynamic-resource-id>', schemaName
 });
 				    **/
           update: function (options) {
-            return baasicApp.dynamicResource.acl.update(options);
+            return baasicApp.dynamicResourceModule.acl.update(options);
           },
           /**
                     * Returns a promise that is resolved once the removeByUser action has been performed. This action deletes ACL policy assigned to the specified user and dynamic resource.
@@ -182,7 +182,7 @@ baasicDynamicResourceService.acl.removeByUser('<access-action>', '<username>', d
 });
 				    **/
           removeByUser: function (action, user, data) {
-            return baasicApp.dynamicResource.acl.removeByUser(action, user, data);
+            return baasicApp.dynamicResourceModule.acl.removeByUser(action, user, data);
           },
           /**
                     * Returns a promise that is resolved once the removeByRole action has been performed. This action deletes ACL policy assigned to the specified role and dynamic resource.
@@ -198,7 +198,7 @@ baasicDynamicResourceService.acl.removeByRole('<access-action>', '<role-name>', 
 });
 				    **/
           removeByRole: function (action, role, data) {
-            return baasicApp.dynamicResource.acl.removeByRole(action, role, data);
+            return baasicApp.dynamicResourceModule.acl.removeByRole(action, role, data);
           },
           routeService: baasicApp.dynamicResource.acl.routeDefinition
         }

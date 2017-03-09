@@ -22,7 +22,7 @@ baasicUserProfileAvatarService.get('<file-id>')
 });
                 **/
                 get: function (id, options) {
-                    return baasicApp.userProfile.profile.avatar.get(id, options);
+                    return baasicApp.userProfileModule.profile.avatar.get(id, options);
                 },
 
                 /**
@@ -43,7 +43,7 @@ baasicUserProfileAvatarRouteService.remove(fileEntry)
 });
                **/
                 unlink: function (data, options) {
-                    return baasicApp.userProfile.profile.avatar.unlink(data, options);
+                    return baasicApp.userProfileModule.profile.avatar.unlink(data, options);
                 },
 
                 /**
@@ -65,7 +65,7 @@ baasicUserProfileAvatarService.update(fileEntry)
 });
 				**/
                 update: function (data) {
-                    return baasicApp.userProfile.profile.avatar.update(data);
+                    return baasicApp.userProfileModule.profile.avatar.update(data);
                 },
 
                 /**
@@ -81,7 +81,7 @@ baasicUserProfileAvatarService.link(fileObject)
 });
                **/
                 link: function (id, data) {
-                    return baasicApp.userProfile.profile.avatar.link(id, data);
+                    return baasicApp.userProfileModule.profile.avatar.link(id, data);
                 },
                 routeService: baasicApp.userProfile.profile.avatar.routeDefinition,
                 streams: {
@@ -107,7 +107,7 @@ baasicUserProfileAvatarService.stream.get({id: '<file-id>', width: <width>, heig
 });
                     **/
                     get: function (data) {
-                        return baasicApp.userProfile.profile.avatar.streams.get(data);
+                        return baasicApp.userProfileModule.profile.avatar.streams.get(data);
                     },
 
                     /**
@@ -132,7 +132,7 @@ baasicUserProfileAvatarService.stream.getBlob({id: '<file-id>', width: <width>, 
 });
                     **/
                     getBlob: function (data) {
-                        return baasicApp.userProfile.profile.avatar.streams.getBlob(data);
+                        return baasicApp.userProfileModule.profile.avatar.streams.getBlob(data);
                     },
 
                     /**
@@ -157,7 +157,7 @@ baasicUserProfileAvatarService.streams.update({id: '<file-id>', width: <width>, 
 });
                    **/
                     update: function (data, stream) {
-                        return baasicApp.userProfile.profile.avatar.streams.update(data, stream);
+                        return baasicApp.userProfileModule.profile.avatar.streams.update(data, stream);
                     },
 
                     /**
@@ -173,7 +173,7 @@ baasicUserProfileAvatarService.streams.create('<file-id>', '<filename'>, <blob>)
 });
                    **/
                     create: function (id, data, stream) {
-                        return baasicApp.userProfile.profile.avatar.streams.create(id, data, stream);
+                        return baasicApp.userProfileModule.profile.avatar.streams.create(id, data, stream);
                     },
                     routeService: baasicApp.userProfile.profile.avatar.streams.routeDefinition,
                 }

@@ -22,7 +22,7 @@ baasicUserService.exists('<username>')
 });  
                  **/
         exists: function (username, options) {
-          return baasicApp.membership.user.exists(username, options);
+          return baasicApp.membershipModule.user.exists(username, options);
         },
         /**
                  * Returns a promise that is resolved once the find action has been performed. Success response returns a list of user resources matching the given criteria.
@@ -43,7 +43,7 @@ baasicUserService.find({
 });    
                  **/
         find: function (options) {
-          return baasicApp.membership.user.find(options);
+          return baasicApp.membershipModule.user.find(options);
         },
         /**
                  * Returns a promise that is resolved once the get action has been performed. Success response returns the specified user resource.
@@ -61,7 +61,7 @@ baasicUserService.get({
 });
                  **/
         get: function (options) {
-          return baasicApp.membership.user.get(options.username, options);
+          return baasicApp.membershipModule.user.get(options.username, options);
         },
         /**
                  * Returns a promise that is resolved once the create user action has been performed; this action creates a new user.
@@ -84,7 +84,7 @@ baasicUserService.create({
 });
                  **/
         create: function (data) {
-          return baasicApp.membership.user.create(data);
+          return baasicApp.membershipModule.user.create(data);
         },
         /**
                  * Returns a promise that is resolved once the update user action has been performed; this action updates a user. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicUserRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
@@ -106,7 +106,7 @@ baasicUserService.update(user)
 });
 				**/
         update: function (data) {
-          return baasicApp.membership.user.update(data);
+          return baasicApp.membershipModule.user.update(data);
         },
         /**
                  * Returns a promise that is resolved once the remove user action has been performed. This action will remove a user from the system if successfully completed. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicUserRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
@@ -126,7 +126,7 @@ baasicUserService.remove(user)
 });		
 				**/
         remove: function (data) {
-          return baasicApp.membership.user.remove(data);
+          return baasicApp.membershipModule.user.remove(data);
         },
         /**
                  * Returns a promise that is resolved once the unlock user action has been performed. This action will unlock the user resource which was previously locked either manually or automatically by the system. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicUserRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
@@ -146,7 +146,7 @@ baasicUserService.unlock(user)
 });		
 				**/
         unlock: function (data) {
-          return baasicApp.membership.user.unlock(data);
+          return baasicApp.membershipModule.user.unlock(data);
         },
         /**
                  * Returns a promise that is resolved once the lock user action has been performed. This action will lock the user resource out of the system. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicUserRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
@@ -166,7 +166,7 @@ baasicUserService.lock(user)
 });		
 				**/
         lock: function (data) {
-          return baasicApp.membership.user.lock(data);
+          return baasicApp.membershipModule.user.lock(data);
         },
         /**
                  * Returns a promise that is resolved once the approve user action has been performed. This action will mark the user resource as 'approved' in the system. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicUserRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
@@ -186,7 +186,7 @@ baasicUserService.lock(user)
 });		
 				**/
         approve: function (data) {
-          return baasicApp.membership.user.approve(data);
+          return baasicApp.membershipModule.user.approve(data);
         },
         /**
                  * Returns a promise that is resolved once the disapprove user action has been performed. This action will mark the user resource as 'not approved' in the system. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicUserRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
@@ -206,7 +206,7 @@ baasicUserService.lock(user)
 });		
 				**/
         disapprove: function (data) {
-          return baasicApp.membership.user.disapprove(data);
+          return baasicApp.membershipModule.user.disapprove(data);
         },
         /**
                  * Returns a promise that is resolved once the changePassword action has been performed. This action will update user's password selection.
@@ -225,7 +225,7 @@ baasicUserService.changePassword('<username>', {
 .finally (function () {});
 				**/
         changePassword: function (username, data) {
-          return baasicApp.membership.user.changePassword(username, data);
+          return baasicApp.membershipModule.user.changePassword(username, data);
         },
         /**
          * Provides direct access to `baasicUserRouteService`.
@@ -247,7 +247,7 @@ baasicUserService.socialLogin.get('<username>')
 });
                     **/
           get: function (username) {
-            return baasicApp.membership.user.socialLogin.get(username);
+            return baasicApp.membershipModule.user.socialLogin.get(username);
           },
           /**
                     * Returns a promise that is resolved once the remove action has been performed. This action removes the user resource social login connection from the specified provider.
@@ -262,7 +262,7 @@ baasicUserService.socialLogin.remove('<username>', '<provider>')
 });
                     **/
           remove: function (username, provider) {
-            return baasicApp.membership.user.socialLogin.remove(username, provider);
+            return baasicApp.membershipModule.user.socialLogin.remove(username, provider);
           }
         }
       };

@@ -27,7 +27,7 @@ baasicDynamicSchemaService.find({
 });    
                  **/
         find: function (options) {
-          return baasicApp.dynamicResource.schema.find(options);
+          return baasicApp.dynamicResourceModule.schema.find(options);
         },
         /**
                  * Returns a promise that is resolved once the get action has been performed. Success response returns the specified dynamic resource schema.
@@ -42,7 +42,7 @@ baasicDynamicSchemaService.get('<schema-name>')
 });
                 **/
         get: function (name, options) {
-          return baasicApp.dynamicResource.schema.get(name, options);
+          return baasicApp.dynamicResourceModule.schema.get(name, options);
         },
         /**
                 * Returns a promise that is resolved once the create action has been performed; this action creates a new dynamic resource schema item.
@@ -75,7 +75,7 @@ baasicDynamicSchemaService.create({
 });
                 **/
         create: function (data) {
-          return baasicApp.dynamicResource.schema.create(data);
+          return baasicApp.dynamicResourceModule.schema.create(data);
         },
         /**
                  * Returns a promise that is resolved once the update dynamic resource schema action has been performed; this action updates a dynamic resource schema item. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicDynamicSchemaRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
@@ -96,7 +96,7 @@ baasicDynamicSchemaService.update(dynamicResourceSchema)
 });
 				**/
         update: function (data) {
-          return baasicApp.dynamicResource.schema.update(data);
+          return baasicApp.dynamicResourceModule.schema.update(data);
         },
         /**
                 * Returns a promise that is resolved once the remove action has been performed. This action will remove a dynamic resource schema item from the system if successfully completed. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicDynamicSchemaRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
@@ -116,7 +116,7 @@ baasicDynamicSchemaService.remove(dynamicResourceSchema)
 });		
 				**/
         remove: function (data) {
-          return baasicApp.dynamicResource.schema.remove(data);
+          return baasicApp.dynamicResourceModule.schema.remove(data);
         },
         /**
                 * Returns a promise that is resolved once the generate schema action has been performed. Success response returns a schema generated based on the json input.
@@ -134,7 +134,7 @@ baasicDynamicSchemaService.generate({
 });		
 				**/
         generate: function (data) {
-          return baasicApp.dynamicResource.schema.generate(data);
+          return baasicApp.dynamicResourceModule.schema.generate(data);
         },
         /**
          * Provides direct access to `baasicDynamicSchemaRouteService`.

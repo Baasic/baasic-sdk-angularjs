@@ -27,7 +27,7 @@ baasicLoginService.login({
 .finally (function () {});       
                  **/
                 login: function login(data) {
-                    return baasicApp.membership.login.login(data);
+                    return baasicApp.membershipModule.login.login(data);
                 },
                 /**
 				* Returns a promise that is resolved once the loadUserData action has been performed. This action retrieves the account information of the currently logged in user. Retrieved account information will contain permission collection which identifies access policies assigned to the user and application sections.
@@ -43,7 +43,7 @@ baasicLoginService.loadUserData()
 .finally (function () {});				
 				*/
                 loadUserData: function loadUserData(data) {
-                    return baasicApp.membership.login.loadUserData(data);
+                    return baasicApp.membershipModule.login.loadUserData(data);
                 },
                 /**
 				* Returns a promise that is resolved once the logout action has been performed. This action invalidates user token logging the user out of the system.
@@ -57,7 +57,7 @@ baasicLoginService.logout(token.access_token, token.token_type)
 .finally (function () {});				
 				*/
                 logout: function logout(token, type) {
-                    return baasicApp.membership.login.logout(token, type);
+                    return baasicApp.membershipModule.login.logout(token, type);
                 },
                 /**
                  * Provides direct access to route definition.
@@ -79,7 +79,7 @@ baasicLoginService.social.get('<provider>', '<returnUrl>')
 });
                     **/
                     get: function (provider, returnUrl) {
-                        return baasicApp.membership.loginSocial.get(provider, returnUrl);
+                        return baasicApp.membershipModule.loginSocial.get(provider, returnUrl);
                     },
                     /**
                     * Returns a promise that is resolved once the post action has been performed. This action logs user into the application and success response returns the token resource.
@@ -103,7 +103,7 @@ baasicLoginService.social.post('<provider>', postData)
 });
                     **/
                     post: function (provider, data, options) {
-                        return baasicApp.membership.loginSocial.post(provider, data, options);
+                        return baasicApp.membershipModule.loginSocial.post(provider, data, options);
                     },
                     /**
                      * Parses social provider response parameters.
@@ -111,7 +111,7 @@ baasicLoginService.social.post('<provider>', postData)
                      * @example baasicLoginService.social.parseResponse('<provider>');
                      **/
                     parseResponse: function (provider, returnUrl) {
-                        return baasicApp.membership.loginSocial.parseResponse(provider, returnUrl);
+                        return baasicApp.membershipModule.loginSocial.parseResponse(provider, returnUrl);
                     },
                     /**
                      * Provides direct access to route definition.

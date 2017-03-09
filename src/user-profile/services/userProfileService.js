@@ -28,7 +28,7 @@ userProfileService.find({
 });    
                  **/
         find: function (options) {
-          return baasicApp.userProfile.profile.find(options);
+          return baasicApp.userProfileModule.profile.find(options);
         },
         /**
                 * Returns a promise that is resolved once the get action has been performed. Success response returns the user profile resource.
@@ -43,7 +43,7 @@ baasicUserProfileService.get()
 });
                 **/
         get: function (id, options) {
-          return baasicApp.userProfile.profile.get(id, options);
+          return baasicApp.userProfileModule.profile.get(id, options);
         },
         /**
                  * Returns a promise that is resolved once the create user profile action has been performed; this action creates a new user profile resource.
@@ -62,7 +62,7 @@ baasicUserProfileService.create({
 });
                  **/
         create: function (data) {
-          return baasicApp.userProfile.profile.create(data);
+          return baasicApp.userProfileModule.profile.create(data);
         },
         /**
                  * Returns a promise that is resolved once the update user profile action has been performed; this action updates a user profile resource. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicUserProfileRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
@@ -83,7 +83,7 @@ baasicUserProfileService.update(userProfile)
 });
 				**/
         update: function (data) {
-          return baasicApp.userProfile.profile.update(data);
+          return baasicApp.userProfileModule.profile.update(data);
         },
         /**
                  * Returns a promise that is resolved once the remove action has been performed. This action will remove a user profile resource from the system if successfully completed. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicUserProfileRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
@@ -103,7 +103,7 @@ baasicUserProfileService.remove(userProfile)
 });		
 				**/
         remove: function (data) {
-          return baasicApp.userProfile.profile.remove(data);
+          return baasicApp.userProfileModule.profile.remove(data);
         },
         acl: {
           /**
@@ -119,7 +119,7 @@ baasicUserProfileService.acl.get({id: '<profile-id>'})
 });
                     **/
           get: function (options) {
-            return baasicApp.userProfile.profile.get(options);
+            return baasicApp.userProfileModule.profile.get(options);
           },
           /**
                     * Returns a promise that is resolved once the update acl action has been performed, this action creates new ACL policy for the specified user profile resource.
@@ -141,7 +141,7 @@ baasicUserProfileService.acl.update(options)
 });
 				    **/
           update: function (options) {
-            return baasicApp.userProfile.profile.update(options);
+            return baasicApp.userProfileModule.profile.update(options);
           },
           /**
                     * Returns a promise that is resolved once the removeByUser action has been performed. This action deletes ACL policy assigned to the specified user and user profile resource.
@@ -156,7 +156,7 @@ baasicUserProfileService.acl.removeByUser('<profile-id>', '<access-action>', '<u
 });
 				    **/
           removeByUser: function (profileId, action, user, data) {
-            return baasicApp.userProfile.profile.removeByUser(profileId, action, user, data);
+            return baasicApp.userProfileModule.profile.removeByUser(profileId, action, user, data);
           },
           /**
                     * Returns a promise that is resolved once the removeByRole action has been performed. This action deletes ACL policy assigned to the specified role and user profile resource.
@@ -171,7 +171,7 @@ baasicUserProfileService.acl.removeByRole('<profile-id>', '<access-action>', '<r
 });
 				    **/
           removeByRole: function (profileId, action, role, data) {
-            return baasicApp.userProfile.profile.removeByRole(profileId, action, role, data);
+            return baasicApp.userProfileModule.profile.removeByRole(profileId, action, role, data);
           }
         },
         /**

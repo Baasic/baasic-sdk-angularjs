@@ -26,7 +26,7 @@ baasicSkillService.create({
 });
                 **/
         create: function (data) {
-          return baasicApp.userProfile.skill.create(data);
+          return baasicApp.userProfileModule.skill.create(data);
         },
         /**
                  * Returns a promise that is resolved once the find action has been performed. Success response returns a list of skill resources matching the given criteria.
@@ -47,7 +47,7 @@ baasicSkillService.find({
 });    
                 **/
         find: function (options) {
-          return baasicApp.userProfile.skill.find(options);
+          return baasicApp.userProfileModule.skill.find(options);
         },
         /**
                 * Returns a promise that is resolved once the get action has been performed. Success response returns the skill resource.
@@ -62,7 +62,7 @@ baasicSkillService.get()
 });
                 **/
         get: function (id, options) {
-          return baasicApp.userProfile.skill.get(id, options);
+          return baasicApp.userProfileModule.skill.get(id, options);
         },
         /**
                  * Returns a promise that is resolved once the remove action has been performed. This action will remove a skill resource from the system if successfully completed. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicSkillRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
@@ -82,7 +82,7 @@ baasicSkillService.remove(skill)
 });		
 				        **/
         remove: function (data) {
-          return baasicApp.userProfile.skill.remove(data);
+          return baasicApp.userProfileModule.skill.remove(data);
         },
         /**
                  * Returns a promise that is resolved once the update skill action has been performed; this action updates a skill resource. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicSkillRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
@@ -103,7 +103,7 @@ baasicSkillService.update(skill)
 });
 				        **/
         update: function (data) {
-          return baasicApp.userProfile.skill.update(data);
+          return baasicApp.userProfileModule.skill.update(data);
         },
         batch: {
           /**
@@ -123,7 +123,7 @@ baasicSkillService.update(skill)
   });
                   **/
           create: function (data) {
-            return baasicApp.userProfile.skill.batch.create(data);
+            return baasicApp.userProfileModule.skill.batch.create(data);
           },
           /**
                   * Returns a promise that is resolved once the update skill action has been performed; this action updates specified skill resources.
@@ -138,7 +138,7 @@ baasicSkillService.update(skill)
   });
                   **/
           update: function (data) {
-            return baasicApp.userProfile.skill.batch.update(data);
+            return baasicApp.userProfileModule.skill.batch.update(data);
           },
           /**
                   * Returns a promise that is resolved once the remove action has been performed. This action will remove skill resources from the system if successfully completed. 
@@ -153,7 +153,7 @@ baasicSkillService.update(skill)
   });		
                   **/
           remove: function (ids) {
-            return baasicApp.userProfile.skill.batch.remove(ids);
+            return baasicApp.userProfileModule.skill.batch.remove(ids);
           }
         }
       };

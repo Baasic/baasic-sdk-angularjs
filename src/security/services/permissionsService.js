@@ -24,7 +24,7 @@ baasicPermissionsService.find('<section-name>', {
 });    
                 **/
         find: function (section, options) {
-          return baasicApp.membership.permissions.find(section, options);
+          return baasicApp.membershipModule.permissions.find(section, options);
         },
         /**
                 * Returns a promise that is resolved once the getActions action has been performed. Success response returns a list of access policies that match the specified search parameters.
@@ -41,7 +41,7 @@ baasicPermissionsService.getActions({
 });    
                 **/
         getActions: function (options) {
-          return baasicApp.membership.permissions.getActions(options);
+          return baasicApp.membershipModule.permissions.getActions(options);
         },
         /**
                 * Returns a promise that is resolved once the getPermissionSubjects action has been performed. Success response returns a list of matching user and role resources.
@@ -90,7 +90,7 @@ baasicPermissionsService.create({
 });
                 **/
         create: function (data) {
-          return baasicApp.membership.permissions.create(data);
+          return baasicApp.membershipModule.permissions.create(data);
         },
         /**
                  * Returns a promise that is resolved once the remove action has been performed. If the action is successfully complete, an access policy assigned to the specified role and section will be removed. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicPermissionsService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
@@ -110,7 +110,7 @@ baasicPermissionsService.remove(permission)
 });		
 				**/
         remove: function (data) {
-          return baasicApp.membership.permissions.remove(data);
+          return baasicApp.membershipModule.permissions.remove(data);
         },
         /**
                  * Creates a new in-memory permission object.
@@ -127,7 +127,7 @@ return baasicLookupService.get()
 baasicPermissionsService.createPermission('<section-Name>', actionCollection, subjectItem);
 				**/
         createPermission: function (section, actionCollection, membershipItem) {
-          return baasicApp.membership.permissions.createPermission(section, actionCollection, membershipItem);
+          return baasicApp.membershipModule.permissions.createPermission(section, actionCollection, membershipItem);
         },
         /**
          * Finds a permission in a given permission collection.
@@ -135,7 +135,7 @@ baasicPermissionsService.createPermission('<section-Name>', actionCollection, su
          * @example baasicPermissionsService.findPermission(permissionObj, permissionCollection);
          **/
         findPermission: function (permission, permissionCollection) {
-          return baasicApp.membership.permissions.findPermission(permission, permissionCollection);
+          return baasicApp.membershipModule.permissions.findPermission(permission, permissionCollection);
         },
         /**
          * Checks if a permission object exists in a given permission collection.
@@ -143,7 +143,7 @@ baasicPermissionsService.createPermission('<section-Name>', actionCollection, su
          * @example baasicPermissionsService.exists(permissionObj, permissionCollection);
          **/
         exists: function (permission, permissionCollection) {
-          return baasicApp.membership.permissions.exists(permission, permissionCollection);
+          return baasicApp.membershipModule.permissions.exists(permission, permissionCollection);
         },
         /**
          * Returns a promise that is resolved once the togglePermission action has been completed. The action will internally either call a `remove` or `create` action based on given criteria.
@@ -151,7 +151,7 @@ baasicPermissionsService.createPermission('<section-Name>', actionCollection, su
          * @example baasicPermissionsService.togglePermission(permissionObj, action);
          **/
         togglePermission: function (permission, action) {
-          return baasicApp.membership.permissions.togglePermission(permission, action);
+          return baasicApp.membershipModule.permissions.togglePermission(permission, action);
         },
         /**
          * Fetches and returns and object containing all existing module permissions.
@@ -159,7 +159,7 @@ baasicPermissionsService.createPermission('<section-Name>', actionCollection, su
          * @example baasicPermissionsService.getModulePermissions('<section-name>');
          **/
         getModulePermissions: function (section) {
-          return baasicApp.membership.permissions.getModulePermissions(section);
+          return baasicApp.membershipModule.permissions.getModulePermissions(section);
         },
         /**
          * Provides direct access to `baasicPermissionsRouteService`.

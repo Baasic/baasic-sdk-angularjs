@@ -25,7 +25,7 @@ baasicUserSkillService.create({
 });
                 **/
         create: function (data) {
-          return baasicApp.userProfile.profile.skill.create(data);
+          return baasicApp.userProfileModule.profile.skill.create(data);
         },
         /**
                  * Returns a promise that is resolved once the find action has been performed. Success response returns a list of user skill resources matching the given criteria.
@@ -46,7 +46,7 @@ baasicUserSkillService.find({
 });    
                 **/
         find: function (options) {
-          return baasicApp.userProfile.profile.skill.find(options);
+          return baasicApp.userProfileModule.profile.skill.find(options);
         },
         /**
                 * Returns a promise that is resolved once the get action has been performed. Success response returns the user skill resource.
@@ -61,7 +61,7 @@ baasicUserSkillService.get()
 });
                 **/
         get: function (id, options) {
-          return baasicApp.userProfile.profile.skill.get(id, options);
+          return baasicApp.userProfileModule.profile.skill.get(id, options);
         },
         /**
                  * Returns a promise that is resolved once the remove action has been performed. This action will remove a user skill resource from the system if successfully completed. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicUserSkillRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
@@ -81,7 +81,7 @@ baasicUserSkillService.remove(skill)
 });		
 				        **/
         remove: function (data) {
-          return baasicApp.userProfile.profile.skill.remove(data);
+          return baasicApp.userProfileModule.profile.skill.remove(data);
         },
         /**
                  * Returns a promise that is resolved once the update user skill action has been performed; this action updates a user skill resource. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicUserSkillRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
@@ -102,7 +102,7 @@ baasicUserSkillService.update(skill)
 });
 				        **/
         update: function (data) {
-          return baasicApp.userProfile.profile.skill.update(data);
+          return baasicApp.userProfileModule.profile.skill.update(data);
         }
       };
     }

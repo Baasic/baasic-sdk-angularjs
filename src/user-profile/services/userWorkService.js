@@ -24,7 +24,7 @@ baasicUserWorkService.create({
 });
                 **/
         create: function (data) {
-          return baasicApp.userProfile.profile.work.create(data);
+          return baasicApp.userProfileModule.profile.work.create(data);
         },
         /**
                  * Returns a promise that is resolved once the find action has been performed. Success response returns a list of user work resources matching the given criteria.
@@ -45,7 +45,7 @@ baasicUserWorkService.find({
 });    
                 **/
         find: function (options) {
-          return baasicApp.userProfile.profile.work.find(options);
+          return baasicApp.userProfileModule.profile.work.find(options);
         },
         /**
                 * Returns a promise that is resolved once the get action has been performed. Success response returns the user work resource.
@@ -60,7 +60,7 @@ baasicUserWorkService.get()
 });
                 **/
         get: function (id, options) {
-          return baasicApp.userProfile.profile.work.get(id, options);
+          return baasicApp.userProfileModule.profile.work.get(id, options);
         },
         /**
                  * Returns a promise that is resolved once the remove action has been performed. This action will remove a user work resource from the system if successfully completed. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicUserWorkRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
@@ -80,7 +80,7 @@ baasicUserWorkService.remove(work)
 });		
 				        **/
         remove: function (data) {
-          return baasicApp.userProfile.profile.work.remove(data);
+          return baasicApp.userProfileModule.profile.work.remove(data);
         },
         /**
                  * Returns a promise that is resolved once the update user work action has been performed; this action updates a user work resource. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicUserWorkRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
@@ -101,7 +101,7 @@ baasicUserWorkService.update(work)
 });
 				        **/
         update: function (data) {
-          return baasicApp.userProfile.profile.work.update(data);
+          return baasicApp.userProfileModule.profile.work.update(data);
         }
       };
     }

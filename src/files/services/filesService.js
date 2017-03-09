@@ -28,7 +28,7 @@ baasicFilesService.find({
 });    
                 **/
         find: function (options) {
-          return baasicApp.files.find(options);
+          return baasicApp.fileModule.find(options);
         },
 
         /**
@@ -44,7 +44,7 @@ baasicFilesService.get('<file-id>')
 });
                 **/
         get: function (id, options) {
-          return baasicApp.files.get(id, options);
+          return baasicApp.fileModule.get(id, options);
         },
 
         /**
@@ -102,7 +102,7 @@ baasicFilesRouteService.remove(fileEntry, {width: <width>, height: <height>})
 });		
 				**/
         unlink: function (data, options) {
-          return baasicApp.files.unlink(data, options);
+          return baasicApp.fileModule.unlink(data, options);
         },
 
         /**
@@ -124,7 +124,7 @@ baasicFilesService.update(fileEntry)
 });
 				**/
         update: function (data) {
-          return baasicApp.files.update(data);
+          return baasicApp.fileModule.update(data);
         },
 
         /**
@@ -140,7 +140,7 @@ baasicFilesService.link(fileObject)
 });
                 **/
         link: function (data) {
-          return baasicApp.files.link(data);
+          return baasicApp.fileModule.link(data);
         },
 
         streams: {
@@ -166,7 +166,7 @@ baasicFilesService.stream.get({id: '<path>', width: <width>, height: <height>})
 });
                     **/
           get: function (data) {
-            return baasicApp.files.streams.get(data);
+            return baasicApp.fileModule.streams.get(data);
           },
 
           /**
@@ -191,7 +191,7 @@ baasicFilesService.stream.getBlob({id: '<path>', width: <width>, height: <height
 });
                     **/
           getBlob: function (data) {
-            return baasicApp.files.streams.getBlob(data);
+            return baasicApp.fileModule.streams.getBlob(data);
           },
 
           /**
@@ -216,7 +216,7 @@ baasicFilesService.streams.update({id: '<path>', width: <width>, height: <height
 });
                     **/
           update: function (data, stream) {
-            return baasicApp.files.streams.update(data, stream);
+            return baasicApp.fileModule.streams.update(data, stream);
           },
 
           /**
@@ -232,7 +232,7 @@ baasicFilesService.streams.create('<path>', <blob>)
 });
                     **/
           create: function (data, stream) {
-            return baasicApp.files.streams.create(data, stream);
+            return baasicApp.fileModule.streams.create(data, stream);
           },
           routeService: baasicApp.files.streams.routeDefinition
         },
@@ -285,7 +285,7 @@ baasicFilesService.batch.unlink([{ id: '<file-id>', fileFormat: { width: <width>
 });		  
                   **/
           unlink: function (data) {
-            return baasicApp.files.batch.unlink(data);
+            return baasicApp.fileModule.batch.unlink(data);
           },
           /**
                   * Returns a promise that is resolved once the update action has been performed; this action updates specified file resources.
@@ -300,7 +300,7 @@ baasicFilesService.batch.update(files)
 });
                   **/
           update: function (data) {
-            return baasicApp.files.batch.update(data);
+            return baasicApp.fileModule.batch.update(data);
           },
 
           /**
@@ -316,7 +316,7 @@ baasicFilesService.batch.link(files)
 });
                   **/
           link: function (data) {
-            return baasicApp.files.batch.link(data);
+            return baasicApp.fileModule.batch.link(data);
           },
           routeService: baasicApp.files.batch.routeDefinition
         },
@@ -335,7 +335,7 @@ baasicFilesService.acl.get({id: '<file-id>'})
 });
                     **/
           get: function (options) {
-            return baasicApp.files.acl.get(options);
+            return baasicApp.fileModule.acl.get(options);
           },
           /**
                     * Returns a promise that is resolved once the update acl action has been performed, this action creates new ACL policy for the specified file resource.
@@ -357,7 +357,7 @@ baasicFilesService.acl.update(options)
 });
 				    **/
           update: function (options) {
-            return baasicApp.files.acl.update(options);
+            return baasicApp.fileModule.acl.update(options);
           },
           /**
                     * Returns a promise that is resolved once the removeByUser action has been performed. This action deletes ACL policy assigned to the specified user and file resource.
@@ -372,7 +372,7 @@ baasicFilesService.acl.removeByUser('<file-id>', '<access-action>', '<username>'
 });
 				    **/
           removeByUser: function (fileEntryId, action, user, data) {
-            return baasicApp.files.acl.removeByUser(fileEntryId, action, user, data);
+            return baasicApp.fileModule.acl.removeByUser(fileEntryId, action, user, data);
           },
           /**
                     * Returns a promise that is resolved once the removeByRole action has been performed. This action deletes ACL policy assigned to the specified role and file resource.
@@ -387,7 +387,7 @@ baasicFilesService.acl.removeByRole('<file-id>', '<access-action>', '<role-name>
 });
 				    **/
           removeByRole: function (fileEntryId, action, role, data) {
-            return baasicApp.files.acl.removeByRole(fileEntryId, action, role, data);
+            return baasicApp.fileModule.acl.removeByRole(fileEntryId, action, role, data);
           }
         },
         routeService: baasicApp.files.acl.routeDefinition

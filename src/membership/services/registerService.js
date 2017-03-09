@@ -31,7 +31,7 @@ baasicRegisterService.create({
 .finally (function () {});
                 **/
         create: function (data) {
-          return baasicApp.membership.register.create(data);
+          return baasicApp.membershipModule.register.create(data);
         },
         /**
                 * Returns a promise that is resolved once the account activation action has been performed; this action activates a user account and success response returns the token resource.
@@ -49,7 +49,7 @@ baasicRegisterService.activate({
 .finally (function () {});
                 **/
         activate: function (data) {
-          return baasicApp.membership.register.activate(data);
+          return baasicApp.membershipModule.register.activate(data);
         },
         /**
          * Provides direct access to route definition.

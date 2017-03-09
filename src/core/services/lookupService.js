@@ -23,7 +23,7 @@ baasicLookupService.get()
 });
                  **/
 				get: function (options) {
-					return baasicApp.membership.lookups.get(options);
+					return baasicApp.membershipModule.lookups.get(options);
 				}
 			};
 		}

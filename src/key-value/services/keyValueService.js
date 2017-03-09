@@ -27,7 +27,7 @@ baasicKeyValueService.find({
 });    
                  **/
         find: function (options) {
-          return baasicApp.keyValue.get(options);
+          return baasicApp.keyValueModule.get(options);
         },
         /**
                  * Returns a promise that is resolved once the get action has been performed. Success response returns the specified key value resource.
@@ -42,7 +42,7 @@ baasicKeyValueService.get('<key-value-id>')
 });
                  **/
         get: function (id, options) {
-          return baasicApp.keyValue.get(id, options);
+          return baasicApp.keyValueModule.get(id, options);
         },
         /**
                  * Returns a promise that is resolved once the create key value action has been performed; this action creates a new key value resource.
@@ -60,7 +60,7 @@ baasicKeyValueService.create({
 });
                  **/
         create: function (data) {
-          return baasicApp.keyValue.post(data);
+          return baasicApp.keyValueModule.post(data);
         },
         /**
                  * Returns a promise that is resolved once the update key value action has been performed; this action updates a key value resource. 
@@ -77,7 +77,7 @@ baasicKeyValueService.update(keyValue)
 });
 				**/
         update: function (data) {
-          return baasicApp.keyValue.put(data);
+          return baasicApp.keyValueModule.put(data);
         },
         /**
                  * Returns a promise that is resolved once the remove action has been performed. This action will remove a key value resource from the system if successfully completed. 
@@ -93,7 +93,7 @@ baasicKeyValueService.remove(keyValue)
 });		
 				**/
         remove: function (data) {
-          return baasicApp.keyValue.delete(data);
+          return baasicApp.keyValueModule.delete(data);
         },
         /**
          * Provides direct access to routeDefinition.

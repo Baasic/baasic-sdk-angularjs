@@ -22,7 +22,7 @@ baasicMeteringSettingsService.get()
 });
                 **/
                 get: function (options) {
-                    return baasicApp.metering.settings.get(options);
+                    return baasicApp.meteringModule.settings.get(options);
                 },
                 /**
                  * Returns a promise that is resolved once the update metering action has been performed; this action updates a metering resource. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicMeteringSettingsRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
@@ -43,7 +43,7 @@ baasicMeteringSettingsService.update(meteringSettings)
 });
 				**/
                 update: function (data) {
-                    return baasicApp.metering.settings.update(data);
+                    return baasicApp.meteringModule.settings.update(data);
                 },
                 /**
                  * Provides direct access to `routeService`.

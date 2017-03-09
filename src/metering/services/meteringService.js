@@ -28,7 +28,7 @@ baasicMeteringService.find({
 });    
                  **/
         find: function (options) {
-          return baasicApp.metering.find(options);
+          return baasicApp.meteringModule.find(options);
         },
         /**
                 * Returns a promise that is resolved once the get action has been performed. Success response returns the metering resource.
@@ -43,7 +43,7 @@ baasicMeteringService.get()
 });
                 **/
         get: function (id, options) {
-          return baasicApp.metering.get(id, options);
+          return baasicApp.meteringModule.get(id, options);
         },
         /**
                  * Returns a promise that is resolved once the create metering action has been performed; this action creates a new metering resource.
@@ -62,7 +62,7 @@ baasicMeteringService.create({
 });
                  **/
         create: function (data) {
-          return baasicApp.metering.create(data);
+          return baasicApp.meteringModule.create(data);
         },
         /**
                  * Returns a promise that is resolved once the update metering action has been performed; this action updates a metering resource. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicMeteringRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
@@ -83,7 +83,7 @@ baasicMeteringService.update(meteringData)
 });
 				**/
         update: function (data) {
-          return baasicApp.metering.update(data);
+          return baasicApp.meteringModule.update(data);
         },
         /**
                  * Returns a promise that is resolved once the remove action has been performed. This action will remove a metering resource from the system if successfully completed. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicMeteringRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
@@ -103,7 +103,7 @@ baasicMeteringService.remove(meteringData)
 });		
 				**/
         remove: function (data) {
-          return baasicApp.metering.remove(data);
+          return baasicApp.meteringModule.remove(data);
         },
         /**
                  * Returns a promise that is resolved once the purge action has been performed. This action will remove all metering resources from the system if successfully completed. 
@@ -118,7 +118,7 @@ baasicMeteringService.purge()
 });		
 				**/
         purge: function () {
-          return baasicApp.metering.purge();
+          return baasicApp.meteringModule.purge();
         },
         /**
          * Provides direct access to `routeService`.
@@ -145,7 +145,7 @@ baasicMeteringService.purge()
   });
                   **/
           create: function (data) {
-            return baasicApp.metering.batch.create(data);
+            return baasicApp.meteringModule.batch.create(data);
           },
           /**
                   * Returns a promise that is resolved once the update data action has been performed; this action updates specified data resources.
@@ -160,7 +160,7 @@ baasicMeteringService.purge()
   });
                   **/
           update: function (data) {
-            return baasicApp.metering.batch.update(data);
+            return baasicApp.meteringModule.batch.update(data);
           },
           /**
                   * Returns a promise that is resolved once the remove action has been performed. This action will remove data resources from the system if successfully completed. 
@@ -175,7 +175,7 @@ baasicMeteringService.purge()
   });		
                   **/
           remove: function (ids) {
-            return baasicApp.metering.batch.remove(ids);
+            return baasicApp.meteringModule.batch.remove(ids);
           }
         },
         statistics: {
@@ -201,7 +201,7 @@ baasicMeteringService.purge()
   });    
                   **/
           find: function (options) {
-            return baasicApp.metering.statistics.find(options);
+            return baasicApp.meteringModule.statistics.find(options);
           }
         },
         acl: {
@@ -218,7 +218,7 @@ baasicMeteringService.acl.get({id: '<id>'})
 });
                     **/
           get: function (options) {
-            return baasicApp.metering.acl.get(options);
+            return baasicApp.meteringModule.acl.get(options);
           },
           /**
                     * Returns a promise that is resolved once the update acl action has been performed, this action creates new ACL policy for the specified metering resource.
@@ -240,7 +240,7 @@ baasicMeteringService.acl.update(options)
 });
 				    **/
           update: function (options) {
-            return baasicApp.metering.acl.update(options);
+            return baasicApp.meteringModule.acl.update(options);
           },
           /**
                     * Returns a promise that is resolved once the removeByUser action has been performed. This action deletes ACL policy assigned to the specified user and metering resource.
@@ -255,7 +255,7 @@ baasicMeteringService.acl.removeByUser('<id>', '<access-action>', '<username>')
 });
 				    **/
           removeByUser: function (id, action, user, data) {
-            return baasicApp.metering.acl.removeByUser(id, action, user, data);
+            return baasicApp.meteringModule.acl.removeByUser(id, action, user, data);
           },
           /**
                     * Returns a promise that is resolved once the removeByRole action has been performed. This action deletes ACL policy assigned to the specified role and metering resource.
@@ -270,7 +270,7 @@ baasicMeteringService.acl.removeByRole('<id>', '<access-action>', '<role-name>')
 });
 				    **/
           removeByRole: function (id, action, role, data) {
-            return baasicApp.metering.acl.removeByRole(id, action, role, data);
+            return baasicApp.meteringModule.acl.removeByRole(id, action, role, data);
           }
         }
       };
