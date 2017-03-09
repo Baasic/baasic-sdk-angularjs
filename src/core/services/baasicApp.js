@@ -37,8 +37,8 @@
 			}
 		};
 
-		this.$get = ["$http", function ($http) {
-			var httpClient = getHttpClient($http);
+		this.$get = ["$http", "$q", function ($http, $q) {
+			var httpClient = getHttpClient($http, $q);
 
 			return {
 				/**
@@ -73,43 +73,66 @@
 		}];
 	});
 
-	function getHttpClient($http) {
-		return function (request) {
-			var config = {
-				withCredentials: true,
-				method: request.method,
-				url: request.url.toString()
-			};
+	function getHttpClient($http, $q) {
+		return {
+			createPromise: function(deferFn) {
+	            var deferred = $q.defer(),
+				deferFn(deferred.resolve, deferred.reject);
+                promise = deferred.promise;
 
-			if (request.headers) config.headers = request.headers;
-			if (request.data) config.data = request.data;
+				promise.success = function (fn) {
+					promise.then(function (response) {
+						fn(response.data, response.status, response.headers, response.config);
+					}, null);
+					return promise;
+				};
 
-			var promise = $http(config)
-				.then(function (value) {
-					return {
-						headers: value.headers(),
-						data: value.data,
-						statusCode: value.status,
-						statusText: value.statusText,
-						request: request
-					};
-				});
+				promise.error = function (fn) {
+					promise.then(null, function (response) {
+						fn(response.data, response.status, response.headers, response.config);
+					});
+					return promise;
+				};
 
-			promise.success = function (fn) {
-			promise.then(function (response) {
-					fn(response.data, response.statusCode, response.headers, request);
-				}, null);
 				return promise;
-			};
+			},
+			request: function (request) {
+				var config = {
+					withCredentials: true,
+					method: request.method,
+					url: request.url.toString()
+				};
 
-			promise.error = function (fn) {
-				promise.then(null, function (response) {
-					fn(response.data, response.statusCode, response.headers, request);
-				});
+				if (request.headers) config.headers = request.headers;
+				if (request.data) config.data = request.data;
+
+				var promise = $http(config)
+					.then(function (value) {
+						return {
+							headers: value.headers(),
+							data: value.data,
+							statusCode: value.status,
+							statusText: value.statusText,
+							request: request
+						};
+					});
+
+				promise.success = function (fn) {
+				promise.then(function (response) {
+						fn(response.data, response.statusCode, response.headers, request);
+					}, null);
+					return promise;
+				};
+
+				promise.error = function (fn) {
+					promise.then(null, function (response) {
+						fn(response.data, response.statusCode, response.headers, request);
+					});
+					return promise;
+				};				
+
 				return promise;
-			};				
-
-			return promise;
+			}
 		};
 	}
 
