@@ -75,10 +75,10 @@
 
 	function getHttpClient($http, $q) {
 		return {
-			createPromise: function (deferFn) {
-				var deferred = $q.defer();
+			createPromise: function(deferFn) {
+	            var deferred = $q.defer();
 				deferFn(deferred.resolve, deferred.reject);
-				promise = deferred.promise;
+                promise = deferred.promise;
 
 				promise.success = function (fn) {
 					promise.then(function (response) {
@@ -118,7 +118,7 @@
 					});
 
 				promise.success = function (fn) {
-					promise.then(function (response) {
+				promise.then(function (response) {
 						fn(response.data, response.statusCode, response.headers, request);
 					}, null);
 					return promise;
@@ -129,7 +129,7 @@
 						fn(response.data, response.statusCode, response.headers, request);
 					});
 					return promise;
-				};
+				};				
 
 				return promise;
 			}
