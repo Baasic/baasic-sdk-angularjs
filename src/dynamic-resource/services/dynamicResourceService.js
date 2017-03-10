@@ -129,7 +129,7 @@ baasicDynamicResourceService.remove(dynamicResource, {
 });		
 				**/
         remove: function (data, options) {
-          return baasicApp.dynamicResourceModule.remvoe(data, options);
+          return baasicApp.dynamicResourceModule.remove(data, options);
         },
         /**
          * Provides direct access to `baasicDynamicResourceRouteService`.
