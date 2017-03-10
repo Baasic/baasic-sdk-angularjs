@@ -100,7 +100,7 @@ baasicKeyValueService.remove(keyValue)
          * @method        
          * @example baasicKeyValueService.routeService.get('<id>', { embed:'<embeds>', fields: '<fields>' });
          **/
-        routeService: baasicApp.keyValue.routeDefinition
+        routeService: baasicApp.keyValueModule.routeDefinition
       };
     }
   ]);

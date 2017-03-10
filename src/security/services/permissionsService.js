@@ -62,7 +62,7 @@ baasicPermissionsService.getPermissionSubjects({
         getPermissionSubjects: function (options) {
           var deferred = baasicApiHttp.createHttpDefer();
 
-          baasicApp.membership.permissions.getPermissionSubjects(options)
+          baasicApp.membershipModule.permissions.getPermissionSubjects(options)
             .then(function (data) {
                 deferred.resolve(data);
               },
@@ -166,7 +166,7 @@ baasicPermissionsService.createPermission('<section-Name>', actionCollection, su
          * @method        
          * @example baasicPermissionsService.routeService.get.expand(expandObject);
          **/
-        routeService: baasicApp.membership.permissions.routeDefinition
+        routeService: baasicApp.membershipModule.permissions.routeDefinition
       };
     }
   ]);

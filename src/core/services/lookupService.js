@@ -9,7 +9,7 @@
 		function (baasicApps) {
 			var baasicApp = baasicApps.get();
 			return {
-				routeService: baasicApp.membership.lookups.routeDefinition,
+				routeService: baasicApp.membershipModule.lookups.routeDefinition,
 				/**
                  * Returns a promise that is resolved once the get action has been performed. Success response returns the lookup resources.
                  * @method        

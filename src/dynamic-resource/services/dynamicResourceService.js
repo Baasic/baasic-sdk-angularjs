@@ -136,7 +136,7 @@ baasicDynamicResourceService.remove(dynamicResource, {
          * @method        
          * @example baasicDynamicResourceService.routeService.get.expand(expandObject);
          **/
-        routeService: baasicApp.dynamicResource.routeDefinition,
+        routeService: baasicApp.dynamicResourceModule.routeDefinition,
         acl: {
           /**
                     * Returns a promise that is resolved once the get action has been performed. Success response returns a list of ACL policies established for the specified dynamic resource.
@@ -200,7 +200,7 @@ baasicDynamicResourceService.acl.removeByRole('<access-action>', '<role-name>', 
           removeByRole: function (action, role, data) {
             return baasicApp.dynamicResourceModule.acl.removeByRole(action, role, data);
           },
-          routeService: baasicApp.dynamicResource.acl.routeDefinition
+          routeService: baasicApp.dynamicResourceModule.acl.routeDefinition
         }
       };
     }

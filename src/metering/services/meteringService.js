@@ -125,7 +125,7 @@ baasicMeteringService.purge()
          * @method        
          * @example baasicMeteringService.routeService.get.expand(expandObject);
          **/
-        routeService: baasicApp.metering.routeDefinition,
+        routeService: baasicApp.meteringModule.routeDefinition,
         batch: {
           /**
                   * Returns a promise that is resolved once the create data action has been performed; this action creates new data resources.

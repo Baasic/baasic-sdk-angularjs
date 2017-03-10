@@ -22,7 +22,7 @@ baasicApplicationSettingsService.get()
 });
                 **/
                 get: function (options) {
-                    return baasicApp.applicationSettings.get(options)
+                    return baasicApp.applicationSettingModule.get(options)
                         .success(function (appSettings) {
                             appSettings.origins = appSettings.origins || [];
                         });
@@ -48,7 +48,7 @@ baasicApplicationSettingsService.update(appSettings)
                 update: function (data) {
                     return baasicApp.applicationSettingModule.update(data);
                 },
-                routeService: baasicApp.applicationSettings.routeDefinition
+                routeService: baasicApp.applicationSettingModule.routeDefinition
             };
         }
     ]);

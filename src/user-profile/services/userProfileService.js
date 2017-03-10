@@ -179,7 +179,7 @@ baasicUserProfileService.acl.removeByRole('<profile-id>', '<access-action>', '<r
          * @method        
          * @example baasicUserProfileService.routeService.get.expand(expandObject);
          **/
-        routeService: baasicApp.userProfile.profile.routeDefinition
+        routeService: baasicApp.userProfileModule.profile.routeDefinition
       };
     }
   ]);

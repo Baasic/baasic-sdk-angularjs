@@ -101,7 +101,7 @@ baasicValueSetService.remove(valueSet)
          * @method        
          * @example baasicValueSetService.routeService.get('<id>', expandObject);
          **/
-        routeService: baasicApp.valueSet.routeDefinition,
+        routeService: baasicApp.valueSetModule.routeDefinition,
         items: {
           /**
                     * Returns a promise that is resolved once the find action has been performed. Success response returns a list of value set item resources matching given criteria.

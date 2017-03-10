@@ -54,7 +54,7 @@ baasicPasswordRecoveryService.reset({
                  * @method        
                  * @example baasicPasswordRecoveryService.routeService.get('<id>', expandObject);
                  **/
-                routeService: baasicApp.membership.passwordRecovery.routeDefinition
+                routeService: baasicApp.membershipModule.passwordRecovery.routeDefinition
             };
         }
     ]);

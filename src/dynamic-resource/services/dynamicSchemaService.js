@@ -141,7 +141,7 @@ baasicDynamicSchemaService.generate({
          * @method        
          * @example baasicDynamicSchemaService.routeService.get.expand(expandObject);
          **/
-        routeService: baasicApp.dynamicResource.schema.routeDefinition
+        routeService: baasicApp.dynamicResourceModule.schema.routeDefinition
       };
     }
   ]);
