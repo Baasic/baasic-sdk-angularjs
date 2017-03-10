@@ -76,7 +76,7 @@
 	function getHttpClient($http, $q) {
 		return {
 			createPromise: function(deferFn) {
-	            var deferred = $q.defer(),
+	            var deferred = $q.defer();
 				deferFn(deferred.resolve, deferred.reject);
                 promise = deferred.promise;
 
