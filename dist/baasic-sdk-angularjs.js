@@ -1127,7 +1127,7 @@
                  * @method        
                  * @example baasicArticleService.updateSlug(article);
                  **/
-                punv: baasicApp.articleModule.articles.articleUtility.updateSlug,
+                updateSlug: baasicApp.articleModule.articles.articleUtility.updateSlug,
                 /**
                  * Generates and returns a valid slug url string.
                  * @method        
@@ -1578,7 +1578,7 @@
                      });
                      **/
                     findByUsername: function (articleId, username, options) {
-                        return baasicApp.articleModule.articles.ratings.findByUsername(articleId, username, options);
+                        return baasicApp.articleModule.articles.ratings.findByUser(articleId, username, options);
                     },
                     /**
                      * Returns a promise that is resolved once the create article rating action has been performed; this action creates a new rating for an article.
@@ -10207,7 +10207,7 @@
                  .finally (function () {});
                  **/
                 resetPermissions: function () {
-                    app.membership.permissions.resetPermissions();
+                    app.membershipModule.permissions.resetPermissions();
                 },
                 /**
                  * Checks if current user has permissions to perform a certain action. To optimize performance this information is cached and can be reset using the resetPermissions action. Permissions cache should be reset when updated user information is set.
@@ -10215,7 +10215,7 @@
                  * @example baasicAuthorizationService.hasPermission("<baasic-Section>.<action>");				
                  **/
                 hasPermission: function (authorization) {
-                    return app.membership.permissions.hasPermission(authorization);
+                    return app.membershipModule.permissions.hasPermission(authorization);
                 }
             };
         }]);

@@ -20,7 +20,7 @@
                  * @method        
                  * @example baasicArticleService.updateSlug(article);
                  **/
-                punv: baasicApp.articleModule.articles.articleUtility.updateSlug,
+                updateSlug: baasicApp.articleModule.articles.articleUtility.updateSlug,
                 /**
                  * Generates and returns a valid slug url string.
                  * @method        
@@ -471,7 +471,7 @@ baasicArticleService.ratings.findByUsername('<article-id>', '<username>')
 });    
                     **/
                     findByUsername: function (articleId, username, options) {
-                        return baasicApp.articleModule.articles.ratings.findByUsername(articleId, username, options);
+                        return baasicApp.articleModule.articles.ratings.findByUser(articleId, username, options);
                     },
                     /**
                     * Returns a promise that is resolved once the create article rating action has been performed; this action creates a new rating for an article.
