@@ -48,7 +48,9 @@ baasicApplicationSettingsService.update(appSettings)
                 update: function (data) {
                     return baasicApp.applicationSettingModule.update(data);
                 },
-                routeService: baasicApp.applicationSettingModule.routeDefinition
+                routeService: function () {
+                    return baasicApp.applicationSettingModule.routeDefinition;
+                }
             };
         }
     ]);

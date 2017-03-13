@@ -130,7 +130,9 @@ baasicArticleRatingsService.remove(articleRating)
          * @method        
          * @example baasicArticleRatingsService.routeService.get.expand(expandObject);
          **/
-        routeService: baasicApp.articleModule.ratings.routeDefinition
+        routeService: function () {
+          return baasicApp.articleModule.ratings.routeDefinition;
+        }
       };
     }
   ]);

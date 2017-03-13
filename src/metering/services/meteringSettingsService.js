@@ -50,7 +50,9 @@ baasicMeteringSettingsService.update(meteringSettings)
                  * @method        
                  * @example baasicMeteringSettingsService.routeService.get.expand(expandObject);
                  **/
-                routeService: baasicApp.meteringModule.settings.routeDefinition
+                routeService: function () {
+                    return baasicApp.meteringModule.settings.routeDefinition;
+                }
             };
         }
     ]);

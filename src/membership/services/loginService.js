@@ -64,7 +64,9 @@ baasicLoginService.logout(token.access_token, token.token_type)
                  * @method        
                  * @example baasicLoginService.routeService.get('<id>', expandObject);
                  **/
-                routeService: baasicApp.membershipModule.login.routeDefinition,
+                routeService: function () {
+                    return baasicApp.membershipModule.login.routeDefinition;
+                },
                 social: {
                     /**
                     * Returns a promise that is resolved once the get action has been performed. Success response returns a resolved social login provider Url.
@@ -118,7 +120,9 @@ baasicLoginService.social.post('<provider>', postData)
                      * @method        
                      * @example baasicLoginService.social.routeService.get('<id>', expandObject);
                      **/
-                    routeService: baasicApp.membershipModule.loginSocial.routeDefinition
+                    routeService: function () {
+                        return baasicApp.membershipModule.loginSocial.routeDefinition;
+                    }
                 }
             };
 

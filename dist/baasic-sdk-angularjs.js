@@ -78,7 +78,9 @@
                 update: function (data) {
                     return baasicApp.applicationSettingModule.update(data);
                 },
-                routeService: baasicApp.applicationSettingModule.routeDefinition
+                routeService: function () {
+                    return baasicApp.applicationSettingModule.routeDefinition;
+                }
             };
         }]);
     }(angular, module));
@@ -133,7 +135,9 @@
                  * @method  
                  * @example baasicArticleCommentRepliesService.statuses.approved;
                  **/
-                statuses: baasicApp.articleModule.comments.replies.statuses,
+                statuses: function () {
+                    return baasicApp.articleModule.comments.replies.statuses;
+                },
                 /**
                  * Returns a promise that is resolved once the approve article comment reply action has been performed. This action sets the state of an article comment reply to "approved". This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicarticleCommentRepliesRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
                  ```
@@ -395,7 +399,9 @@
                  * @method        
                  * @example baasicArticleCommentRepliesService.routeService.get.expand(expandObject);
                  **/
-                routeService: baasicApp.articleModule.comments.replies.routeDefinition
+                routeService: function () {
+                    return baasicApp.articleModule.comments.replies.routeDefinition;
+                }
             };
         }]);
     }(angular, module));
@@ -421,7 +427,9 @@
                  * @method      
                  * @example baasicArticleCommentsService.statuses.approved;
                  **/
-                statuses: baasicApp.articleModule.comments.statuses,
+                statuses: function () {
+                    return baasicApp.articleModule.comments.statuses;
+                },
                 /**
                  * Returns a promise that is resolved once the approve article comment action has been performed. This action sets the state of an article comment to "approved". This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicarticleCommentsRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
                  ```
@@ -682,7 +690,9 @@
                  * @method        
                  * @example baasicArticleCommentsService.routeService.get(expandObject);
                  **/
-                routeService: baasicApp.articleModule.comments.routeDefinition
+                routeService: function () {
+                    return baasicApp.articleModule.comments.routeDefinition;
+                }
             };
         }]);
     }(angular, module));
@@ -891,7 +901,9 @@
                     create: function (data, stream) {
                         return baasicApp.articleModule.files.streams.create(data, stream);
                     },
-                    routeService: baasicApp.articleModule.files.streams.routeDefintion
+                    routeService: function () {
+                        return baasicApp.articleModule.files.streams.routeDefintion;
+                    }
                 },
 
                 batch: {
@@ -1092,7 +1104,9 @@
                  * @method        
                  * @example baasicArticleRatingsService.routeService.get.expand(expandObject);
                  **/
-                routeService: baasicApp.articleModule.ratings.routeDefinition
+                routeService: function () {
+                    return baasicApp.articleModule.ratings.routeDefinition;
+                }
             };
         }]);
     }(angular, module));
@@ -1121,19 +1135,25 @@
                  * @method        
                  * @example baasicArticleService.statuses.archive;
                  **/
-                statuses: baasicApp.articleModule.articles.statuses,
+                statuses: function () {
+                    return baasicApp.articleModule.articles.statuses;
+                },
                 /**
                  * Parses article object and updates slug of an article.
                  * @method        
                  * @example baasicArticleService.updateSlug(article);
                  **/
-                updateSlug: baasicApp.articleModule.articles.articleUtility.updateSlug,
+                updateSlug: function (article) {
+                    return baasicApp.articleModule.articles.articleUtility.updateSlug(article);
+                },
                 /**
                  * Generates and returns a valid slug url string.
                  * @method        
                  * @example baasicArticleService.toSlug('<slug>');
                  **/
-                toSlug: baasicApp.articleModule.articles.articleUtility.toSlug,
+                toSlug: function (slug) {
+                    return baasicApp.articleModule.articles.articleUtility.toSlug(slug);
+                },
                 /**
                  * Returns a promise that is resolved once the find action has been performed. Success response returns a list of article resources matching the given criteria.
                  * @method        
@@ -1757,7 +1777,9 @@
                      * @method comments.statuses      
                      * @example baasicArticleService.comments.statuses.approved;
                      **/
-                    statuses: baasicApp.articleModule.articles.comments.statuses,
+                    statuses: function () {
+                        return baasicApp.articleModule.articles.comments.statuses;
+                    },
                     /**
                      * Returns a promise that is resolved once the approve article comment action has been performed. This action sets the state of an article comment to "approved". This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicArticleRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
                      ```
@@ -2039,7 +2061,9 @@
                          * @method comments.replies.statuses    
                          * @example baasicArticleService.comments.replies.statuses.approved;
                          **/
-                        statuses: baasicApp.articleModule.articles.comments.statuses,
+                        statuses: function () {
+                            return baasicApp.articleModule.articles.comments.statuses;
+                        },
                         /**
                          * Returns a promise that is resolved once the approve article comment reply action has been performed. This action sets the state of an article comment reply to "approved". This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicArticleRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
                          ```
@@ -2653,7 +2677,9 @@
                  * @method        
                  * @example baasicArticleService.routeService.get(expandObject);
                  **/
-                routeService: baasicApp.articleModule.articles.routeDefinition
+                routeService: function () {
+                    return baasicApp.articleModule.articles.routeDefinition;
+                }
             };
         }]);
     }(angular, module));
@@ -2717,7 +2743,9 @@
                  * @method        
                  * @example baasicArticleSettingsService.routeService.get(expandObject);
                  **/
-                routeService: baasicApp.articleModule.settings.routeDefinition
+                routeService: function () {
+                    return baasicApp.articleModule.settings.routeDefinition;
+                }
             };
         }]);
     }(angular, module));
@@ -2823,7 +2851,9 @@
                  * @method        
                  * @example baasicArticleTagsService.routeService.get.expand(expandObject);
                  **/
-                routeService: baasicApp.articleModule.tags.routeDefinition,
+                routeService: function () {
+                    return baasicApp.articleModule.tags.routeDefinition;
+                },
 
                 subscriptions: {
                     /**
@@ -6622,7 +6652,9 @@
         module.service('baasicLookupService', ['baasicApp', function (baasicApps) {
             var baasicApp = baasicApps.get();
             return {
-                routeService: baasicApp.membershipModule.lookups.routeDefinition,
+                routeService: function () {
+                    return baasicApp.membershipModule.lookups.routeDefinition;
+                },
                 /**
                  * Returns a promise that is resolved once the get action has been performed. Success response returns the lookup resources.
                  * @method        
@@ -6895,7 +6927,9 @@
                  * @method        
                  * @example baasicDynamicResourceService.routeService.get.expand(expandObject);
                  **/
-                routeService: baasicApp.dynamicResourceModule.routeDefinition,
+                routeService: function () {
+                    return baasicApp.dynamicResourceModule.routeDefinition;
+                },
                 acl: {
                     /**
                      * Returns a promise that is resolved once the get action has been performed. Success response returns a list of ACL policies established for the specified dynamic resource.
@@ -6959,7 +6993,9 @@
                     removeByRole: function (action, role, data) {
                         return baasicApp.dynamicResourceModule.acl.removeByRole(action, role, data);
                     },
-                    routeService: baasicApp.dynamicResourceModule.acl.routeDefinition
+                    routeService: function () {
+                        return baasicApp.dynamicResourceModule.acl.routeDefinition;
+                    }
                 }
             };
         }]);
@@ -7112,7 +7148,9 @@
                  * @method        
                  * @example baasicDynamicSchemaService.routeService.get.expand(expandObject);
                  **/
-                routeService: baasicApp.dynamicResourceModule.schema.routeDefinition
+                routeService: function () {
+                    return baasicApp.dynamicResourceModule.schema.routeDefinition;
+                }
             };
         }]);
     }(angular, module));
@@ -7382,7 +7420,9 @@
                     create: function (data, stream) {
                         return baasicApp.fileModule.streams.create(data, stream);
                     },
-                    routeService: baasicApp.fileModule.streams.routeDefinition
+                    routeService: function () {
+                        return baasicApp.fileModule.streams.routeDefinition;
+                    }
                 },
 
                 batch: {
@@ -7466,7 +7506,9 @@
                     link: function (data) {
                         return baasicApp.fileModule.batch.link(data);
                     },
-                    routeService: baasicApp.fileModule.batch.routeDefinition
+                    routeService: function () {
+                        return baasicApp.fileModule.batch.routeDefinition;
+                    }
                 },
 
                 acl: {
@@ -7538,7 +7580,9 @@
                         return baasicApp.fileModule.acl.removeByRole(fileEntryId, action, role, data);
                     }
                 },
-                routeService: baasicApp.fileModule.acl.routeDefinition
+                routeService: function () {
+                    return baasicApp.fileModule.acl.routeDefinition;
+                }
             };
         }]);
     }(angular, module));
@@ -7739,7 +7783,9 @@
                     create: function (data, stream) {
                         return baasicApp.mediaVaultModule.streams.create(data, stream);
                     },
-                    routeService: baasicApp.mediaVaultModule.streams.routeDefinition
+                    routeService: function () {
+                        return baasicApp.mediaVaultModule.streams.routeDefinition;
+                    }
                 },
 
                 batch: {
@@ -7782,7 +7828,9 @@
                     update: function (data) {
                         return baasicApp.mediaVaultModule.batch.update(data);
                     },
-                    routeService: baasicApp.mediaVaultModule.batch.routeDefinition
+                    routeService: function () {
+                        return baasicApp.mediaVaultModule.batch.routeDefinition;
+                    }
                 },
 
                 settings: {
@@ -7817,7 +7865,9 @@
                     update: function (data) {
                         return baasicApp.mediaVaultModule.settings.update(data);
                     },
-                    routeService: baasicApp.mediaVaultModule.settings.routeDefinition
+                    routeService: function () {
+                        return baasicApp.mediaVaultModule.settings.routeDefinition;
+                    }
                 },
 
                 processingProviderSettings: {
@@ -7880,9 +7930,13 @@
                     update: function (data) {
                         return baasicApp.mediaVaultModule.processingProviderSettings.update(data);
                     },
-                    routeService: baasicApp.mediaVaultModule.processingProviderSettings.routeDefinition
+                    routeService: function () {
+                        return baasicApp.mediaVaultModule.processingProviderSettings.routeDefinition;
+                    }
                 },
-                routeService: baasicApp.mediaVaultModule.routeDefinition
+                routeService: function () {
+                    return baasicApp.mediaVaultModule.routeDefinition;
+                }
             };
         }]);
     }(angular, module));
@@ -8020,7 +8074,9 @@
                  * @method        
                  * @example baasicKeyValueService.routeService.get('<id>', { embed:'<embeds>', fields: '<fields>' });
                  **/
-                routeService: baasicApp.keyValueModule.routeDefinition
+                routeService: function () {
+                    return baasicApp.keyValueModule.routeDefinition;
+                }
             };
         }]);
     }(angular, module));
@@ -8121,7 +8177,9 @@
                  * @method        
                  * @example baasicLoginService.routeService.get('<id>', expandObject);
                  **/
-                routeService: baasicApp.membershipModule.login.routeDefinition,
+                routeService: function () {
+                    return baasicApp.membershipModule.login.routeDefinition;
+                },
                 social: {
                     /**
                      * Returns a promise that is resolved once the get action has been performed. Success response returns a resolved social login provider Url.
@@ -8175,7 +8233,9 @@
                      * @method        
                      * @example baasicLoginService.social.routeService.get('<id>', expandObject);
                      **/
-                    routeService: baasicApp.membershipModule.loginSocial.routeDefinition
+                    routeService: function () {
+                        return baasicApp.membershipModule.loginSocial.routeDefinition;
+                    }
                 }
             };
 
@@ -8242,7 +8302,9 @@
                  * @method        
                  * @example baasicPasswordRecoveryService.routeService.get('<id>', expandObject);
                  **/
-                routeService: baasicApp.membershipModule.passwordRecovery.routeDefinition
+                routeService: function () {
+                    return baasicApp.membershipModule.passwordRecovery.routeDefinition;
+                }
             };
         }]);
     }(angular, module));
@@ -8309,7 +8371,9 @@
                  * @method        
                  * @example baasicRegisterService.routeService.get('<id>', expandObject);
                  **/
-                routeService: baasicApp.membershipModule.register.routeDefinition
+                routeService: function () {
+                    return baasicApp.membershipModule.register.routeDefinition;
+                }
             };
         }]);
     }(angular, module));
@@ -8422,7 +8486,9 @@
                  * @method        
                  * @example baasicRoleService.routeService.get('<id>', expandObject);
                  **/
-                routeService: baasicApp.membershipModule.role.routeDefinition
+                routeService: function () {
+                    return baasicApp.membershipModule.role.routeDefinition;
+                }
             };
         }]);
     }(angular, module));
@@ -8665,7 +8731,9 @@
                  * @method        
                  * @example baasicUserService.routeService.get.expand(expandObject);
                  **/
-                routeService: baasicApp.membershipModule.user.routeDefinition,
+                routeService: function () {
+                    return baasicApp.membershipModule.user.routeDefinition;
+                },
                 socialLogin: {
                     /**
                      * Returns a promise that is resolved once the get action has been performed. Success response returns a list user resource connected social login providers.
@@ -8846,7 +8914,9 @@
                  * @method        
                  * @example baasicMeteringCategoryService.routeService.get.expand(expandObject);
                  **/
-                routeService: baasicApp.meteringModule.category.routeDefinition,
+                routeService: function () {
+                    return baasicApp.meteringModule.category.routeDefinition;
+                },
                 batch: {
                     /**
                      * Returns a promise that is resolved once the create category action has been performed; this action creates new category resources.
@@ -9040,7 +9110,9 @@
                  * @method        
                  * @example baasicMeteringService.routeService.get.expand(expandObject);
                  **/
-                routeService: baasicApp.meteringModule.routeDefinition,
+                routeService: function () {
+                    return baasicApp.meteringModule.routeDefinition;
+                },
                 batch: {
                     /**
                      * Returns a promise that is resolved once the create data action has been performed; this action creates new data resources.
@@ -9252,7 +9324,9 @@
                  * @method        
                  * @example baasicMeteringSettingsService.routeService.get.expand(expandObject);
                  **/
-                routeService: baasicApp.meteringModule.settings.routeDefinition
+                routeService: function () {
+                    return baasicApp.meteringModule.settings.routeDefinition;
+                }
             };
         }]);
     }(angular, module));
@@ -10023,7 +10097,9 @@
                  * @method
                  * @example baasicNotificationsService.routeService.publish.create.expand({});
                  */
-                routeService: baasicApp.notificationModule.routeDefinition
+                routeService: function () {
+                    return baasicApp.notificationModule.routeDefinition;
+                }
             };
         }]);
     }(angular, module));
@@ -10390,7 +10466,9 @@
                  * @method        
                  * @example baasicPermissionsService.routeService.get.expand(expandObject);
                  **/
-                routeService: baasicApp.membershipModule.permissions.routeDefinition
+                routeService: function () {
+                    return baasicApp.membershipModule.permissions.routeDefinition;
+                }
             };
         }]);
     }(angular, module));
@@ -10652,7 +10730,9 @@
                  * @method        
                  * @example baasicTemplatingService.routeService.get.expand(expandObject);
                  **/
-                routeService: baasicApp.templatingModule.routeDefinition,
+                routeService: function () {
+                    return baasicApp.templatingModule.routeDefinition;
+                },
                 batch: {
                     /**
                      * Returns a promise that is resolved once the create action has been performed; this action creates new template resources.
@@ -11440,7 +11520,9 @@
                 link: function (id, data) {
                     return baasicApp.userProfileModule.profile.avatar.link(id, data);
                 },
-                routeService: baasicApp.userProfileModule.profile.avatar.routeDefinition,
+                routeService: function () {
+                    return baasicApp.userProfileModule.profile.avatar.routeDefinition;
+                },
                 streams: {
                     /**
                      * Returns a promise that is resolved once the get action has been performed. Success response returns the file stream if successfully completed. If derived resource's format is passed, such as `width` and `height` for the image type of file resource, the operation will return a stream of the derived resource. Otherwise, stream of the original file resource will be retrieved.
@@ -11532,7 +11614,9 @@
                     create: function (id, data, stream) {
                         return baasicApp.userProfileModule.profile.avatar.streams.create(id, data, stream);
                     },
-                    routeService: baasicApp.userProfileModule.profile.avatar.streams.routeDefinition,
+                    routeService: function () {
+                        return baasicApp.userProfileModule.profile.avatar.streams.routeDefinition;
+                    },
                 }
             };
         }]);
@@ -11724,7 +11808,9 @@
                  * @method        
                  * @example baasicUserProfileService.routeService.get.expand(expandObject);
                  **/
-                routeService: baasicApp.userProfileModule.profile.routeDefinition
+                routeService: function () {
+                    return baasicApp.userProfileModule.profile.routeDefinition;
+                }
             };
         }]);
     }(angular, module));
@@ -12096,7 +12182,9 @@
                  * @method        
                  * @example baasicValueSetService.routeService.get('<id>', expandObject);
                  **/
-                routeService: baasicApp.valueSetModule.routeDefinition,
+                routeService: function () {
+                    return baasicApp.valueSetModule.routeDefinition;
+                },
                 items: {
                     /**
                      * Returns a promise that is resolved once the find action has been performed. Success response returns a list of value set item resources matching given criteria.

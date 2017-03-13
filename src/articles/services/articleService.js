@@ -14,19 +14,25 @@
                  * @method        
                  * @example baasicArticleService.statuses.archive;
                  **/
-                statuses: baasicApp.articleModule.articles.statuses,
+                statuses: function () {
+                    return baasicApp.articleModule.articles.statuses;
+                },
                 /**
                  * Parses article object and updates slug of an article.
                  * @method        
                  * @example baasicArticleService.updateSlug(article);
                  **/
-                updateSlug: baasicApp.articleModule.articles.articleUtility.updateSlug,
+                updateSlug: function (article) {
+                    return baasicApp.articleModule.articles.articleUtility.updateSlug(article);
+                },
                 /**
                  * Generates and returns a valid slug url string.
                  * @method        
                  * @example baasicArticleService.toSlug('<slug>');
                  **/
-                toSlug: baasicApp.articleModule.articles.articleUtility.toSlug,
+                toSlug: function (slug) {
+                    return baasicApp.articleModule.articles.articleUtility.toSlug(slug);
+                },
                 /**
                 * Returns a promise that is resolved once the find action has been performed. Success response returns a list of article resources matching the given criteria.
                 * @method        
@@ -650,7 +656,9 @@ baasicArticleService.tags.removeAll(article)
                      * @method comments.statuses      
                      * @example baasicArticleService.comments.statuses.approved;
                      **/
-                    statuses: baasicApp.articleModule.articles.comments.statuses,
+                    statuses: function () {
+                        return baasicApp.articleModule.articles.comments.statuses;
+                    },
                     /**
                     * Returns a promise that is resolved once the approve article comment action has been performed. This action sets the state of an article comment to "approved". This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicArticleRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
 ```
@@ -932,7 +940,9 @@ baasicArticleService.comments.update(articleComment)
                          * @method comments.replies.statuses    
                          * @example baasicArticleService.comments.replies.statuses.approved;
                          **/
-                        statuses: baasicApp.articleModule.articles.comments.statuses,
+                        statuses: function () {
+                            return baasicApp.articleModule.articles.comments.statuses;
+                        },
                         /**
                         * Returns a promise that is resolved once the approve article comment reply action has been performed. This action sets the state of an article comment reply to "approved". This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicArticleRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
 ```
@@ -1546,7 +1556,9 @@ baasicArticleService.acl.removeByRole('<article-id>', '<access-action>', '<role-
                  * @method        
                  * @example baasicArticleService.routeService.get(expandObject);
                  **/
-                routeService: baasicApp.articleModule.articles.routeDefinition
+                routeService: function () {
+                    return baasicApp.articleModule.articles.routeDefinition;
+                }
             };
         }
     ]);

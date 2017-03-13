@@ -102,7 +102,9 @@ baasicRoleService.remove(role)
          * @method        
          * @example baasicRoleService.routeService.get('<id>', expandObject);
          **/
-        routeService: baasicApp.membershipModule.role.routeDefinition
+        routeService: function () {
+          return baasicApp.membershipModule.role.routeDefinition;
+        }
       };
     }
   ]);

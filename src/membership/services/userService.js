@@ -232,7 +232,9 @@ baasicUserService.changePassword('<username>', {
          * @method        
          * @example baasicUserService.routeService.get.expand(expandObject);
          **/
-        routeService: baasicApp.membershipModule.user.routeDefinition,
+        routeService: function () {
+          return baasicApp.membershipModule.user.routeDefinition;
+        },
         socialLogin: {
           /**
                     * Returns a promise that is resolved once the get action has been performed. Success response returns a list user resource connected social login providers.

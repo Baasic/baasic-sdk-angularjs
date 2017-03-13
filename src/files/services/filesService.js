@@ -234,7 +234,9 @@ baasicFilesService.streams.create('<path>', <blob>)
           create: function (data, stream) {
             return baasicApp.fileModule.streams.create(data, stream);
           },
-          routeService: baasicApp.fileModule.streams.routeDefinition
+          routeService: function () {
+            return baasicApp.fileModule.streams.routeDefinition;
+          }
         },
 
         batch: {
@@ -318,7 +320,9 @@ baasicFilesService.batch.link(files)
           link: function (data) {
             return baasicApp.fileModule.batch.link(data);
           },
-          routeService: baasicApp.fileModule.batch.routeDefinition
+          routeService: function () {
+            return baasicApp.fileModule.batch.routeDefinition;
+          }
         },
 
         acl: {
@@ -390,7 +394,9 @@ baasicFilesService.acl.removeByRole('<file-id>', '<access-action>', '<role-name>
             return baasicApp.fileModule.acl.removeByRole(fileEntryId, action, role, data);
           }
         },
-        routeService: baasicApp.fileModule.acl.routeDefinition
+        routeService: function () {
+          return baasicApp.fileModule.acl.routeDefinition;
+        }
       };
     }
   ]);

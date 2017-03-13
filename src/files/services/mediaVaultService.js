@@ -189,7 +189,9 @@ baasicMediaVaultService.streams.create('<path>', <blob>)
           create: function (data, stream) {
             return baasicApp.mediaVaultModule.streams.create(data, stream);
           },
-          routeService: baasicApp.mediaVaultModule.streams.routeDefinition
+          routeService: function () {
+            return baasicApp.mediaVaultModule.streams.routeDefinition;
+          }
         },
 
         batch: {
@@ -232,7 +234,9 @@ baasicMediaVaultService.batch.update(files)
           update: function (data) {
             return baasicApp.mediaVaultModule.batch.update(data);
           },
-          routeService: baasicApp.mediaVaultModule.batch.routeDefinition
+          routeService: function () {
+            return baasicApp.mediaVaultModule.batch.routeDefinition;
+          }
         },
 
         settings: {
@@ -267,7 +271,9 @@ baasicMediaVaultService.settings.update(mediaVaultSettings)
           update: function (data) {
             return baasicApp.mediaVaultModule.settings.update(data);
           },
-          routeService: baasicApp.mediaVaultModule.settings.routeDefinition
+          routeService: function () {
+            return baasicApp.mediaVaultModule.settings.routeDefinition;
+          }
         },
 
         processingProviderSettings: {
@@ -330,9 +336,13 @@ baasicMediaVaultService.processingProviderSettings.update(processingProviderSett
           update: function (data) {
             return baasicApp.mediaVaultModule.processingProviderSettings.update(data);
           },
-          routeService: baasicApp.mediaVaultModule.processingProviderSettings.routeDefinition
+          routeService: function () {
+            return baasicApp.mediaVaultModule.processingProviderSettings.routeDefinition;
+          }
         },
-        routeService: baasicApp.mediaVaultModule.routeDefinition
+        routeService: function () {
+          return baasicApp.mediaVaultModule.routeDefinition;
+        }
       };
     }
   ]);
