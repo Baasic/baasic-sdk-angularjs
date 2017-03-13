@@ -56,7 +56,9 @@ baasicRegisterService.activate({
          * @method        
          * @example baasicRegisterService.routeService.get('<id>', expandObject);
          **/
-        routeService: baasicApp.membershipModule.register.routeDefinition
+        routeService: function () {
+          return baasicApp.membershipModule.register.routeDefinition;
+        }
       };
     }
   ]);

@@ -734,7 +734,9 @@ baasicNotificationsService.update(settings)
                  * @method
                  * @example baasicNotificationsService.routeService.publish.create.expand({});
                  */
-                routeService: baasicApp.notificationModule.routeDefinition
+                routeService: function () {
+                    return baasicApp.notificationModule.routeDefinition;
+                }
             };
         }
     ]);

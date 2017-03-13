@@ -92,7 +92,9 @@ baasicArticleTagsService.remove(articleTag)
                  * @method        
                  * @example baasicArticleTagsService.routeService.get.expand(expandObject);
                  **/
-                routeService: baasicApp.articleModule.tags.routeDefinition,
+                routeService: function () {
+                    return baasicApp.articleModule.tags.routeDefinition;
+                },
 
                 subscriptions: {
                     /**

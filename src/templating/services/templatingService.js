@@ -110,7 +110,9 @@ baasicTemplatingService.remove(template)
                  * @method        
                  * @example baasicTemplatingService.routeService.get.expand(expandObject);
                  **/
-                routeService: baasicApp.templatingModule.routeDefinition,
+                routeService: function () {
+                    return baasicApp.templatingModule.routeDefinition;
+                },
                 batch: {
                     /**
                     * Returns a promise that is resolved once the create action has been performed; this action creates new template resources.
