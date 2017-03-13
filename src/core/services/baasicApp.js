@@ -78,7 +78,7 @@
 			createPromise: function(deferFn) {
 	            var deferred = $q.defer();
 				deferFn(deferred.resolve, deferred.reject);
-                promise = deferred.promise;
+                var promise = deferred.promise;
 
 				promise.success = function (fn) {
 					promise.then(function (response) {

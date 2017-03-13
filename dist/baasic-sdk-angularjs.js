@@ -6555,7 +6555,7 @@
                 createPromise: function (deferFn) {
                     var deferred = $q.defer();
                     deferFn(deferred.resolve, deferred.reject);
-                    promise = deferred.promise;
+                    var promise = deferred.promise;
 
                     promise.success = function (fn) {
                         promise.then(function (response) {
@@ -10207,7 +10207,7 @@
                  .finally (function () {});
                  **/
                 resetPermissions: function () {
-                    app.membership.permissions.resetPermissions();
+                    app.membershipModule.permissions.resetPermissions();
                 },
                 /**
                  * Checks if current user has permissions to perform a certain action. To optimize performance this information is cached and can be reset using the resetPermissions action. Permissions cache should be reset when updated user information is set.
@@ -10215,7 +10215,7 @@
                  * @example baasicAuthorizationService.hasPermission("<baasic-Section>.<action>");				
                  **/
                 hasPermission: function (authorization) {
-                    return app.membership.permissions.hasPermission(authorization);
+                    return app.membershipModule.permissions.hasPermission(authorization);
                 }
             };
         }]);
