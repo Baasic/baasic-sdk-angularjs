@@ -165,9 +165,7 @@ baasicCommerceAddressTypeService.batch.create([{
          * @method        
          * @example baasicCommerceAddressTypeService.routeService.get(expandObject);
          **/
-        routeService: function () {
-          return baasicApp.commerceModule.lookups.addressTypes.routeDefinition;
-        }
+        routeService: baasicApp.commerceModule.lookups.addressTypes.routeDefinition
       };
     }
   ]);

@@ -177,11 +177,9 @@ baasicUserProfileService.acl.removeByRole('<profile-id>', '<access-action>', '<r
         /**
          * Provides direct access to `userProfileRouteService`.
          * @method        
-         * @example baasicUserProfileService.routeService.get.expand(expandObject);
+         * @example baasicUserProfileService.routeService.get(expandObject);
          **/
-        routeService: function () {
-          return baasicApp.userProfileModule.profile.routeDefinition;
-        }
+        routeService: baasicApp.userProfileModule.profile.routeDefinition
       };
     }
   ]);

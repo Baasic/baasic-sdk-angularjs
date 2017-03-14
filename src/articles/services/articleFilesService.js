@@ -197,9 +197,7 @@ baasicArticleFilesService.streams.create('<file-id>', <blob>)
           create: function (data, stream) {
             return baasicApp.articleModule.files.streams.create(data, stream);
           },
-          routeService: function () {
-            return baasicApp.articleModule.files.streams.routeDefintion;
-          }
+          routeService: baasicApp.articleModule.files.streams.routeDefinition
         },
 
         batch: {

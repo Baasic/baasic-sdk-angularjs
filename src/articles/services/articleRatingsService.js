@@ -128,11 +128,9 @@ baasicArticleRatingsService.remove(articleRating)
         /**
          * Provides direct access to `baasicArticleRatingsRouteService`.
          * @method        
-         * @example baasicArticleRatingsService.routeService.get.expand(expandObject);
+         * @example baasicArticleRatingsService.routeService.get(expandObject);
          **/
-        routeService: function () {
-          return baasicApp.articleModule.ratings.routeDefinition;
-        }
+        routeService: baasicApp.articleModule.ratings.routeDefinition
       };
     }
   ]);

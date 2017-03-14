@@ -230,11 +230,9 @@ baasicUserService.changePassword('<username>', {
         /**
          * Provides direct access to `baasicUserRouteService`.
          * @method        
-         * @example baasicUserService.routeService.get.expand(expandObject);
+         * @example baasicUserService.routeService.get(expandObject);
          **/
-        routeService: function () {
-          return baasicApp.membershipModule.user.routeDefinition;
-        },
+        routeService: baasicApp.membershipModule.user.routeDefinition,
         socialLogin: {
           /**
                     * Returns a promise that is resolved once the get action has been performed. Success response returns a list user resource connected social login providers.

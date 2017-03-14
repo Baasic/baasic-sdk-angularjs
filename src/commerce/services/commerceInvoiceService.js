@@ -128,9 +128,7 @@ baasicCommerceInvoiceService.stream.getBlobl({id: commerceInvoice.id})
                  * @method        
                  * @example baasicCommerceInvoiceService.routeService.get(expandObject);
                  **/
-                routeService: function () {
-                    return baasicApp.commerceModule.invoices.routeDefinition;
-                }
+                routeService: baasicApp.commerceModule.invoices.routeDefinition
             };
         }
     ]);

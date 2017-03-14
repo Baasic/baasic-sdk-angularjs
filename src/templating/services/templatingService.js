@@ -108,11 +108,9 @@ baasicTemplatingService.remove(template)
                 /**
                  * Provides direct access to `baasicKeyValueRouteService`.
                  * @method        
-                 * @example baasicTemplatingService.routeService.get.expand(expandObject);
+                 * @example baasicTemplatingService.routeService.get(expandObject);
                  **/
-                routeService: function () {
-                    return baasicApp.templatingModule.routeDefinition;
-                },
+                routeService: baasicApp.templatingModule.routeDefinition,
                 batch: {
                     /**
                     * Returns a promise that is resolved once the create action has been performed; this action creates new template resources.

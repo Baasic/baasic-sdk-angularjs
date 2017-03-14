@@ -48,11 +48,9 @@ baasicMeteringSettingsService.update(meteringSettings)
                 /**
                  * Provides direct access to `routeService`.
                  * @method        
-                 * @example baasicMeteringSettingsService.routeService.get.expand(expandObject);
+                 * @example baasicMeteringSettingsService.routeService.get(expandObject);
                  **/
-                routeService: function () {
-                    return baasicApp.meteringModule.settings.routeDefinition;
-                }
+                routeService: baasicApp.meteringModule.settings.routeDefinition
             };
         }
     ]);

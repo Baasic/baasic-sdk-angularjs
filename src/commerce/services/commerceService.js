@@ -127,9 +127,7 @@ baasicCommerceService.cancel({
          * @method        
          * @example baasicCommerceService.routeService.get(expandObject);
          **/
-        routeService: function () {
-          return baasicApp.commerceModule.routeDefinition;
-        }
+        routeService: baasicApp.commerceModule.routeDefinition
       };
     }
   ]);

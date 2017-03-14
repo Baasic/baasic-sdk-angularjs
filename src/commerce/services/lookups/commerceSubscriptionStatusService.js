@@ -164,11 +164,9 @@ baasicCommerceSubscriptionStatusService.batch.create([{
         /**
          * Provides direct access to `routeService`.
          * @method        
-         * @example baasicCommerceSubscriptionStatusService.routeService.get.expand(expandObject);
+         * @example baasicCommerceSubscriptionStatusService.routeService.get(expandObject);
          **/
-        routeService: function () {
-          return baasicApp.commerceModule.lookups.subscriptionStatuses.routeDefinition;
-        }
+        routeService: baasicApp.commerceModule.lookups.subscriptionStatuses.routeDefinition
       };
     }
   ]);

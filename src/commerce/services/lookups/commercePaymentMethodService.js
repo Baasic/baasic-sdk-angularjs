@@ -168,9 +168,7 @@ baasicCommercePaymentMethodService.batch.create([{
          * @method        
          * @example baasicCommercePaymentMethodService.routeService.get(expandObject);
          **/
-        routeService: function () {
-          return baasicApp.commerceModule.lookups.paymentMethods.routeDefinition;
-        }
+        routeService: baasicApp.commerceModule.lookups.paymentMethods.routeDefinition
       };
     }
   ]);

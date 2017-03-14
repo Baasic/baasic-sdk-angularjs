@@ -110,9 +110,7 @@ baasicCommerceCustomerPaymentMethodService.remove(commerceCustomerPaymentMethod)
          * @method        
          * @example baasicCommerceCustomerPaymentMethodService.routeService.get(expandObject);
          **/
-        routeService: function () {
-          return baasicApp.commerceModule.customers.paymentMethods.routeDefinition;
-        }
+        routeService: baasicApp.commerceModule.customers.paymentMethods.routeDefinition
       };
     }
   ]);

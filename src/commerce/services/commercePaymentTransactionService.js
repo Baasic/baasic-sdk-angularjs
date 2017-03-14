@@ -91,9 +91,7 @@ baasicCommercePaymentTransactionService.remove(commercePaymentTransaction)
          * @method        
          * @example baasicCommercePaymentTransactionService.routeService.get(expandObject);
          **/
-        routeService: function () {
-          return baasicApp.commerceModule.paymentTransactions.routeDefinition;
-        }
+        routeService: baasicApp.commerceModule.paymentTransactions.routeDefinition
       };
     }
   ]);

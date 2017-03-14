@@ -164,11 +164,9 @@ baasicPermissionsService.createPermission('<section-Name>', actionCollection, su
         /**
          * Provides direct access to `baasicPermissionsRouteService`.
          * @method        
-         * @example baasicPermissionsService.routeService.get.expand(expandObject);
+         * @example baasicPermissionsService.routeService.get(expandObject);
          **/
-        routeService: function () {
-          return baasicApp.membershipModule.permissions.routeDefinition;
-        }
+        routeService: baasicApp.membershipModule.permissions.routeDefinition
       };
     }
   ]);

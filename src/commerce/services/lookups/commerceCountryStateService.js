@@ -175,9 +175,7 @@ baasicCommerceCountryStateService.batch.create([{
          * @method        
          * @example baasicCommerceCountryStateService.routeService.get(expandObject);
          **/
-        routeService: function () {
-          return baasicApp.commerceModule.lookups.countryStates.routeDefinition;
-        }
+        routeService: baasicApp.commerceModule.lookups.countryStates.routeDefinition
       };
     }
   ]);

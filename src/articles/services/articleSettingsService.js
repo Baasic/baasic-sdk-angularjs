@@ -50,9 +50,7 @@ baasicArticleSettingsService.update(articleSettings)
                  * @method        
                  * @example baasicArticleSettingsService.routeService.get(expandObject);
                  **/
-                routeService: function () {
-                    return baasicApp.articleModule.settings.routeDefinition;
-                }
+                routeService: baasicApp.articleModule.settings.routeDefinition
             };
         }
     ]);
