@@ -2617,7 +2617,7 @@
                      });
                      **/
                     get: function (options) {
-                        return baasicApp.articleModule.articles.files.acl.get(options);
+                        return baasicApp.articleModule.articles.acl.get(options);
                     },
                     /**
                      * Returns a promise that is resolved once the update acl action has been performed, this action creates new ACL policy for the specified article resource.
@@ -2639,7 +2639,7 @@
                      });
                      **/
                     update: function (options) {
-                        return baasicApp.articleModule.articles.files.acl.update(options);
+                        return baasicApp.articleModule.articles.acl.update(options);
                     },
                     /**
                      * Returns a promise that is resolved once the removeByUser action has been performed. This action deletes ACL policy assigned to the specified user and article resource.
@@ -2654,7 +2654,7 @@
                      });
                      **/
                     removeByUser: function (articleId, action, user, data) {
-                        return baasicApp.articleModule.articles.files.acl.removeByUser(articleId, action, user, data);
+                        return baasicApp.articleModule.articles.acl.removeByUser(articleId, action, user, data);
                     },
                     /**
                      * Returns a promise that is resolved once the removeByRole action has been performed. This action deletes ACL policy assigned to the specified role and article resource.
@@ -2669,7 +2669,7 @@
                      });
                      **/
                     removeByRole: function (articleId, action, role, data) {
-                        return baasicApp.articleModule.articles.files.acl.removeByRole(articleId, action, role, data);
+                        return baasicApp.articleModule.articles.acl.removeByRole(articleId, action, role, data);
                     }
                 },
                 /**
