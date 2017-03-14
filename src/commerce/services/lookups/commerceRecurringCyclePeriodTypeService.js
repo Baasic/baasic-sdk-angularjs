@@ -2,13 +2,14 @@
 /**
  * @module baasicCommerceRecurringCyclePeriodTypeService
  * @description Baasic Commerce Recurring Cycle Period Type Service provides an easy way to consume Baasic Commerce REST API end-points. In order to obtain a needed routes `baasicCommerceRecurringCyclePeriodTypeService` uses `baasicCommerceRecurringCyclePeriodTypeRouteService`.
-*/
-(function (angular, module){
-    'use strict';
-    module.service('baasicCommerceRecurringCyclePeriodTypeService', ['baasicApiHttp', 'baasicApiService', 'baasicConstants', 'baasicCommerceRecurringCyclePeriodTypeRouteService',
-        function (baasicApiHttp, baasicApiService, baasicConstants, routeService) {
-            return {
-                /**
+ */
+(function (angular, module) {
+  'use strict';
+  module.service('baasicCommerceRecurringCyclePeriodTypeService', ['baasicApp',
+    function (baasicApps) {
+      var baasicApp = baasicApps.get();
+      return {
+        /**
                  * Returns a promise that is resolved once the create commerce action has been performed; this action creates a new commerce resource.
                  * @method        
                  * @example 
@@ -25,11 +26,11 @@ baasicCommerceRecurringCyclePeriodTypeService.create({
   // perform error handling here
 });
                  **/
-                create: function (data) {
-                    return baasicApiHttp.post(routeService.create.expand(), baasicApiService.createParams(data)[baasicConstants.modelPropertyName]);
-                },
+        create: function (data) {
+          return baasicApp.commerceModule.lookups.recurringCyclePerioedTypes.create(data);
+        },
 
-                /**
+        /**
                  * Returns a promise that is resolved once the find action has been performed. Success response returns a list of commerce resources matching the given criteria.
                  * @method        
                  * @example 
@@ -47,11 +48,11 @@ baasicCommerceRecurringCyclePeriodTypeService.find({
   // perform error handling here
 });    
                  **/
-                find: function (options) {
-                    return baasicApiHttp.get(routeService.find.expand(baasicApiService.findParams(options)));
-                },
+        find: function (options) {
+          return baasicApp.commerceModule.lookups.recurringCyclePerioedTypes.find(options);
+        },
 
-                /**
+        /**
                 * Returns a promise that is resolved once the get action has been performed. Success response returns the commerce resource.
                 * @method        
                 * @example 
@@ -62,12 +63,12 @@ baasicCommerceRecurringCyclePeriodTypeService.get('<recurring-cycle-period-type-
 .error(function (response, status, headers, config) {
   // perform error handling here
 });
-                **/  
-                get: function (id, options) {
-                    return baasicApiHttp.get(routeService.get.expand(baasicApiService.getParams(id, options)));
-                },
+                **/
+        get: function (id, options) {
+          return baasicApp.commerceModule.lookups.recurringCyclePerioedTypes.get(id, options);
+        },
 
-                /**
+        /**
                  * Returns a promise that is resolved once the update commerce action has been performed; this action updates a commerce resource. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicCommerceRecurringCyclePeriodTypeRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
 ```
 var params = baasicApiService.removeParams(commerceRecurringPeriodType);
@@ -84,13 +85,12 @@ baasicCommerceRecurringCyclePeriodTypeService.update(commerceRecurringPeriodType
 .error(function (response, status, headers, config) {
   // perform error handling here
 });
-				**/	
-                update: function (data) {
-                    var params = baasicApiService.updateParams(data);
-                    return baasicApiHttp.put(params[baasicConstants.modelPropertyName].links('put').href, params[baasicConstants.modelPropertyName]);
-                },
+				**/
+        update: function (data) {
+          return baasicApp.commerceModule.lookups.recurringCyclePerioedTypes.update(data);
+        },
 
-                /**
+        /**
                  * Returns a promise that is resolved once the remove action has been performed. This action will remove a commerce resource from the system if successfully completed. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicCommerceRecurringCyclePeriodTypeRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
 ```
 var params = baasicApiService.removeParams(commerceRecurringPeriodType);
@@ -107,14 +107,13 @@ baasicCommerceRecurringCyclePeriodTypeService.remove(commerceRecurringPeriodType
   // perform error handling here
 });		
 				**/
-                remove: function (data) {
-                    var params = baasicApiService.removeParams(data);
-                    return baasicApiHttp.delete(params[baasicConstants.modelPropertyName].links('delete').href);
-                }, 
+        remove: function (data) {
+          return baasicApp.commerceModule.lookups.recurringCyclePerioedTypes.remove(data);
+        },
 
-                batch: {
+        batch: {
 
-                    /**
+          /**
                     * Returns a promise that is resolved once the create commerce action has been performed; this action creates a new commerce resources.
                     * @method batch.create        
                     * @example 
@@ -130,12 +129,12 @@ baasicCommerceRecurringCyclePeriodTypeService.batch.create([{
 .error(function (response, status, headers, config) {
   // perform error handling here
 });
-                    **/ 
-                    create: function (data) {
-                        return baasicApiHttp.post(routeService.batch.create.expand(), baasicApiService.createParams(data)[baasicConstants.modelPropertyName]);
-                    },
+                    **/
+          create: function (data) {
+            return baasicApp.commerceModule.lookups.recurringCyclePerioedTypes.batch.create(data);
+          },
 
-                    /**
+          /**
                     * Returns a promise that is resolved once the remove commerce action has been performed. This action will remove commerce resources from the system if successfully completed. 
                     * @method batch.remove       
                     * @example 			 
@@ -147,15 +146,11 @@ baasicCommerceRecurringCyclePeriodTypeService.batch.create([{
     // perform error handling here
   });		
                     **/
-                    remove: function (ids) {
-                        return baasicApiHttp({
-                            url: routeService.batch.remove.expand(),
-                            method: 'DELETE',
-                            data: ids
-                        });
-                    },
+          remove: function (ids) {
+            return baasicApp.commerceModule.lookups.recurringCyclePerioedTypes.batch.remove(ids);
+          },
 
-                    /**
+          /**
                     * Returns a promise that is resolved once the update commerce action has been performed; this action updates specified commerce resources.
                     * @method batch.update       
                     * @example 
@@ -166,21 +161,23 @@ baasicCommerceRecurringCyclePeriodTypeService.batch.create([{
   .error(function (response, status, headers, config) {
     // perform error handling here
   });
-                    **/ 
-                    update: function (data) {
-                        return baasicApiHttp.put(routeService.batch.update.expand(), baasicApiService.updateParams(data)[baasicConstants.modelPropertyName]);
-                    }
-                },
+                    **/
+          update: function (data) {
+            return baasicApp.commerceModule.lookups.recurringCyclePerioedTypes.batch.update(data);
+          }
+        },
 
-                /**
-                * Provides direct access to `routeService`.
-                * @method        
-                * @example baasicCommerceRecurringCyclePeriodTypeService.routeService.get.expand(expandObject);
-                **/  							    
-                routeService: routeService
-            };
+        /**
+         * Provides direct access to `routeService`.
+         * @method        
+         * @example baasicCommerceRecurringCyclePeriodTypeService.routeService.get(expandObject);
+         **/
+        routeService: function () {
+          return baasicApp.commerceModule.lookups.recurringCyclePerioedTypes.reouteDefinition;
         }
-    ]);
+      };
+    }
+  ]);
 }(angular, module));
 /**
  * @copyright (c) 2017 Mono Ltd

@@ -1,15 +1,15 @@
-﻿
-/* globals module */
+﻿/* globals module */
 /**
  * @module baasicCommerceCustomerService
  * @description Baasic Commerce Customer Service provides an easy way to consume Baasic Commerce REST API end-points. In order to obtain a needed routes `baasicCommerceCustomerService` uses `baasicCommerceCustomerRouteService`.
-*/
+ */
 (function (angular, module, undefined) {
-    'use strict';
-    module.service('baasicCommerceCustomerService', ['baasicApiHttp', 'baasicApiService', 'baasicConstants', 'baasicCommerceCustomerRouteService',
-        function (baasicApiHttp, baasicApiService, baasicConstants, routeService) {
-            return {    
-                /**
+  'use strict';
+  module.service('baasicCommerceCustomerService', ['baasicApp',
+    function (baasicApps) {
+      var baasicApp = baasicApps.get();
+      return {
+        /**
                  * Returns a promise that is resolved once the find action has been performed. Success response returns a list of commerce resources matching the given criteria.
                  * @method        
                  * @example 
@@ -26,11 +26,11 @@ baasicCommerceCustomerService.find({
 .error(function (response, status, headers, config) {
   // perform error handling here
 });    
-                 **/ 				
-                find: function (options) {
-                    return baasicApiHttp.get(routeService.find.expand(baasicApiService.findParams(options)));
-                },
-                /**
+                 **/
+        find: function (options) {
+          return baasicApp.commerceModule.customers.find(options);
+        },
+        /**
                 * Returns a promise that is resolved once the get action has been performed. Success response returns the commerce resource.
                 * @method        
                 * @example 
@@ -41,11 +41,11 @@ baasicCommerceCustomerService.get()
 .error(function (response, status, headers, config) {
   // perform error handling here
 });
-                **/  				
-                get: function (id, options) {
-                    return baasicApiHttp.get(routeService.get.expand(baasicApiService.getParams(id, options)));
-                },                
-                /**
+                **/
+        get: function (id, options) {
+          return baasicApp.commerceModule.customers.get(id, options);
+        },
+        /**
                  * Returns a promise that is resolved once the update commerce action has been performed; this action updates a commerce resource. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicCommerceCustomerRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
 ```
 var params = baasicApiService.removeParams(commerceCustomer);
@@ -62,12 +62,11 @@ baasicCommerceCustomerService.update(commerceCustomer)
 .error(function (response, status, headers, config) {
   // perform error handling here
 });
-				**/					
-                update: function (data) {
-                    var params = baasicApiService.updateParams(data);
-                    return baasicApiHttp.put(params[baasicConstants.modelPropertyName].links('put').href, params[baasicConstants.modelPropertyName]);
-                },
-                 /**
+				**/
+        update: function (data) {
+          return baasicApp.commerceModule.customers.update(data);
+        },
+        /**
                  * Returns a promise that is resolved once the remove action has been performed. This action will remove a commerce resource from the system if successfully completed. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicCommerceCustomerRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
 ```
 var params = baasicApiService.removeParams(commerceCustomer);
@@ -83,19 +82,21 @@ baasicCommerceCustomerService.remove(commerceCustomer)
 .error(function (response, status, headers, config) {
   // perform error handling here
 });		
-				**/					
-                remove: function (data) {
-                    var params = baasicApiService.removeParams(data);
-                    return baasicApiHttp.delete(params[baasicConstants.modelPropertyName].links('delete').href);
-                },                 
-                /**
-                * Provides direct access to `routeService`.
-                * @method        
-                * @example baasicCommerceCustomerService.routeService.get.expand(expandObject);
-                **/  							    
-				        routeService: routeService
-            };
-        }]);
+				**/
+        remove: function (data) {
+          return baasicApp.commerceModule.customers.remove(data);
+        },
+        /**
+         * Provides direct access to `routeService`.
+         * @method        
+         * @example baasicCommerceCustomerService.routeService.get(expandObject);
+         **/
+        routeService: function () {
+          return baasicApp.commerceModule.customers.routeDefinition;
+        }
+      };
+    }
+  ]);
 }(angular, module));
 
 /**

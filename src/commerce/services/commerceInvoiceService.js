@@ -1,14 +1,14 @@
-﻿
-/* globals module */
+﻿/* globals module */
 /**
  * @module baasicCommerceInvoiceService
  * @description Baasic Commerce Invoice Service provides an easy way to consume Baasic Commerce REST API end-points. In order to obtain a needed routes `baasicCommerceInvoiceService` uses `baasicCommerceInvoiceRouteService`.
-*/
+ */
 (function (angular, module, undefined) {
     'use strict';
-    module.service('baasicCommerceInvoiceService', ['baasicApiHttp', 'baasicApiService', 'baasicConstants', 'baasicCommerceInvoiceRouteService',
-        function (baasicApiHttp, baasicApiService, baasicConstants, routeService) {
-            return {    
+    module.service('baasicCommerceInvoiceService', ['baasicApp',
+        function (baasicApps) {
+            var baasicApp = baasicApps.get();
+            return {
                 /**
                  * Returns a promise that is resolved once the find action has been performed. Success response returns a list of commerce resources matching the given criteria.
                  * @method        
@@ -26,9 +26,9 @@ baasicCommerceInvoiceService.find({
 .error(function (response, status, headers, config) {
   // perform error handling here
 });    
-                 **/ 				
+                 **/
                 find: function (options) {
-                    return baasicApiHttp.get(routeService.find.expand(baasicApiService.findParams(options)));
+                    return baasicApp.commerceModule.invoices.find(options);
                 },
                 /**
                 * Returns a promise that is resolved once the get action has been performed. Success response returns the commerce resource.
@@ -41,9 +41,9 @@ baasicCommerceInvoiceService.get()
 .error(function (response, status, headers, config) {
   // perform error handling here
 });
-                **/  				
+                **/
                 get: function (id, options) {
-                    return baasicApiHttp.get(routeService.get.expand(baasicApiService.getParams(id, options)));
+                    return baasicApp.commerceModule.invoices.get(id, options);
                 },
                 /**
                  * Returns a promise that is resolved once the update commerce action has been performed; this action updates a commerce resource. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicCommerceInvoiceRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
@@ -62,12 +62,11 @@ baasicCommerceInvoiceService.update(commerceInvoice)
 .error(function (response, status, headers, config) {
   // perform error handling here
 });
-				**/					
+				**/
                 update: function (data) {
-                    var params = baasicApiService.updateParams(data);
-                    return baasicApiHttp.put(params[baasicConstants.modelPropertyName].links('put').href, params[baasicConstants.modelPropertyName]);
+                    return baasicApp.commerceModule.invoices.update(data);
                 },
-                 /**
+                /**
                  * Returns a promise that is resolved once the remove action has been performed. This action will remove a commerce resource from the system if successfully completed. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicCommerceInvoiceRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
 ```
 var params = baasicApiService.removeParams(commerceInvoice);
@@ -83,10 +82,9 @@ baasicCommerceInvoiceService.remove(commerceInvoice)
 .error(function (response, status, headers, config) {
   // perform error handling here
 });		
-				**/					
+				**/
                 remove: function (data) {
-                    var params = baasicApiService.removeParams(data);
-                    return baasicApiHttp.delete(params[baasicConstants.modelPropertyName].links('delete').href);
+                    return baasicApp.commerceModule.invoices.remove(data);
                 },
 
                 streams: {
@@ -104,12 +102,7 @@ baasicCommerceInvoiceService.stream.get({id: commerceInvoice.id})
 });                    
                     **/
                     get: function (data) {
-                        if (!angular.isObject(data)){
-                            data = {
-                              id: data  
-                            };
-                        }
-                        return baasicApiHttp.get(routeService.streams.get.expand(data));
+                        return baasicApp.commerceModule.invoices.streams.get(data);
                     },
 
                     /**
@@ -124,29 +117,23 @@ baasicCommerceInvoiceService.stream.getBlobl({id: commerceInvoice.id})
 .error(function (response, status, headers, config) {
     // perform error handling here
 });
-                    **/  	                    
-                    getBlob: function(data) {
-                        if (!angular.isObject(data)){
-                            data = {
-                              id: data  
-                            };
-                        }                        
-                        return baasicApiHttp({
-                            url:  routeService.streams.get.expand(data),
-                            method: 'GET',
-                            responseType: 'blob'                            
-                        });                                                               
+                    **/
+                    getBlob: function (data) {
+                        return baasicApp.commerceModule.invoices.streams.getBlob(data);
                     }
                 },
 
                 /**
-                * Provides direct access to `routeService`.
-                * @method        
-                * @example baasicCommerceInvoiceService.routeService.get.expand(expandObject);
-                **/  							    
-				        routeService: routeService
+                 * Provides direct access to `routeService`.
+                 * @method        
+                 * @example baasicCommerceInvoiceService.routeService.get(expandObject);
+                 **/
+                routeService: function () {
+                    return baasicApp.commerceModule.invoices.routeDefinition;
+                }
             };
-        }]);
+        }
+    ]);
 }(angular, module));
 
 /**

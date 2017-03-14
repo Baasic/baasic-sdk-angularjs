@@ -2,13 +2,14 @@
 /**
  * @module baasicCommerceService
  * @description Baasic Commerce Service provides an easy way to consume Baasic Commerce REST API end-points. In order to obtain a needed routes `baasicCommerceService` uses `baasicCommerceRouteService`.
-*/
+ */
 (function (angular, module, undefined) {
-    'use strict';
-    module.service('baasicCommerceService', ['baasicApiHttp', 'baasicApiService', 'baasicConstants', 'baasicCommerceRouteService',
-        function (baasicApiHttp, baasicApiService, baasicConstants, routeService) {
-            return {    
-                /**
+  'use strict';
+  module.service('baasicCommerceService', ['baasicApp',
+    function (baasicApps) {
+      var baasicApp = baasicApps.get();
+      return {
+        /**
                  * Returns a promise that is resolved once the find action has been performed. Success response returns a list of commerce resources matching the given criteria.
                  * @method        
                  * @example 
@@ -25,11 +26,11 @@ baasicCommerceService.find({
 .error(function (response, status, headers, config) {
   // perform error handling here
 });    
-                 **/ 				
-                find: function (options) {
-                    return baasicApiHttp.get(routeService.find.expand(baasicApiService.findParams(options)));
-                },
-                /**
+                 **/
+        find: function (options) {
+          return baasicApp.commerceModule.find(options);
+        },
+        /**
                 * Returns a promise that is resolved once the get action has been performed. Success response returns the commerce resource.
                 * @method        
                 * @example 
@@ -40,11 +41,11 @@ baasicCommerceService.get('<id>', {})
 .error(function (response, status, headers, config) {
   // perform error handling here
 });
-                **/  				
-                get: function (id, options) {
-                    return baasicApiHttp.get(routeService.get.expand(baasicApiService.getParams(id, options)));
-                },
-                /**
+                **/
+        get: function (id, options) {
+          return baasicApp.commerceModule.get(id, options);
+        },
+        /**
                 * Returns a promise that is resolved once the get action has been performed. Success response returns the commerce resource.
                 * @method        
                 * @example 
@@ -55,10 +56,11 @@ baasicCommerceService.validateVAT({ countryCode: 'DE', vatId: 'DE999999999' })
 .error(function (response, status, headers, config) {
   // perform error handling here
 });
-                **/  				
-                validateVAT: function (countryCode, vatId) {
-                    return baasicApiHttp.get(routeService.validateVAT.expand({ countryCode: countryCode, vatId: vatId }));
-                },                /**
+                **/
+        validateVAT: function (countryCode, vatId) {
+          return baasicApp.commerceModule.validateVAT(countryCode, vatId);
+        },
+        /**
                  * Returns a promise that is resolved once the subscribe pre-process commerce action has been performed; this action performes pre-subscribe operations such as getting client tokens etc.
                  * @method        
                  * @example 
@@ -73,11 +75,11 @@ baasicCommerceService.preprocess({
 .error(function (response, status, headers, config) {
   // perform error handling here
 });
-                 **/ 				
-                preprocess: function (data) {
-                    return baasicApiHttp.post(routeService.preprocess.expand(), baasicApiService.createParams(data)[baasicConstants.modelPropertyName]);
-                },  
-                 /**
+                 **/
+        preprocess: function (data) {
+          return baasicApp.commerceModule.preprocess(data);
+        },
+        /**
                  * Returns a promise that is resolved once the subscribe commerce action has been performed; this action creates a new commerce subscription resource.
                  * @method        
                  * @example 
@@ -96,11 +98,11 @@ baasicCommerceService.subscribe({
 .error(function (response, status, headers, config) {
   // perform error handling here
 });
-                 **/ 				
-                subscribe: function (data) {
-                    return baasicApiHttp.post(routeService.subscribe.expand(), baasicApiService.createParams(data)[baasicConstants.modelPropertyName]);
-                },                
-                 /**
+                 **/
+        subscribe: function (data) {
+          return baasicApp.commerceModule.subscribe(data);
+        },
+        /**
                  * Returns a promise that is resolved once the cancel subscription action has been performed. This action will remove a commerce subscription resource from the system if successfully completed. This route obtain routes from `baasicCommerceRouteService` route template. Here is an example of how execute this action:
                  * @method        
                  * @example				 
@@ -116,18 +118,21 @@ baasicCommerceService.cancel({
 .error(function (response, status, headers, config) {
   // perform error handling here
 });		
-				**/					
-                cancel: function (data) {
-                    return baasicApiHttp.delete(routeService.cancel.expand(data));
-                },                 
-                /**
-                * Provides direct access to `routeService`.
-                * @method        
-                * @example baasicCommerceService.routeService.get.expand(expandObject);
-                **/  							    
-				        routeService: routeService
-            };
-        }]);
+				**/
+        cancel: function (data) {
+          return baasicApp.commerceModule.cancel(data);
+        },
+        /**
+         * Provides direct access to `routeService`.
+         * @method        
+         * @example baasicCommerceService.routeService.get(expandObject);
+         **/
+        routeService: function () {
+          return baasicApp.commerceModule.routeDefinition;
+        }
+      };
+    }
+  ]);
 }(angular, module));
 
 /**

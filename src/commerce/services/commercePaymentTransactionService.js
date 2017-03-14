@@ -1,15 +1,15 @@
-﻿
-/* globals module */
+﻿/* globals module */
 /**
  * @module baasicCommercePaymentTransactionService
  * @description Baasic Commerce PaymentTransaction Service provides an easy way to consume Baasic Commerce REST API end-points. In order to obtain a needed routes `baasicCommercePaymentTransactionService` uses `baasicCommercePaymentTransactionRouteService`.
-*/
+ */
 (function (angular, module, undefined) {
-    'use strict';
-    module.service('baasicCommercePaymentTransactionService', ['baasicApiHttp', 'baasicApiService', 'baasicConstants', 'baasicCommercePaymentTransactionRouteService',
-        function (baasicApiHttp, baasicApiService, baasicConstants, routeService) {
-            return {    
-                /**
+  'use strict';
+  module.service('baasicCommercePaymentTransactionService', ['baasicApp',
+    function (baasicApps) {
+      var baasicApp = baasicApps.get();
+      return {
+        /**
                  * Returns a promise that is resolved once the find action has been performed. Success response returns a list of commerce resources matching the given criteria.
                  * @method        
                  * @example 
@@ -26,11 +26,11 @@ baasicCommercePaymentTransactionService.find({
 .error(function (response, status, headers, config) {
   // perform error handling here
 });    
-                 **/ 				
-                find: function (options) {
-                    return baasicApiHttp.get(routeService.find.expand(baasicApiService.findParams(options)));
-                },
-                /**
+                 **/
+        find: function (options) {
+          return baasicApp.commerceModule.paymentTransactions.find(options);
+        },
+        /**
                 * Returns a promise that is resolved once the get action has been performed. Success response returns the commerce resource.
                 * @method        
                 * @example 
@@ -41,11 +41,11 @@ baasicCommercePaymentTransactionService.get()
 .error(function (response, status, headers, config) {
   // perform error handling here
 });
-                **/  				
-                get: function (id, options) {
-                    return baasicApiHttp.get(routeService.get.expand(baasicApiService.getParams(id, options)));
-                },                 
-                /**
+                **/
+        get: function (id, options) {
+          return baasicApp.commerceModule.paymentTransactions.get(id, options);
+        },
+        /**
                  * Returns a promise that is resolved once the update commerce action has been performed; this action updates a commerce resource. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicCommercePaymentTransactionRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
 ```
 var params = baasicApiService.removeParams(commercePaymentTransaction);
@@ -62,12 +62,11 @@ baasicCommercePaymentTransactionService.update(commercePaymentTransaction)
 .error(function (response, status, headers, config) {
   // perform error handling here
 });
-				**/					
-                update: function (data) {
-                    var params = baasicApiService.updateParams(data);
-                    return baasicApiHttp.put(params[baasicConstants.modelPropertyName].links('put').href, params[baasicConstants.modelPropertyName]);
-                },
-                 /**
+				**/
+        update: function (data) {
+          return baasicApp.commerceModule.paymentTransactions.update(data);
+        },
+        /**
                  * Returns a promise that is resolved once the remove action has been performed. This action will remove a commerce resource from the system if successfully completed. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicCommercePaymentTransactionRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
 ```
 var params = baasicApiService.removeParams(commercePaymentTransaction);
@@ -83,19 +82,21 @@ baasicCommercePaymentTransactionService.remove(commercePaymentTransaction)
 .error(function (response, status, headers, config) {
   // perform error handling here
 });		
-				**/					
-                remove: function (data) {
-                    var params = baasicApiService.removeParams(data);
-                    return baasicApiHttp.delete(params[baasicConstants.modelPropertyName].links('delete').href);
-                },                 
-                /**
-                * Provides direct access to `routeService`.
-                * @method        
-                * @example baasicCommercePaymentTransactionService.routeService.get.expand(expandObject);
-                **/  							    
-				        routeService: routeService
-            };
-        }]);
+				**/
+        remove: function (data) {
+          return baasicApp.commerceModule.paymentTransactions.remove(data);
+        },
+        /**
+         * Provides direct access to `routeService`.
+         * @method        
+         * @example baasicCommercePaymentTransactionService.routeService.get(expandObject);
+         **/
+        routeService: function () {
+          return baasicApp.commerceModule.paymentTransactions.routeDefinition;
+        }
+      };
+    }
+  ]);
 }(angular, module));
 
 /**
