@@ -21,9 +21,9 @@
 		this.create = function create(apiKey, config) {
 
 			apps[apiKey] = function (httpClient) {
-				var cfg = angular.extend({}, config, {
-					httpClient: httpClient
-				});
+				var cfg = angular.extend({
+					httpClient: function () { return httpClient; }
+				}, config);
 				var app = new baasicSdkJavaScript.BaasicApp(apiKey, cfg);
 				apps[apiKey] = function () {
 					return app;

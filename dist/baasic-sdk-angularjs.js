@@ -5520,9 +5520,11 @@
             this.create = function create(apiKey, config) {
 
                 apps[apiKey] = function (httpClient) {
-                    var cfg = angular.extend({}, config, {
-                        httpClient: httpClient
-                    });
+                    var cfg = angular.extend({
+                        httpClient: function () {
+                            return httpClient;
+                        }
+                    }, config);
                     var app = new baasicSdkJavaScript.BaasicApp(apiKey, cfg);
                     apps[apiKey] = function () {
                         return app;
@@ -5581,14 +5583,14 @@
 
                     promise.success = function (fn) {
                         promise.then(function (response) {
-                            fn(response.data, response.status, response.headers, response.config);
+                            resolveHttpPromise(fn, response);
                         }, null);
                         return promise;
                     };
 
                     promise.error = function (fn) {
                         promise.then(null, function (response) {
-                            fn(response.data, response.status, response.headers, response.config);
+                            resolveHttpPromise(fn, response);
                         });
                         return promise;
                     };
@@ -5632,6 +5634,12 @@
                     return promise;
                 }
             };
+        }
+
+        function resolveHttpPromise(fn, response) {
+            var config = angular.extend({}, response.request);
+            if (config.url) config.url = config.url.toString();
+            fn(response.data, response.statusCode, response.headers, config);
         }
 
     }(angular, module)); /* globals module */
