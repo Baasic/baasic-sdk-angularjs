@@ -164,11 +164,9 @@ baasicCommerceCountryService.batch.create([{
         /**
          * Provides direct access to `routeService`.
          * @method        
-         * @example baasicCommerceCountryService.routeService.get.expand(expandObject);
+         * @example baasicCommerceCountryService.routeService.get(expandObject);
          **/
-        routeService: function () {
-          return baasicApp.commerceModule.lookups.countries.routeDefinition;
-        }
+        routeService: baasicApp.commerceModule.lookups.countries.routeDefinition
       };
     }
   ]);

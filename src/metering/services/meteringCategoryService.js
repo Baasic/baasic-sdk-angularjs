@@ -110,11 +110,9 @@ baasicMeteringCategoryService.remove(meteringCategory)
         /**
          * Provides direct access to `routeService`.
          * @method        
-         * @example baasicMeteringCategoryService.routeService.get.expand(expandObject);
+         * @example baasicMeteringCategoryService.routeService.get(expandObject);
          **/
-        routeService: function () {
-          return baasicApp.meteringModule.category.routeDefinition;
-        },
+        routeService: baasicApp.meteringModule.category.routeDefinition,
         batch: {
           /**
                   * Returns a promise that is resolved once the create category action has been performed; this action creates new category resources.

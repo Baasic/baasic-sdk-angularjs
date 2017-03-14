@@ -135,9 +135,7 @@
                  * @method  
                  * @example baasicArticleCommentRepliesService.statuses.approved;
                  **/
-                statuses: function () {
-                    return baasicApp.articleModule.comments.replies.statuses;
-                },
+                statuses: baasicApp.articleModule.comments.replies.statuses,
                 /**
                  * Returns a promise that is resolved once the approve article comment reply action has been performed. This action sets the state of an article comment reply to "approved". This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicarticleCommentRepliesRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
                  ```
@@ -427,9 +425,7 @@
                  * @method      
                  * @example baasicArticleCommentsService.statuses.approved;
                  **/
-                statuses: function () {
-                    return baasicApp.articleModule.comments.statuses;
-                },
+                statuses: baasicApp.articleModule.comments.statuses,
                 /**
                  * Returns a promise that is resolved once the approve article comment action has been performed. This action sets the state of an article comment to "approved". This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicarticleCommentsRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
                  ```
@@ -901,9 +897,7 @@
                     create: function (data, stream) {
                         return baasicApp.articleModule.files.streams.create(data, stream);
                     },
-                    routeService: function () {
-                        return baasicApp.articleModule.files.streams.routeDefintion;
-                    }
+                    routeService: baasicApp.articleModule.files.streams.routeDefinition
                 },
 
                 batch: {
@@ -1135,9 +1129,7 @@
                  * @method        
                  * @example baasicArticleService.statuses.archive;
                  **/
-                statuses: function () {
-                    return baasicApp.articleModule.articles.statuses;
-                },
+                statuses: baasicApp.articleModule.articles.statuses,
                 /**
                  * Parses article object and updates slug of an article.
                  * @method        
@@ -1777,9 +1769,7 @@
                      * @method comments.statuses      
                      * @example baasicArticleService.comments.statuses.approved;
                      **/
-                    statuses: function () {
-                        return baasicApp.articleModule.articles.comments.statuses;
-                    },
+                    statuses: baasicApp.articleModule.articles.comments.statuses,
                     /**
                      * Returns a promise that is resolved once the approve article comment action has been performed. This action sets the state of an article comment to "approved". This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicArticleRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
                      ```
@@ -2061,9 +2051,7 @@
                          * @method comments.replies.statuses    
                          * @example baasicArticleService.comments.replies.statuses.approved;
                          **/
-                        statuses: function () {
-                            return baasicApp.articleModule.articles.comments.statuses;
-                        },
+                        statuses: baasicApp.articleModule.articles.comments.statuses,
                         /**
                          * Returns a promise that is resolved once the approve article comment reply action has been performed. This action sets the state of an article comment reply to "approved". This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicArticleRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
                          ```
@@ -2617,7 +2605,7 @@
                      });
                      **/
                     get: function (options) {
-                        return baasicApp.articleModule.articles.files.acl.get(options);
+                        return baasicApp.articleModule.articles.acl.get(options);
                     },
                     /**
                      * Returns a promise that is resolved once the update acl action has been performed, this action creates new ACL policy for the specified article resource.
@@ -2639,7 +2627,7 @@
                      });
                      **/
                     update: function (options) {
-                        return baasicApp.articleModule.articles.files.acl.update(options);
+                        return baasicApp.articleModule.articles.acl.update(options);
                     },
                     /**
                      * Returns a promise that is resolved once the removeByUser action has been performed. This action deletes ACL policy assigned to the specified user and article resource.
@@ -2654,7 +2642,7 @@
                      });
                      **/
                     removeByUser: function (articleId, action, user, data) {
-                        return baasicApp.articleModule.articles.files.acl.removeByUser(articleId, action, user, data);
+                        return baasicApp.articleModule.articles.acl.removeByUser(articleId, action, user, data);
                     },
                     /**
                      * Returns a promise that is resolved once the removeByRole action has been performed. This action deletes ACL policy assigned to the specified role and article resource.
@@ -2669,7 +2657,7 @@
                      });
                      **/
                     removeByRole: function (articleId, action, role, data) {
-                        return baasicApp.articleModule.articles.files.acl.removeByRole(articleId, action, role, data);
+                        return baasicApp.articleModule.articles.acl.removeByRole(articleId, action, role, data);
                     }
                 },
                 /**

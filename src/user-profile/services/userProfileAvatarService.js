@@ -83,9 +83,7 @@ baasicUserProfileAvatarService.link(fileObject)
                 link: function (id, data) {
                     return baasicApp.userProfileModule.profile.avatar.link(id, data);
                 },
-                routeService: function () {
-                    return baasicApp.userProfileModule.profile.avatar.routeDefinition;
-                },
+                routeService: baasicApp.userProfileModule.profile.avatar.routeDefinition,
                 streams: {
                     /**
                     * Returns a promise that is resolved once the get action has been performed. Success response returns the file stream if successfully completed. If derived resource's format is passed, such as `width` and `height` for the image type of file resource, the operation will return a stream of the derived resource. Otherwise, stream of the original file resource will be retrieved.
@@ -177,9 +175,7 @@ baasicUserProfileAvatarService.streams.create('<file-id>', '<filename'>, <blob>)
                     create: function (id, data, stream) {
                         return baasicApp.userProfileModule.profile.avatar.streams.create(id, data, stream);
                     },
-                    routeService: function () {
-                        return baasicApp.userProfileModule.profile.avatar.streams.routeDefinition;
-                    },
+                    routeService: baasicApp.userProfileModule.profile.avatar.streams.routeDefinition
                 }
             };
         }

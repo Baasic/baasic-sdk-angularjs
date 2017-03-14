@@ -166,9 +166,7 @@ baasicCommercePaymentTransactionStatusService.batch.create([{
          * @method        
          * @example baasicCommercePaymentTransactionStatusService.routeService.get(expandObject);
          **/
-        routeService: function () {
-          return baasicApp.commerceModule.lookups.paymentTransactionStatuses.routeDefinition;
-        }
+        routeService: baasicApp.commerceModule.lookups.paymentTransactionStatuses.routeDefinition
       };
     }
   ]);

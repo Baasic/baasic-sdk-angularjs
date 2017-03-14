@@ -168,11 +168,9 @@ baasicCommerceInvoiceStatusService.batch.create([{
         /**
          * Provides direct access to `routeService`.
          * @method        
-         * @example baasicCommerceInvoiceStatusService.routeService.get.expand(expandObject);
+         * @example baasicCommerceInvoiceStatusService.routeService.get(expandObject);
          **/
-        routeService: function () {
-          return baasicApp.commerceModule.lookups.invoiceStatuses.routeDefinition;
-        }
+        routeService: baasicApp.commerceModule.lookups.invoiceStatuses.routeDefinition
       };
     }
   ]);

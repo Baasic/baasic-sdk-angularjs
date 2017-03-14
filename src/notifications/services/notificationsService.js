@@ -732,11 +732,9 @@ baasicNotificationsService.update(settings)
                 /**
                  * Provides direct access to `baasicNotificationsRouteService`.
                  * @method
-                 * @example baasicNotificationsService.routeService.publish.create.expand({});
+                 * @example baasicNotificationsService.routeService.publish.create({});
                  */
-                routeService: function () {
-                    return baasicApp.notificationModule.routeDefinition;
-                }
+                routeService: baasicApp.notificationModule.routeDefinition
             };
         }
     ]);

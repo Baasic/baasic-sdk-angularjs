@@ -114,9 +114,7 @@ baasicCommerceProductService.remove(commerceProduct)
          * @method        
          * @example baasicCommerceProductService.routeService.get(expandObject);
          **/
-        routeService: function () {
-          return baasicApp.commerceModule.products.routeDefinition;
-        }
+        routeService: baasicApp.commerceModule.products.routeDefinition
       };
     }
   ]);

@@ -14,9 +14,7 @@
                  * @method  
                  * @example baasicArticleCommentRepliesService.statuses.approved;
                  **/
-                statuses: function () {
-                    return baasicApp.articleModule.comments.replies.statuses;
-                },
+                statuses: baasicApp.articleModule.comments.replies.statuses,
                 /**
                 * Returns a promise that is resolved once the approve article comment reply action has been performed. This action sets the state of an article comment reply to "approved". This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicarticleCommentRepliesRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
 ```
@@ -276,11 +274,9 @@ baasicArticleCommentRepliesService.update(articleCommentReply)
                 /**
                  * Provides direct access to `baasicArticleCommentRepliesRouteService`.
                  * @method        
-                 * @example baasicArticleCommentRepliesService.routeService.get.expand(expandObject);
+                 * @example baasicArticleCommentRepliesService.routeService.get(expandObject);
                  **/
-                routeService: function () {
-                    return baasicApp.articleModule.comments.replies.routeDefinition;
-                }
+                routeService: baasicApp.articleModule.comments.replies.routeDefinition
             };
         }
     ]);
