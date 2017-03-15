@@ -78,9 +78,7 @@
                 update: function (data) {
                     return baasicApp.applicationSettingModule.update(data);
                 },
-                routeService: function () {
-                    return baasicApp.applicationSettingModule.routeDefinition;
-                }
+                routeService: baasicApp.applicationSettingModule.routeDefinition
             };
         }]);
     }(angular, module));
@@ -395,11 +393,9 @@
                 /**
                  * Provides direct access to `baasicArticleCommentRepliesRouteService`.
                  * @method        
-                 * @example baasicArticleCommentRepliesService.routeService.get.expand(expandObject);
+                 * @example baasicArticleCommentRepliesService.routeService.get(expandObject);
                  **/
-                routeService: function () {
-                    return baasicApp.articleModule.comments.replies.routeDefinition;
-                }
+                routeService: baasicApp.articleModule.comments.replies.routeDefinition
             };
         }]);
     }(angular, module));
@@ -686,9 +682,7 @@
                  * @method        
                  * @example baasicArticleCommentsService.routeService.get(expandObject);
                  **/
-                routeService: function () {
-                    return baasicApp.articleModule.comments.routeDefinition;
-                }
+                routeService: baasicApp.articleModule.comments.routeDefinition
             };
         }]);
     }(angular, module));
@@ -1096,11 +1090,9 @@
                 /**
                  * Provides direct access to `baasicArticleRatingsRouteService`.
                  * @method        
-                 * @example baasicArticleRatingsService.routeService.get.expand(expandObject);
+                 * @example baasicArticleRatingsService.routeService.get(expandObject);
                  **/
-                routeService: function () {
-                    return baasicApp.articleModule.ratings.routeDefinition;
-                }
+                routeService: baasicApp.articleModule.ratings.routeDefinition
             };
         }]);
     }(angular, module));
@@ -2665,9 +2657,7 @@
                  * @method        
                  * @example baasicArticleService.routeService.get(expandObject);
                  **/
-                routeService: function () {
-                    return baasicApp.articleModule.articles.routeDefinition;
-                }
+                routeService: baasicApp.articleModule.articles.routeDefinition
             };
         }]);
     }(angular, module));
@@ -2731,9 +2721,7 @@
                  * @method        
                  * @example baasicArticleSettingsService.routeService.get(expandObject);
                  **/
-                routeService: function () {
-                    return baasicApp.articleModule.settings.routeDefinition;
-                }
+                routeService: baasicApp.articleModule.settings.routeDefinition
             };
         }]);
     }(angular, module));
@@ -2837,11 +2825,9 @@
                 /**
                  * Provides direct access to `baasicArticleTagsRouteService`.
                  * @method        
-                 * @example baasicArticleTagsService.routeService.get.expand(expandObject);
+                 * @example baasicArticleTagsService.routeService.get(expandObject);
                  **/
-                routeService: function () {
-                    return baasicApp.articleModule.tags.routeDefinition;
-                },
+                routeService: baasicApp.articleModule.tags.routeDefinition,
 
                 subscriptions: {
                     /**
@@ -3039,9 +3025,7 @@
                  * @method        
                  * @example baasicCommerceCustomerPaymentMethodService.routeService.get(expandObject);
                  **/
-                routeService: function () {
-                    return baasicApp.commerceModule.customers.paymentMethods.routeDefinition;
-                }
+                routeService: baasicApp.commerceModule.customers.paymentMethods.routeDefinition
             };
         }]);
     }(angular, module));
@@ -3147,9 +3131,7 @@
                  * @method        
                  * @example baasicCommerceCustomerService.routeService.get(expandObject);
                  **/
-                routeService: function () {
-                    return baasicApp.commerceModule.customers.routeDefinition;
-                }
+                routeService: baasicApp.commerceModule.customers.routeDefinition
             };
         }]);
     }(angular, module));
@@ -3292,9 +3274,7 @@
                  * @method        
                  * @example baasicCommerceInvoiceService.routeService.get(expandObject);
                  **/
-                routeService: function () {
-                    return baasicApp.commerceModule.invoices.routeDefinition;
-                }
+                routeService: baasicApp.commerceModule.invoices.routeDefinition
             };
         }]);
     }(angular, module));
@@ -3400,9 +3380,7 @@
                  * @method        
                  * @example baasicCommercePaymentTransactionService.routeService.get(expandObject);
                  **/
-                routeService: function () {
-                    return baasicApp.commerceModule.paymentTransactions.routeDefinition;
-                }
+                routeService: baasicApp.commerceModule.paymentTransactions.routeDefinition
             };
         }]);
     }(angular, module));
@@ -3531,9 +3509,7 @@
                  * @method        
                  * @example baasicCommerceProductService.routeService.get(expandObject);
                  **/
-                routeService: function () {
-                    return baasicApp.commerceModule.products.routeDefinition;
-                }
+                routeService: baasicApp.commerceModule.products.routeDefinition
             };
         }]);
     }(angular, module));
@@ -3675,9 +3651,7 @@
                  * @method        
                  * @example baasicCommerceService.routeService.get(expandObject);
                  **/
-                routeService: function () {
-                    return baasicApp.commerceModule.routeDefinition;
-                }
+                routeService: baasicApp.commerceModule.routeDefinition
             };
         }]);
     }(angular, module));
@@ -3857,9 +3831,7 @@
                  * @method        
                  * @example baasicCommerceAddressTypeService.routeService.get(expandObject);
                  **/
-                routeService: function () {
-                    return baasicApp.commerceModule.lookups.addressTypes.routeDefinition;
-                }
+                routeService: baasicApp.commerceModule.lookups.addressTypes.routeDefinition
             };
         }]);
     }(angular, module));
@@ -4038,11 +4010,9 @@
                 /**
                  * Provides direct access to `routeService`.
                  * @method        
-                 * @example baasicCommerceCountryService.routeService.get.expand(expandObject);
+                 * @example baasicCommerceCountryService.routeService.get(expandObject);
                  **/
-                routeService: function () {
-                    return baasicApp.commerceModule.lookups.countries.routeDefinition;
-                }
+                routeService: baasicApp.commerceModule.lookups.countries.routeDefinition
             };
         }]);
     }(angular, module));
@@ -4231,9 +4201,7 @@
                  * @method        
                  * @example baasicCommerceCountryStateService.routeService.get(expandObject);
                  **/
-                routeService: function () {
-                    return baasicApp.commerceModule.lookups.countryStates.routeDefinition;
-                }
+                routeService: baasicApp.commerceModule.lookups.countryStates.routeDefinition
             };
         }]);
     }(angular, module));
@@ -4415,11 +4383,9 @@
                 /**
                  * Provides direct access to `routeService`.
                  * @method        
-                 * @example baasicCommerceInvoiceStatusService.routeService.get.expand(expandObject);
+                 * @example baasicCommerceInvoiceStatusService.routeService.get(expandObject);
                  **/
-                routeService: function () {
-                    return baasicApp.commerceModule.lookups.invoiceStatuses.routeDefinition;
-                }
+                routeService: baasicApp.commerceModule.lookups.invoiceStatuses.routeDefinition
             };
         }]);
     }(angular, module));
@@ -4601,9 +4567,7 @@
                  * @method        
                  * @example baasicCommercePaymentMethodService.routeService.get(expandObject);
                  **/
-                routeService: function () {
-                    return baasicApp.commerceModule.lookups.paymentMethods.routeDefinition;
-                }
+                routeService: baasicApp.commerceModule.lookups.paymentMethods.routeDefinition
             };
         }]);
     }(angular, module));
@@ -4784,9 +4748,7 @@
                  * @method        
                  * @example baasicCommercePaymentTransactionStatusService.routeService.get(expandObject);
                  **/
-                routeService: function () {
-                    return baasicApp.commerceModule.lookups.paymentTransactionStatuses.routeDefinition;
-                }
+                routeService: baasicApp.commerceModule.lookups.paymentTransactionStatuses.routeDefinition
             };
         }]);
     }(angular, module));
@@ -5153,11 +5115,9 @@
                 /**
                  * Provides direct access to `routeService`.
                  * @method        
-                 * @example baasicCommerceSubscriptionStatusService.routeService.get.expand(expandObject);
+                 * @example baasicCommerceSubscriptionStatusService.routeService.get(expandObject);
                  **/
-                routeService: function () {
-                    return baasicApp.commerceModule.lookups.subscriptionStatuses.routeDefinition;
-                }
+                routeService: baasicApp.commerceModule.lookups.subscriptionStatuses.routeDefinition
             };
         }]);
     }(angular, module));
@@ -5347,22 +5307,6 @@
                 }
 
                 return app.baasicApiClient.request(request);
-
-                promise.success = function (fn) {
-                    promise.then(function (response) {
-                        fn(response.data, response.statusCode, response.headers, config);
-                    }, null);
-                    return promise;
-                };
-
-                promise.error = function (fn) {
-                    promise.then(null, function (response) {
-                        fn(response.data, response.statusCode, response.headers, config);
-                    });
-                    return promise;
-                };
-
-                return promise;
             };
 
             createShortMethods(proxyMethod, 'get', 'delete', 'head', 'jsonp');
@@ -5640,9 +5584,7 @@
         module.service('baasicLookupService', ['baasicApp', function (baasicApps) {
             var baasicApp = baasicApps.get();
             return {
-                routeService: function () {
-                    return baasicApp.membershipModule.lookups.routeDefinition;
-                },
+                routeService: baasicApp.membershipModule.lookups.routeDefinition,
                 /**
                  * Returns a promise that is resolved once the get action has been performed. Success response returns the lookup resources.
                  * @method        
@@ -5913,11 +5855,9 @@
                 /**
                  * Provides direct access to `baasicDynamicResourceRouteService`.
                  * @method        
-                 * @example baasicDynamicResourceService.routeService.get.expand(expandObject);
+                 * @example baasicDynamicResourceService.routeService.get(expandObject);
                  **/
-                routeService: function () {
-                    return baasicApp.dynamicResourceModule.routeDefinition;
-                },
+                routeService: baasicApp.dynamicResourceModule.routeDefinition,
                 acl: {
                     /**
                      * Returns a promise that is resolved once the get action has been performed. Success response returns a list of ACL policies established for the specified dynamic resource.
@@ -5981,9 +5921,7 @@
                     removeByRole: function (action, role, data) {
                         return baasicApp.dynamicResourceModule.acl.removeByRole(action, role, data);
                     },
-                    routeService: function () {
-                        return baasicApp.dynamicResourceModule.acl.routeDefinition;
-                    }
+                    routeService: baasicApp.dynamicResourceModule.acl.routeDefinition
                 }
             };
         }]);
@@ -6134,11 +6072,9 @@
                 /**
                  * Provides direct access to `baasicDynamicSchemaRouteService`.
                  * @method        
-                 * @example baasicDynamicSchemaService.routeService.get.expand(expandObject);
+                 * @example baasicDynamicSchemaService.routeService.get(expandObject);
                  **/
-                routeService: function () {
-                    return baasicApp.dynamicResourceModule.schema.routeDefinition;
-                }
+                routeService: baasicApp.dynamicResourceModule.schema.routeDefinition
             };
         }]);
     }(angular, module));
@@ -6408,9 +6344,7 @@
                     create: function (data, stream) {
                         return baasicApp.fileModule.streams.create(data, stream);
                     },
-                    routeService: function () {
-                        return baasicApp.fileModule.streams.routeDefinition;
-                    }
+                    routeService: baasicApp.fileModule.streams.routeDefinition
                 },
 
                 batch: {
@@ -6494,9 +6428,7 @@
                     link: function (data) {
                         return baasicApp.fileModule.batch.link(data);
                     },
-                    routeService: function () {
-                        return baasicApp.fileModule.batch.routeDefinition;
-                    }
+                    routeService: baasicApp.fileModule.batch.routeDefinition
                 },
 
                 acl: {
@@ -6568,9 +6500,7 @@
                         return baasicApp.fileModule.acl.removeByRole(fileEntryId, action, role, data);
                     }
                 },
-                routeService: function () {
-                    return baasicApp.fileModule.acl.routeDefinition;
-                }
+                routeService: baasicApp.fileModule.acl.routeDefinition
             };
         }]);
     }(angular, module));
@@ -6771,9 +6701,7 @@
                     create: function (data, stream) {
                         return baasicApp.mediaVaultModule.streams.create(data, stream);
                     },
-                    routeService: function () {
-                        return baasicApp.mediaVaultModule.streams.routeDefinition;
-                    }
+                    routeService: baasicApp.mediaVaultModule.streams.routeDefinition
                 },
 
                 batch: {
@@ -6816,9 +6744,7 @@
                     update: function (data) {
                         return baasicApp.mediaVaultModule.batch.update(data);
                     },
-                    routeService: function () {
-                        return baasicApp.mediaVaultModule.batch.routeDefinition;
-                    }
+                    routeService: baasicApp.mediaVaultModule.batch.routeDefinition
                 },
 
                 settings: {
@@ -6853,9 +6779,7 @@
                     update: function (data) {
                         return baasicApp.mediaVaultModule.settings.update(data);
                     },
-                    routeService: function () {
-                        return baasicApp.mediaVaultModule.settings.routeDefinition;
-                    }
+                    routeService: baasicApp.mediaVaultModule.settings.routeDefinition
                 },
 
                 processingProviderSettings: {
@@ -6918,13 +6842,9 @@
                     update: function (data) {
                         return baasicApp.mediaVaultModule.processingProviderSettings.update(data);
                     },
-                    routeService: function () {
-                        return baasicApp.mediaVaultModule.processingProviderSettings.routeDefinition;
-                    }
+                    routeService: baasicApp.mediaVaultModule.processingProviderSettings.routeDefinition
                 },
-                routeService: function () {
-                    return baasicApp.mediaVaultModule.routeDefinition;
-                }
+                routeService: baasicApp.mediaVaultModule.routeDefinition
             };
         }]);
     }(angular, module));
@@ -7062,9 +6982,7 @@
                  * @method        
                  * @example baasicKeyValueService.routeService.get('<id>', { embed:'<embeds>', fields: '<fields>' });
                  **/
-                routeService: function () {
-                    return baasicApp.keyValueModule.routeDefinition;
-                }
+                routeService: baasicApp.keyValueModule.routeDefinition
             };
         }]);
     }(angular, module));
@@ -7165,9 +7083,7 @@
                  * @method        
                  * @example baasicLoginService.routeService.get('<id>', expandObject);
                  **/
-                routeService: function () {
-                    return baasicApp.membershipModule.login.routeDefinition;
-                },
+                routeService: baasicApp.membershipModule.login.routeDefinition,
                 social: {
                     /**
                      * Returns a promise that is resolved once the get action has been performed. Success response returns a resolved social login provider Url.
@@ -7221,9 +7137,7 @@
                      * @method        
                      * @example baasicLoginService.social.routeService.get('<id>', expandObject);
                      **/
-                    routeService: function () {
-                        return baasicApp.membershipModule.loginSocial.routeDefinition;
-                    }
+                    routeService: baasicApp.membershipModule.loginSocial.routeDefinition
                 }
             };
 
@@ -7290,9 +7204,7 @@
                  * @method        
                  * @example baasicPasswordRecoveryService.routeService.get('<id>', expandObject);
                  **/
-                routeService: function () {
-                    return baasicApp.membershipModule.passwordRecovery.routeDefinition;
-                }
+                routeService: baasicApp.membershipModule.passwordRecovery.routeDefinition
             };
         }]);
     }(angular, module));
@@ -7359,9 +7271,7 @@
                  * @method        
                  * @example baasicRegisterService.routeService.get('<id>', expandObject);
                  **/
-                routeService: function () {
-                    return baasicApp.membershipModule.register.routeDefinition;
-                }
+                routeService: baasicApp.membershipModule.register.routeDefinition
             };
         }]);
     }(angular, module));
@@ -7474,9 +7384,7 @@
                  * @method        
                  * @example baasicRoleService.routeService.get('<id>', expandObject);
                  **/
-                routeService: function () {
-                    return baasicApp.membershipModule.role.routeDefinition;
-                }
+                routeService: baasicApp.membershipModule.role.routeDefinition
             };
         }]);
     }(angular, module));
@@ -7717,11 +7625,9 @@
                 /**
                  * Provides direct access to `baasicUserRouteService`.
                  * @method        
-                 * @example baasicUserService.routeService.get.expand(expandObject);
+                 * @example baasicUserService.routeService.get(expandObject);
                  **/
-                routeService: function () {
-                    return baasicApp.membershipModule.user.routeDefinition;
-                },
+                routeService: baasicApp.membershipModule.user.routeDefinition,
                 socialLogin: {
                     /**
                      * Returns a promise that is resolved once the get action has been performed. Success response returns a list user resource connected social login providers.
@@ -7900,11 +7806,9 @@
                 /**
                  * Provides direct access to `routeService`.
                  * @method        
-                 * @example baasicMeteringCategoryService.routeService.get.expand(expandObject);
+                 * @example baasicMeteringCategoryService.routeService.get(expandObject);
                  **/
-                routeService: function () {
-                    return baasicApp.meteringModule.category.routeDefinition;
-                },
+                routeService: baasicApp.meteringModule.category.routeDefinition,
                 batch: {
                     /**
                      * Returns a promise that is resolved once the create category action has been performed; this action creates new category resources.
@@ -8096,11 +8000,9 @@
                 /**
                  * Provides direct access to `routeService`.
                  * @method        
-                 * @example baasicMeteringService.routeService.get.expand(expandObject);
+                 * @example baasicMeteringService.routeService.get(expandObject);
                  **/
-                routeService: function () {
-                    return baasicApp.meteringModule.routeDefinition;
-                },
+                routeService: baasicApp.meteringModule.routeDefinition,
                 batch: {
                     /**
                      * Returns a promise that is resolved once the create data action has been performed; this action creates new data resources.
@@ -8310,11 +8212,9 @@
                 /**
                  * Provides direct access to `routeService`.
                  * @method        
-                 * @example baasicMeteringSettingsService.routeService.get.expand(expandObject);
+                 * @example baasicMeteringSettingsService.routeService.get(expandObject);
                  **/
-                routeService: function () {
-                    return baasicApp.meteringModule.settings.routeDefinition;
-                }
+                routeService: baasicApp.meteringModule.settings.routeDefinition
             };
         }]);
     }(angular, module));
@@ -9083,11 +8983,9 @@
                 /**
                  * Provides direct access to `baasicNotificationsRouteService`.
                  * @method
-                 * @example baasicNotificationsService.routeService.publish.create.expand({});
+                 * @example baasicNotificationsService.routeService.publish.create({});
                  */
-                routeService: function () {
-                    return baasicApp.notificationModule.routeDefinition;
-                }
+                routeService: baasicApp.notificationModule.routeDefinition
             };
         }]);
     }(angular, module));
@@ -9452,11 +9350,9 @@
                 /**
                  * Provides direct access to `baasicPermissionsRouteService`.
                  * @method        
-                 * @example baasicPermissionsService.routeService.get.expand(expandObject);
+                 * @example baasicPermissionsService.routeService.get(expandObject);
                  **/
-                routeService: function () {
-                    return baasicApp.membershipModule.permissions.routeDefinition;
-                }
+                routeService: baasicApp.membershipModule.permissions.routeDefinition
             };
         }]);
     }(angular, module));
@@ -9716,11 +9612,9 @@
                 /**
                  * Provides direct access to `baasicKeyValueRouteService`.
                  * @method        
-                 * @example baasicTemplatingService.routeService.get.expand(expandObject);
+                 * @example baasicTemplatingService.routeService.get(expandObject);
                  **/
-                routeService: function () {
-                    return baasicApp.templatingModule.routeDefinition;
-                },
+                routeService: baasicApp.templatingModule.routeDefinition,
                 batch: {
                     /**
                      * Returns a promise that is resolved once the create action has been performed; this action creates new template resources.
@@ -10508,9 +10402,7 @@
                 link: function (id, data) {
                     return baasicApp.userProfileModule.profile.avatar.link(id, data);
                 },
-                routeService: function () {
-                    return baasicApp.userProfileModule.profile.avatar.routeDefinition;
-                },
+                routeService: baasicApp.userProfileModule.profile.avatar.routeDefinition,
                 streams: {
                     /**
                      * Returns a promise that is resolved once the get action has been performed. Success response returns the file stream if successfully completed. If derived resource's format is passed, such as `width` and `height` for the image type of file resource, the operation will return a stream of the derived resource. Otherwise, stream of the original file resource will be retrieved.
@@ -10602,9 +10494,7 @@
                     create: function (id, data, stream) {
                         return baasicApp.userProfileModule.profile.avatar.streams.create(id, data, stream);
                     },
-                    routeService: function () {
-                        return baasicApp.userProfileModule.profile.avatar.streams.routeDefinition;
-                    },
+                    routeService: baasicApp.userProfileModule.profile.avatar.streams.routeDefinition
                 }
             };
         }]);
@@ -10794,11 +10684,9 @@
                 /**
                  * Provides direct access to `userProfileRouteService`.
                  * @method        
-                 * @example baasicUserProfileService.routeService.get.expand(expandObject);
+                 * @example baasicUserProfileService.routeService.get(expandObject);
                  **/
-                routeService: function () {
-                    return baasicApp.userProfileModule.profile.routeDefinition;
-                }
+                routeService: baasicApp.userProfileModule.profile.routeDefinition
             };
         }]);
     }(angular, module));
@@ -11170,9 +11058,7 @@
                  * @method        
                  * @example baasicValueSetService.routeService.get('<id>', expandObject);
                  **/
-                routeService: function () {
-                    return baasicApp.valueSetModule.routeDefinition;
-                },
+                routeService: baasicApp.valueSetModule.routeDefinition,
                 items: {
                     /**
                      * Returns a promise that is resolved once the find action has been performed. Success response returns a list of value set item resources matching given criteria.

@@ -22,7 +22,9 @@
 
 			apps[apiKey] = function (httpClient) {
 				var cfg = angular.extend({
-					httpClient: function () { return httpClient; }
+					httpClient: function () {
+						return httpClient;
+					}
 				}, config);
 				var app = new baasicSdkJavaScript.BaasicApp(apiKey, cfg);
 				apps[apiKey] = function () {
@@ -75,10 +77,10 @@
 
 	function getHttpClient($http, $q) {
 		return {
-			createPromise: function(deferFn) {
-	            var deferred = $q.defer();
+			createPromise: function (deferFn) {
+				var deferred = $q.defer();
 				deferFn(deferred.resolve, deferred.reject);
-                var promise = deferred.promise;
+				var promise = deferred.promise;
 
 				promise.success = function (fn) {
 					promise.then(function (response) {
@@ -118,7 +120,7 @@
 					});
 
 				promise.success = function (fn) {
-				promise.then(function (response) {
+					promise.then(function (response) {
 						fn(response.data, response.statusCode, response.headers, request);
 					}, null);
 					return promise;
@@ -129,7 +131,7 @@
 						fn(response.data, response.statusCode, response.headers, request);
 					});
 					return promise;
-				};				
+				};
 
 				return promise;
 			}
