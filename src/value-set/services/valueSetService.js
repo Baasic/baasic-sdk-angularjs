@@ -27,7 +27,7 @@ baasicValueSetService.find({
 });    
                  **/
         find: function (options) {
-          return baasicApp.valueSetModule.get(options);
+          return baasicApp.valueSetModule.find(options);
         },
         /**
                  * Returns a promise that is resolved once the get action has been performed. Success response returns the specified value set resource.
@@ -61,7 +61,7 @@ baasicValueSetService.create({
 });
                  **/
         create: function (data) {
-          return baasicApp.valueSetModule.post(data);
+          return baasicApp.valueSetModule.create(data);
         },
         /**
                  * Returns a promise that is resolved once the update value set action has been performed; this action updates a value set resource. 
@@ -78,7 +78,7 @@ baasicValueSetService.update(valueSet)
 });
 				**/
         update: function (data) {
-          return baasicApp.valueSetModule.put(data);
+          return baasicApp.valueSetModule.update(data);
         },
         /**
                  * Returns a promise that is resolved once the remove action has been performed. This action will delete a value set resource if the action is completed successfully. 
@@ -94,10 +94,10 @@ baasicValueSetService.remove(valueSet)
 });		
 				**/
         remove: function (data) {
-          return baasicApp.valueSetModule.delete(data);
+          return baasicApp.valueSetModule.remove(data);
         },
         /**
-         * Provides direct access to route defintion.
+         * Provides direct access to route definition.
          * @method        
          * @example baasicValueSetService.routeService.get('<id>', expandObject);
          **/
@@ -123,7 +123,7 @@ baasicValueSetService.items.find({
 });    
                     **/
           find: function (options) {
-            return baasicApp.valueSetModule.items.get(options);
+            return baasicApp.valueSetModule.items.find(options);
           },
           /**
                     * Returns a promise that is resolved once the get action has been performed. Success response returns the specified value set item resource.
@@ -156,7 +156,7 @@ baasicValueSetService.items.create({
 });
                     **/
           create: function (data) {
-            return baasicApp.valueSetModule.items.post(data);
+            return baasicApp.valueSetModule.items.create(data);
           },
           /**
                     * Returns a promise that is resolved once the update value set item action has been performed; this action updates a value set item resource. 
@@ -173,7 +173,7 @@ baasicValueSetService.items.update(valueSetItem)
 });
 				    **/
           update: function (data) {
-            return baasicApp.valueSetModule.items.put(data);
+            return baasicApp.valueSetModule.items.update(data);
           },
           /**
                     * Returns a promise that is resolved once the remove action has been performed. This action will delete a value set item if the action is completed successfully. 
@@ -189,7 +189,7 @@ baasicValueSetService.items.remove(valueSetItem)
 });		
 				    **/
           remove: function (data) {
-            return baasicApp.valueSetModule.items.delete(data);
+            return baasicApp.valueSetModule.items.remove(data);
           }
         }
       };

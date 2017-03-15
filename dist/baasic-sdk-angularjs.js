@@ -5555,17 +5555,6 @@
                             statusText: data.statusText,
                             request: request
                         };
-
-
-                        // return this.createPromise(function (resolve, reject) {
-                        // 	reject({
-                        // 		headers: value.headers(),
-                        // 		data: value.data,
-                        // 		statusCode: value.status,
-                        // 		statusText: value.statusText,
-                        // 		request: request
-                        // 	});
-                        // });
                     });
 
                     promise.success = function (fn) {
@@ -6928,7 +6917,7 @@
                  });
                  **/
                 find: function (options) {
-                    return baasicApp.keyValueModule.get(options);
+                    return baasicApp.keyValueModule.find(options);
                 },
                 /**
                  * Returns a promise that is resolved once the get action has been performed. Success response returns the specified key value resource.
@@ -6961,7 +6950,7 @@
                  });
                  **/
                 create: function (data) {
-                    return baasicApp.keyValueModule.post(data);
+                    return baasicApp.keyValueModule.create(data);
                 },
                 /**
                  * Returns a promise that is resolved once the update key value action has been performed; this action updates a key value resource. 
@@ -6978,7 +6967,7 @@
                  });
                  **/
                 update: function (data) {
-                    return baasicApp.keyValueModule.put(data);
+                    return baasicApp.keyValueModule.update(data);
                 },
                 /**
                  * Returns a promise that is resolved once the remove action has been performed. This action will remove a key value resource from the system if successfully completed. 
@@ -6994,7 +6983,7 @@
                  });
                  **/
                 remove: function (data) {
-                    return baasicApp.keyValueModule.delete(data);
+                    return baasicApp.keyValueModule.remove(data);
                 },
                 /**
                  * Provides direct access to routeDefinition.
@@ -11003,7 +10992,7 @@
                  });
                  **/
                 find: function (options) {
-                    return baasicApp.valueSetModule.get(options);
+                    return baasicApp.valueSetModule.find(options);
                 },
                 /**
                  * Returns a promise that is resolved once the get action has been performed. Success response returns the specified value set resource.
@@ -11037,7 +11026,7 @@
                  });
                  **/
                 create: function (data) {
-                    return baasicApp.valueSetModule.post(data);
+                    return baasicApp.valueSetModule.create(data);
                 },
                 /**
                  * Returns a promise that is resolved once the update value set action has been performed; this action updates a value set resource. 
@@ -11054,7 +11043,7 @@
                  });
                  **/
                 update: function (data) {
-                    return baasicApp.valueSetModule.put(data);
+                    return baasicApp.valueSetModule.update(data);
                 },
                 /**
                  * Returns a promise that is resolved once the remove action has been performed. This action will delete a value set resource if the action is completed successfully. 
@@ -11070,10 +11059,10 @@
                  });
                  **/
                 remove: function (data) {
-                    return baasicApp.valueSetModule.delete(data);
+                    return baasicApp.valueSetModule.remove(data);
                 },
                 /**
-                 * Provides direct access to route defintion.
+                 * Provides direct access to route definition.
                  * @method        
                  * @example baasicValueSetService.routeService.get('<id>', expandObject);
                  **/
@@ -11099,7 +11088,7 @@
                      });
                      **/
                     find: function (options) {
-                        return baasicApp.valueSetModule.items.get(options);
+                        return baasicApp.valueSetModule.items.find(options);
                     },
                     /**
                      * Returns a promise that is resolved once the get action has been performed. Success response returns the specified value set item resource.
@@ -11132,7 +11121,7 @@
                      });
                      **/
                     create: function (data) {
-                        return baasicApp.valueSetModule.items.post(data);
+                        return baasicApp.valueSetModule.items.create(data);
                     },
                     /**
                      * Returns a promise that is resolved once the update value set item action has been performed; this action updates a value set item resource. 
@@ -11149,7 +11138,7 @@
                      });
                      **/
                     update: function (data) {
-                        return baasicApp.valueSetModule.items.put(data);
+                        return baasicApp.valueSetModule.items.update(data);
                     },
                     /**
                      * Returns a promise that is resolved once the remove action has been performed. This action will delete a value set item if the action is completed successfully. 
@@ -11165,7 +11154,7 @@
                      });
                      **/
                     remove: function (data) {
-                        return baasicApp.valueSetModule.items.delete(data);
+                        return baasicApp.valueSetModule.items.remove(data);
                     }
                 }
             };
