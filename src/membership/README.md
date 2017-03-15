@@ -2,26 +2,7 @@
 
 Baasic AngularJS Membership library provides access to [Baasic REST API](http://dev.baasic.com/api/reference/home) membership end-points.
 
-## Dependencies
-
-Baasic AngularJS Membership library has the following dependencies:
-
-* [Baasic Core AngularJS SDK](../../../baasic-sdk-angularjs-core)
-
-## Usage
-
-This section will describe how to add the Baasic AngularJS Membership library to your project.
-
-### Adding the Library to your Project
-
-Please add the _Baasic Membership_ include after the _Baasic Angular Core_ include:
-
-```html
-<script src='/js/baasic-angular-core-1.0.0.min.js'></script>
-<script src='/js/baasic-angular-membership-1.0.0.min.js'></script>
-```
-
-### Initialization
+## Initialization
 
 To be able to use the library you will need to add the Baasic (_baasic.membership_) dependency to your AngularJS module.
 
@@ -39,8 +20,8 @@ angular.module('my-module', ["baasic.api", "baasic.membership"])
 
 ## Contributing
 
-* [Pull requests are always welcome](../../../baasic-sdk-angularjs-membership/pulls)
-* Please [report](../../../baasic-sdk-angularjs-membership/issues) any issues you might  have found
+* [Pull requests are always welcome](../../../baasic-sdk-angularjs/pulls)
+* Please [report](../../../baasic-sdk-angularjs/issues) any issues you might  have found
 * Help us write the documentation
 * Create interesting apps using SDK
 * Looking for something else to do? Get in <u>touch</u> ...

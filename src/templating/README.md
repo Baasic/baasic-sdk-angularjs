@@ -2,25 +2,7 @@
 
 Baasic AngularJS Templating library provides access to [Baasic REST API](https://api.baasic.com/beta) templating end-points.
 
-## Dependencies
-
-Baasic AngularJS Templating library has the following dependencies:
-
-* [Baasic Core AngularJS SDK](../../../baasic-sdk-angularjs-core)
-
-## Usage
-
-This section will describe how to add the Baasic AngularJS Templating library to your project.
-
-### Adding the Library to your Project
-
-Please add the _Baasic Templating include after the _Baasic Angular Core_ include:
-
-```html
-<script src='/js/baasic-angular-core-1.0.0.min.js'></script>
-<script src='/js/baasic-angular-templating-1.0.0.min.js'></script>
-```
-### Initialization
+## Initialization
 
 To be able to use the library you will need to add the Baasic (_baasic.templating_) dependency to your AngularJS module.
 
@@ -38,8 +20,8 @@ angular.module('my-module', ["baasic.api", "baasic.templating"])
 
 ## Contributing
 
-* [Pull requests are always welcome](../../../baasic-sdk-angularjs-templating/pulls)
-* Please [report](../../../baasic-sdk-angularjs-templating/issues) any issues you might have found
+* [Pull requests are always welcome](../../../baasic-sdk-angularjs/pulls)
+* Please [report](../../../baasic-sdk-angularjs/issues) any issues you might have found
 * Help us write the documentation
 * Create interesting apps using SDK
 * Looking for something else to do? Get in <u>touch</u> ...

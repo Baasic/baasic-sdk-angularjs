@@ -78,6 +78,8 @@ Before you create a new issue, please make sure it hasn't already been reported.
 
 ##### Other
 
+* [Pull requests are always welcome](../../../baasic-sdk-angularjs/pulls)
+* Please [report](../../../baasic-sdk-angularjs/issues) any issues you might have found
 * Help us write the documentation
 * Create interesting apps using SDK
 * Looking for something else to do? Get in <u>touch</u> ...

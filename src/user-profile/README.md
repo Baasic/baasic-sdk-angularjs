@@ -2,23 +2,7 @@
 
 Baasic AngularJS User Profile library provides access to [Baasic REST API](http://dev.baasic.com/api/reference/home) user profile end-points.
 
-## Dependencies
-
-Baasic AngularJS User Profile library has the following dependencies:
-
-* [Baasic Core AngularJS SDK](../../../baasic-sdk-angularjs-core)
-
-## Usage
-
-### Adding the Library to your Project
-
-Please add the _Baasic User Profile_ include after the _Baasic Angular Core_ include:
-
-```html
-<script src='/js/baasic-angular-core-1.0.0.min.js'></script>
-<script src='/js/baasic-angular-user-profile-1.0.0.min.js'></script>
-```
-### Initialization
+## Initialization
 
 To be able to use the library you will need to add the Baasic (_baasic.userProfile_) dependency to your AngularJS module.
 
@@ -35,8 +19,8 @@ angular.module('my-module', ["baasic.api", "baasic.userProfile"])
 
 ## Contributing
 
-* [Pull requests are always welcome](../../../baasic-sdk-angularjs-user-profile/pulls)
-* Please [report](../../../baasic-sdk-angularjs-user-profile/issues) any issues you might have found
+* [Pull requests are always welcome](../../../baasic-sdk-angularjs/pulls)
+* Please [report](../../../baasic-sdk-angularjs/issues) any issues you might have found
 * Help us write the documentation
 * Create interesting apps using SDK
 * Looking for something else to do? Get in <u>touch</u> ...
