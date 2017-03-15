@@ -5547,6 +5547,25 @@
                             statusText: value.statusText,
                             request: request
                         };
+                    }, function (data) {
+                        throw {
+                            headers: data.headers(),
+                            data: data.data,
+                            statusCode: data.status,
+                            statusText: data.statusText,
+                            request: request
+                        };
+
+
+                        // return this.createPromise(function (resolve, reject) {
+                        // 	reject({
+                        // 		headers: value.headers(),
+                        // 		data: value.data,
+                        // 		statusCode: value.status,
+                        // 		statusText: value.statusText,
+                        // 		request: request
+                        // 	});
+                        // });
                     });
 
                     promise.success = function (fn) {
