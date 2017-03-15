@@ -6,24 +6,27 @@ Baasic AngularJS library provides integration access to [Baasic REST API](http:/
 
 Baasic AngularJS library has the following dependencies:
 
-* [Baasic JavaScript SDK](../../../baasic-sdk-javascript)
+* [Baasic JavaScript SDK](https://github.com/Baasic/baasic-sdk-javascript)
 * [AngularJS](http://www.angularjs.org/) (>= 1.2.16)
-* [HAL Parser](../../../angular-hal)
-* [URI Template](../../../uritemplate-js)
+* [HAL Parser](https://github.com/Baasic/angular-hal)
+* [URI Template](https://github.com/Baasic/uritemplate-js)
 
 ## Usage
 
 This section will describe how to add the Baasic AngularJS library to your project. It's important to know that Baasic AngularJS SDK uses HAL+JSON format for the back-end communication. You can find out more about HAL format [here](http://stateless.co/hal_specification.html).
 
-### Adding the Library to your Project
+### Adding the library to your project
 
 Please add the following lines of code after the AngularJS include:
 
 ```html
 <script src='/js/hal-parser.js'></script>
 <script src='/js/uritemplate-min.js'></script>
-<script src='/js/baasic-angularjs-2.0.0.min.js'></script>
+<script src='/js/baasic-sdk-javascript-2.0.0.min.js'></script>
+<script src='/js/baasic-sdk-angularjs-2.0.0.min.js'></script>
 ```
+
+Note: Baasic JavaScript SDK uses [jQuery](https://jquery.com/) for http communication only if JavaScript SDK is used as stand-alone library, inside the AngularJS SDK [$http](https://docs.angularjs.org/api/ng/service/$http) service is used.
 
 ### Initialization
 
@@ -40,7 +43,7 @@ Baasic AngularJS library allows you to use multiple Baasic applications in your 
 ```javascript
 module.config(["baasicAppProvider",
     function (baasicAppProvider) {
-        var app = baasicAppProvider.create("my-app-identifier", {
+        var app = baasicAppProvider.create("<api-key>", {
             apiRootUrl: "api.baasic.com",
             apiVersion: "<version>"
         });
