@@ -2,30 +2,7 @@
 
 Baasic AngularJS Core library provides integration access to [Baasic REST API](http://dev.baasic.com/api/reference/home) core end-points.
 
-## Dependencies
-
-Baasic AngularJS Core library has the following dependencies:
-
-* [Baasic JavaScript Framework](../../../baasic-sdk-javascript)
-* [AngularJS](http://www.angularjs.org/) (>= 1.2.16)
-* [HAL Parser](../../../angular-hal)
-* [URI Template](../../../uritemplate-js)
-
-## Usage
-
-This section will describe how to add the Baasic AngularJS Core library to your project. It's important to know that Baasic AngularJS SDK uses HAL+JSON format for the back-end communication. You can find out more about HAL format [here](http://stateless.co/hal_specification.html).
-
-### Adding the Library to your Project
-
-Please add the following lines of code after the AngularJS include:
-
-```html
-<script src='/js/hal-parser.js'></script>
-<script src='/js/uritemplate-min.js'></script>
-<script src='/js/baasic-angular-core-1.0.0.min.js'></script>
-```
-
-### Initialization
+## Initialization
 
 To be able to use the library you will need to add the Baasic (_baasic.api_) dependency to your AngularJS module.
 
