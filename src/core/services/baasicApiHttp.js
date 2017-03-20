@@ -48,7 +48,7 @@
 
             }
 
-            return app.baasicApiClient.request(request);
+            return app.apiClient.request(request);
         };
 
         createShortMethods(proxyMethod, 'get', 'delete', 'head', 'jsonp');
