@@ -1,6 +1,6 @@
 {
   "name": "baasic-sdk-angularjs",
-  "version": "2.0.0-rc.1",
+  "version": "2.0.0-rc.2",
   "main": "dist/*",
   "ignore": [
     "src",
@@ -31,6 +31,6 @@
   "dependencies": {
     "baasic-uritemplate": "Baasic/uritemplate-js",
     "baasic-angular-hal": "Baasic/angular-hal",
-    "baasic-sdk-javascript": "Baasic/baasic-sdk-javascript#2.0.0-rc.2"
+    "baasic-sdk-javascript": "Baasic/baasic-sdk-javascript#2.0.0-rc.3"
   }
 }
