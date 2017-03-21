@@ -1,6 +1,6 @@
 {
   "name": "baasic-sdk-angularjs",
-  "version": "2.0.0",
+  "version": "2.0.0-rc.1",
   "main": "dist/*",
   "ignore": [
     "src",
@@ -29,6 +29,6 @@
     "gulp-uglify": ">0.0.21"
   },
   "dependencies": {
-    "baasic-sdk-javascript": "Baasic/baasic-sdk-javascript"
+    "baasic-sdk-javascript": "Baasic/baasic-sdk-javascript#2.0.0-rc.2"
   }
 }
