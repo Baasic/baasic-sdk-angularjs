@@ -19,7 +19,5 @@
 		"jshint-stylish": "^1.0.0",
 		"baasic-javascript-docgen": "git://github.com/Baasic/baasic-javascript-docgen"
 	},
-	"dependencies": {
-		"baasic-sdk-javascript": "Baasic/baasic-sdk-javascript#2.0.0-rc.2"
-	}
+	"dependencies": {}
 }

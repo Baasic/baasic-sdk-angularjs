@@ -29,6 +29,8 @@
     "gulp-uglify": ">0.0.21"
   },
   "dependencies": {
+    "baasic-uritemplate": "Baasic/uritemplate-js",
+    "baasic-angular-hal": "Baasic/angular-hal",
     "baasic-sdk-javascript": "Baasic/baasic-sdk-javascript#2.0.0-rc.2"
   }
 }
