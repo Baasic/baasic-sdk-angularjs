@@ -1,7 +1,9 @@
 {
   "name": "baasic-sdk-angularjs",
   "version": "2.0.0-rc.2",
-  "main": "dist/*",
+  "main": [
+    "dist/baasic-sdk-angularjs.js"
+  ],
   "ignore": [
     "src",
     "spec",
@@ -15,19 +17,7 @@
     "package.json",
     "README.md"
   ],
-  "devDependencies": {
-    "gulp": ">3.4.0",
-    "gulp-beautify": "1.0.3",
-    "gulp-concat": ">2.1.7",
-    "gulp-footer": "1.0.4",
-    "gulp-header": "1.0.2",
-    "gulp-jshint": ">1.4.2",
-    "gulp-load-plugins": "0.5.0",
-    "gulp-ngmin": "0.2.0",
-    "gulp-order": "1.0.6",
-    "gulp-rename": "1.2.0",
-    "gulp-uglify": ">0.0.21"
-  },
+  "devDependencies": {},
   "dependencies": {
     "baasic-uritemplate": "Baasic/uritemplate-js",
     "baasic-angular-hal": "Baasic/angular-hal",
