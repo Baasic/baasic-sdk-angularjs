@@ -1,7 +1,17 @@
 {
   "name": "baasic-sdk-angularjs",
-  "version": "2.0.0-rc.2",
-  "main": "dist/*",
+  "description": "AngularJS SDK provides core functionality for building web and mobile applications on [Baasic](http://www.baasic.com/).",
+  "version": "2.0.0-rc.3",
+  "keywords": ["Baasic", "BaaS", "sdk", "JavaScript", "Backend", "AngularJS", "browser", "client-side"],
+  "homepage": "http://www.baasic.com/",
+  "author": "Mono Software",
+  "main": [
+    "dist/baasic-sdk-angularjs.js"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/baasic/baasic-sdk-angularjs.git"
+  },
   "ignore": [
     "src",
     "spec",
@@ -16,21 +26,11 @@
     "README.md"
   ],
   "devDependencies": {
-    "gulp": ">3.4.0",
-    "gulp-beautify": "1.0.3",
-    "gulp-concat": ">2.1.7",
-    "gulp-footer": "1.0.4",
-    "gulp-header": "1.0.2",
-    "gulp-jshint": ">1.4.2",
-    "gulp-load-plugins": "0.5.0",
-    "gulp-ngmin": "0.2.0",
-    "gulp-order": "1.0.6",
-    "gulp-rename": "1.2.0",
-    "gulp-uglify": ">0.0.21"
+    "angularjs": "1.2.8"
   },
   "dependencies": {
     "baasic-uritemplate": "Baasic/uritemplate-js",
     "baasic-angular-hal": "Baasic/angular-hal",
-    "baasic-sdk-javascript": "Baasic/baasic-sdk-javascript#2.0.0-rc.3"
+    "baasic-sdk-javascript": "Baasic/baasic-sdk-javascript#2.0.0-rc.4"
   }
 }
