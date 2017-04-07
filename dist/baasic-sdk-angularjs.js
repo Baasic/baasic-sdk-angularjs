@@ -1,5 +1,5 @@
 /*
- Baasic AngularJS SDK v2.0.0-rc.4
+ Baasic AngularJS SDK v2.0.0-rc.5
  (c) 2014-2017 Mono Ltd.  http://baasic.com
  License: MIT
 */
@@ -5811,8 +5811,8 @@
                  // perform error handling here
                  });
                  **/
-                update: function (data, options) {
-                    return baasicApp.dynamicResourceModule.update(data, options);
+                update: function (schemaName, data, options) {
+                    return baasicApp.dynamicResourceModule.update(schemaName, data, options);
                 },
                 /**
                  * Returns a promise that is resolved once the patch action has been performed; this action patches an existing dynamic resource. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicDynamicResourceRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
@@ -5835,8 +5835,8 @@
                  // perform error handling here
                  });
                  **/
-                patch: function (data, options) {
-                    return baasicApp.dynamicResourceModule.patch(data, options);
+                patch: function (schemaName, data, options) {
+                    return baasicApp.dynamicResourceModule.patch(schemaName, data, options);
                 },
                 /**
                  * Returns a promise that is resolved once the remove action has been performed. This action will remove a dynamic resource from the system if successfully completed. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicDynamicResourceRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
@@ -5857,8 +5857,8 @@
                  // perform error handling here
                  });
                  **/
-                remove: function (data, options) {
-                    return baasicApp.dynamicResourceModule.remove(data, options);
+                remove: function (schemaName, data, options) {
+                    return baasicApp.dynamicResourceModule.remove(schemaName, data, options);
                 },
                 /**
                  * Provides direct access to `baasicDynamicResourceRouteService`.

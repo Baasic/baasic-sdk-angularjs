@@ -1,7 +1,7 @@
 {
 	"name": "baasic-sdk-angularjs",
 	"description": "AngularJS SDK provides core functionality for building web and mobile applications on [Baasic](http://www.baasic.com/).",
-	"version": "2.0.0-rc.4",
+	"version": "2.0.0-rc.5",
 	"keywords": ["Baasic", "BaaS", "sdk", "JavaScript", "Backend", "AngularJS", "browser", "client-side"],
 	"homepage": "http://www.baasic.com/",
 	"author": "Mono Software",
@@ -30,6 +30,6 @@
 	"dependencies": {
 		"baasic-uritemplate": "Baasic/uritemplate-js",
 		"baasic-angular-hal": "Baasic/angular-hal",
-		"baasic-sdk-javascript": "Baasic/baasic-sdk-javascript#2.0.0-rc.13"
+		"baasic-sdk-javascript": "2.0.0-rc.20"
 	}
 }
