@@ -4790,7 +4790,7 @@
                  });
                  **/
                 create: function (data) {
-                    return baasicApp.commerceModule.lookups.recurringCyclePerioedTypes.create(data);
+                    return baasicApp.commerceModule.lookups.recurringCyclePeriodTypes.create(data);
                 },
 
                 /**
@@ -4812,7 +4812,7 @@
                  });
                  **/
                 find: function (options) {
-                    return baasicApp.commerceModule.lookups.recurringCyclePerioedTypes.find(options);
+                    return baasicApp.commerceModule.lookups.recurringCyclePeriodTypes.find(options);
                 },
 
                 /**
@@ -4828,7 +4828,7 @@
                  });
                  **/
                 get: function (id, options) {
-                    return baasicApp.commerceModule.lookups.recurringCyclePerioedTypes.get(id, options);
+                    return baasicApp.commerceModule.lookups.recurringCyclePeriodTypes.get(id, options);
                 },
 
                 /**
@@ -4850,7 +4850,7 @@
                  });
                  **/
                 update: function (data) {
-                    return baasicApp.commerceModule.lookups.recurringCyclePerioedTypes.update(data);
+                    return baasicApp.commerceModule.lookups.recurringCyclePeriodTypes.update(data);
                 },
 
                 /**
@@ -4871,7 +4871,7 @@
                  });
                  **/
                 remove: function (data) {
-                    return baasicApp.commerceModule.lookups.recurringCyclePerioedTypes.remove(data);
+                    return baasicApp.commerceModule.lookups.recurringCyclePeriodTypes.remove(data);
                 },
 
                 batch: {
@@ -4894,7 +4894,7 @@
                      });
                      **/
                     create: function (data) {
-                        return baasicApp.commerceModule.lookups.recurringCyclePerioedTypes.batch.create(data);
+                        return baasicApp.commerceModule.lookups.recurringCyclePeriodTypes.batch.create(data);
                     },
 
                     /**
@@ -4910,7 +4910,7 @@
                      });		
                      **/
                     remove: function (ids) {
-                        return baasicApp.commerceModule.lookups.recurringCyclePerioedTypes.batch.remove(ids);
+                        return baasicApp.commerceModule.lookups.recurringCyclePeriodTypes.batch.remove(ids);
                     },
 
                     /**
@@ -4926,7 +4926,7 @@
                      });
                      **/
                     update: function (data) {
-                        return baasicApp.commerceModule.lookups.recurringCyclePerioedTypes.batch.update(data);
+                        return baasicApp.commerceModule.lookups.recurringCyclePeriodTypes.batch.update(data);
                     }
                 },
 
@@ -4936,7 +4936,7 @@
                  * @example baasicCommerceRecurringCyclePeriodTypeService.routeService.get(expandObject);
                  **/
                 routeService: function () {
-                    return baasicApp.commerceModule.lookups.recurringCyclePerioedTypes.reouteDefinition;
+                    return baasicApp.commerceModule.lookups.recurringCyclePeriodTypes.routeDefinition;
                 }
             };
         }]);
