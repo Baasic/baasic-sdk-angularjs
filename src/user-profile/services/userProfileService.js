@@ -119,7 +119,7 @@ baasicUserProfileService.acl.get({id: '<profile-id>'})
 });
                     **/
           get: function (options) {
-            return baasicApp.userProfileModule.profile.get(options);
+            return baasicApp.userProfileModule.profile.acl.get(options);
           },
           /**
                     * Returns a promise that is resolved once the update acl action has been performed, this action creates new ACL policy for the specified user profile resource.
@@ -141,7 +141,7 @@ baasicUserProfileService.acl.update(options)
 });
 				    **/
           update: function (options) {
-            return baasicApp.userProfileModule.profile.update(options);
+            return baasicApp.userProfileModule.profile.acl.update(options);
           },
           /**
                     * Returns a promise that is resolved once the removeByUser action has been performed. This action deletes ACL policy assigned to the specified user and user profile resource.
@@ -156,7 +156,7 @@ baasicUserProfileService.acl.removeByUser('<profile-id>', '<access-action>', '<u
 });
 				    **/
           removeByUser: function (profileId, action, user, data) {
-            return baasicApp.userProfileModule.profile.removeByUser(profileId, action, user, data);
+            return baasicApp.userProfileModule.profile.acl.removeByUser(profileId, action, user, data);
           },
           /**
                     * Returns a promise that is resolved once the removeByRole action has been performed. This action deletes ACL policy assigned to the specified role and user profile resource.
@@ -171,7 +171,7 @@ baasicUserProfileService.acl.removeByRole('<profile-id>', '<access-action>', '<r
 });
 				    **/
           removeByRole: function (profileId, action, role, data) {
-            return baasicApp.userProfileModule.profile.removeByRole(profileId, action, role, data);
+            return baasicApp.userProfileModule.profile.acl.removeByRole(profileId, action, role, data);
           }
         },
         /**

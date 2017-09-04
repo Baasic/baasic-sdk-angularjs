@@ -1,5 +1,5 @@
 /*
- Baasic AngularJS SDK v2.0.0-rc.7
+ Baasic AngularJS SDK v2.0.0-rc.8
  (c) 2014-2017 Mono Ltd.  http://baasic.com
  License: MIT
 */
@@ -10634,7 +10634,7 @@
                      });
                      **/
                     get: function (options) {
-                        return baasicApp.userProfileModule.profile.get(options);
+                        return baasicApp.userProfileModule.profile.acl.get(options);
                     },
                     /**
                      * Returns a promise that is resolved once the update acl action has been performed, this action creates new ACL policy for the specified user profile resource.
@@ -10656,7 +10656,7 @@
                      });
                      **/
                     update: function (options) {
-                        return baasicApp.userProfileModule.profile.update(options);
+                        return baasicApp.userProfileModule.profile.acl.update(options);
                     },
                     /**
                      * Returns a promise that is resolved once the removeByUser action has been performed. This action deletes ACL policy assigned to the specified user and user profile resource.
@@ -10671,7 +10671,7 @@
                      });
                      **/
                     removeByUser: function (profileId, action, user, data) {
-                        return baasicApp.userProfileModule.profile.removeByUser(profileId, action, user, data);
+                        return baasicApp.userProfileModule.profile.acl.removeByUser(profileId, action, user, data);
                     },
                     /**
                      * Returns a promise that is resolved once the removeByRole action has been performed. This action deletes ACL policy assigned to the specified role and user profile resource.
@@ -10686,7 +10686,7 @@
                      });
                      **/
                     removeByRole: function (profileId, action, role, data) {
-                        return baasicApp.userProfileModule.profile.removeByRole(profileId, action, role, data);
+                        return baasicApp.userProfileModule.profile.acl.removeByRole(profileId, action, role, data);
                     }
                 },
                 /**
