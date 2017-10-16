@@ -59,7 +59,7 @@ var uri = params['model'].links('delete').href;
                  * @method        
                  * @example 
 // mediaGalleryEntry is a media gallery resource previously fetched using get action. The following action will remove the original media gallery resource and all accompanying derived media gallery resources.		
-baasicMediaGalleryService.remove(mediaGalleryEntryId)
+baasicMediaGalleryService.remove(mediaGalleryEntry)
 .success(function (data) {
   // perform success action here
 })
@@ -67,8 +67,8 @@ baasicMediaGalleryService.remove(mediaGalleryEntryId)
   // perform error handling here
 });		
 				**/
-        remove: function (mediaGalleryId, options) {
-          return baasicApp.mediaGalleryModule.galleries.remove(mediaGalleryId, options);
+        remove: function (mediaGallery, options) {
+          return baasicApp.mediaGalleryModule.galleries.remove(mediaGallery, options);
         },
 
         /**
@@ -139,8 +139,8 @@ baasicMediaGalleryService.stream.get('<media-gallery>')
     // perform error handling here
 });
                     **/
-          get: function (data) {
-            return baasicApp.mediaGalleryModule.galleries.streams.get(data);
+          get: function (id, data) {
+            return baasicApp.mediaGalleryModule.galleries.streams.get(id, data);
           },
 
           /**
