@@ -131,7 +131,7 @@ baasicMediaGalleryService.create(mediaGalleryEntry)
                     * @method streams.get        
                     * @example 
 // Request the original media gallery stream   
-baasicMediaGalleryService.stream.get('<media-gallery>')
+baasicMediaGalleryService.stream.get('<media-gallery-entry-id>', <media-gallery-entry>')
 .success(function (data) {
     // perform success action here
 })
@@ -148,7 +148,7 @@ baasicMediaGalleryService.stream.get('<media-gallery>')
                     * @method streams.getBlob        
                     * @example 
 // Request the original blob   
-baasicMediaGalleryService.stream.getBlob('<media-gallery>')
+baasicMediaGalleryService.stream.getBlob('<media-gallery-entry-id>', <media-gallery-entry>')
 .success(function (data) {
     // perform success action here
 })
@@ -156,8 +156,8 @@ baasicMediaGalleryService.stream.getBlob('<media-gallery>')
     // perform error handling here
 });
                     **/
-          getBlob: function (data) {
-            return baasicApp.mediaGalleryModule.galleries.streams.getBlob(data);
+          getBlob: function (id, data) {
+            return baasicApp.mediaGalleryModule.galleries.streams.getBlob(id, data);
           },
 
           /**
