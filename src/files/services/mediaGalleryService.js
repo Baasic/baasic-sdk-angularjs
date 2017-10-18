@@ -174,7 +174,7 @@ baasicMediaGalleryService.streams.update('<path>', <media-gallery-stream>)
 });
                     **/
           update: function (data, stream) {
-            return baasicApp.mediaGalleryModule.galleries.streams.update(data, streams);
+            return baasicApp.mediaGalleryModule.galleries.streams.update(data, stream);
           },
 
           /**
