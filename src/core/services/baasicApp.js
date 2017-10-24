@@ -11,12 +11,12 @@
 		var defaultAppKey;
 		/**
         * Create an application.
-        * @method create       
+        * @method create
         * @example
 		var app = baasicApp.create('<api-key>', {
-			apiRootUrl : 'api.baasic.com',	
-			apiVersion : '<version>' 
-		});      
+			apiRootUrl : 'api.baasic.com',
+			apiVersion : '<version>'
+		});
         **/
 		this.create = function create(apiKey, config) {
 
@@ -45,8 +45,8 @@
 			return {
 				/**
 				 * Returns a list of all applications.
-				 * @method        
-				 * @example baasicApp.all();               
+				 * @method
+				 * @example baasicApp.all();
 				 **/
 				all: function () {
 					var list = [];
@@ -58,8 +58,8 @@
 				},
 				/**
 				 * Returns a specified application.
-				 * @method        
-				 * @example baasicApp.get('<api-key>');               
+				 * @method
+				 * @example baasicApp.get('<api-key>');
 				 **/
 				get: function getBaasicApplication(apiKey) {
 					var appFactory;
@@ -104,6 +104,9 @@
 					method: request.method,
 					url: request.url.toString()
 				};
+				if (request.responseType) {
+					config.responseType = request.responseType;
+				}
 
 				if (request.headers) config.headers = request.headers;
 				if (request.data) config.data = request.data;
