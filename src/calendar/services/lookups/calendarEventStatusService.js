@@ -134,7 +134,7 @@
                      * Returns a promise that is resolved once the create EventStatuses action has been performed. This action creates new EventStatus resources.
                      * @method batch.create
                      * @example 
-                        baasicCommerceCountryService.batch.create([{
+                        baasicCalendarEventStatusService.batch.create([{
                             abrv: '<abrv>',
                             json: '<json>',
                             name: '<name>'      

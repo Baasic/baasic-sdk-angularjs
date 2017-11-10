@@ -1,20 +1,20 @@
 /* globals module */
 /**
- * @module baasicCalendarEventTypeService
- * @description Baasic Calendar Event Type Service provides an easy way to consume Baasic Calendar REST API end-points. In order to obtain a needed routes `baasicCalendarEventTypeService` uses `baasicCalendarEventTypeRouteService`.
+ * @module baasicCalendarEventRsvpInvitationTypeService
+ * @description Baasic Calendar Event Rsvp Invitation Type Service provides an easy way to consume Baasic Calendar REST API end-points. In order to obtain a needed routes `baasicCalendarEventRsvpInvitationTypeService` uses `baasicCalendarEventRsvpInvitationTypeRouteService`.
  */
 (function (angular, module) {
     'use strict';
-    module.service('baasicCalendarEventTypeService', ['baasicApp',
+    module.service('baasicCalendarEventRsvpInvitationTypeService', ['baasicApp',
         function (baasicApps) {
             var baasicApp = baasicApps.get();
             return {
 
                 /**
-                 * Returns a promise that is resolved once the find action has been completed. Success response returns a list of EventType resources matching the given criteria.
+                 * Returns a promise that is resolved once the find action has been completed. Success response returns a list of EventRsvpInvitationType resources matching the given criteria.
                  * @method
                  * @example
-                    baasicCalendarEventTypeService.find({
+                    baasicCalendarEventRsvpInvitationTypeService.find({
                         pageNumber: 1,
                         pageSize: 10,
                         orderBy: '<field>',
@@ -32,15 +32,15 @@
                     });
                 */
                 find: function (options) {
-                    return baasicApp.calendarModule.calendarEventTypeClient.find(options);
+                    return baasicApp.calendarModule.calendarEventRsvpInvitationTypeClient.find(options);
                 },
 
 
                 /**
-                 * Returns a promise that is resolved once the get action has been completed. Success response returns an EventType resource matching the given criteria.
+                 * Returns a promise that is resolved once the get action has been completed. Success response returns an EventRsvpInvitationType resource matching the given criteria.
                  * @method
                  * @example
-                    baasicCalendarEventTypeService.get('<event-type-id>')
+                    baasicCalendarEventRsvpInvitationTypeService.get('<event-rsvp-invitation-type-id>')
                     .success(function (data) {
                         // perform success action here
                     })
@@ -49,15 +49,15 @@
                     });             
                 */
                 get: function (id, options) {
-                    return baasicApp.calendarModule.calendarEventTypeClient.get(id, options);
+                    return baasicApp.calendarModule.calendarEventRsvpInvitationTypeClient.get(id, options);
                 },
 
 
                 /**
-                 * Returns a promise that is resolved once the create EventType action has been performed. This action creates a new EventType resource.
+                 * Returns a promise that is resolved once the create EventRsvpInvitationType action has been performed. This action creates a new EventRsvpInvitationType resource.
                  * @method
                  * @example 
-                    baasicCalendarEventTypeService.create({
+                    baasicCalendarEventRsvpInvitationTypeService.create({
                         abrv: '<abrv>',
                         json: '<json>',
                         name: '<name>'
@@ -70,17 +70,17 @@
                     });
                 */
                 create: function (data) {
-                    return baasicApp.calendarModule.calendarEventTypeClient.create(data);
+                    return baasicApp.calendarModule.calendarEventRsvpInvitationTypeClient.create(data);
                 },
 
 
                 /**
-                 * Returns a promise that is resolved once the update EventType action has been performed. This action updates an EventType resource.
+                 * Returns a promise that is resolved once the update EventRsvpInvitationType action has been performed. This action updates an EventRsvpInvitationType resource.
                  * @method
                  * @example
-                    eventType is a resource previously fetched using get action.
-                    eventType.name = '<name>';
-                    baasicCalendarEventTypeService.update(eventType)
+                    eventRsvpInvitationType is a resource previously fetched using get action.
+                    eventRsvpInvitationType.name = '<name>';
+                    baasicCalendarEventRsvpInvitationTypeService.update(eventRsvpInvitationType)
                     .success(function (data) {
                         // perform success action here
                     })
@@ -89,16 +89,16 @@
                     });
                 */
                 update: function (data) {
-                    return baasicApp.calendarModule.calendarEventTypeClient.update(data);
+                    return baasicApp.calendarModule.calendarEventRsvpInvitationTypeClient.update(data);
                 },
 
 
                 /**
-                 * Returns a promise that is resolved once the remove EventType action has been performed. This action removes an EventType resource.
+                 * Returns a promise that is resolved once the remove EventRsvpInvitationType action has been performed. This action removes an EventRsvpInvitationType resource.
                  * @method
                  * @example
-                    eventType is a resource previously fetched using get action.
-                    baasicCalendarEventTypeService.remove(eventType)
+                    eventRsvpInvitationType is a resource previously fetched using get action.
+                    baasicCalendarEventRsvpInvitationTypeService.remove(eventRsvpInvitationType)
                     .success(funcation (data) {
                         // perform success action here
                     })
@@ -107,15 +107,15 @@
                     })
                 */
                 remove: function (data) {
-                    return baasicApp.calendarModule.calendarEventTypeClient.remove(data);
+                    return baasicApp.calendarModule.calendarEventRsvpInvitationTypeClient.remove(data);
                 },
 
 
                 /**
-                 * Returns a promise that is resolved once the purge EventTypes action has been performed. This action removes all EventType resources.
+                 * Returns a promise that is resolved once the purge EventRsvpInvitationTypes action has been performed. This action removes all EventRsvpInvitationType resources.
                  * @method
                  * @example
-                    baasicCalendarEventTypeService.purge( )
+                    baasicCalendarEventRsvpInvitationTypeService.purge( )
                     .success(function (data) {
                         // perform success action here
                     })
@@ -124,17 +124,17 @@
                     })
                 */
                 purge: function ( ) {
-                    return baasicApp.calendarModule.calendarEventTypeClient.purge( );
+                    return baasicApp.calendarModule.calendarEventRsvpInvitationTypeClient.purge( );
                 },
 
 
                 batch: {
 
                     /**
-                     * Returns a promise that is resolved once the create EventTypes action has been performed. This action creates new EventType resources.
+                     * Returns a promise that is resolved once the create EventRsvpInvitationTypes action has been performed. This action creates new EventRsvpInvitationType resources.
                      * @method batch.create
                      * @example 
-                        baasicCalendarEventTypeService.batch.create([{
+                        baasicCalendarEventRsvpInvitationTypeService.batch.create([{
                             abrv: '<abrv>',
                             json: '<json>',
                             name: '<name>'      
@@ -147,16 +147,16 @@
                         });
                     */
                     create: function (data) {
-                        return baasicApp.calendarModule.calendarEventTypeBatchClient.create(data);
+                        return baasicApp.calendarModule.calendarEventRsvpInvitationTypeBatchClient.create(data);
                     },
 
 
                     /**
-                     * Returns a promise that is resolved once the update EventTypes action has been performed. This action updates EventType resources.
+                     * Returns a promise that is resolved once the update EventRsvpInvitationTypes action has been performed. This action updates EventRsvpInvitationType resources.
                      * @method batch.update
                      * @example
-                        eventTypes are resources previously fetched using get action.
-                        baasicCalendarEventTypeService.batch.update(eventTypes)
+                        eventRsvpInvitationTypes are resources previously fetched using get action.
+                        baasicCalendarEventRsvpInvitationTypeService.batch.update(eventRsvpInvitationTypes)
                         .success(function (data) {
                             // perform success action here
                         })
@@ -165,15 +165,15 @@
                         });
                     */
                     update: function (data) {
-                        return baasicApp.calendarModule.calendarEventTypeBatchClient.update(data);
+                        return baasicApp.calendarModule.calendarEventRsvpInvitationTypeBatchClient.update(data);
                     },
 
 
                     /**
-                     * Returns a promise that is resolved once the delete EventTypes action has been performed. This action deletes EventType resources.
+                     * Returns a promise that is resolved once the delete EventRsvpInvitationTypes action has been performed. This action deletes EventRsvpInvitationType resources.
                      * @method batch.remove
                      * @example 
-                        baasicCalendarEventTypeService.batch.remove(eventTypeIds)
+                        baasicCalendarEventRsvpInvitationTypeService.batch.remove(eventRsvpInvitationTypeIds)
                         .success(function (data) {
                             // perform success action here
                         })
@@ -182,23 +182,23 @@
                         });
                     */
                     remove: function(ids) {
-                        return baasicApp.calendarEventTypeBatchClient.remove(ids);
+                        return baasicApp.calendarEventRsvpInvitationTypeBatchClient.remove(ids);
                     },
 
                     /**
                      * Provides direct access to `routeService`.
                      * @method batch.routeService
-                     * @example baasicCalendarEventTypeService.batch.routeService.get(expandObject);
+                     * @example baasicCalendarEventRsvpInvitationTypeService.batch.routeService.get(expandObject);
                      **/
-                    routeService: baasicApp.calendarEventTypeBatchClient.routeDefinition
+                    routeService: baasicApp.calendarEventRsvpInvitationTypeBatchClient.routeDefinition
                 },
 
                 /**
                  * Provides direct access to `routeService`.
                  * @method
-                 * @example baasicCalendarEventTypeService.routeService.get(expandObject);
+                 * @example baasicCalendarEventRsvpInvitationTypeService.routeService.get(expandObject);
                  **/
-                routeService: baasicApp.calendarEventTypeClient.routeDefinition
+                routeService: baasicApp.calendarEventRsvpInvitationTypeClient.routeDefinition
             };
         }
     ]);
