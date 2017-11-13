@@ -62,7 +62,16 @@
                  * Returns a promise that is resolved once the link EventRsvp action has been performed. This action links the specified eventRsvp resource to the specified calendar resource.
                  * @method
                  * @example 
-                    baasicCalendarRsvpService.link(calendarId, eventRsvp)
+                    baasicCalendarRsvpService.link(calendarId, {
+                        InvitationOnly: <true|false>,
+                        InvitationType: <calendar-rsvp-invitation-type>,
+                        InvitationTypeId: '<invitation-type-id>',
+                        Json: '<json>',
+                        MaxSlots: <max-slots>,
+                        MinSlots: <min-slots>,
+                        RegistrationCloseDate: '<registration-close-date>',
+                        TotalSlots: <total-slots>
+                    })
                     .success(function (data) {
                         // perform success action here
                     })
