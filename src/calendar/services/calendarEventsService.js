@@ -52,7 +52,7 @@
                     });             
                 */
                 get: function (id, options) {
-                    return baasicApp.calendarModule.calendarEventClient.get(calendarId, id, options);
+                    return baasicApp.calendarModule.calendarEventsClient.get(calendarId, id, options);
                 },
 
 
@@ -60,7 +60,7 @@
                  * Returns a promise that is resolved once the get action has been completed. Success response returns an Event resource matching the given criteria.
                  * @method
                  * @example
-                    baasicCalendarEventService.getByEmailOrFullName(calendarId, eventId, email, options)
+                    baasicCalendarEventsService.getByEmailOrFullName(calendarId, eventId, email, options)
                     .success(function (data) {
                         // perform success action here
                     })
@@ -69,7 +69,7 @@
                     });   
                  */
                 getByEmailOrFullName: function (calendarId, id, emailOrFullName, options) {
-                    return baasicApp.calendarModule.calendarEventClient.getByEmailOrFullName(calendarId, id, emailOrFullName, options);
+                    return baasicApp.calendarModule.calendarEventsClient.getByEmailOrFullName(calendarId, id, emailOrFullName, options);
                 },
 
 
@@ -105,7 +105,7 @@
                     });
                 */
                 update: function (calendarId, data) {
-                    return baasicApp.calendarModule.calendarEventClient.update(calendarId, data);
+                    return baasicApp.calendarModule.calendarEventsClient.update(calendarId, data);
                 },
 
 
@@ -122,7 +122,7 @@
                     })
                 */
                 unlink: function (calendarId, eventId) {
-                    return baasicApp.calendarModule.calendarEventClient.remove(calendarId, eventId);
+                    return baasicApp.calendarModule.calendarEventsClient.unlink(calendarId, eventId);
                 },
 
 
@@ -131,7 +131,7 @@
                  * @method
                  * @example baasicCalendarEventsService.routeService.get(expandObject);
                  **/
-                routeService: baasicApp.calendarEventClient.routeDefinition
+                routeService: baasicApp.calendarEventsClient.routeDefinition
             };
         }
     ]);
