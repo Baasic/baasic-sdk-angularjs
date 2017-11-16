@@ -77,7 +77,7 @@
                  * Returns a promise that is resolved once the link Event action has been performed. This action links the specified event resource to the specified calendar resource.
                  * @method
                  * @example 
-                    baasicCalendarEventsService.link(calendarId, eventId)
+                    baasicCalendarEventsService.link(calendarId, data)
                     .success(function (data) {
                         // perform success action here
                     })
@@ -85,8 +85,8 @@
                         // perform error handling here
                     });
                 */
-                link: function (calendarId, eventId) {
-                    return baasicApp.calendarModule.calendarEventsClient.link(calendarId, eventId);
+                link: function (calendarId, data) {
+                    return baasicApp.calendarModule.calendarEventsClient.link(calendarId, data);
                 },
 
 
@@ -113,7 +113,7 @@
                  * Returns a promise that is resolved once the unlink Event action has been performed. This action unlinks the specified event resource from the specified calendar resource.
                  * @method
                  * @example
-                    baasicCalendarEventsService.unlink(calendarId, eventId)
+                    baasicCalendarEventsService.unlink(calendarId, data)
                     .success(funcation (data) {
                         // perform success action here
                     })
@@ -121,8 +121,8 @@
                         // perform error handling here
                     })
                 */
-                unlink: function (calendarId, eventId) {
-                    return baasicApp.calendarModule.calendarEventsClient.unlink(calendarId, eventId);
+                unlink: function (calendarId, data) {
+                    return baasicApp.calendarModule.calendarEventsClient.unlink(calendarId, data);
                 },
 
 
