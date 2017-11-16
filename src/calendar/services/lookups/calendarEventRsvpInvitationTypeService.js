@@ -32,7 +32,7 @@
                     });
                 */
                 find: function (options) {
-                    return baasicApp.calendarModule.calendarEventRsvpInvitationTypeClient.find(options);
+                    return baasicApp.calendarModule.calendarClient.lookups.eventRsvpInvitationType.find(options);
                 },
 
 
@@ -49,7 +49,7 @@
                     });             
                 */
                 get: function (id, options) {
-                    return baasicApp.calendarModule.calendarEventRsvpInvitationTypeClient.get(id, options);
+                    return baasicApp.calendarModule.calendarClient.lookups.eventRsvpInvitationType.get(id, options);
                 },
 
 
@@ -70,7 +70,7 @@
                     });
                 */
                 create: function (data) {
-                    return baasicApp.calendarModule.calendarEventRsvpInvitationTypeClient.create(data);
+                    return baasicApp.calendarModule.calendarClient.lookups.eventRsvpInvitationType.create(data);
                 },
 
 
@@ -89,7 +89,7 @@
                     });
                 */
                 update: function (data) {
-                    return baasicApp.calendarModule.calendarEventRsvpInvitationTypeClient.update(data);
+                    return baasicApp.calendarModule.calendarClient.lookups.eventRsvpInvitationType.update(data);
                 },
 
 
@@ -107,7 +107,7 @@
                     })
                 */
                 remove: function (data) {
-                    return baasicApp.calendarModule.calendarEventRsvpInvitationTypeClient.remove(data);
+                    return baasicApp.calendarModule.calendarClient.lookups.eventRsvpInvitationType.remove(data);
                 },
 
 
@@ -124,7 +124,7 @@
                     })
                 */
                 purge: function ( ) {
-                    return baasicApp.calendarModule.calendarEventRsvpInvitationTypeClient.purge( );
+                    return baasicApp.calendarModule.calendarClient.lookups.eventRsvpInvitationType.purge( );
                 },
 
 
@@ -147,7 +147,7 @@
                         });
                     */
                     create: function (data) {
-                        return baasicApp.calendarModule.calendarEventRsvpInvitationTypeBatchClient.create(data);
+                        return baasicApp.calendarModule.calendarClient.lookups.eventRsvpInvitationType.batch.create(data);
                     },
 
 
@@ -165,7 +165,7 @@
                         });
                     */
                     update: function (data) {
-                        return baasicApp.calendarModule.calendarEventRsvpInvitationTypeBatchClient.update(data);
+                        return baasicApp.calendarModule.calendarClient.lookups.eventRsvpInvitationType.batch.update(data);
                     },
 
 
@@ -182,7 +182,7 @@
                         });
                     */
                     remove: function(ids) {
-                        return baasicApp.calendarEventRsvpInvitationTypeBatchClient.remove(ids);
+                        return baasicApp.calendarModule.calendarClient.lookups.eventRsvpInvitationType.batch.remove(ids);
                     },
 
                     /**
@@ -190,7 +190,7 @@
                      * @method batch.routeService
                      * @example baasicCalendarEventRsvpInvitationTypeService.batch.routeService.get(expandObject);
                      **/
-                    routeService: baasicApp.calendarEventRsvpInvitationTypeBatchClient.routeDefinition
+                    routeService: baasicApp.calendarModule.calendarClient.lookups.eventRsvpInvitationType.batch.routeDefinition
                 },
 
                 /**
@@ -198,7 +198,7 @@
                  * @method
                  * @example baasicCalendarEventRsvpInvitationTypeService.routeService.get(expandObject);
                  **/
-                routeService: baasicApp.calendarEventRsvpInvitationTypeClient.routeDefinition
+                routeService: baasicApp.calendarModule.calendarClient.lookups.eventRsvpInvitationType.routeDefinition
             };
         }
     ]);

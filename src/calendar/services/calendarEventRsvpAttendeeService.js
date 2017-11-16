@@ -40,7 +40,7 @@
                     });
                 */
                 find: function (options) {
-                    return baasicApp.calendarModule.calendarEventRsvpAttendeeClient.find(options);
+                    return baasicApp.calendarModule.calendarClient.event.rsvpAttendee.find(options);
                 },
 
 
@@ -57,7 +57,7 @@
                     });             
                 */
                 get: function (id, options) {
-                    return baasicApp.calendarModule.calendarEventRsvpAttendeeClient.get(id, options);
+                    return baasicApp.calendarModule.calendarClient.event.rsvpAttendee.get(id, options);
                 },
 
 
@@ -90,7 +90,7 @@
                     });
                 */
                 create: function (data) {
-                    return baasicApp.calendarModule.calendarEventRsvpAttendeeClient.create(data);
+                    return baasicApp.calendarModule.calendarClient.event.rsvpAttendee.create(data);
                 },
 
 
@@ -109,7 +109,7 @@
                     });
                 */
                 update: function (data) {
-                    return baasicApp.calendarModule.calendarEventRsvpAttendeeClient.update(data);
+                    return baasicApp.calendarModule.calendarClient.event.rsvpAttendee.update(data);
                 },
 
 
@@ -126,7 +126,7 @@
                     });                
                  */
                 updateStatus: function (id, statusId) {
-                    return baasicApp.calendarModule.calendarEventRsvpAttendeeClient.updateStatus(id, statusId);
+                    return baasicApp.calendarModule.calendarClient.event.rsvpAttendee.updateStatus(id, statusId);
                 },
 
 
@@ -143,7 +143,7 @@
                     }); 
                  */
                 updateStatusEmailOrFullName: function (id, emailOrFullName, statusId) {
-                    return baasicApp.calendarModule.calendarEventRsvpAttendeeClient.updateStatusEmailOrFullName(id, emailOrFullName, statusId);
+                    return baasicApp.calendarModule.calendarClient.event.rsvpAttendee.updateStatusEmailOrFullName(id, emailOrFullName, statusId);
                 },
 
 
@@ -161,7 +161,7 @@
                     })
                 */
                 remove: function (data) {
-                    return baasicApp.calendarModule.calendarEventRsvpAttendeeClient.remove(data);
+                    return baasicApp.calendarModule.calendarClient.event.rsvpAttendee.remove(data);
                 },
 
 
@@ -178,7 +178,7 @@
                     })
                 */
                 purgeForEvent: function (data) {
-                    return baasicApp.calendarModule.calendarEventRsvpAttendeeClient.purge(data);
+                    return baasicApp.calendarModule.calendarClient.event.rsvpAttendee.purge(data);
                 },
 
 
@@ -213,7 +213,7 @@
                         });
                     */
                     create: function (data) {
-                        return baasicApp.calendarModule.calendarEventRsvpAttendeeBatchClient.create(data);
+                        return baasicApp.calendarModule.calendarClient.event.rsvpAttendee.batch.create(data);
                     },
 
 
@@ -231,7 +231,7 @@
                         });
                     */
                     update: function (data) {
-                        return baasicApp.calendarModule.calendarEventRsvpAttendeeBatchClient.update(data);
+                        return baasicApp.calendarModule.calendarClient.event.rsvpAttendee.batch.update(data);
                     },
 
 
@@ -248,7 +248,7 @@
                         });
                     */
                     remove: function(ids) {
-                        return baasicApp.calendarEventRsvpAttendeeBatchClient.remove(ids);
+                        return baasicApp.calendarModule.calendarClient.event.rsvpAttendee.batch.remove(ids);
                     },
 
                     /**
@@ -256,7 +256,7 @@
                      * @method batch.routeService
                      * @example baasicCalendarEventRsvpAttendeeService.batch.routeService.get(expandObject);
                      **/
-                    routeService: baasicApp.calendarEventRsvpAttendeeBatchClient.routeDefinition
+                    routeService: baasicApp.calendarModule.calendarClient.event.rsvpAttendee.batch.routeDefinition
                 },
 
                 /**
@@ -264,7 +264,7 @@
                  * @method
                  * @example baasicCalendarEventRsvpAttendeeService.routeService.get(expandObject);
                  **/
-                routeService: baasicApp.calendarEventRsvpAttendeeClient.routeDefinition
+                routeService: baasicApp.calendarModule.calendarClient.event.rsvpAttendee.routeDefinition
             };
         }
     ]);

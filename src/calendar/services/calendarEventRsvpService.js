@@ -40,7 +40,7 @@
                     });
                 */
                 find: function (options) {
-                    return baasicApp.calendarModule.calendarEventRsvpClient.find(options);
+                    return baasicApp.calendarModule.calendarClient.event.rsvp.find(options);
                 },
 
 
@@ -57,7 +57,7 @@
                     });             
                 */
                 get: function (id, options) {
-                    return baasicApp.calendarModule.calendarEventRsvpClient.get(id, options);
+                    return baasicApp.calendarModule.calendarClient.event.rsvp.get(id, options);
                 },
 
 
@@ -83,7 +83,7 @@
                     });
                 */
                 create: function (data) {
-                    return baasicApp.calendarModule.calendarEventRsvpClient.create(data);
+                    return baasicApp.calendarModule.calendarClient.event.rsvp.create(data);
                 },
 
 
@@ -102,7 +102,7 @@
                     });
                 */
                 update: function (data) {
-                    return baasicApp.calendarModule.calendarEventRsvpClient.update(data);
+                    return baasicApp.calendarModule.calendarClient.event.rsvp.update(data);
                 },
 
 
@@ -120,7 +120,7 @@
                     })
                 */
                 remove: function (data) {
-                    return baasicApp.calendarModule.calendarEventRsvpClient.remove(data);
+                    return baasicApp.calendarModule.calendarClient.event.rsvp.remove(data);
                 },
 
 
@@ -137,7 +137,7 @@
                     })
                 */
                 purgeForEvent: function (data) {
-                    return baasicApp.calendarModule.calendarEventRsvpClient.purge(data);
+                    return baasicApp.calendarModule.calendarClient.event.rsvp.purge(data);
                 },
 
 
@@ -165,7 +165,7 @@
                         });
                     */
                     create: function (data) {
-                        return baasicApp.calendarModule.calendarEventRsvpBatchClient.create(data);
+                        return baasicApp.calendarModule.calendarClient.event.rsvp.batch.create(data);
                     },
 
 
@@ -183,7 +183,7 @@
                         });
                     */
                     update: function (data) {
-                        return baasicApp.calendarModule.calendarEventRsvpBatchClient.update(data);
+                        return baasicApp.calendarModule.calendarClient.event.rsvp.batch.update(data);
                     },
 
 
@@ -200,7 +200,7 @@
                         });
                     */
                     remove: function(ids) {
-                        return baasicApp.calendarEventRsvpBatchClient.remove(ids);
+                        return baasicApp.calendarModule.calendarClient.event.rsvp.batch.remove(ids);
                     },
 
                     /**
@@ -208,7 +208,7 @@
                      * @method batch.routeService
                      * @example baasicCalendarEventRsvpService.batch.routeService.get(expandObject);
                      **/
-                    routeService: baasicApp.calendarEventRsvpBatchClient.routeDefinition
+                    routeService: baasicApp.calendarModule.calendarClient.event.rsvp.batch.routeDefinition
                 },
 
                 /**
@@ -216,7 +216,7 @@
                  * @method
                  * @example baasicCalendarEventRsvpService.routeService.get(expandObject);
                  **/
-                routeService: baasicApp.calendarEventRsvpClient.routeDefinition
+                routeService: baasicApp.calendarModule.calendarClient.event.rsvp.routeDefinition
             };
         }
     ]);

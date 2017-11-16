@@ -37,7 +37,7 @@
                     });
                 */
                 find: function (calendarId, options) {
-                    return baasicApp.calendarModule.calendarRsvpClient.find(calendarId, options);
+                    return baasicApp.calendarModule.calendarClient.rsvp.find(calendarId, options);
                 },
 
 
@@ -54,7 +54,7 @@
                     });             
                 */
                 get: function (calendarId, id, options) {
-                    return baasicApp.calendarModule.calendarRsvpClient.get(calendarId, id, options);
+                    return baasicApp.calendarModule.calendarClient.rsvp.get(calendarId, id, options);
                 },
 
 
@@ -80,7 +80,7 @@
                     });
                 */
                 link: function (calendarId, data) {
-                    return baasicApp.calendarModule.calendarRsvpClient.link(calendarId, data);
+                    return baasicApp.calendarModule.calendarClient.rsvp.link(calendarId, data);
                 },
 
 
@@ -99,7 +99,7 @@
                     });
                 */
                 update: function (calendarId, data) {
-                    return baasicApp.calendarModule.calendarRsvpClient.update(calendarId, data);
+                    return baasicApp.calendarModule.calendarClient.rsvp.update(calendarId, data);
                 },
 
 
@@ -116,7 +116,7 @@
                     });
                 */
                 unlink: function (calendarId, data) {
-                    return baasicApp.calendarModule.calendarRsvpClient.unlink(calendarId, data);
+                    return baasicApp.calendarModule.calendarClient.rsvp.unlink(calendarId, data);
                 },
 
 
@@ -133,7 +133,7 @@
                     });
                  */
                 purge: function (calendarId, data) {
-                    return baasicApp.calendarModule.calendarRsvpClient.purge(calendarId, data);
+                    return baasicApp.calendarModule.calendarClient.rsvp.purge(calendarId, data);
                 },
 
 
@@ -161,7 +161,7 @@
                         });
                     */
                     link: function (calendarId, data) {
-                        return baasicApp.calendarModule.calendarRsvpBatchClient.link(calendarId, data);
+                        return baasicApp.calendarModule.calendarClient.rsvp.batch.link(calendarId, data);
                     },
 
 
@@ -179,7 +179,7 @@
                         });
                     */
                     update: function (calendarId, data) {
-                        return baasicApp.calendarModule.calendarRsvpBatchClient.update(calendarId, data);
+                        return baasicApp.calendarModule.calendarClient.rsvp.batch.update(calendarId, data);
                     },
 
 
@@ -196,7 +196,7 @@
                         });
                     */
                     unlink: function(calendarId, ids) {
-                        return baasicApp.calendarRsvpBatchClient.unlink(calendarId, ids);
+                        return baasicApp.calendarModule.calendarClient.rsvp.batch.unlink(calendarId, ids);
                     },
 
                     /**
@@ -204,7 +204,7 @@
                      * @method batch.routeService
                      * @example baasicCalendarRsvpService.batch.routeService.get(expandObject);
                      **/
-                    routeService: baasicApp.calendarRsvpBatchClient.routeDefinition
+                    routeService: baasicApp.calendarModule.calendarClient.rsvp.batch.routeDefinition
                 },
 
 
@@ -213,7 +213,7 @@
                  * @method
                  * @example baasicCalendarRsvpService.routeService.get(expandObject);
                  **/
-                routeService: baasicApp.calendarRsvpClient.routeDefinition
+                routeService: baasicApp.calendarModule.calendarClient.rsvp.routeDefinition
             };
         }
     ]);

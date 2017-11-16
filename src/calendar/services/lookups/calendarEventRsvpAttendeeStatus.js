@@ -32,7 +32,7 @@
                     });
                 */
                 find: function (options) {
-                    return baasicApp.calendarModule.calendarEventRsvpAttendeeStatusClient.find(options);
+                    return baasicApp.calendarModule.calendarClient.lookups.eventRsvpAttendeeStatus.find(options);
                 },
 
 
@@ -49,7 +49,7 @@
                     });             
                 */
                 get: function (id, options) {
-                    return baasicApp.calendarModule.calendarEventRsvpAttendeeStatusClient.get(id, options);
+                    return baasicApp.calendarModule.calendarClient.lookups.eventRsvpAttendeeStatus.get(id, options);
                 },
 
 
@@ -70,7 +70,7 @@
                     });
                 */
                 create: function (data) {
-                    return baasicApp.calendarModule.calendarEventRsvpAttendeeStatusClient.create(data);
+                    return baasicApp.calendarModule.calendarClient.lookups.eventRsvpAttendeeStatus.create(data);
                 },
 
 
@@ -89,7 +89,7 @@
                     });
                 */
                 update: function (data) {
-                    return baasicApp.calendarModule.calendarEventRsvpAttendeeStatusClient.update(data);
+                    return baasicApp.calendarModule.calendarClient.lookups.eventRsvpAttendeeStatus.update(data);
                 },
 
 
@@ -107,7 +107,7 @@
                     })
                 */
                 remove: function (data) {
-                    return baasicApp.calendarModule.calendarEventRsvpAttendeeStatusClient.remove(data);
+                    return baasicApp.calendarModule.calendarClient.lookups.eventRsvpAttendeeStatus.remove(data);
                 },
 
 
@@ -124,7 +124,7 @@
                     })
                 */
                 purge: function ( ) {
-                    return baasicApp.calendarModule.calendarEventRsvpAttendeeStatusClient.purge( );
+                    return baasicApp.calendarModule.calendarClient.lookups.eventRsvpAttendeeStatus.purge( );
                 },
 
 
@@ -147,7 +147,7 @@
                         });
                     */
                     create: function (data) {
-                        return baasicApp.calendarModule.calendarEventRsvpAttendeeStatusBatchClient.create(data);
+                        return baasicApp.calendarModule.calendarClient.lookups.eventRsvpAttendeeStatus.batch.create(data);
                     },
 
 
@@ -165,7 +165,7 @@
                         });
                     */
                     update: function (data) {
-                        return baasicApp.calendarModule.calendarEventRsvpAttendeeStatusBatchClient.update(data);
+                        return baasicApp.calendarModule.calendarClient.lookups.eventRsvpAttendeeStatus.batch.update(data);
                     },
 
 
@@ -182,7 +182,7 @@
                         });
                     */
                     remove: function(ids) {
-                        return baasicApp.calendarEventRsvpAttendeeStatusBatchClient.remove(ids);
+                        return baasicApp.calendarModule.calendarClient.lookups.eventRsvpAttendeeStatus.batch.remove(ids);
                     },
 
                     /**
@@ -190,7 +190,7 @@
                      * @method batch.routeService
                      * @example baasicCalendarEventRsvpAttendeeStatusService.batch.routeService.get(expandObject);
                      **/
-                    routeService: baasicApp.calendarEventRsvpAttendeeStatusBatchClient.routeDefinition
+                    routeService: baasicApp.calendarModule.calendarClient.lookups.eventRsvpAttendeeStatus.batch.routeDefinition
                 },
 
                 /**
@@ -198,7 +198,7 @@
                  * @method
                  * @example baasicCalendarEventRsvpAttendeeStatusService.routeService.get(expandObject);
                  **/
-                routeService: baasicApp.calendarEventRsvpAttendeeStatusClient.routeDefinition
+                routeService: baasicApp.calendarModule.calendarClient.lookups.eventRsvpAttendeeStatus.routeDefinition
             };
         }
     ]);

@@ -35,7 +35,7 @@
                     });
                 */
                 find: function (calendarId, options) {
-                    return baasicApp.calendarModule.calendarEventsClient.find(calendarId, options);
+                    return baasicApp.calendarModule.calendarClient.events.find(calendarId, options);
                 },
 
 
@@ -52,7 +52,7 @@
                     });             
                 */
                 get: function (id, options) {
-                    return baasicApp.calendarModule.calendarEventsClient.get(calendarId, id, options);
+                    return baasicApp.calendarModule.calendarClient.events.get(calendarId, id, options);
                 },
 
 
@@ -69,7 +69,7 @@
                     });   
                  */
                 getByEmailOrFullName: function (calendarId, id, emailOrFullName, options) {
-                    return baasicApp.calendarModule.calendarEventsClient.getByEmailOrFullName(calendarId, id, emailOrFullName, options);
+                    return baasicApp.calendarModule.calendarClient.events.getByEmailOrFullName(calendarId, id, emailOrFullName, options);
                 },
 
 
@@ -86,7 +86,7 @@
                     });
                 */
                 link: function (calendarId, data) {
-                    return baasicApp.calendarModule.calendarEventsClient.link(calendarId, data);
+                    return baasicApp.calendarModule.calendarClient.events.link(calendarId, data);
                 },
 
 
@@ -105,7 +105,7 @@
                     });
                 */
                 update: function (calendarId, data) {
-                    return baasicApp.calendarModule.calendarEventsClient.update(calendarId, data);
+                    return baasicApp.calendarModule.calendarClient.events.update(calendarId, data);
                 },
 
 
@@ -122,7 +122,7 @@
                     })
                 */
                 unlink: function (calendarId, data) {
-                    return baasicApp.calendarModule.calendarEventsClient.unlink(calendarId, data);
+                    return baasicApp.calendarModule.calendarClient.events.unlink(calendarId, data);
                 },
 
 
@@ -131,7 +131,7 @@
                  * @method
                  * @example baasicCalendarEventsService.routeService.get(expandObject);
                  **/
-                routeService: baasicApp.calendarEventsClient.routeDefinition
+                routeService: baasicApp.calendarModule.calendarClient.events.routeDefinition
             };
         }
     ]);

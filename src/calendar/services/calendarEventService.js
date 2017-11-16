@@ -37,7 +37,7 @@
                     });
                 */
                 find: function (options) {
-                    return baasicApp.calendarModule.calendarEventClient.find(options);
+                    return baasicApp.calendarModule.calendarClient.event.find(options);
                 },
 
 
@@ -54,7 +54,7 @@
                     });             
                 */
                 get: function (id, options) {
-                    return baasicApp.calendarModule.calendarEventClient.get(id, options);
+                    return baasicApp.calendarModule.calendarClient.event.get(id, options);
                 },
 
 
@@ -71,7 +71,7 @@
                     });   
                  */
                 getByEmailOrFullName: function (id, emailOrFullName, options) {
-                    return baasicApp.calendarModule.calendarEventClient.getByEmailOrFullName(id, emailOrFullName, options);
+                    return baasicApp.calendarModule.calendarClient.event.getByEmailOrFullName(id, emailOrFullName, options);
                 },
 
 
@@ -101,7 +101,7 @@
                     });
                 */
                 create: function (data) {
-                    return baasicApp.calendarModule.calendarEventClient.create(data);
+                    return baasicApp.calendarModule.calendarClient.event.create(data);
                 },
 
 
@@ -120,7 +120,7 @@
                     });
                 */
                 update: function (data) {
-                    return baasicApp.calendarModule.calendarEventClient.update(data);
+                    return baasicApp.calendarModule.calendarClient.event.update(data);
                 },
 
 
@@ -138,7 +138,7 @@
                     })
                 */
                 remove: function (data) {
-                    return baasicApp.calendarModule.calendarEventClient.remove(data);
+                    return baasicApp.calendarModule.calendarClient.event.remove(data);
                 },
 
 
@@ -155,7 +155,7 @@
                     })
                 */
                 purgeForCalendar: function (data) {
-                    return baasicApp.calendarModule.calendarEventClient.purge(data);
+                    return baasicApp.calendarModule.calendarClient.event.purge(data);
                 },
 
 
@@ -187,7 +187,7 @@
                         });
                     */
                     create: function (data) {
-                        return baasicApp.calendarModule.calendarEventBatchClient.create(data);
+                        return baasicApp.calendarModule.calendarClient.event.batch.create(data);
                     },
 
 
@@ -205,7 +205,7 @@
                         });
                     */
                     update: function (data) {
-                        return baasicApp.calendarModule.calendarEventBatchClient.update(data);
+                        return baasicApp.calendarModule.calendarClient.event.batch.update(data);
                     },
 
 
@@ -222,7 +222,7 @@
                         });
                     */
                     remove: function(ids) {
-                        return baasicApp.calendarEventBatchClient.remove(ids);
+                        return baasicApp.calendarModule.calendarClient.event.batch.remove(ids);
                     },
 
                     /**
@@ -230,7 +230,7 @@
                      * @method batch.routeService
                      * @example baasicCalendarEventService.batch.routeService.get(expandObject);
                      **/
-                    routeService: baasicApp.calendarEventBatchClient.routeDefinition
+                    routeService:baasicApp.calendarModule.calendarClient.event.batch.routeDefinition
                 },
 
                 /**
@@ -238,7 +238,7 @@
                  * @method
                  * @example baasicCalendarEventService.routeService.get(expandObject);
                  **/
-                routeService: baasicApp.calendarEventClient.routeDefinition
+                routeService: baasicApp.calendarModule.calendarClient.event.routeDefinition
             };
         }
     ]);
