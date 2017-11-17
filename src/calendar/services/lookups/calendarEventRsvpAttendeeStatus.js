@@ -32,7 +32,7 @@
                     });
                 */
                 find: function (options) {
-                    return baasicApp.calendarModule.calendarClient.lookups.eventRsvpAttendeeStatus.find(options);
+                    return baasicApp.calendarModule.lookups.rsvpAttendeeStatus.find(options);
                 },
 
 
@@ -49,7 +49,7 @@
                     });             
                 */
                 get: function (id, options) {
-                    return baasicApp.calendarModule.calendarClient.lookups.eventRsvpAttendeeStatus.get(id, options);
+                    return baasicApp.calendarModule.lookups.rsvpAttendeeStatus.get(id, options);
                 },
 
 
@@ -70,7 +70,7 @@
                     });
                 */
                 create: function (data) {
-                    return baasicApp.calendarModule.calendarClient.lookups.eventRsvpAttendeeStatus.create(data);
+                    return baasicApp.calendarModule.lookups.rsvpAttendeeStatus.create(data);
                 },
 
 
@@ -89,7 +89,7 @@
                     });
                 */
                 update: function (data) {
-                    return baasicApp.calendarModule.calendarClient.lookups.eventRsvpAttendeeStatus.update(data);
+                    return baasicApp.calendarModule.lookups.rsvpAttendeeStatus.update(data);
                 },
 
 
@@ -107,7 +107,7 @@
                     })
                 */
                 remove: function (data) {
-                    return baasicApp.calendarModule.calendarClient.lookups.eventRsvpAttendeeStatus.remove(data);
+                    return baasicApp.calendarModule.lookups.rsvpAttendeeStatus.remove(data);
                 },
 
 
@@ -124,7 +124,7 @@
                     })
                 */
                 purge: function ( ) {
-                    return baasicApp.calendarModule.calendarClient.lookups.eventRsvpAttendeeStatus.purge( );
+                    return baasicApp.calendarModule.lookups.rsvpAttendeeStatus.purge( );
                 },
 
 
@@ -147,7 +147,7 @@
                         });
                     */
                     create: function (data) {
-                        return baasicApp.calendarModule.calendarClient.lookups.eventRsvpAttendeeStatus.batch.create(data);
+                        return baasicApp.calendarModule.lookups.rsvpAttendeeStatus.batch.create(data);
                     },
 
 
@@ -165,7 +165,7 @@
                         });
                     */
                     update: function (data) {
-                        return baasicApp.calendarModule.calendarClient.lookups.eventRsvpAttendeeStatus.batch.update(data);
+                        return baasicApp.calendarModule.lookups.rsvpAttendeeStatus.batch.update(data);
                     },
 
 
@@ -182,7 +182,7 @@
                         });
                     */
                     remove: function(ids) {
-                        return baasicApp.calendarModule.calendarClient.lookups.eventRsvpAttendeeStatus.batch.remove(ids);
+                        return baasicApp.calendarModule.lookups.rsvpAttendeeStatus.batch.remove(ids);
                     },
 
                     /**
@@ -190,7 +190,7 @@
                      * @method batch.routeService
                      * @example baasicCalendarEventRsvpAttendeeStatusService.batch.routeService.get(expandObject);
                      **/
-                    routeService: baasicApp.calendarModule.calendarClient.lookups.eventRsvpAttendeeStatus.batch.routeDefinition
+                    routeService: baasicApp.calendarModule.lookups.rsvpAttendeeStatus.batch.routeDefinition
                 },
 
                 /**
@@ -198,7 +198,7 @@
                  * @method
                  * @example baasicCalendarEventRsvpAttendeeStatusService.routeService.get(expandObject);
                  **/
-                routeService: baasicApp.calendarModule.calendarClient.lookups.eventRsvpAttendeeStatus.routeDefinition
+                routeService: baasicApp.calendarModule.lookups.rsvpAttendeeStatus.routeDefinition
             };
         }
     ]);

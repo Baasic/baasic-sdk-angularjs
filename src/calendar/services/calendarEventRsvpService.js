@@ -40,7 +40,7 @@
                     });
                 */
                 find: function (options) {
-                    return baasicApp.calendarModule.calendarClient.event.rsvp.find(options);
+                    return baasicApp.calendarModule.rsvp.find(options);
                 },
 
 
@@ -57,7 +57,7 @@
                     });             
                 */
                 get: function (id, options) {
-                    return baasicApp.calendarModule.calendarClient.event.rsvp.get(id, options);
+                    return baasicApp.calendarModule.rsvp.get(id, options);
                 },
 
 
@@ -83,7 +83,7 @@
                     });
                 */
                 create: function (data) {
-                    return baasicApp.calendarModule.calendarClient.event.rsvp.create(data);
+                    return baasicApp.calendarModule.rsvp.create(data);
                 },
 
 
@@ -102,7 +102,7 @@
                     });
                 */
                 update: function (data) {
-                    return baasicApp.calendarModule.calendarClient.event.rsvp.update(data);
+                    return baasicApp.calendarModule.rsvp.update(data);
                 },
 
 
@@ -120,15 +120,15 @@
                     })
                 */
                 remove: function (data) {
-                    return baasicApp.calendarModule.calendarClient.event.rsvp.remove(data);
+                    return baasicApp.calendarModule.rsvp.remove(data);
                 },
 
 
                 /**
-                 * Returns a promise that is resolved once the purgeForEvent action has been performed. This action removes all EventRsvp resources from the specified event resource.
+                 * Returns a promise that is resolved once the purge action has been performed. This action removes all EventRsvp resources from the specified event resource.
                  * @method
                  * @example
-                    baasicCalendarEventRsvpService.purgeForEvent(event)
+                    baasicCalendarEventRsvpService.purge(event)
                     .success(function (data) {
                         // perform success action here
                     })
@@ -136,8 +136,8 @@
                         // perform error handling here
                     })
                 */
-                purgeForEvent: function (data) {
-                    return baasicApp.calendarModule.calendarClient.event.rsvp.purge(data);
+                purge: function (data) {
+                    return baasicApp.calendarModule.rsvp.purge(data);
                 },
 
 
@@ -165,7 +165,7 @@
                         });
                     */
                     create: function (data) {
-                        return baasicApp.calendarModule.calendarClient.event.rsvp.batch.create(data);
+                        return baasicApp.calendarModule.rsvp.batch.create(data);
                     },
 
 
@@ -183,7 +183,7 @@
                         });
                     */
                     update: function (data) {
-                        return baasicApp.calendarModule.calendarClient.event.rsvp.batch.update(data);
+                        return baasicApp.calendarModule.rsvp.batch.update(data);
                     },
 
 
@@ -200,7 +200,7 @@
                         });
                     */
                     remove: function(ids) {
-                        return baasicApp.calendarModule.calendarClient.event.rsvp.batch.remove(ids);
+                        return baasicApp.calendarModule.rsvp.batch.remove(ids);
                     },
 
                     /**
@@ -208,7 +208,7 @@
                      * @method batch.routeService
                      * @example baasicCalendarEventRsvpService.batch.routeService.get(expandObject);
                      **/
-                    routeService: baasicApp.calendarModule.calendarClient.event.rsvp.batch.routeDefinition
+                    routeService: baasicApp.calendarModule.rsvp.batch.routeDefinition
                 },
 
                 /**
@@ -216,7 +216,7 @@
                  * @method
                  * @example baasicCalendarEventRsvpService.routeService.get(expandObject);
                  **/
-                routeService: baasicApp.calendarModule.calendarClient.event.rsvp.routeDefinition
+                routeService: baasicApp.calendarModule.rsvp.routeDefinition
             };
         }
     ]);

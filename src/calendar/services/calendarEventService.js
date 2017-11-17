@@ -37,7 +37,7 @@
                     });
                 */
                 find: function (options) {
-                    return baasicApp.calendarModule.calendarClient.event.find(options);
+                    return baasicApp.calendarModule.event.find(options);
                 },
 
 
@@ -54,7 +54,7 @@
                     });             
                 */
                 get: function (id, options) {
-                    return baasicApp.calendarModule.calendarClient.event.get(id, options);
+                    return baasicApp.calendarModule.event.get(id, options);
                 },
 
 
@@ -71,7 +71,7 @@
                     });   
                  */
                 getByEmailOrFullName: function (id, emailOrFullName, options) {
-                    return baasicApp.calendarModule.calendarClient.event.getByEmailOrFullName(id, emailOrFullName, options);
+                    return baasicApp.calendarModule.event.getByEmailOrFullName(id, emailOrFullName, options);
                 },
 
 
@@ -101,7 +101,7 @@
                     });
                 */
                 create: function (data) {
-                    return baasicApp.calendarModule.calendarClient.event.create(data);
+                    return baasicApp.calendarModule.event.create(data);
                 },
 
 
@@ -120,7 +120,7 @@
                     });
                 */
                 update: function (data) {
-                    return baasicApp.calendarModule.calendarClient.event.update(data);
+                    return baasicApp.calendarModule.event.update(data);
                 },
 
 
@@ -138,15 +138,15 @@
                     })
                 */
                 remove: function (data) {
-                    return baasicApp.calendarModule.calendarClient.event.remove(data);
+                    return baasicApp.calendarModule.event.remove(data);
                 },
 
 
                 /**
-                 * Returns a promise that is resolved once the purgeForCalendar action has been performed. This action removes all Event resources from the system matching the given criteria.
+                 * Returns a promise that is resolved once the purge action has been performed. This action removes all Event resources from the system matching the given criteria.
                  * @method
                  * @example
-                    baasicCalendarEventService.purgeForCalendar(calendar)
+                    baasicCalendarEventService.purge(calendar)
                     .success(function (data) {
                         // perform success action here
                     })
@@ -154,8 +154,8 @@
                         // perform error handling here
                     })
                 */
-                purgeForCalendar: function (data) {
-                    return baasicApp.calendarModule.calendarClient.event.purge(data);
+                purge: function (data) {
+                    return baasicApp.calendarModule.event.purge(data);
                 },
 
 
@@ -187,7 +187,7 @@
                         });
                     */
                     create: function (data) {
-                        return baasicApp.calendarModule.calendarClient.event.batch.create(data);
+                        return baasicApp.calendarModule.event.batch.create(data);
                     },
 
 
@@ -205,7 +205,7 @@
                         });
                     */
                     update: function (data) {
-                        return baasicApp.calendarModule.calendarClient.event.batch.update(data);
+                        return baasicApp.calendarModule.event.batch.update(data);
                     },
 
 
@@ -222,7 +222,7 @@
                         });
                     */
                     remove: function(ids) {
-                        return baasicApp.calendarModule.calendarClient.event.batch.remove(ids);
+                        return baasicApp.calendarModule.event.batch.remove(ids);
                     },
 
                     /**
@@ -230,7 +230,7 @@
                      * @method batch.routeService
                      * @example baasicCalendarEventService.batch.routeService.get(expandObject);
                      **/
-                    routeService:baasicApp.calendarModule.calendarClient.event.batch.routeDefinition
+                    routeService:baasicApp.calendarModule.event.batch.routeDefinition
                 },
 
                 /**
@@ -238,7 +238,7 @@
                  * @method
                  * @example baasicCalendarEventService.routeService.get(expandObject);
                  **/
-                routeService: baasicApp.calendarModule.calendarClient.event.routeDefinition
+                routeService: baasicApp.calendarModule.event.routeDefinition
             };
         }
     ]);
