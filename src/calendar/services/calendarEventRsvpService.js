@@ -140,6 +140,70 @@
                     return baasicApp.calendarModule.rsvp.purge(data);
                 },
 
+                /**
+                 * Returns a promise that is resolved once the subscribe action has been performed. This action creates CalendarEventAttendee subscriotion to CalendarEvent changes.
+                 * @method
+                 * @example
+                    baasicCalendarEventRsvpService.subscribe(calendarId, eventId, attendeeId)
+                    .success(function (data) {
+                        // perform success action here
+                    })
+                    .error(function (response, status, headers, config) {
+                        //perform error handling here
+                    })
+                 */
+                subscribe: function(calendarId, eventId, id) {
+                    return baasicApp.calendarModule.rsvp.subscribe(calendarId, eventId, id);
+                },
+
+                /**
+                 * Returns a promise that is resolved once the unsubscribe action has been performed. This action removes CalendarEventAttendee subscriotion to CalendarEvent changes.
+                 * @method
+                 * @example
+                    baasicCalendarEventRsvpService.unsubscribe(calendarId, eventId, sattendeeId)
+                    .success(function (data) {
+                        // perform success action here
+                    })
+                    .error(function (response, status, headers, config) {
+                        //perform error handling here
+                    })
+                 */
+                unsubscribe: function(calendarId, eventId, id) {
+                    return baasicApp.calendarModule.attendee.unsubscribe(calendarId, eventId, id);
+                },
+
+                /**
+                 * Returns a promise that is resolved once the subscribeEmail action has been performed. This action creates CalendarEventAttendee subscriotion to CalendarEvent changes.
+                 * @method
+                 * @example
+                    baasicCalendarEventRsvpService.subscribeEmail(calendarId, eventId, attendeeEmail)
+                    .success(function (data) {
+                        // perform success action here
+                    })
+                    .error(function (response, status, headers, config) {
+                        //perform error handling here
+                    })
+                 */
+                subscribeEmail: function(calendarId, eventId, email) {
+                    return baasicApp.calendarModule.rsvp.subscribeEmail(calendarId, eventId, email);
+                },
+
+                /**
+                 * Returns a promise that is resolved once the unsubscribeEmail action has been performed. This action removes CalendarEventAttendee subscriotion to CalendarEvent changes.
+                 * @method
+                 * @example
+                   baasicCalendarEventRsvpService.unsubscribe(calendarId, eventId, attendeeEmail)
+                    .success(function (data) {
+                        // perform success action here
+                    })
+                    .error(function (response, status, headers, config) {
+                        //perform error handling here
+                    })
+                 */
+                unsubscribeEmail: function(calendarId, eventId, email) {
+                    return baasicApp.calendarModule.rsvp.unsubscribeEmail(calendarId, eventId, email);
+                },
+
 
                 batch: {
 

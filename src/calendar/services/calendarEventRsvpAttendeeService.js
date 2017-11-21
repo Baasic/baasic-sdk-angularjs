@@ -181,6 +181,37 @@
                     return baasicApp.calendarModule.attendee.purge(data);
                 },
 
+                /**
+                 * Returns a promise that is resolved once the subscribe action has been performed. This action creates CalendarEventAttendee subscriotion to CalendarEvent changes.
+                 * @method
+                 * @example
+                    baasicCalendarEventRsvpAttendeeService.subscribe(attendeeId)
+                    .success(function (data) {
+                        // perform success action here
+                    })
+                    .error(function (response, status, headers, config) {
+                        //perform error handling here
+                    })
+                 */
+                subscribe: function(id) {
+                    return baasicApp.calendarModule.attendee.subscribe(id);
+                },
+
+                /**
+                 * Returns a promise that is resolved once the unsubscribe action has been performed. This action removes CalendarEventAttendee subscriotion to CalendarEvent changes.
+                 * @method
+                 * @example
+                    baasicCalendarEventRsvpAttendeeService.unsubscribe(attendeeId)
+                    .success(function (data) {
+                        // perform success action here
+                    })
+                    .error(function (response, status, headers, config) {
+                        //perform error handling here
+                    })
+                 */
+                unsubscribe: function(id) {
+                    return baasicApp.calendarModule.attendee.unsubscribe(id);
+                },
 
                 batch: {
 
