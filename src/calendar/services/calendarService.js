@@ -30,7 +30,7 @@
                     .error(function(response, status, headers, config) {
                         // perform error handling here 
                     });
-                */
+                 */
                 find: function (options) {
                     return baasicApp.calendarModule.calendar.find(options);
                 },
@@ -47,7 +47,7 @@
                     .error(function(response, status, headers, config) {
                         // perform error handling here 
                     });             
-                */
+                 */
                 get: function (id, options) {
                     return baasicApp.calendarModule.calendar.get(id, options);
                 },
@@ -71,7 +71,7 @@
                     .error(function (response, status, headers, config) {
                         // perform error handling here
                     });
-                */
+                 */
                 create: function (data) {
                     return baasicApp.calendarModule.calendar.create(data);
                 },
@@ -90,7 +90,7 @@
                     .error(function (response, status, headers, config) {
                         // perform error handling here
                     });
-                */
+                 */
                 update: function (data) {
                     return baasicApp.calendarModule.calendar.update(data);
                 },
@@ -107,7 +107,7 @@
                     .error(function (response, status, headers, config) {
                         // perform error handling here
                     });
-                */
+                 */
                 remove: function (data) {
                     return baasicApp.calendarModule.calendar.remove(data);
                 },
@@ -150,7 +150,7 @@
                         .error(function (respose, status, headers, config) {
                             // perform error handling here
                         });
-                    */
+                     */
                     create: function (data) {
                         return baasicApp.calendarModule.calendar.batch.create(data);
                     },
@@ -168,7 +168,7 @@
                         .error(function (response, status, headers, config) {
                             // perform error handling here
                         });
-                    */
+                     */
                     update: function (data) {
                         return baasicApp.calendarModule.calendar.batch.update(data);
                     },
@@ -185,7 +185,7 @@
                         .error(function (response, status, headers, config) {
                             // perform error handling here
                         });
-                    */
+                     */
                     remove: function(ids) {
                         return baasicApp.calendarModule.Calendar.batch.remove(ids);
                     },
@@ -193,8 +193,9 @@
                     /**
                      * Provides direct access to `routeService`.
                      * @method batch.routeService
-                     * @example baasicCalendarService.batch.routeService.get(expandObject);
-                     **/
+                     * @example 
+                        baasicCalendarService.batch.routeService.get(expandObject);
+                     */
                     routeService: baasicApp.calendarModule.calendar.batch.routeDefinition
                 },
 
@@ -202,8 +203,9 @@
                 /**
                  * Provides direct access to `routeService`.
                  * @method
-                 * @example baasicCalendarService.routeService.get(expandObject);
-                 **/
+                 * @example 
+                    baasicCalendarService.routeService.get(expandObject);
+                 */
                 routeService: baasicApp.calendarModule.calendar.routeDefinition
             };
         }

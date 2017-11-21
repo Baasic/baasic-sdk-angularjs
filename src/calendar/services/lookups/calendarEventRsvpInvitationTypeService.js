@@ -30,7 +30,7 @@
                     .error(function(response, status, headers, config) {
                         // perform error handling here 
                     });
-                */
+                 */
                 find: function (options) {
                     return baasicApp.calendarModule.lookups.rsvpInvitationType.find(options);
                 },
@@ -47,7 +47,7 @@
                     .error(function(response, status, headers, config) {
                         // perform error handling here 
                     });             
-                */
+                 */
                 get: function (id, options) {
                     return baasicApp.calendarModule.lookups.rsvpInvitationType.get(id, options);
                 },
@@ -68,7 +68,7 @@
                     .error(function (response, status, headers, config) {
                         // perform error handling here
                     });
-                */
+                 */
                 create: function (data) {
                     return baasicApp.calendarModule.lookups.rsvpInvitationType.create(data);
                 },
@@ -87,7 +87,7 @@
                     .error(function (response, status, headers, config) {
                         // perform error handling here
                     });
-                */
+                 */
                 update: function (data) {
                     return baasicApp.calendarModule.lookups.rsvpInvitationType.update(data);
                 },
@@ -104,8 +104,8 @@
                     })
                     .error(function (response, status, headers, config) {
                         // perform error handling here
-                    })
-                */
+                    });
+                 */
                 remove: function (data) {
                     return baasicApp.calendarModule.lookups.rsvpInvitationType.remove(data);
                 },
@@ -121,8 +121,8 @@
                     })
                     .error(function (response, status, headers, config) {
                         // perform error handling here
-                    })
-                */
+                    });
+                 */
                 purge: function ( ) {
                     return baasicApp.calendarModule.lookups.rsvpInvitationType.purge( );
                 },
@@ -145,7 +145,7 @@
                         .error(function (respose, status, headers, config) {
                             // perform error handling here
                         });
-                    */
+                     */
                     create: function (data) {
                         return baasicApp.calendarModule.lookups.rsvpInvitationType.batch.create(data);
                     },
@@ -163,7 +163,7 @@
                         .error(function (response, status, headers, config) {
                             // perform error handling here
                         });
-                    */
+                     */
                     update: function (data) {
                         return baasicApp.calendarModule.lookups.rsvpInvitationType.batch.update(data);
                     },
@@ -180,7 +180,7 @@
                         .error(function (response, status, headers, config) {
                             // perform error handling here
                         });
-                    */
+                     */
                     remove: function(ids) {
                         return baasicApp.calendarModule.lookups.rsvpInvitationType.batch.remove(ids);
                     },
@@ -188,16 +188,18 @@
                     /**
                      * Provides direct access to `routeService`.
                      * @method batch.routeService
-                     * @example baasicCalendarEventRsvpInvitationTypeService.batch.routeService.get(expandObject);
-                     **/
+                     * @example 
+                        baasicCalendarEventRsvpInvitationTypeService.batch.routeService.get(expandObject);
+                     */
                     routeService: baasicApp.calendarModule.lookups.rsvpInvitationType.batch.routeDefinition
                 },
 
                 /**
                  * Provides direct access to `routeService`.
                  * @method
-                 * @example baasicCalendarEventRsvpInvitationTypeService.routeService.get(expandObject);
-                 **/
+                 * @example 
+                    baasicCalendarEventRsvpInvitationTypeService.routeService.get(expandObject);
+                 */
                 routeService: baasicApp.calendarModule.lookups.rsvpInvitationType.routeDefinition
             };
         }

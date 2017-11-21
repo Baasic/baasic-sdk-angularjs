@@ -34,7 +34,7 @@
                     .error(function (response, status, headers, config) {
                         // perform error handling here 
                     });
-                */
+                 */
                 find: function (calendarId, eventId, options) {
                     return baasicApp.calendarModule.calendar.eventAttendee.find(calendarId, eventId, options);
                 },
@@ -51,7 +51,7 @@
                     .error(function(response, status, headers, config) {
                         // perform error handling here 
                     });             
-                */
+                 */
                 get: function (calendarId, eventId, id, options) {
                     return baasicApp.calendarModule.calendar.eventAttendee.get(calendarId, eventId, id, options);
                 },
@@ -79,7 +79,7 @@
                  * @method
                  * @example 
                     baasicCalendarRsvpService.link(calendarId, eventId, {
-                        AttendeeStatus: <calendar-evetn-attendee-status>,
+                        AttendeeStatus: <calendar-event-attendee-status>,
                         AttendeeStatusId '<attendee-status-id>',
                         DateCreated: '<date-created>',
                         DateUpdated: '<date-updated>',
@@ -101,7 +101,7 @@
                     .error(function (response, status, headers, config) {
                         // perform error handling here
                     });
-                */
+                 */
                 link: function (calendarId, eventId, data) {
                     return baasicApp.calendarModule.calendar.eventAttendee.link(calendarId, eventId, data);
                 },
@@ -112,7 +112,7 @@
                  * @method
                  * @example
                     eventRsvpAttendee is a resource previously fetched using get action.
-                    eventRsvpAttendee.SlotsRequested = '<clots-requested>';
+                    eventRsvpAttendee.SlotsRequested = '<slots-requested>';
                     baasicCalendarRsvpAttendeeService.update(calendarId, eventId, eventRsvpAttendee)
                     .success(function (data) {
                         // perform success action here
@@ -120,7 +120,7 @@
                     .error(function (response, status, headers, config) {
                         // perform error handling here
                     });
-                */
+                 */
                 update: function (calendarId, eventId, data) {
                     return baasicApp.calendarModule.calendar.eventAttendee.update(calendarId, eventId, data);
                 },
@@ -171,7 +171,7 @@
                     .error(function (response, status, headers, config) {
                         // perform error handling here
                     });
-                */
+                 */
                 unlink: function (calendarId, eventId, data) {
                     return baasicApp.calendarModule.calendar.eventAttendee.unlink(calendarId, eventId, data);
                 },
@@ -223,7 +223,7 @@
                         .error(function (respose, status, headers, config) {
                             // perform error handling here
                         });
-                    */
+                     */
                     link: function (calendarId, eventId, data) {
                         return baasicApp.calendarModule.calendar.eventAttendee.batch.link(calendarId, eventId, data);
                     },
@@ -241,7 +241,7 @@
                         .error(function (response, status, headers, config) {
                             // perform error handling here
                         });
-                    */
+                     */
                     update: function (calendarId, eventId, data) {
                         return baasicApp.calendarModule.calendar.eventAttendee.batch.update(calendarId, eventId, data);
                     },
@@ -258,7 +258,7 @@
                         .error(function (response, status, headers, config) {
                             // perform error handling here
                         });
-                    */
+                     */
                     unlink: function(calendarId, eventId, ids) {
                         return baasicApp.calendarModule.calendar.eventAttendee.batch.unlink(calendarId, eventId, ids);
                     },
@@ -266,8 +266,9 @@
                     /**
                      * Provides direct access to `routeService`.
                      * @method batch.routeService
-                     * @example baasicCalendarRsvpAttendeeService.batch.routeService.get(expandObject);
-                     **/
+                     * @example 
+                        baasicCalendarRsvpAttendeeService.batch.routeService.get(expandObject);
+                     */
                     routeService: baasicApp.calendarModule.calendar.eventAttendee.batch.routeDefinition
                 },
 
@@ -275,8 +276,9 @@
                 /**
                  * Provides direct access to `routeService`.
                  * @method
-                 * @example baasicCalendarRsvpAttendeeService.routeService.get(expandObject);
-                 **/
+                 * @example 
+                    baasicCalendarRsvpAttendeeService.routeService.get(expandObject);
+                 */
                 routeService: baasicApp.calendarModule.calendar.eventAttendee.routeDefinition
             };
         }

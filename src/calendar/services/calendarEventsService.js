@@ -33,7 +33,7 @@
                     .error(function(response, status, headers, config) {
                         // perform error handling here 
                     });
-                */
+                 */
                 find: function (calendarId, options) {
                     return baasicApp.calendarModule.calendar.events.find(calendarId, options);
                 },
@@ -50,7 +50,7 @@
                     .error(function(response, status, headers, config) {
                         // perform error handling here 
                     });             
-                */
+                 */
                 get: function (id, options) {
                     return baasicApp.calendarModule.calendar.events.get(calendarId, id, options);
                 },
@@ -84,7 +84,7 @@
                     .error(function (response, status, headers, config) {
                         // perform error handling here
                     });
-                */
+                 */
                 link: function (calendarId, data) {
                     return baasicApp.calendarModule.calendar.events.link(calendarId, data);
                 },
@@ -103,7 +103,7 @@
                     .error(function (response, status, headers, config) {
                         // perform error handling here
                     });
-                */
+                 */
                 update: function (calendarId, data) {
                     return baasicApp.calendarModule.calendar.events.update(calendarId, data);
                 },
@@ -120,7 +120,7 @@
                     .error(function (response, status, headers, config) {
                         // perform error handling here
                     })
-                */
+                 */
                 unlink: function (calendarId, data) {
                     return baasicApp.calendarModule.calendar.events.unlink(calendarId, data);
                 },
@@ -129,8 +129,9 @@
                 /**
                  * Provides direct access to `routeService`.
                  * @method
-                 * @example baasicCalendarEventsService.routeService.get(expandObject);
-                 **/
+                 * @example 
+                    baasicCalendarEventsService.routeService.get(expandObject);
+                 */
                 routeService: baasicApp.calendarModule.calendar.events.routeDefinition
             };
         }

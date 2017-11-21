@@ -30,7 +30,7 @@
                     .error(function(response, status, headers, config) {
                         // perform error handling here 
                     });
-                */
+                 */
                 find: function (options) {
                     return baasicApp.calendarModule.lookups.eventStatus.find(options);
                 },
@@ -47,7 +47,7 @@
                     .error(function(response, status, headers, config) {
                         // perform error handling here 
                     });             
-                */
+                 */
                 get: function (id, options) {
                     return baasicApp.calendarModule.lookups.eventStatus.get(id, options);
                 },
@@ -68,7 +68,7 @@
                     .error(function (response, status, headers, config) {
                         // perform error handling here
                     });
-                */
+                 */
                 create: function (data) {
                     return baasicApp.calendarModule.lookups.eventStatus.create(data);
                 },
@@ -87,7 +87,7 @@
                     .error(function (response, status, headers, config) {
                         // perform error handling here
                     });
-                */
+                 */
                 update: function (data) {
                     return baasicApp.calendarModule.lookups.eventStatus.update(data);
                 },
@@ -104,8 +104,8 @@
                     })
                     .error(function (response, status, headers, config) {
                         // perform error handling here
-                    })
-                */
+                    });
+                 */
                 remove: function (data) {
                     return baasicApp.calendarModule.lookups.eventStatus.remove(data);
                 },
@@ -121,8 +121,8 @@
                     })
                     .error(function (response, status, headers, config) {
                         // perform error handling here
-                    })
-                */
+                    });
+                 */
                 purge: function ( ) {
                     return baasicApp.calendarModule.lookups.eventStatus.purge( );
                 },
@@ -145,7 +145,7 @@
                         .error(function (respose, status, headers, config) {
                             // perform error handling here
                         });
-                    */
+                     */
                     create: function (data) {
                         return baasicApp.calendarModule.lookups.eventStatus.batch.create(data);
                     },
@@ -163,7 +163,7 @@
                         .error(function (response, status, headers, config) {
                             // perform error handling here
                         });
-                    */
+                     */
                     update: function (data) {
                         return baasicApp.calendarModule.lookups.eventStatus.batch.update(data);
                     },
@@ -180,7 +180,7 @@
                         .error(function (response, status, headers, config) {
                             // perform error handling here
                         });
-                    */
+                     */
                     remove: function(ids) {
                         return baasicApp.calendarModule.lookups.eventStatus.batch.remove(ids);
                     },
@@ -188,16 +188,18 @@
                     /**
                      * Provides direct access to `routeService`.
                      * @method batch.routeService
-                     * @example baasicCalendarEventStatusService.batch.routeService.get(expandObject);
-                     **/
+                     * @example
+                        baasicCalendarEventStatusService.batch.routeService.get(expandObject);
+                     */
                     routeService: baasicApp.calendarModule.lookups.eventStatus.batch.routeDefinition
                 },
 
                 /**
                  * Provides direct access to `routeService`.
                  * @method
-                 * @example baasicCalendarEventStatusService.routeService.get(expandObject);
-                 **/
+                 * @example 
+                    baasicCalendarEventStatusService.routeService.get(expandObject);
+                 */
                 routeService: baasicApp.calendarModule.lookups.eventStatus.routeDefinition
             };
         }

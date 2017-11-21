@@ -38,7 +38,7 @@
                     .error(function(response, status, headers, config) {
                         // perform error handling here 
                     });
-                */
+                 */
                 find: function (options) {
                     return baasicApp.calendarModule.rsvp.find(options);
                 },
@@ -55,7 +55,7 @@
                     .error(function(response, status, headers, config) {
                         // perform error handling here 
                     });             
-                */
+                 */
                 get: function (id, options) {
                     return baasicApp.calendarModule.rsvp.get(id, options);
                 },
@@ -81,7 +81,7 @@
                     .error(function (response, status, headers, config) {
                         // perform error handling here
                     });
-                */
+                 */
                 create: function (data) {
                     return baasicApp.calendarModule.rsvp.create(data);
                 },
@@ -100,7 +100,7 @@
                     .error(function (response, status, headers, config) {
                         // perform error handling here
                     });
-                */
+                 */
                 update: function (data) {
                     return baasicApp.calendarModule.rsvp.update(data);
                 },
@@ -117,8 +117,8 @@
                     })
                     .error(function (response, status, headers, config) {
                         // perform error handling here
-                    })
-                */
+                    });
+                 */
                 remove: function (data) {
                     return baasicApp.calendarModule.rsvp.remove(data);
                 },
@@ -134,8 +134,8 @@
                     })
                     .error(function (response, status, headers, config) {
                         // perform error handling here
-                    })
-                */
+                    });
+                 */
                 purge: function (data) {
                     return baasicApp.calendarModule.rsvp.purge(data);
                 },
@@ -150,7 +150,7 @@
                     })
                     .error(function (response, status, headers, config) {
                         //perform error handling here
-                    })
+                    });
                  */
                 subscribe: function(calendarId, eventId, id) {
                     return baasicApp.calendarModule.rsvp.subscribe(calendarId, eventId, id);
@@ -166,7 +166,7 @@
                     })
                     .error(function (response, status, headers, config) {
                         //perform error handling here
-                    })
+                    });
                  */
                 unsubscribe: function(calendarId, eventId, id) {
                     return baasicApp.calendarModule.attendee.unsubscribe(calendarId, eventId, id);
@@ -182,7 +182,7 @@
                     })
                     .error(function (response, status, headers, config) {
                         //perform error handling here
-                    })
+                    });
                  */
                 subscribeEmail: function(calendarId, eventId, email) {
                     return baasicApp.calendarModule.rsvp.subscribeEmail(calendarId, eventId, email);
@@ -192,13 +192,13 @@
                  * Returns a promise that is resolved once the unsubscribeEmail action has been performed. This action removes CalendarEventAttendee subscriotion to CalendarEvent changes.
                  * @method
                  * @example
-                   baasicCalendarEventRsvpService.unsubscribe(calendarId, eventId, attendeeEmail)
+                    baasicCalendarEventRsvpService.unsubscribeEmail(calendarId, eventId, attendeeEmail)
                     .success(function (data) {
                         // perform success action here
                     })
                     .error(function (response, status, headers, config) {
                         //perform error handling here
-                    })
+                    });
                  */
                 unsubscribeEmail: function(calendarId, eventId, email) {
                     return baasicApp.calendarModule.rsvp.unsubscribeEmail(calendarId, eventId, email);
@@ -227,7 +227,7 @@
                         .error(function (respose, status, headers, config) {
                             // perform error handling here
                         });
-                    */
+                     */
                     create: function (data) {
                         return baasicApp.calendarModule.rsvp.batch.create(data);
                     },
@@ -245,7 +245,7 @@
                         .error(function (response, status, headers, config) {
                             // perform error handling here
                         });
-                    */
+                     */
                     update: function (data) {
                         return baasicApp.calendarModule.rsvp.batch.update(data);
                     },
@@ -262,7 +262,7 @@
                         .error(function (response, status, headers, config) {
                             // perform error handling here
                         });
-                    */
+                     */
                     remove: function(ids) {
                         return baasicApp.calendarModule.rsvp.batch.remove(ids);
                     },
@@ -270,16 +270,18 @@
                     /**
                      * Provides direct access to `routeService`.
                      * @method batch.routeService
-                     * @example baasicCalendarEventRsvpService.batch.routeService.get(expandObject);
-                     **/
+                     * @example 
+                        baasicCalendarEventRsvpService.batch.routeService.get(expandObject);
+                     */
                     routeService: baasicApp.calendarModule.rsvp.batch.routeDefinition
                 },
 
                 /**
                  * Provides direct access to `routeService`.
                  * @method
-                 * @example baasicCalendarEventRsvpService.routeService.get(expandObject);
-                 **/
+                 * @example 
+                    baasicCalendarEventRsvpService.routeService.get(expandObject);
+                 */
                 routeService: baasicApp.calendarModule.rsvp.routeDefinition
             };
         }

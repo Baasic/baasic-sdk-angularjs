@@ -38,7 +38,7 @@
                     .error(function(response, status, headers, config) {
                         // perform error handling here 
                     });
-                */
+                 */
                 find: function (options) {
                     return baasicApp.calendarModule.attendee.find(options);
                 },
@@ -55,7 +55,7 @@
                     .error(function(response, status, headers, config) {
                         // perform error handling here 
                     });             
-                */
+                 */
                 get: function (id, options) {
                     return baasicApp.calendarModule.attendee.get(id, options);
                 },
@@ -88,7 +88,7 @@
                     .error(function (response, status, headers, config) {
                         // perform error handling here
                     });
-                */
+                 */
                 create: function (data) {
                     return baasicApp.calendarModule.attendee.create(data);
                 },
@@ -107,7 +107,7 @@
                     .error(function (response, status, headers, config) {
                         // perform error handling here
                     });
-                */
+                 */
                 update: function (data) {
                     return baasicApp.calendarModule.attendee.update(data);
                 },
@@ -134,7 +134,7 @@
                  * Returns a promise that is resolved once the update EventRsvpAttendee status Email or FullName action has been performed. This action updates an EventRsvpAttendee resource
                  * @method
                  * @example
-                    baasicCalendarEventRsvpAttendeeService.updateStatus(id, email, statusId)
+                    baasicCalendarEventRsvpAttendeeService.updateStatusEmailOrFullName(id, email, statusId)
                     .success(function (data) {
                         // perform success action here
                     })
@@ -158,8 +158,8 @@
                     })
                     .error(function (response, status, headers, config) {
                         // perform error handling here
-                    })
-                */
+                    });
+                 */
                 remove: function (data) {
                     return baasicApp.calendarModule.attendee.remove(data);
                 },
@@ -175,8 +175,8 @@
                     })
                     .error(function (response, status, headers, config) {
                         // perform error handling here
-                    })
-                */
+                    });
+                 */
                 purge: function (data) {
                     return baasicApp.calendarModule.attendee.purge(data);
                 },
@@ -191,7 +191,7 @@
                     })
                     .error(function (response, status, headers, config) {
                         //perform error handling here
-                    })
+                    });
                  */
                 subscribe: function(id) {
                     return baasicApp.calendarModule.attendee.subscribe(id);
@@ -207,7 +207,7 @@
                     })
                     .error(function (response, status, headers, config) {
                         //perform error handling here
-                    })
+                    });
                  */
                 unsubscribe: function(id) {
                     return baasicApp.calendarModule.attendee.unsubscribe(id);
@@ -242,7 +242,7 @@
                         .error(function (respose, status, headers, config) {
                             // perform error handling here
                         });
-                    */
+                     */
                     create: function (data) {
                         return baasicApp.calendarModule.attendee.batch.create(data);
                     },
@@ -260,7 +260,7 @@
                         .error(function (response, status, headers, config) {
                             // perform error handling here
                         });
-                    */
+                     */
                     update: function (data) {
                         return baasicApp.calendarModule.attendee.batch.update(data);
                     },
@@ -277,7 +277,7 @@
                         .error(function (response, status, headers, config) {
                             // perform error handling here
                         });
-                    */
+                     */
                     remove: function(ids) {
                         return baasicApp.calendarModule.attendee.batch.remove(ids);
                     },
@@ -285,8 +285,9 @@
                     /**
                      * Provides direct access to `routeService`.
                      * @method batch.routeService
-                     * @example baasicCalendarEventRsvpAttendeeService.batch.routeService.get(expandObject);
-                     **/
+                     * @example 
+                        baasicCalendarEventRsvpAttendeeService.batch.routeService.get(expandObject);
+                     */
                     routeService: baasicApp.calendarModule.attendee.batch.routeDefinition
                 },
 
