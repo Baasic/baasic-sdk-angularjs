@@ -60,7 +60,7 @@
                  * Returns a promise that is resolved once the get action has been completed. Success response returns an Event resource matching the given criteria.
                  * @method
                  * @example
-                    baasicCalendarEventsService.getByEmailOrFullName(calendarId, eventId, email, options)
+                    baasicCalendarEventsService.getByEmailOrFullName(calendarId, eventId, email, securityToken, options)
                     .success(function (data) {
                         // perform success action here
                     })
@@ -68,8 +68,8 @@
                         // perform error handling here 
                     });   
                  */
-                getByEmailOrFullName: function (calendarId, id, emailOrFullName, options) {
-                    return baasicApp.calendarModule.calendar.events.getByEmailOrFullName(calendarId, id, emailOrFullName, options);
+                getByEmailOrFullName: function (calendarId, id, emailOrFullName, securityToken, options) {
+                    return baasicApp.calendarModule.calendar.events.getByEmailOrFullName(calendarId, id, emailOrFullName, securityToken, options);
                 },
 
 

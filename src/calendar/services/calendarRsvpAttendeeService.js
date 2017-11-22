@@ -147,7 +147,7 @@
                  * Returns a promise that is resolved once the update EventRsvpAttendee status action has been performed. This action updates an eventRsvpAttendee resource.
                  * @method
                  * @example
-                    baasicCalendarRsvpAttendeeService.updateStatusEmailOrFullName(calendarId, eventId, emailOrFullName, statusId)
+                    baasicCalendarRsvpAttendeeService.updateStatusEmailOrFullName(calendarId, eventId, emailOrFullName, securityToken, statusId)
                     .success(function (data) {
                         // perform success action here
                     })
@@ -155,8 +155,8 @@
                         // perform error handling here
                     });
                  */
-                updateStatusEmailOrFullName: function (calendarId, eventId, emailOrFullName, statusId) {
-                    return baasicApp.calendarModule.calendar.eventAttendee.updateStatusEmailOrFullName(calendarId, eventId, emailOrFullName, statusId);
+                updateStatusEmailOrFullName: function (calendarId, eventId, emailOrFullName, securityToken, statusId) {
+                    return baasicApp.calendarModule.calendar.eventAttendee.updateStatusEmailOrFullName(calendarId, eventId, emailOrFullName, securityToken, statusId);
                 },
 
 
