@@ -2889,6 +2889,2727 @@
      - All end-point objects are transformed by the associated route service.
      */
     /* exported module */
+
+    /** 
+     * @description The angular.module is a global place for creating, registering or retrieving modules. All modules should be registered in an application using this mechanism. An angular module is a container for the different parts of your app - services, directives etc. In order to use `baasic.calendar` module functionality it must be added as a dependency to your app.
+     * @copyright (c) 2017 Mono Ltd
+     * @license MIT
+     * @author Mono Ltd
+     * @module baasic.calendar
+     * @example
+     (function (Main) {
+     "use strict";
+     var dependencies = [
+     "baasic.api",
+     "baasic.membership",
+     "baasic.security",
+     "baasic.userProfile",
+     "baasic.article",
+     "baasic.dynamicResource",
+     "baasic.keyValue",
+     "baasic.valueSet"
+     ];
+     Main.module = angular.module("myApp.Main", dependencies);
+     }
+     (MyApp.Modules.Main = {})); 
+     */
+    var module = angular.module('baasic.calendar', ['baasic.api']);
+
+    /* globals module */
+    /**
+     * @module baasicCalendarACLService
+     * @description Baasic Calendar ACL Service provides an easy way to consume Baasic Calendar REST API end-points. In order to obtain a needed routes `baasicCalendarACLService` uses `baasicCalendarACLRouteService`.
+     */
+    (function (angular, module) {
+        'use strict';
+        module.service('baasicCalendarACLService', ['baasicApp', function (baasicApps) {
+            var baasicApp = baasicApps.get();
+            return {
+
+                /**                     
+                 * Returns a promise that is resolved once the get action has been performed. Success response returns a list of ACL policies established for the specified calendar resource.                     
+                 * @method
+                 * @returns A promise that is resolved once the get action has been performed.                            
+                 * @example 
+                 aclService.get({id: '<id>'})
+                 .success(function (data) {   
+                 // perform success action here 
+                 }),
+                 .error(function (response, status, headers, config) {   
+                 // perform error handling here 
+                 });
+                 */
+                get: function (options) {
+                    return baasicApp.calendarModule.ACL.get(options);
+                },
+
+                /**                     
+                 * Returns a promise that is resolved once the update acl action has been performed, this action creates new ACL policy for the specified calendar resource.                     
+                 * @method                     
+                 * @example 
+                 let options = {id : '<id>'}; 
+                 let aclObj =  {  actionId: '<action-id'>,  roleId: '<roleId>',  userId: '<userId>' }; 
+                 options[baasicConstants.modelPropertyName] = aclObj; 
+                 aclService.update(options)
+                 .success(function (data) {   
+                 // perform success action here 
+                 }),
+                 .error(function (response, status, headers, config) {   
+                 // perform error handling here 
+                 });				    
+                 */
+                update: function (options) {
+                    return baasicApp.calendarModule.ACL.update(options);
+                },
+
+                /**                     
+                 * Returns a promise that is resolved once the removeByUser action has been performed. This action deletes ACL policy assigned to the specified user and calendar resource.                     
+                 * @method                  
+                 * @example 
+                 aclService.removeByUser('<id>', '<access-action>', '<username>')
+                 .success(function (data) {   
+                 // perform success action here 
+                 }),
+                 .error(function (response, status, headers, config) {   
+                 // perform error handling here 
+                 });				    
+                 */
+                removeByUser: function (id, action, user, data) {
+                    return baasicApp.calendarModule.ACL.removeByUser(id, action, user, data);
+                },
+
+                /**                     
+                 * Returns a promise that is resolved once the removeByRole action has been performed. This action deletes ACL policy assigned to the specified role and calendar resource.                     
+                 * @method                  
+                 * @example 
+                 aclService.removeByRole('<id>', '<access-action>', '<role-name>')
+                 .success(function (data) {   
+                 // perform success action here 
+                 }),
+                 .error(function (response, status, headers, config) {   
+                 // perform error handling here 
+                 });				    
+                 */
+                removeByRole: function (id, action, role, data) {
+                    return baasicApp.calendarModule.ACL.removeByRole(id, action, role, data);
+                }
+            };
+        }]);
+    }(angular, module));
+    /**
+     * @copyright (c) 2017 Mono Ltd
+     * @license MIT
+     * @author Mono Ltd
+     * @overview 
+     ***Notes:**
+     - Refer to the [Baasic REST API](http://dev.baasic.com/api/reference/home) for detailed information about available Baasic REST API end-points.
+     - All end-point objects are transformed by the associated route service.
+     */
+    /* globals module */
+    /**
+     * @module baasicCalendarEventRsvpAttendeeService
+     * @description Baasic Calendar Event Rsvp Attendee Service provides an easy way to consume Baasic Calendar REST API end-points. In order to obtain a needed routes `baasicCalendarEventRsvpAttendeeService` uses `baasicCalendarEventRsvpAttendeeRouteService`.
+     */
+    (function (angular, module) {
+        'use strict';
+        module.service('baasicCalendarEventRsvpAttendeeService', ['baasicApp', function (baasicApps) {
+            var baasicApp = baasicApps.get();
+            return {
+
+                /**
+                 * Returns a promise that is resolved once the find action has been completed. Success response returns a list of EventRsvpAttendee resources matching the given criteria.
+                 * @method
+                 * @example
+                 baasicCalendarEventRsvpAttendeeService.find({
+                 pageNumber: 1,
+                 pageSize: 10,
+                 orderBy: '<field>',
+                 orderDirection: '<asc|desc>',
+                 search: '<search-phrase>',
+                 calendarIds: '<calendar-identifiers>',
+                 calendarNames: '<calendar-names>',
+                 eventIds: '<event-ids>',
+                 invitationTypeIds: '<event-invitation-type-identifierss>',
+                 attendeeStatusIds: '<event-attendee-status-identifierss>',
+                 userIds: '<user-identifierss>',
+                 slotDifference: '<true|false>',
+                 emails: '<e-mails>',
+                 ids: '<event-rsvp-attendee-identifiers>',
+                 from: '<start-date>',
+                 to: '<end-date>'
+                 })
+                 .success(function (collection) {
+                 // perform success action here
+                 })
+                 .error(function(response, status, headers, config) {
+                 // perform error handling here 
+                 });
+                 */
+                find: function (options) {
+                    return baasicApp.calendarModule.attendee.find(options);
+                },
+
+
+                /**
+                 * Returns a promise that is resolved once the get action has been completed. Success response returns an EventRsvpAttendee resource matching the given criteria.
+                 * @method
+                 * @example
+                 baasicCalendarEventRsvpAttendeeService.get('<event-rsvp-attendee-id>')
+                 .success(function (data) {
+                 // perform success action here
+                 })
+                 .error(function(response, status, headers, config) {
+                 // perform error handling here 
+                 });             
+                 */
+                get: function (id, options) {
+                    return baasicApp.calendarModule.attendee.get(id, options);
+                },
+
+
+                /**
+                 * Returns a promise that is resolved once the create EventRsvpAttendee action has been performed. This action creates a new EventRsvpAttendee resource.
+                 * @method
+                 * @example 
+                 baasicCalendarEventRsvpAttendeeService.create({
+                 AttendeeStatus: <calendar-event-attendee-status>,
+                 AttendeeStatusId '<event-attendee-status-id>',
+                 DateCreated: '<date-created>',
+                 DateUpdated: '<date-updated>',
+                 Email: '<email>',
+                 EventId: '<calendar-event-id>',
+                 FullName: '<full-name>',
+                 Id: '<id>',
+                 InvitationType: <calendar-event-invitation-type>,
+                 InvitationTypeId: '<event-invitation-type-id>',
+                 Json: '<json>',
+                 Slots: <slots>,
+                 SlotsRequested: <slots-requested>,
+                 User: <user-profile>,
+                 UserID: '<user-id>'
+                 })
+                 .success(function (data) {
+                 // perform success action here
+                 })
+                 .error(function (response, status, headers, config) {
+                 // perform error handling here
+                 });
+                 */
+                create: function (data) {
+                    return baasicApp.calendarModule.attendee.create(data);
+                },
+
+
+                /**
+                 * Returns a promise that is resolved once the update EventRsvpAttendee action has been performed. This action updates an EventRsvpAttendee resource.
+                 * @method
+                 * @example
+                 eventRsvpAttendee is a resource previously fetched using get action.
+                 eventRsvpAttendee.maxSlots = '<max-slots>';
+                 baasicCalendarEventRsvpAttendeeService.update(eventRsvpAttendee)
+                 .success(function (data) {
+                 // perform success action here
+                 })
+                 .error(function (response, status, headers, config) {
+                 // perform error handling here
+                 });
+                 */
+                update: function (data) {
+                    return baasicApp.calendarModule.attendee.update(data);
+                },
+
+
+                /**
+                 * Returns a promise that is resolved once the update EventRsvpAttendee status action has been performed. This action updates an EventRsvpAttendee resource.
+                 * @method
+                 * @example
+                 baasicCalendarEventRsvpAttendeeService.updateStatus(id, statusId)
+                 .success(function (data) {
+                 // perform success action here
+                 })
+                 .error(function (response, status, headers, config) {
+                 // perform error handling here
+                 });                
+                 */
+                updateStatus: function (id, statusId) {
+                    return baasicApp.calendarModule.attendee.updateStatus(id, statusId);
+                },
+
+
+                /**
+                 * Returns a promise that is resolved once the update EventRsvpAttendee status Email or FullName action has been performed. This action updates an EventRsvpAttendee resource
+                 * @method
+                 * @example
+                 baasicCalendarEventRsvpAttendeeService.updateStatusEmailOrFullName(id, email, statusId, securityToken)
+                 .success(function (data) {
+                 // perform success action here
+                 })
+                 .error(function (response, status, headers, config) {
+                 // perform error handling here
+                 }); 
+                 */
+                updateStatusEmailOrFullName: function (id, emailOrFullName, statusId, securityToken) {
+                    return baasicApp.calendarModule.attendee.updateStatusEmailOrFullName(id, emailOrFullName, statusId, securityToken);
+                },
+
+
+                /**
+                 * Returns a promise that is resolved once the remove EventRsvpAttendee action has been performed. This action removes an EventRsvpAttendee resource.
+                 * @method
+                 * @example
+                 eventRsvpAttendee is a resource previously fetched using get action.
+                 baasicCalendarEventRsvpAttendeeService.remove(eventRsvpAttendee)
+                 .success(funcation (data) {
+                 // perform success action here
+                 })
+                 .error(function (response, status, headers, config) {
+                 // perform error handling here
+                 });
+                 */
+                remove: function (data) {
+                    return baasicApp.calendarModule.attendee.remove(data);
+                },
+
+
+                /**
+                 * Returns a promise that is resolved once the purge action has been performed. This action removes all EventRsvpAttendee resources from the specified event resource.
+                 * @method
+                 * @example
+                 baasicCalendarEventRsvpAttendeeService.purge(event)
+                 .success(function (data) {
+                 // perform success action here
+                 })
+                 .error(function (response, status, headers, config) {
+                 // perform error handling here
+                 });
+                 */
+                purge: function (data) {
+                    return baasicApp.calendarModule.attendee.purge(data);
+                },
+
+                /**
+                 * Returns a promise that is resolved once the subscribe action has been performed. This action creates CalendarEventAttendee subscriotion to CalendarEvent changes.
+                 * @method
+                 * @example
+                 baasicCalendarEventRsvpAttendeeService.subscribe(attendeeId)
+                 .success(function (data) {
+                 // perform success action here
+                 })
+                 .error(function (response, status, headers, config) {
+                 //perform error handling here
+                 });
+                 */
+                subscribe: function (id) {
+                    return baasicApp.calendarModule.attendee.subscribe(id);
+                },
+
+                /**
+                 * Returns a promise that is resolved once the unsubscribe action has been performed. This action removes CalendarEventAttendee subscriotion to CalendarEvent changes.
+                 * @method
+                 * @example
+                 baasicCalendarEventRsvpAttendeeService.unsubscribe(attendeeId)
+                 .success(function (data) {
+                 // perform success action here
+                 })
+                 .error(function (response, status, headers, config) {
+                 //perform error handling here
+                 });
+                 */
+                unsubscribe: function (id) {
+                    return baasicApp.calendarModule.attendee.unsubscribe(id);
+                },
+
+                batch: {
+
+                    /**
+                     * Returns a promise that is resolved once the create EventRsvpAttendees action has been performed. This action creates new EventRsvpAttendee resources.
+                     * @method batch.create
+                     * @example 
+                     baasicCalendarEventRsvpAttendeeService.batch.create([{
+                     AttendeeStatus: <calendar-event-attendee-status>,
+                     AttendeeStatusId '<event-attendee-status-id>',
+                     DateCreated: '<date-created>',
+                     DateUpdated: '<date-updated>',
+                     Email: '<email>',
+                     EventId: '<calendar-event-id>',
+                     FullName: '<full-name>',
+                     Id: '<id>',
+                     InvitationType: <calendar-event-invitation-type>,
+                     InvitationTypeId: '<event-invitation-type-id>',
+                     Json: '<json>',
+                     Slots: <slots>,
+                     SlotsRequested: <slots-requested>,
+                     User: <user-profile>,
+                     UserID: '<user-id>'
+                     }])
+                     .success(function (data) {
+                     // perform success action here
+                     })
+                     .error(function (respose, status, headers, config) {
+                     // perform error handling here
+                     });
+                     */
+                    create: function (data) {
+                        return baasicApp.calendarModule.attendee.batch.create(data);
+                    },
+
+
+                    /**
+                     * Returns a promise that is resolved once the update EventRsvpAttendees action has been performed. This action updates EventRsvpAttendee resources.
+                     * @method batch.update
+                     * @example
+                     eventRsvpAttendees are resources previously fetched using get action.
+                     baasicCalendarEventRsvpAttendeeService.batch.update(eventRsvpAttendees)
+                     .success(function (data) {
+                     // perform success action here
+                     })
+                     .error(function (response, status, headers, config) {
+                     // perform error handling here
+                     });
+                     */
+                    update: function (data) {
+                        return baasicApp.calendarModule.attendee.batch.update(data);
+                    },
+
+
+                    /**
+                     * Returns a promise that is resolved once the delete EventRsvpAttendees action has been performed. This action deletes EventRsvpAttendee resources.
+                     * @method batch.remove
+                     * @example 
+                     baasicCalendarEventRsvpAttendeeService.batch.remove(eventRsvpAttendeeIds)
+                     .success(function (data) {
+                     // perform success action here
+                     })
+                     .error(function (response, status, headers, config) {
+                     // perform error handling here
+                     });
+                     */
+                    remove: function (ids) {
+                        return baasicApp.calendarModule.attendee.batch.remove(ids);
+                    },
+
+                    /**
+                     * Provides direct access to `routeService`.
+                     * @method batch.routeService
+                     * @example 
+                     baasicCalendarEventRsvpAttendeeService.batch.routeService.get(expandObject);
+                     */
+                    routeService: baasicApp.calendarModule.attendee.batch.routeDefinition
+                },
+
+                /**
+                 * Provides direct access to `routeService`.
+                 * @method
+                 * @example baasicCalendarEventRsvpAttendeeService.routeService.get(expandObject);
+                 **/
+                routeService: baasicApp.calendarModule.attendee.routeDefinition
+            };
+        }]);
+    }(angular, module));
+    /**
+     * @copyright (c) 2017 Mono Ltd
+     * @license MIT
+     * @author Mono Ltd
+     * @overview 
+     ***Notes:**
+     - Refer to the [Baasic REST API](http://dev.baasic.com/api/reference/home) for detailed information about available Baasic REST API end-points.
+     - All end-point objects are transformed by the associated route service.
+     */
+    /* globals module */
+    /**
+     * @module baasicCalendarEventRsvpService
+     * @description Baasic Calendar Event Rsvp Service provides an easy way to consume Baasic Calendar REST API end-points. In order to obtain a needed routes `baasicCalendarEventRsvpService` uses `baasicCalendarEventRsvpRouteService`.
+     */
+    (function (angular, module) {
+        'use strict';
+        module.service('baasicCalendarEventRsvpService', ['baasicApp', function (baasicApps) {
+            var baasicApp = baasicApps.get();
+            return {
+
+                /**
+                 * Returns a promise that is resolved once the find action has been completed. Success response returns a list of EventRsvp resources matching the given criteria.
+                 * @method
+                 * @example
+                 baasicCalendarEventRsvpService.find({
+                 pageNumber: 1,
+                 pageSize: 10,
+                 orderBy: '<field>',
+                 orderDirection: '<asc|desc>',
+                 search: '<search-phrase>',
+                 ids: '<event-rsvp-identifiers>',
+                 calendarIds: '<calendar-identifiers>',
+                 calendarNames: '<calendar-names'>,
+                 invitationTypeIds: '<invitation-type-identifiers>',
+                 invitationOnly: '<true|false>',
+                 statudIds: '<event-status-identifiers>',
+                 typeIds: '<event-type-identifiers>',
+                 from: '<start-date>',
+                 to: '<end-date>',
+                 registrationCloseFrom: '<registration-from-date>',
+                 registrationCloseTo: '<registration-to-date>'
+                 })
+                 .success(function (collection) {
+                 // perform success action here
+                 })
+                 .error(function(response, status, headers, config) {
+                 // perform error handling here 
+                 });
+                 */
+                find: function (options) {
+                    return baasicApp.calendarModule.rsvp.find(options);
+                },
+
+
+                /**
+                 * Returns a promise that is resolved once the get action has been completed. Success response returns an EventRsvp resource matching the given criteria.
+                 * @method
+                 * @example
+                 baasicCalendarEventRsvpService.get('<event-rsvp-id>')
+                 .success(function (data) {
+                 // perform success action here
+                 })
+                 .error(function(response, status, headers, config) {
+                 // perform error handling here 
+                 });             
+                 */
+                get: function (id, options) {
+                    return baasicApp.calendarModule.rsvp.get(id, options);
+                },
+
+
+                /**
+                 * Returns a promise that is resolved once the create EventRsvp action has been performed. This action creates a new EventRsvp resource.
+                 * @method
+                 * @example 
+                 baasicCalendarEventRsvpService.create({
+                 InvitationOnly: <true|false>,
+                 InvitationType: <calendar-rsvp-invitation-type>,
+                 InvitationTypeId: '<invitation-type-id>',
+                 Json: '<json>',
+                 MaxSlots: <max-slots>,
+                 MinSlots: <min-slots>,
+                 RegistrationCloseDate: '<registration-close-date>',
+                 TotalSlots: <total-slots>
+                 })
+                 .success(function (data) {
+                 // perform success action here
+                 })
+                 .error(function (response, status, headers, config) {
+                 // perform error handling here
+                 });
+                 */
+                create: function (data) {
+                    return baasicApp.calendarModule.rsvp.create(data);
+                },
+
+
+                /**
+                 * Returns a promise that is resolved once the update EventRsvp action has been performed. This action updates an EventRsvp resource.
+                 * @method
+                 * @example
+                 eventRsvp is a resource previously fetched using get action.
+                 eventRsvp.maxSlots = '<max-slots>';
+                 baasicCalendarEventRsvpService.update(eventRsvp)
+                 .success(function (data) {
+                 // perform success action here
+                 })
+                 .error(function (response, status, headers, config) {
+                 // perform error handling here
+                 });
+                 */
+                update: function (data) {
+                    return baasicApp.calendarModule.rsvp.update(data);
+                },
+
+
+                /**
+                 * Returns a promise that is resolved once the remove EventRsvp action has been performed. This action removes an EventRsvp resource.
+                 * @method
+                 * @example
+                 eventRsvp is a resource previously fetched using get action.
+                 baasicCalendarEventRsvpService.remove(eventRsvp)
+                 .success(funcation (data) {
+                 // perform success action here
+                 })
+                 .error(function (response, status, headers, config) {
+                 // perform error handling here
+                 });
+                 */
+                remove: function (data) {
+                    return baasicApp.calendarModule.rsvp.remove(data);
+                },
+
+
+                /**
+                 * Returns a promise that is resolved once the purge action has been performed. This action removes all EventRsvp resources from the specified event resource.
+                 * @method
+                 * @example
+                 baasicCalendarEventRsvpService.purge(event)
+                 .success(function (data) {
+                 // perform success action here
+                 })
+                 .error(function (response, status, headers, config) {
+                 // perform error handling here
+                 });
+                 */
+                purge: function (data) {
+                    return baasicApp.calendarModule.rsvp.purge(data);
+                },
+
+                /**
+                 * Returns a promise that is resolved once the subscribe action has been performed. This action creates CalendarEventAttendee subscriotion to CalendarEvent changes.
+                 * @method
+                 * @example
+                 baasicCalendarEventRsvpService.subscribe(calendarId, eventId, attendeeId)
+                 .success(function (data) {
+                 // perform success action here
+                 })
+                 .error(function (response, status, headers, config) {
+                 //perform error handling here
+                 });
+                 */
+                subscribe: function (calendarId, eventId, id) {
+                    return baasicApp.calendarModule.rsvp.subscribe(calendarId, eventId, id);
+                },
+
+                /**
+                 * Returns a promise that is resolved once the unsubscribe action has been performed. This action removes CalendarEventAttendee subscriotion to CalendarEvent changes.
+                 * @method
+                 * @example
+                 baasicCalendarEventRsvpService.unsubscribe(calendarId, eventId, sattendeeId)
+                 .success(function (data) {
+                 // perform success action here
+                 })
+                 .error(function (response, status, headers, config) {
+                 //perform error handling here
+                 });
+                 */
+                unsubscribe: function (calendarId, eventId, id) {
+                    return baasicApp.calendarModule.attendee.unsubscribe(calendarId, eventId, id);
+                },
+
+                /**
+                 * Returns a promise that is resolved once the subscribeEmail action has been performed. This action creates CalendarEventAttendee subscriotion to CalendarEvent changes.
+                 * @method
+                 * @example
+                 baasicCalendarEventRsvpService.subscribeEmail(calendarId, eventId, attendeeEmail)
+                 .success(function (data) {
+                 // perform success action here
+                 })
+                 .error(function (response, status, headers, config) {
+                 //perform error handling here
+                 });
+                 */
+                subscribeEmail: function (calendarId, eventId, email) {
+                    return baasicApp.calendarModule.rsvp.subscribeEmail(calendarId, eventId, email);
+                },
+
+                /**
+                 * Returns a promise that is resolved once the unsubscribeEmail action has been performed. This action removes CalendarEventAttendee subscriotion to CalendarEvent changes.
+                 * @method
+                 * @example
+                 baasicCalendarEventRsvpService.unsubscribeEmail(calendarId, eventId, attendeeEmail)
+                 .success(function (data) {
+                 // perform success action here
+                 })
+                 .error(function (response, status, headers, config) {
+                 //perform error handling here
+                 });
+                 */
+                unsubscribeEmail: function (calendarId, eventId, email) {
+                    return baasicApp.calendarModule.rsvp.unsubscribeEmail(calendarId, eventId, email);
+                },
+
+
+                batch: {
+
+                    /**
+                     * Returns a promise that is resolved once the create EventRsvps action has been performed. This action creates new EventRsvp resources.
+                     * @method batch.create
+                     * @example 
+                     baasicCalendarEventRsvpService.batch.create([{
+                     InvitationOnly: <true|false>,
+                     InvitationType: <calendar-rsvp-invitation-type>,
+                     InvitationTypeId: '<invitation-type-id>',
+                     Json: '<json>',
+                     MaxSlots: <max-slots>,
+                     MinSlots: <min-slots>,
+                     RegistrationCloseDate: '<registration-close-date>',
+                     TotalSlots: <total-slots>
+                     }])
+                     .success(function (data) {
+                     // perform success action here
+                     })
+                     .error(function (respose, status, headers, config) {
+                     // perform error handling here
+                     });
+                     */
+                    create: function (data) {
+                        return baasicApp.calendarModule.rsvp.batch.create(data);
+                    },
+
+
+                    /**
+                     * Returns a promise that is resolved once the update EventRsvps action has been performed. This action updates EventRsvp resources.
+                     * @method batch.update
+                     * @example
+                     eventRsvps are resources previously fetched using get action.
+                     baasicCalendarEventRsvpService.batch.update(eventRsvps)
+                     .success(function (data) {
+                     // perform success action here
+                     })
+                     .error(function (response, status, headers, config) {
+                     // perform error handling here
+                     });
+                     */
+                    update: function (data) {
+                        return baasicApp.calendarModule.rsvp.batch.update(data);
+                    },
+
+
+                    /**
+                     * Returns a promise that is resolved once the delete EventRsvps action has been performed. This action deletes EventRsvp resources.
+                     * @method batch.remove
+                     * @example 
+                     baasicCalendarEventRsvpService.batch.remove(eventRsvpIds)
+                     .success(function (data) {
+                     // perform success action here
+                     })
+                     .error(function (response, status, headers, config) {
+                     // perform error handling here
+                     });
+                     */
+                    remove: function (ids) {
+                        return baasicApp.calendarModule.rsvp.batch.remove(ids);
+                    },
+
+                    /**
+                     * Provides direct access to `routeService`.
+                     * @method batch.routeService
+                     * @example 
+                     baasicCalendarEventRsvpService.batch.routeService.get(expandObject);
+                     */
+                    routeService: baasicApp.calendarModule.rsvp.batch.routeDefinition
+                },
+
+                /**
+                 * Provides direct access to `routeService`.
+                 * @method
+                 * @example 
+                 baasicCalendarEventRsvpService.routeService.get(expandObject);
+                 */
+                routeService: baasicApp.calendarModule.rsvp.routeDefinition
+            };
+        }]);
+    }(angular, module));
+    /**
+     * @copyright (c) 2017 Mono Ltd
+     * @license MIT
+     * @author Mono Ltd
+     * @overview 
+     ***Notes:**
+     - Refer to the [Baasic REST API](http://dev.baasic.com/api/reference/home) for detailed information about available Baasic REST API end-points.
+     - All end-point objects are transformed by the associated route service.
+     */
+    /* globals module */
+    /**
+     * @module baasicCalendarEventService
+     * @description Baasic Calendar Event Service provides an easy way to consume Baasic Calendar REST API end-points. In order to obtain a needed routes `baasicCalendarEventService` uses `baasicCalendarEventRouteService`.
+     */
+    (function (angular, module) {
+        'use strict';
+        module.service('baasicCalendarEventService', ['baasicApp', function (baasicApps) {
+            var baasicApp = baasicApps.get();
+            return {
+
+                /**
+                 * Returns a promise that is resolved once the find action has been completed. Success response returns a list of Event resources matching the given criteria.
+                 * @method
+                 * @example
+                 baasicCalendarEventService.find({
+                 pageNumber: 1,
+                 pageSize: 10,
+                 orderBy: '<field>',
+                 orderDirection: '<asc|desc>',
+                 search: '<search-phrase>',
+                 ids: '<event-identifiers>',
+                 ownerIds: '<event-owner-identifiers>',
+                 calendarIds: '<calendars-identifiers>',
+                 calendarNames: '<calendar-names>',
+                 statusIds: '<event-status-identifiers>',
+                 typeIds: '<event-type-identifiers>',
+                 from: '<start-date>',
+                 to: '<end-date>'
+                 })
+                 .success(function (collection) {
+                 // perform success action here
+                 })
+                 .error(function(response, status, headers, config) {
+                 // perform error handling here 
+                 });
+                 */
+                find: function (options) {
+                    return baasicApp.calendarModule.event.find(options);
+                },
+
+
+                /**
+                 * Returns a promise that is resolved once the get action has been completed. Success response returns an Event resource matching the given criteria.
+                 * @method
+                 * @example
+                 baasicCalendarEventService.get('<event-id>')
+                 .success(function (data) {
+                 // perform success action here
+                 })
+                 .error(function(response, status, headers, config) {
+                 // perform error handling here 
+                 });             
+                 */
+                get: function (id, options) {
+                    return baasicApp.calendarModule.event.get(id, options);
+                },
+
+
+                /**
+                 * Returns a promise that is resolved once the get action has been completed. Success response returns an Event resource matching the given criteria.
+                 * @method
+                 * @example
+                 baasicCalendarEventService.getByEmailOrFullName(eventId, email, securityToken, options)
+                 .success(function (data) {
+                 // perform success action here
+                 })
+                 .error(function(response, status, headers, config) {
+                 // perform error handling here 
+                 });   
+                 */
+                getByEmailOrFullName: function (id, emailOrFullName, securityToken, options) {
+                    return baasicApp.calendarModule.event.getByEmailOrFullName(id, emailOrFullName, securityToken, options);
+                },
+
+
+                /**
+                 * Returns a promise that is resolved once the create Event action has been performed. This action creates a new Event resource.
+                 * @method
+                 * @example 
+                 baasicCalendarEventService.create({
+                 author: <user-info>,
+                 authorId: '<author-identifier>',
+                 calendar: <calendar>,
+                 calendarId: '<calendar-identifier>',
+                 description: '<description>',
+                 detail: <calendar-event-detail>,
+                 endTime: '<end-time>',
+                 isAllDay: '<true|false>',
+                 isRecurring: '<true|false>',
+                 json: '<json>',
+                 startTime: '<start-time>',
+                 title: '<title'>
+                 })
+                 .success(function (data) {
+                 // perform success action here
+                 })
+                 .error(function (response, status, headers, config) {
+                 // perform error handling here
+                 });
+                 */
+                create: function (data) {
+                    return baasicApp.calendarModule.event.create(data);
+                },
+
+
+                /**
+                 * Returns a promise that is resolved once the update Event action has been performed. This action updates an Event resource.
+                 * @method
+                 * @example
+                 event is a resource previously fetched using get action.
+                 event.title = '<title>';
+                 baasicCalendarEventService.update(event)
+                 .success(function (data) {
+                 // perform success action here
+                 })
+                 .error(function (response, status, headers, config) {
+                 // perform error handling here
+                 });
+                 */
+                update: function (data) {
+                    return baasicApp.calendarModule.event.update(data);
+                },
+
+
+                /**
+                 * Returns a promise that is resolved once the remove Event action has been performed. This action removes an Event resource.
+                 * @method
+                 * @example
+                 event is a resource previously fetched using get action.
+                 baasicCalendarEventService.remove(event)
+                 .success(funcation (data) {
+                 // perform success action here
+                 })
+                 .error(function (response, status, headers, config) {
+                 // perform error handling here
+                 });
+                 */
+                remove: function (data) {
+                    return baasicApp.calendarModule.event.remove(data);
+                },
+
+
+                /**
+                 * Returns a promise that is resolved once the purge action has been performed. This action removes all Event resources from the system matching the given criteria.
+                 * @method
+                 * @example
+                 baasicCalendarEventService.purge(calendar)
+                 .success(function (data) {
+                 // perform success action here
+                 })
+                 .error(function (response, status, headers, config) {
+                 // perform error handling here
+                 });
+                 */
+                purge: function (data) {
+                    return baasicApp.calendarModule.event.purge(data);
+                },
+
+
+                batch: {
+
+                    /**
+                     * Returns a promise that is resolved once the create Events action has been performed. This action creates new Event resources.
+                     * @method batch.create
+                     * @example 
+                     baasicCalendarEventService.batch.create([{
+                     author: <user-info>,
+                     authorId: '<author-identifier>',
+                     calendar: <calendar>,
+                     calendarId: '<calendar-identifier>',
+                     description: '<description>',
+                     detail: <calendar-event-detail>,
+                     endTime: '<end-time>',
+                     isAllDay: '<true|false>',
+                     isRecurring: '<true|false>',
+                     json: '<json>',
+                     startTime: '<start-time>',
+                     title: '<title'>
+                     }])
+                     .success(function (data) {
+                     // perform success action here
+                     })
+                     .error(function (respose, status, headers, config) {
+                     // perform error handling here
+                     });
+                     */
+                    create: function (data) {
+                        return baasicApp.calendarModule.event.batch.create(data);
+                    },
+
+
+                    /**
+                     * Returns a promise that is resolved once the update Events action has been performed. This action updates Event resources.
+                     * @method batch.update
+                     * @example
+                     events are resources previously fetched using get action.
+                     baasicCalendarEventService.batch.update(events)
+                     .success(function (data) {
+                     // perform success action here
+                     })
+                     .error(function (response, status, headers, config) {
+                     // perform error handling here
+                     });
+                     */
+                    update: function (data) {
+                        return baasicApp.calendarModule.event.batch.update(data);
+                    },
+
+
+                    /**
+                     * Returns a promise that is resolved once the delete Events action has been performed. This action deletes Event resources.
+                     * @method batch.remove
+                     * @example 
+                     baasicCalendarEventService.batch.remove(eventIds)
+                     .success(function (data) {
+                     // perform success action here
+                     })
+                     .error(function (response, status, headers, config) {
+                     // perform error handling here
+                     });
+                     */
+                    remove: function (ids) {
+                        return baasicApp.calendarModule.event.batch.remove(ids);
+                    },
+
+                    /**
+                     * Provides direct access to `routeService`.
+                     * @method batch.routeService
+                     * @example 
+                     baasicCalendarEventService.batch.routeService.get(expandObject);
+                     */
+                    routeService: baasicApp.calendarModule.event.batch.routeDefinition
+                },
+
+                /**
+                 * Provides direct access to `routeService`.
+                 * @method
+                 * @example 
+                 baasicCalendarEventService.routeService.get(expandObject);
+                 */
+                routeService: baasicApp.calendarModule.event.routeDefinition
+            };
+        }]);
+    }(angular, module));
+    /**
+     * @copyright (c) 2017 Mono Ltd
+     * @license MIT
+     * @author Mono Ltd
+     * @overview 
+     ***Notes:**
+     - Refer to the [Baasic REST API](http://dev.baasic.com/api/reference/home) for detailed information about available Baasic REST API end-points.
+     - All end-point objects are transformed by the associated route service.
+     */
+    /* globals module */
+    /**
+     * @module baasicCalendarEventsService
+     * @description Baasic Calendar Events Service provides an easy way to consume Baasic Calendar REST API end-points. In order to obtain a needed routes `baasicCalendarEventsService` uses `baasicCalendarEventsRouteService`.
+     */
+    (function (angular, module) {
+        'use strict';
+        module.service('baasicCalendarEventsService', ['baasicApp', function (baasicApps) {
+            var baasicApp = baasicApps.get();
+            return {
+
+                /**
+                 * Returns a promise that is resolved once the find action has been completed. Success response returns a list of Event resources matching the given criteria.
+                 * @method
+                 * @example
+                 baasicCalendarEventsService.find(calendarId, {
+                 pageNumber: 1,
+                 pageSize: 10,
+                 orderBy: '<field>',
+                 orderDirection: '<asc|desc>',
+                 search: '<search-phrase>',
+                 ids: '<event-identifiers>',
+                 ownerIds: '<event-owner-identifiers>',
+                 statusIds: '<event-status-identifiers>',
+                 typeIds: '<event-type-identifiers>',
+                 from: '<start-date>',
+                 to: '<end-date>'  
+                 })
+                 .success(function (collection) {
+                 // perform success action here
+                 })
+                 .error(function(response, status, headers, config) {
+                 // perform error handling here 
+                 });
+                 */
+                find: function (calendarId, options) {
+                    return baasicApp.calendarModule.calendar.events.find(calendarId, options);
+                },
+
+
+                /**
+                 * Returns a promise that is resolved once the get action has been completed. Success response returns an Event resource matching the given criteria.
+                 * @method
+                 * @example
+                 baasicCalendarEventsService.get(calendarId, eventId)
+                 .success(function (data) {
+                 // perform success action here
+                 })
+                 .error(function(response, status, headers, config) {
+                 // perform error handling here 
+                 });             
+                 */
+                get: function (id, options) {
+                    return baasicApp.calendarModule.calendar.events.get(calendarId, id, options);
+                },
+
+
+                /**
+                 * Returns a promise that is resolved once the get action has been completed. Success response returns an Event resource matching the given criteria.
+                 * @method
+                 * @example
+                 baasicCalendarEventsService.getByEmailOrFullName(calendarId, eventId, email, securityToken, options)
+                 .success(function (data) {
+                 // perform success action here
+                 })
+                 .error(function(response, status, headers, config) {
+                 // perform error handling here 
+                 });   
+                 */
+                getByEmailOrFullName: function (calendarId, id, emailOrFullName, securityToken, options) {
+                    return baasicApp.calendarModule.calendar.events.getByEmailOrFullName(calendarId, id, emailOrFullName, securityToken, options);
+                },
+
+
+                /**
+                 * Returns a promise that is resolved once the link Event action has been performed. This action links the specified event resource to the specified calendar resource.
+                 * @method
+                 * @example 
+                 baasicCalendarEventsService.link(calendarId, data)
+                 .success(function (data) {
+                 // perform success action here
+                 })
+                 .error(function (response, status, headers, config) {
+                 // perform error handling here
+                 });
+                 */
+                link: function (calendarId, data) {
+                    return baasicApp.calendarModule.calendar.events.link(calendarId, data);
+                },
+
+
+                /**
+                 * Returns a promise that is resolved once the update Event action has been performed. This action updates an Event resource.
+                 * @method
+                 * @example
+                 event is a resource previously fetched using get action.
+                 event.title = '<title>';
+                 baasicCalendarEventsService.update(calendarId, event)
+                 .success(function (data) {
+                 // perform success action here
+                 })
+                 .error(function (response, status, headers, config) {
+                 // perform error handling here
+                 });
+                 */
+                update: function (calendarId, data) {
+                    return baasicApp.calendarModule.calendar.events.update(calendarId, data);
+                },
+
+
+                /**
+                 * Returns a promise that is resolved once the unlink Event action has been performed. This action unlinks the specified event resource from the specified calendar resource.
+                 * @method
+                 * @example
+                 baasicCalendarEventsService.unlink(calendarId, data)
+                 .success(funcation (data) {
+                 // perform success action here
+                 })
+                 .error(function (response, status, headers, config) {
+                 // perform error handling here
+                 })
+                 */
+                unlink: function (calendarId, data) {
+                    return baasicApp.calendarModule.calendar.events.unlink(calendarId, data);
+                },
+
+
+                /**
+                 * Provides direct access to `routeService`.
+                 * @method
+                 * @example 
+                 baasicCalendarEventsService.routeService.get(expandObject);
+                 */
+                routeService: baasicApp.calendarModule.calendar.events.routeDefinition
+            };
+        }]);
+    }(angular, module));
+    /**
+     * @copyright (c) 2017 Mono Ltd
+     * @license MIT
+     * @author Mono Ltd
+     * @overview 
+     ***Notes:**
+     - Refer to the [Baasic REST API](http://dev.baasic.com/api/reference/home) for detailed information about available Baasic REST API end-points.
+     - All end-point objects are transformed by the associated route service.
+     */
+    /* globals module */
+    /**
+     * @module baasicCalendarRsvpAttendeeService
+     * @description Baasic Calendar Rsvp Attendee Service provides an easy way to consume Baasic Calendar REST API end-points. In order to obtain a needed routes `baasicCalendarRsvpAttendeeService` uses `baasicCalendarRsvpAttendeeRouteService`.
+     */
+    (function (angular, module) {
+        'use strict';
+        module.service('baasicCalendarRsvpAttendeeService', ['baasicApp', function (baasicApps) {
+            var baasicApp = baasicApps.get();
+            return {
+
+                /**
+                 * Returns a promise that is resolved once the find action has been completed. Success response returns a list of EventRsvpAttendee resources matching the given criteria.
+                 * @method
+                 * @example
+                 baasicCalendarRsvpAttendeeService.find(calendarId, eventId, {
+                 pageNumber: 1,
+                 pageSize: 10,
+                 orderBy: '<field>',
+                 orderDirection: '<asc|desc>',
+                 search: '<search-phrase>',
+                 ids: '<ids>',
+                 userIds: '<user-ids>',
+                 emails: '<emails>',
+                 fullNames: '<full-names>',
+                 invitationTypeIds: '<invitation-type-ids>',
+                 from: <from-date>,
+                 to: <to-date>
+                 })
+                 .success(function (collection) {
+                 // perform success action here
+                 })
+                 .error(function (response, status, headers, config) {
+                 // perform error handling here 
+                 });
+                 */
+                find: function (calendarId, eventId, options) {
+                    return baasicApp.calendarModule.calendar.eventAttendee.find(calendarId, eventId, options);
+                },
+
+
+                /**
+                 * Returns a promise that is resolved once the get action has been completed. Success response returns an EventRsvpAttendee resource matching the given criteria.
+                 * @method
+                 * @example
+                 baasicCalendarRsvpAttendeeService.get(calendarId, eventId, id)
+                 .success(function (data) {
+                 // perform success action here
+                 })
+                 .error(function(response, status, headers, config) {
+                 // perform error handling here 
+                 });             
+                 */
+                get: function (calendarId, eventId, id, options) {
+                    return baasicApp.calendarModule.calendar.eventAttendee.get(calendarId, eventId, id, options);
+                },
+
+
+                /**
+                 * Returns a promise that is resolved once the get action has been completed. Success response returns an EventRsvpAttendee resource matching the given criteria.
+                 * @method
+                 * @example
+                 baasicCalendarRsvpAttendeeService.getByEmailOrFullName(calendarId, eventId, email) 
+                 .success(function (data) {
+                 // perform success action here
+                 })
+                 .error(function (response, status, headers, config) {
+                 // perform error handling here
+                 });
+                 */
+                getByEmailOrFullName: function (calendarId, eventId, emailOrFullName) {
+                    return baasicApp.calendarModule.calendar.eventAttendee.getByEmailOrFullName(calendarId, eventId, emailOrFullName);
+                },
+
+
+                /**
+                 * Returns a promise that is resolved once the link EventRsvpAttendee action has been performed. This action links the specified eventRsvpAttendee resource to the specified calendar resource.
+                 * @method
+                 * @example 
+                 baasicCalendarRsvpService.link(calendarId, eventId, {
+                 AttendeeStatus: <calendar-event-attendee-status>,
+                 AttendeeStatusId '<attendee-status-id>',
+                 DateCreated: '<date-created>',
+                 DateUpdated: '<date-updated>',
+                 Email: '<email>',
+                 EventID: '<calendar-event-id>',
+                 FullName: '<full-name>',
+                 Id: '<id>',
+                 InvitationType: <calendar-event-invitation-type>,
+                 InvitationTypeId: '<invitation-type-id>',
+                 Json: '<json>',
+                 Slots: <slots>,
+                 SlotsRequested: <slots-requested>,
+                 User: <user-profile>,
+                 UserID: '<user-id>'
+                 })
+                 .success(function (data) {
+                 // perform success action here
+                 })
+                 .error(function (response, status, headers, config) {
+                 // perform error handling here
+                 });
+                 */
+                link: function (calendarId, eventId, data) {
+                    return baasicApp.calendarModule.calendar.eventAttendee.link(calendarId, eventId, data);
+                },
+
+
+                /**
+                 * Returns a promise that is resolved once the update EventRsvpAttendee action has been performed. This action updates an EventRsvpAttendee resource.
+                 * @method
+                 * @example
+                 eventRsvpAttendee is a resource previously fetched using get action.
+                 eventRsvpAttendee.SlotsRequested = '<slots-requested>';
+                 baasicCalendarRsvpAttendeeService.update(calendarId, eventId, eventRsvpAttendee)
+                 .success(function (data) {
+                 // perform success action here
+                 })
+                 .error(function (response, status, headers, config) {
+                 // perform error handling here
+                 });
+                 */
+                update: function (calendarId, eventId, data) {
+                    return baasicApp.calendarModule.calendar.eventAttendee.update(calendarId, eventId, data);
+                },
+
+
+                /**
+                 * Returns a promise that is resolved once the update EventRsvpAttendee status action has been performed. This action updates an EventRsvpAttendee resource.
+                 * @method
+                 * @example
+                 baasicCalendarRsvpAttendeeService.updateStatus(calendarId, eventId, id, statusId)
+                 .success(function (data) {
+                 // perform success action here
+                 })
+                 .error(function (response, status, headers, config) {
+                 // perform error handling here
+                 });
+                 */
+                updateStatus: function (calendarId, eventId, id, statusId) {
+                    return baasicApp.calendarModule.calendar.eventAttendee.updateStatus(calendarId, eventId, id, statusId);
+                },
+
+
+                /**
+                 * Returns a promise that is resolved once the update EventRsvpAttendee status action has been performed. This action updates an eventRsvpAttendee resource.
+                 * @method
+                 * @example
+                 baasicCalendarRsvpAttendeeService.updateStatusEmailOrFullName(calendarId, eventId, emailOrFullName, securityToken, statusId)
+                 .success(function (data) {
+                 // perform success action here
+                 })
+                 .error(function (response, status, headers, config) {
+                 // perform error handling here
+                 });
+                 */
+                updateStatusEmailOrFullName: function (calendarId, eventId, emailOrFullName, securityToken, statusId) {
+                    return baasicApp.calendarModule.calendar.eventAttendee.updateStatusEmailOrFullName(calendarId, eventId, emailOrFullName, securityToken, statusId);
+                },
+
+
+                /**
+                 * Returns a promise that is resolved once the unlink EventRsvpAttendee action has been performed. This action unlinks the specified eventRsvpAttende resource from the specified calendar event resource.
+                 * @method
+                 * @example
+                 baasicCalendarRsvpAttendeeService.unlink(calendarId, eventId, eventRsvpAttendee)
+                 .success(funcation (data) {
+                 // perform success action here
+                 })
+                 .error(function (response, status, headers, config) {
+                 // perform error handling here
+                 });
+                 */
+                unlink: function (calendarId, eventId, data) {
+                    return baasicApp.calendarModule.calendar.eventAttendee.unlink(calendarId, eventId, data);
+                },
+
+
+                /**
+                 * Returns a promise that is resolved once the purge EventRsvpAttendees action has been performed. This action deletes all EventRsvpAttendees from the specified Event resource.
+                 * @method
+                 * @example
+                 baasicCalendarRsvpService.purge(calendarId, eventId)
+                 .success(function (data) {
+                 // perform success action here
+                 })
+                 .error(function (response, status, headers, config) {
+                 // perform error handling here
+                 });
+                 */
+                purge: function (calendarId, eventId) {
+                    return baasicApp.calendarModule.calendar.eventAttendee.purge(calendarId, eventId);
+                },
+
+
+                batch: {
+
+                    /**
+                     * Returns a promise that is resolved once the link EventRsvpAttendees action has been performed. This action links EnventRsvpAttendee resources to the specified calendar event.
+                     * @method batch.link
+                     * @example 
+                     baasicCalendarRsvpAttendeeService.batch.link(calendarId, eventId, [{
+                     AttendeeStatus: <calendar-evetn-attendee-status>,
+                     AttendeeStatusId '<attendee-status-id>',
+                     DateCreated: '<date-created>',
+                     DateUpdated: '<date-updated>',
+                     Email: '<email>',
+                     EventID: '<calendar-event-id>',
+                     FullName: '<full-name>',
+                     Id: '<id>',
+                     InvitationType: <calendar-event-invitation-type>,
+                     InvitationTypeId: '<invitation-type-id>',
+                     Json: '<json>',
+                     Slots: <slots>,
+                     SlotsRequested: <slots-requested>,
+                     User: <user-profile>,
+                     UserID: '<user-id>'
+                     }])
+                     .success(function (data) {
+                     // perform success action here
+                     })
+                     .error(function (respose, status, headers, config) {
+                     // perform error handling here
+                     });
+                     */
+                    link: function (calendarId, eventId, data) {
+                        return baasicApp.calendarModule.calendar.eventAttendee.batch.link(calendarId, eventId, data);
+                    },
+
+
+                    /**
+                     * Returns a promise that is resolved once the update EventRsvpAttendees action has been performed. This action updates EventRsvpAttendee resources.
+                     * @method batch.update
+                     * @example
+                     eventRsvpAttendees are resources previously fetched using get action.
+                     baasicCalendarRsvpAttemdeeService.batch.update(calendarId, eventId, eventRsvpAttendees)
+                     .success(function (data) {
+                     // perform success action here
+                     })
+                     .error(function (response, status, headers, config) {
+                     // perform error handling here
+                     });
+                     */
+                    update: function (calendarId, eventId, data) {
+                        return baasicApp.calendarModule.calendar.eventAttendee.batch.update(calendarId, eventId, data);
+                    },
+
+
+                    /**
+                     * Returns a promise that is resolved once the unlink EventRsvpAttendees action has been performed. This action unlinks EventRsvpAttendee resources from the specified calendar event.
+                     * @method batch.unlink
+                     * @example 
+                     baasicCalendarRsvpAttendeeService.batch.unlink(calendarId, eventId, eventRsvpAttendeeIds)
+                     .success(function (data) {
+                     // perform success action here
+                     })
+                     .error(function (response, status, headers, config) {
+                     // perform error handling here
+                     });
+                     */
+                    unlink: function (calendarId, eventId, ids) {
+                        return baasicApp.calendarModule.calendar.eventAttendee.batch.unlink(calendarId, eventId, ids);
+                    },
+
+                    /**
+                     * Provides direct access to `routeService`.
+                     * @method batch.routeService
+                     * @example 
+                     baasicCalendarRsvpAttendeeService.batch.routeService.get(expandObject);
+                     */
+                    routeService: baasicApp.calendarModule.calendar.eventAttendee.batch.routeDefinition
+                },
+
+
+                /**
+                 * Provides direct access to `routeService`.
+                 * @method
+                 * @example 
+                 baasicCalendarRsvpAttendeeService.routeService.get(expandObject);
+                 */
+                routeService: baasicApp.calendarModule.calendar.eventAttendee.routeDefinition
+            };
+        }]);
+    }(angular, module));
+    /**
+     * @copyright (c) 2017 Mono Ltd
+     * @license MIT
+     * @author Mono Ltd
+     * @overview 
+     ***Notes:**
+     - Refer to the [Baasic REST API](http://dev.baasic.com/api/reference/home) for detailed information about available Baasic REST API end-points.
+     - All end-point objects are transformed by the associated route service.
+     */
+    /* globals module */
+    /**
+     * @module baasicCalendarRsvpService
+     * @description Baasic Calendar Rsvp Service provides an easy way to consume Baasic Calendar REST API end-points. In order to obtain a needed routes `baasicCalendarRsvpService` uses `baasicCalendarRsvpRouteService`.
+     */
+    (function (angular, module) {
+        'use strict';
+        module.service('baasicCalendarRsvpService', ['baasicApp', function (baasicApps) {
+            var baasicApp = baasicApps.get();
+            return {
+
+                /**
+                 * Returns a promise that is resolved once the find action has been completed. Success response returns a list of EventRsvp resources matching the given criteria.
+                 * @method
+                 * @example
+                 baasicCalendarRsvpService.find(calendarId, {
+                 pageNumber: 1,
+                 pageSize: 10,
+                 orderBy: '<field>',
+                 orderDirection: '<asc|desc>',
+                 search: '<search-phrase>',
+                 ids: '<ids>',
+                 InvitationTypeIds: '<invitation-type-ids>',
+                 InvitationOnly: <true|false>,
+                 statusIds: '<status-ids>',
+                 from: '<from-date>',
+                 to: '<to-date>',
+                 registrationCloseFrom: '<registration-start-date>',
+                 registrationCloseTo: '<registration-end-date>'
+                 })
+                 .success(function (collection) {
+                 // perform success action here
+                 })
+                 .error(function(response, status, headers, config) {
+                 // perform error handling here 
+                 });
+                 */
+                find: function (calendarId, options) {
+                    return baasicApp.calendarModule.calendar.eventRsvp.find(calendarId, options);
+                },
+
+
+                /**
+                 * Returns a promise that is resolved once the get action has been completed. Success response returns an EventRsvp resource matching the given criteria.
+                 * @method
+                 * @example
+                 baasicCalendarRsvpService.get(calendarId, id)
+                 .success(function (data) {
+                 // perform success action here
+                 })
+                 .error(function(response, status, headers, config) {
+                 // perform error handling here 
+                 });             
+                 */
+                get: function (calendarId, id, options) {
+                    return baasicApp.calendarModule.calendar.eventRsvp.get(calendarId, id, options);
+                },
+
+
+                /**
+                 * Returns a promise that is resolved once the link EventRsvp action has been performed. This action links the specified eventRsvp resource to the specified calendar resource.
+                 * @method
+                 * @example 
+                 baasicCalendarRsvpService.link(calendarId, {
+                 InvitationOnly: <true|false>,
+                 InvitationType: <calendar-rsvp-invitation-type>,
+                 InvitationTypeId: '<invitation-type-id>',
+                 Json: '<json>',
+                 MaxSlots: <max-slots>,
+                 MinSlots: <min-slots>,
+                 RegistrationCloseDate: '<registration-close-date>',
+                 TotalSlots: <total-slots>
+                 })
+                 .success(function (data) {
+                 // perform success action here
+                 })
+                 .error(function (response, status, headers, config) {
+                 // perform error handling here
+                 });
+                 */
+                link: function (calendarId, data) {
+                    return baasicApp.calendarModule.calendar.eventRsvp.link(calendarId, data);
+                },
+
+
+                /**
+                 * Returns a promise that is resolved once the update EventRsvp action has been performed. This action updates an EventRsvp resource.
+                 * @method
+                 * @example
+                 eventRsvp is a resource previously fetched using get action.
+                 eventRsvp.MaxSlots = '<max-slots>';
+                 baasicCalendarRsvpService.update(calendarId, eventRsvp)
+                 .success(function (data) {
+                 // perform success action here
+                 })
+                 .error(function (response, status, headers, config) {
+                 // perform error handling here
+                 });
+                 */
+                update: function (calendarId, data) {
+                    return baasicApp.calendarModule.calendar.eventRsvp.update(calendarId, data);
+                },
+
+
+                /**
+                 * Returns a promise that is resolved once the unlink EventRsvp action has been performed. This action unlinks the specified eventRsvp resource from the specified calendar resource.
+                 * @method
+                 * @example
+                 baasicCalendarRsvpService.unlink(calendarId, eventRsvp)
+                 .success(funcation (data) {
+                 // perform success action here
+                 })
+                 .error(function (response, status, headers, config) {
+                 // perform error handling here
+                 });
+                 */
+                unlink: function (calendarId, data) {
+                    return baasicApp.calendarModule.calendar.eventRsvp.unlink(calendarId, data);
+                },
+
+
+                /**
+                 * Returns a promise that is resolved once the purge EventRsvps action has been performed. This action deletes all EventRsvps from the specified Event resource.
+                 * @method
+                 * @example
+                 baasicCalendarRsvpService.purge(calendarId, event)
+                 .success(function (data) {
+                 // perform success action here
+                 })
+                 .error(function (response, status, headers, config) {
+                 // perform error handling here
+                 });
+                 */
+                purge: function (calendarId, data) {
+                    return baasicApp.calendarModule.calendar.eventRsvp.purge(calendarId, data);
+                },
+
+
+                batch: {
+
+                    /**
+                     * Returns a promise that is resolved once the link EventRsvps action has been performed. This action links EnventRsvp resources to the specified calendar.
+                     * @method batch.link
+                     * @example 
+                     baasicCalendarRsvpService.batch.link(calendarId, [{
+                     InvitationOnly: <true|false>,
+                     InvitationType: <calendar-rsvp-invitation-type>,
+                     InvitationTypeId: '<invitation-type-id>',
+                     Json: '<json>',
+                     MaxSlots: <max-slots>,
+                     MinSlots: <min-slots>,
+                     RegistrationCloseDate: '<registration-close-date>',
+                     TotalSlots: <total-slots>
+                     }])
+                     .success(function (data) {
+                     // perform success action here
+                     })
+                     .error(function (respose, status, headers, config) {
+                     // perform error handling here
+                     });
+                     */
+                    link: function (calendarId, data) {
+                        return baasicApp.calendarModule.calendar.eventRsvp.batch.link(calendarId, data);
+                    },
+
+
+                    /**
+                     * Returns a promise that is resolved once the update EventRsvps action has been performed. This action updates EventRsvp resources.
+                     * @method batch.update
+                     * @example
+                     eventRsvps are resources previously fetched using get action.
+                     baasicCalendarRsvpService.batch.update(calendarId, eventRsvps)
+                     .success(function (data) {
+                     // perform success action here
+                     })
+                     .error(function (response, status, headers, config) {
+                     // perform error handling here
+                     });
+                     */
+                    update: function (calendarId, data) {
+                        return baasicApp.calendarModule.calendar.eventRsvp.batch.update(calendarId, data);
+                    },
+
+
+                    /**
+                     * Returns a promise that is resolved once the unlink EventRsvps action has been performed. This action unlinks EventRsvp resources from the specified calendar.
+                     * @method batch.unlink
+                     * @example 
+                     baasicCalendarRsvpService.batch.unlink(calendarId, eventRsvpIds)
+                     .success(function (data) {
+                     // perform success action here
+                     })
+                     .error(function (response, status, headers, config) {
+                     // perform error handling here
+                     });
+                     */
+                    unlink: function (calendarId, ids) {
+                        return baasicApp.calendarModule.calendar.eventRsvp.batch.unlink(calendarId, ids);
+                    },
+
+                    /**
+                     * Provides direct access to `routeService`.
+                     * @method batch.routeService
+                     * @example 
+                     baasicCalendarRsvpService.batch.routeService.get(expandObject);
+                     */
+                    routeService: baasicApp.calendarModule.calendar.eventRsvp.batch.routeDefinition
+                },
+
+
+                /**
+                 * Provides direct access to `routeService`.
+                 * @method
+                 * @example 
+                 baasicCalendarRsvpService.routeService.get(expandObject);
+                 */
+                routeService: baasicApp.calendarModule.calendar.eventRsvp.routeDefinition
+            };
+        }]);
+    }(angular, module));
+    /**
+     * @copyright (c) 2017 Mono Ltd
+     * @license MIT
+     * @author Mono Ltd
+     * @overview 
+     ***Notes:**
+     - Refer to the [Baasic REST API](http://dev.baasic.com/api/reference/home) for detailed information about available Baasic REST API end-points.
+     - All end-point objects are transformed by the associated route service.
+     */
+    /* globals module */
+    /**
+     * @module baasicCalendarService
+     * @description Baasic Calendar Service provides an easy way to consume Baasic Calendar REST API end-points. In order to obtain a needed routes `baasicCalendarService` uses `baasicCalendarRouteService`.
+     */
+    (function (angular, module) {
+        'use strict';
+        module.service('baasicCalendarService', ['baasicApp', function (baasicApps) {
+            var baasicApp = baasicApps.get();
+            return {
+
+                /**
+                 * Returns a promise that is resolved once the find action has been completed. Success response returns a list of Calendar resources matching the given criteria.
+                 * @method
+                 * @example
+                 baasicCalendarService.find({
+                 pageNumber : 1,
+                 pageSize : 10,
+                 orderBy : '<field>',
+                 orderDirection : '<asc|desc>',
+                 search : '<search-phrase>',
+                 ids : <identifiers>,
+                 from : <start-date>,
+                 to : <end-date>
+                 })
+                 .success(function (collection) {
+                 // perform success action here
+                 })
+                 .error(function(response, status, headers, config) {
+                 // perform error handling here 
+                 });
+                 */
+                find: function (options) {
+                    return baasicApp.calendarModule.calendar.find(options);
+                },
+
+
+                /**
+                 * Returns a promise that is resolved once the get action has been completed. Success response returns a Calendar resource matching the given criteria.
+                 * @method
+                 * @example
+                 baasicCalendarService.get(id)
+                 .success(function (data) {
+                 // perform success action here
+                 })
+                 .error(function(response, status, headers, config) {
+                 // perform error handling here 
+                 });             
+                 */
+                get: function (id, options) {
+                    return baasicApp.calendarModule.calendar.get(id, options);
+                },
+
+
+                /**
+                 * Returns a promise that is resolved once the create Calendar action has been performed. This action creates a new Calendar resource.
+                 * @method
+                 * @example 
+                 baasicCalendarService.create({
+                 abrv: '<abrv>',
+                 description: '<description>',
+                 json: '<json>',
+                 name: '<name>',
+                 owner: <user-info>,
+                 ownerId: '<owner-id>'
+                 })
+                 .success(function (data) {
+                 // perform success action here
+                 })
+                 .error(function (response, status, headers, config) {
+                 // perform error handling here
+                 });
+                 */
+                create: function (data) {
+                    return baasicApp.calendarModule.calendar.create(data);
+                },
+
+
+                /**
+                 * Returns a promise that is resolved once the update Calendar action has been performed. This action updates a Calendar resource.
+                 * @method
+                 * @example
+                 calendar is a resource previously fetched using get action.
+                 calendar.Name = '<name>';
+                 baasicCalendarService.update(calendar)
+                 .success(function (data) {
+                 // perform success action here
+                 })
+                 .error(function (response, status, headers, config) {
+                 // perform error handling here
+                 });
+                 */
+                update: function (data) {
+                    return baasicApp.calendarModule.calendar.update(data);
+                },
+
+
+                /**
+                 * Returns a promise that is resolved once the remove Calendar action has been performed. This action removes the specified calendar resource from the system.
+                 * @method
+                 * @example
+                 baasicCalendarService.remove(calendar)
+                 .success(funcation (data) {
+                 // perform success action here
+                 })
+                 .error(function (response, status, headers, config) {
+                 // perform error handling here
+                 });
+                 */
+                remove: function (data) {
+                    return baasicApp.calendarModule.calendar.remove(data);
+                },
+
+
+                /**
+                 * Returns a promise that is resolved once the purge Calendars action has been performed. This action deletes all Calendar resources from the system.
+                 * @method
+                 * @example
+                 baasicCalendarService.purge( )
+                 .success(function (data) {
+                 // perform success action here
+                 })
+                 .error(function (response, status, headers, config) {
+                 // perform error handling here
+                 });
+                 */
+                purge: function () {
+                    return baasicApp.calendarModule.calendar.purge();
+                },
+
+
+                batch: {
+
+                    /**
+                     * Returns a promise that is resolved once the create Calendars action has been performed. This action creates new Calendar resources.
+                     * @method batch.create
+                     * @example 
+                     baasicCalendarService.batch.create([{
+                     abrv: '<abrv>',
+                     description: '<description>',
+                     json: '<json>',
+                     name: '<name>',
+                     owner: <user-info>,
+                     ownerId: '<owner-id>'
+                     }])
+                     .success(function (data) {
+                     // perform success action here
+                     })
+                     .error(function (respose, status, headers, config) {
+                     // perform error handling here
+                     });
+                     */
+                    create: function (data) {
+                        return baasicApp.calendarModule.calendar.batch.create(data);
+                    },
+
+
+                    /**
+                     * Returns a promise that is resolved once the update Calendars action has been performed. This action updates Calendar resources.
+                     * @method batch.update
+                     * @example
+                     calendars are resources previously fetched using get action.
+                     baasicCalendarService.batch.update(calendars)
+                     .success(function (data) {
+                     // perform success action here
+                     })
+                     .error(function (response, status, headers, config) {
+                     // perform error handling here
+                     });
+                     */
+                    update: function (data) {
+                        return baasicApp.calendarModule.calendar.batch.update(data);
+                    },
+
+
+                    /**
+                     * Returns a promise that is resolved once the remove Calendars action has been performed. This removes Calendar resources from the system.
+                     * @method batch.remove
+                     * @example 
+                     baasicCalendarService.batch.remove(calendarIds)
+                     .success(function (data) {
+                     // perform success action here
+                     })
+                     .error(function (response, status, headers, config) {
+                     // perform error handling here
+                     });
+                     */
+                    remove: function (ids) {
+                        return baasicApp.calendarModule.Calendar.batch.remove(ids);
+                    },
+
+                    /**
+                     * Provides direct access to `routeService`.
+                     * @method batch.routeService
+                     * @example 
+                     baasicCalendarService.batch.routeService.get(expandObject);
+                     */
+                    routeService: baasicApp.calendarModule.calendar.batch.routeDefinition
+                },
+
+
+                /**
+                 * Provides direct access to `routeService`.
+                 * @method
+                 * @example 
+                 baasicCalendarService.routeService.get(expandObject);
+                 */
+                routeService: baasicApp.calendarModule.calendar.routeDefinition
+            };
+        }]);
+    }(angular, module));
+    /**
+     * @copyright (c) 2017 Mono Ltd
+     * @license MIT
+     * @author Mono Ltd
+     * @overview 
+     ***Notes:**
+     - Refer to the [Baasic REST API](http://dev.baasic.com/api/reference/home) for detailed information about available Baasic REST API end-points.
+     - All end-point objects are transformed by the associated route service.
+     */
+    /* globals module */
+    /**
+     * @module baasicCalendarEventRsvpAttendeeStatusService
+     * @description Baasic Calendar Event Rsvp Attendee Status Service provides an easy way to consume Baasic Calendar REST API end-points. In order to obtain a needed routes `baasicCalendarEventRsvpAttendeeStatusService` uses `baasicCalendarEventRsvpAttendeeStatusRouteService`.
+     */
+    (function (angular, module) {
+        'use strict';
+        module.service('baasicCalendarEventRsvpAttendeeStatusService', ['baasicApp', function (baasicApps) {
+            var baasicApp = baasicApps.get();
+            return {
+
+                /**
+                 * Returns a promise that is resolved once the find action has been completed. Success response returns a list of EventRsvpAttendeeStatus resources matching the given criteria.
+                 * @method
+                 * @example
+                 baasicCalendarEventRsvpAttendeeStatusService.find({
+                 pageNumber: 1,
+                 pageSize: 10,
+                 orderBy: '<field>',
+                 orderDirection: '<asc|desc>',
+                 search: '<search-phrase>',
+                 ids: '<identifiers>',
+                 from: '<from-date>',
+                 to: '<to-date>'
+                 })
+                 .success(function (collection) {
+                 // perform success action here
+                 })
+                 .error(function(response, status, headers, config) {
+                 // perform error handling here 
+                 });
+                 */
+                find: function (options) {
+                    return baasicApp.calendarModule.lookups.rsvpAttendeeStatus.find(options);
+                },
+
+
+                /**
+                 * Returns a promise that is resolved once the get action has been completed. Success response returns an EventRsvpAttendeeStatus resource matching the given criteria.
+                 * @method
+                 * @example
+                 baasicCalendarEventRsvpAttendeeStatusService.get('<event-rsvp-attendee-status-id>')
+                 .success(function (data) {
+                 // perform success action here
+                 })
+                 .error(function(response, status, headers, config) {
+                 // perform error handling here 
+                 });             
+                 */
+                get: function (id, options) {
+                    return baasicApp.calendarModule.lookups.rsvpAttendeeStatus.get(id, options);
+                },
+
+
+                /**
+                 * Returns a promise that is resolved once the create EventRsvpAttendeeStatus action has been performed. This action creates a new EventRsvpAttendeeStatus resource.
+                 * @method
+                 * @example 
+                 baasicCalendarEventRsvpAttendeeStatusService.create({
+                 abrv: '<abrv>',
+                 json: '<json>',
+                 name: '<name>'
+                 })
+                 .success(function (data) {
+                 // perform success action here
+                 })
+                 .error(function (response, status, headers, config) {
+                 // perform error handling here
+                 });
+                 */
+                create: function (data) {
+                    return baasicApp.calendarModule.lookups.rsvpAttendeeStatus.create(data);
+                },
+
+
+                /**
+                 * Returns a promise that is resolved once the update EventRsvpAttendeeStatus action has been performed. This action updates an EventRsvpAttendeeStatus resource.
+                 * @method
+                 * @example
+                 eventRsvpAttendeeStatus is a resource previously fetched using get action.
+                 eventRsvpAttendeeStatus.name = '<name>';
+                 baasicCalendarEventRsvpAttendeeStatusService.update(eventRsvpAttendeeStatus)
+                 .success(function (data) {
+                 // perform success action here
+                 })
+                 .error(function (response, status, headers, config) {
+                 // perform error handling here
+                 });
+                 */
+                update: function (data) {
+                    return baasicApp.calendarModule.lookups.rsvpAttendeeStatus.update(data);
+                },
+
+
+                /**
+                 * Returns a promise that is resolved once the remove EventRsvpAttendeeStatus action has been performed. This action removes an EventRsvpAttendeeStatus resource.
+                 * @method
+                 * @example
+                 eventRsvpAttendeeStatus is a resource previously fetched using get action.
+                 baasicCalendarEventRsvpAttendeeStatusService.remove(eventRsvpAttendeeStatus)
+                 .success(funcation (data) {
+                 // perform success action here
+                 })
+                 .error(function (response, status, headers, config) {
+                 // perform error handling here
+                 });
+                 */
+                remove: function (data) {
+                    return baasicApp.calendarModule.lookups.rsvpAttendeeStatus.remove(data);
+                },
+
+
+                /**
+                 * Returns a promise that is resolved once the purge EventRsvpAttendeeStatuses action has been performed. This action removes all EventRsvpAttendeeStatus resources.
+                 * @method
+                 * @example
+                 baasicCalendarEventRsvpAttendeeStatusService.purge( )
+                 .success(function (data) {
+                 // perform success action here
+                 })
+                 .error(function (response, status, headers, config) {
+                 // perform error handling here
+                 });
+                 */
+                purge: function () {
+                    return baasicApp.calendarModule.lookups.rsvpAttendeeStatus.purge();
+                },
+
+
+                batch: {
+
+                    /**
+                     * Returns a promise that is resolved once the create EventRsvpAttendeeStatuses action has been performed. This action creates new EventRsvpAttendeeStatus resources.
+                     * @method batch.create
+                     * @example 
+                     baasicCalendarEventRsvpAttendeeStatusService.batch.create([{
+                     abrv: '<abrv>',
+                     json: '<json>',
+                     name: '<name>'      
+                     }])
+                     .success(function (data) {
+                     // perform success action here
+                     })
+                     .error(function (respose, status, headers, config) {
+                     // perform error handling here
+                     });
+                     */
+                    create: function (data) {
+                        return baasicApp.calendarModule.lookups.rsvpAttendeeStatus.batch.create(data);
+                    },
+
+
+                    /**
+                     * Returns a promise that is resolved once the update EventRsvpAttendeeStatuses action has been performed. This action updates EventRsvpAttendeeStatus resources.
+                     * @method batch.update
+                     * @example
+                     eventRsvpAttendeeStatuses are resources previously fetched using get action.
+                     baasicCalendarEventRsvpAttendeeStatusService.batch.update(eventRsvpAttendeeStatuses)
+                     .success(function (data) {
+                     // perform success action here
+                     })
+                     .error(function (response, status, headers, config) {
+                     // perform error handling here
+                     });
+                     */
+                    update: function (data) {
+                        return baasicApp.calendarModule.lookups.rsvpAttendeeStatus.batch.update(data);
+                    },
+
+
+                    /**
+                     * Returns a promise that is resolved once the delete EventRsvpAttendeeStatuses action has been performed. This action deletes EventRsvpAttendeeStatus resources.
+                     * @method batch.remove
+                     * @example 
+                     baasicCalendarEventRsvpAttendeeStatusService.batch.remove(eventRsvpAttendeeStatusIds)
+                     .success(function (data) {
+                     // perform success action here
+                     })
+                     .error(function (response, status, headers, config) {
+                     // perform error handling here
+                     });
+                     */
+                    remove: function (ids) {
+                        return baasicApp.calendarModule.lookups.rsvpAttendeeStatus.batch.remove(ids);
+                    },
+
+                    /**
+                     * Provides direct access to `routeService`.
+                     * @method batch.routeService
+                     * @example 
+                     baasicCalendarEventRsvpAttendeeStatusService.batch.routeService.get(expandObject);
+                     */
+                    routeService: baasicApp.calendarModule.lookups.rsvpAttendeeStatus.batch.routeDefinition
+                },
+
+                /**
+                 * Provides direct access to `routeService`.
+                 * @method
+                 * @example 
+                 baasicCalendarEventRsvpAttendeeStatusService.routeService.get(expandObject);
+                 */
+                routeService: baasicApp.calendarModule.lookups.rsvpAttendeeStatus.routeDefinition
+            };
+        }]);
+    }(angular, module));
+    /**
+     * @copyright (c) 2017 Mono Ltd
+     * @license MIT
+     * @author Mono Ltd
+     * @overview 
+     ***Notes:**
+     - Refer to the [Baasic REST API](http://dev.baasic.com/api/reference/home) for detailed information about available Baasic REST API end-points.
+     - All end-point objects are transformed by the associated route service.
+     */
+    /* globals module */
+    /**
+     * @module baasicCalendarEventRsvpInvitationTypeService
+     * @description Baasic Calendar Event Rsvp Invitation Type Service provides an easy way to consume Baasic Calendar REST API end-points. In order to obtain a needed routes `baasicCalendarEventRsvpInvitationTypeService` uses `baasicCalendarEventRsvpInvitationTypeRouteService`.
+     */
+    (function (angular, module) {
+        'use strict';
+        module.service('baasicCalendarEventRsvpInvitationTypeService', ['baasicApp', function (baasicApps) {
+            var baasicApp = baasicApps.get();
+            return {
+
+                /**
+                 * Returns a promise that is resolved once the find action has been completed. Success response returns a list of EventRsvpInvitationType resources matching the given criteria.
+                 * @method
+                 * @example
+                 baasicCalendarEventRsvpInvitationTypeService.find({
+                 pageNumber: 1,
+                 pageSize: 10,
+                 orderBy: '<field>',
+                 orderDirection: '<asc|desc>',
+                 search: '<search-phrase>',
+                 ids: '<identifiers>',
+                 from: '<from-date>',
+                 to: '<to-date>'
+                 })
+                 .success(function (collection) {
+                 // perform success action here
+                 })
+                 .error(function(response, status, headers, config) {
+                 // perform error handling here 
+                 });
+                 */
+                find: function (options) {
+                    return baasicApp.calendarModule.lookups.rsvpInvitationType.find(options);
+                },
+
+
+                /**
+                 * Returns a promise that is resolved once the get action has been completed. Success response returns an EventRsvpInvitationType resource matching the given criteria.
+                 * @method
+                 * @example
+                 baasicCalendarEventRsvpInvitationTypeService.get('<event-rsvp-invitation-type-id>')
+                 .success(function (data) {
+                 // perform success action here
+                 })
+                 .error(function(response, status, headers, config) {
+                 // perform error handling here 
+                 });             
+                 */
+                get: function (id, options) {
+                    return baasicApp.calendarModule.lookups.rsvpInvitationType.get(id, options);
+                },
+
+
+                /**
+                 * Returns a promise that is resolved once the create EventRsvpInvitationType action has been performed. This action creates a new EventRsvpInvitationType resource.
+                 * @method
+                 * @example 
+                 baasicCalendarEventRsvpInvitationTypeService.create({
+                 abrv: '<abrv>',
+                 json: '<json>',
+                 name: '<name>'
+                 })
+                 .success(function (data) {
+                 // perform success action here
+                 })
+                 .error(function (response, status, headers, config) {
+                 // perform error handling here
+                 });
+                 */
+                create: function (data) {
+                    return baasicApp.calendarModule.lookups.rsvpInvitationType.create(data);
+                },
+
+
+                /**
+                 * Returns a promise that is resolved once the update EventRsvpInvitationType action has been performed. This action updates an EventRsvpInvitationType resource.
+                 * @method
+                 * @example
+                 eventRsvpInvitationType is a resource previously fetched using get action.
+                 eventRsvpInvitationType.name = '<name>';
+                 baasicCalendarEventRsvpInvitationTypeService.update(eventRsvpInvitationType)
+                 .success(function (data) {
+                 // perform success action here
+                 })
+                 .error(function (response, status, headers, config) {
+                 // perform error handling here
+                 });
+                 */
+                update: function (data) {
+                    return baasicApp.calendarModule.lookups.rsvpInvitationType.update(data);
+                },
+
+
+                /**
+                 * Returns a promise that is resolved once the remove EventRsvpInvitationType action has been performed. This action removes an EventRsvpInvitationType resource.
+                 * @method
+                 * @example
+                 eventRsvpInvitationType is a resource previously fetched using get action.
+                 baasicCalendarEventRsvpInvitationTypeService.remove(eventRsvpInvitationType)
+                 .success(funcation (data) {
+                 // perform success action here
+                 })
+                 .error(function (response, status, headers, config) {
+                 // perform error handling here
+                 });
+                 */
+                remove: function (data) {
+                    return baasicApp.calendarModule.lookups.rsvpInvitationType.remove(data);
+                },
+
+
+                /**
+                 * Returns a promise that is resolved once the purge EventRsvpInvitationTypes action has been performed. This action removes all EventRsvpInvitationType resources.
+                 * @method
+                 * @example
+                 baasicCalendarEventRsvpInvitationTypeService.purge( )
+                 .success(function (data) {
+                 // perform success action here
+                 })
+                 .error(function (response, status, headers, config) {
+                 // perform error handling here
+                 });
+                 */
+                purge: function () {
+                    return baasicApp.calendarModule.lookups.rsvpInvitationType.purge();
+                },
+
+
+                batch: {
+
+                    /**
+                     * Returns a promise that is resolved once the create EventRsvpInvitationTypes action has been performed. This action creates new EventRsvpInvitationType resources.
+                     * @method batch.create
+                     * @example 
+                     baasicCalendarEventRsvpInvitationTypeService.batch.create([{
+                     abrv: '<abrv>',
+                     json: '<json>',
+                     name: '<name>'      
+                     }])
+                     .success(function (data) {
+                     // perform success action here
+                     })
+                     .error(function (respose, status, headers, config) {
+                     // perform error handling here
+                     });
+                     */
+                    create: function (data) {
+                        return baasicApp.calendarModule.lookups.rsvpInvitationType.batch.create(data);
+                    },
+
+
+                    /**
+                     * Returns a promise that is resolved once the update EventRsvpInvitationTypes action has been performed. This action updates EventRsvpInvitationType resources.
+                     * @method batch.update
+                     * @example
+                     eventRsvpInvitationTypes are resources previously fetched using get action.
+                     baasicCalendarEventRsvpInvitationTypeService.batch.update(eventRsvpInvitationTypes)
+                     .success(function (data) {
+                     // perform success action here
+                     })
+                     .error(function (response, status, headers, config) {
+                     // perform error handling here
+                     });
+                     */
+                    update: function (data) {
+                        return baasicApp.calendarModule.lookups.rsvpInvitationType.batch.update(data);
+                    },
+
+
+                    /**
+                     * Returns a promise that is resolved once the delete EventRsvpInvitationTypes action has been performed. This action deletes EventRsvpInvitationType resources.
+                     * @method batch.remove
+                     * @example 
+                     baasicCalendarEventRsvpInvitationTypeService.batch.remove(eventRsvpInvitationTypeIds)
+                     .success(function (data) {
+                     // perform success action here
+                     })
+                     .error(function (response, status, headers, config) {
+                     // perform error handling here
+                     });
+                     */
+                    remove: function (ids) {
+                        return baasicApp.calendarModule.lookups.rsvpInvitationType.batch.remove(ids);
+                    },
+
+                    /**
+                     * Provides direct access to `routeService`.
+                     * @method batch.routeService
+                     * @example 
+                     baasicCalendarEventRsvpInvitationTypeService.batch.routeService.get(expandObject);
+                     */
+                    routeService: baasicApp.calendarModule.lookups.rsvpInvitationType.batch.routeDefinition
+                },
+
+                /**
+                 * Provides direct access to `routeService`.
+                 * @method
+                 * @example 
+                 baasicCalendarEventRsvpInvitationTypeService.routeService.get(expandObject);
+                 */
+                routeService: baasicApp.calendarModule.lookups.rsvpInvitationType.routeDefinition
+            };
+        }]);
+    }(angular, module));
+    /**
+     * @copyright (c) 2017 Mono Ltd
+     * @license MIT
+     * @author Mono Ltd
+     * @overview 
+     ***Notes:**
+     - Refer to the [Baasic REST API](http://dev.baasic.com/api/reference/home) for detailed information about available Baasic REST API end-points.
+     - All end-point objects are transformed by the associated route service.
+     */
+    /* globals module */
+    /**
+     * @module baasicCalendarEventStatusService
+     * @description Baasic Calendar Event Status Service provides an easy way to consume Baasic Calendar REST API end-points. In order to obtain a needed routes `baasicCalendarEventStatusService` uses `baasicCalendarEventStatusRouteService`.
+     */
+    (function (angular, module) {
+        'use strict';
+        module.service('baasicCalendarEventStatusService', ['baasicApp', function (baasicApps) {
+            var baasicApp = baasicApps.get();
+            return {
+
+                /**
+                 * Returns a promise that is resolved once the find action has been completed. Success response returns a list of EventStatus resources matching the given criteria.
+                 * @method
+                 * @example
+                 baasicCalendarEventStatusService.find({
+                 pageNumber: 1,
+                 pageSize: 10,
+                 orderBy: '<field>',
+                 orderDirection: '<asc|desc>',
+                 search: '<search-phrase>',
+                 ids: '<identifiers>',
+                 from: '<from-date>',
+                 to: '<to-date>'
+                 })
+                 .success(function (collection) {
+                 // perform success action here
+                 })
+                 .error(function(response, status, headers, config) {
+                 // perform error handling here 
+                 });
+                 */
+                find: function (options) {
+                    return baasicApp.calendarModule.lookups.eventStatus.find(options);
+                },
+
+
+                /**
+                 * Returns a promise that is resolved once the get action has been completed. Success response returns an EventStatus resource matching the given criteria.
+                 * @method
+                 * @example
+                 baasicCalendarEventStatusService.get('<event-status-id>')
+                 .success(function (data) {
+                 // perform success action here
+                 })
+                 .error(function(response, status, headers, config) {
+                 // perform error handling here 
+                 });             
+                 */
+                get: function (id, options) {
+                    return baasicApp.calendarModule.lookups.eventStatus.get(id, options);
+                },
+
+
+                /**
+                 * Returns a promise that is resolved once the create EventStatus action has been performed. This action creates a new EventStatus resource.
+                 * @method
+                 * @example 
+                 baasicCalendarEventStatusService.create({
+                 abrv: '<abrv>',
+                 json: '<json>',
+                 name: '<name>'
+                 })
+                 .success(function (data) {
+                 // perform success action here
+                 })
+                 .error(function (response, status, headers, config) {
+                 // perform error handling here
+                 });
+                 */
+                create: function (data) {
+                    return baasicApp.calendarModule.lookups.eventStatus.create(data);
+                },
+
+
+                /**
+                 * Returns a promise that is resolved once the update EventStatus action has been performed. This action updates an EventStatus resource.
+                 * @method
+                 * @example
+                 eventStatus is a resource previously fetched using get action.
+                 eventStatus.name = '<name>';
+                 baasicCalendarEventStatusService.update(eventStatus)
+                 .success(function (data) {
+                 // perform success action here
+                 })
+                 .error(function (response, status, headers, config) {
+                 // perform error handling here
+                 });
+                 */
+                update: function (data) {
+                    return baasicApp.calendarModule.lookups.eventStatus.update(data);
+                },
+
+
+                /**
+                 * Returns a promise that is resolved once the remove EventStatus action has been performed. This action removes an EventStatus resource.
+                 * @method
+                 * @example
+                 eventStatus is a resource previously fetched using get action.
+                 baasicCalendarEventStatusService.remove(eventStatus)
+                 .success(funcation (data) {
+                 // perform success action here
+                 })
+                 .error(function (response, status, headers, config) {
+                 // perform error handling here
+                 });
+                 */
+                remove: function (data) {
+                    return baasicApp.calendarModule.lookups.eventStatus.remove(data);
+                },
+
+
+                /**
+                 * Returns a promise that is resolved once the purge EventStatuses action has been performed. This action removes all EventStatus resources.
+                 * @method
+                 * @example
+                 baasicCalendarEventStatusService.purge( )
+                 .success(function (data) {
+                 // perform success action here
+                 })
+                 .error(function (response, status, headers, config) {
+                 // perform error handling here
+                 });
+                 */
+                purge: function () {
+                    return baasicApp.calendarModule.lookups.eventStatus.purge();
+                },
+
+
+                batch: {
+
+                    /**
+                     * Returns a promise that is resolved once the create EventStatuses action has been performed. This action creates new EventStatus resources.
+                     * @method batch.create
+                     * @example 
+                     baasicCalendarEventStatusService.batch.create([{
+                     abrv: '<abrv>',
+                     json: '<json>',
+                     name: '<name>'      
+                     }])
+                     .success(function (data) {
+                     // perform success action here
+                     })
+                     .error(function (respose, status, headers, config) {
+                     // perform error handling here
+                     });
+                     */
+                    create: function (data) {
+                        return baasicApp.calendarModule.lookups.eventStatus.batch.create(data);
+                    },
+
+
+                    /**
+                     * Returns a promise that is resolved once the update EventStatuses action has been performed. This action updates EventStatus resources.
+                     * @method batch.update
+                     * @example
+                     eventStatuses are resources previously fetched using get action.
+                     baasicCalendarEventStatusService.batch.update(eventStatuses)
+                     .success(function (data) {
+                     // perform success action here
+                     })
+                     .error(function (response, status, headers, config) {
+                     // perform error handling here
+                     });
+                     */
+                    update: function (data) {
+                        return baasicApp.calendarModule.lookups.eventStatus.batch.update(data);
+                    },
+
+
+                    /**
+                     * Returns a promise that is resolved once the delete EventStatuses action has been performed. This action deletes EventStatus resources.
+                     * @method batch.remove
+                     * @example 
+                     baasicCalendarEventStatusService.batch.remove(eventStatusIds)
+                     .success(function (data) {
+                     // perform success action here
+                     })
+                     .error(function (response, status, headers, config) {
+                     // perform error handling here
+                     });
+                     */
+                    remove: function (ids) {
+                        return baasicApp.calendarModule.lookups.eventStatus.batch.remove(ids);
+                    },
+
+                    /**
+                     * Provides direct access to `routeService`.
+                     * @method batch.routeService
+                     * @example
+                     baasicCalendarEventStatusService.batch.routeService.get(expandObject);
+                     */
+                    routeService: baasicApp.calendarModule.lookups.eventStatus.batch.routeDefinition
+                },
+
+                /**
+                 * Provides direct access to `routeService`.
+                 * @method
+                 * @example 
+                 baasicCalendarEventStatusService.routeService.get(expandObject);
+                 */
+                routeService: baasicApp.calendarModule.lookups.eventStatus.routeDefinition
+            };
+        }]);
+    }(angular, module));
+    /**
+     * @copyright (c) 2017 Mono Ltd
+     * @license MIT
+     * @author Mono Ltd
+     * @overview 
+     ***Notes:**
+     - Refer to the [Baasic REST API](http://dev.baasic.com/api/reference/home) for detailed information about available Baasic REST API end-points.
+     - All end-point objects are transformed by the associated route service.
+     */
+    /* globals module */
+    /**
+     * @module baasicCalendarEventTypeService
+     * @description Baasic Calendar Event Type Service provides an easy way to consume Baasic Calendar REST API end-points. In order to obtain a needed routes `baasicCalendarEventTypeService` uses `baasicCalendarEventTypeRouteService`.
+     */
+    (function (angular, module) {
+        'use strict';
+        module.service('baasicCalendarEventTypeService', ['baasicApp', function (baasicApps) {
+            var baasicApp = baasicApps.get();
+            return {
+
+                /**
+                 * Returns a promise that is resolved once the find action has been completed. Success response returns a list of EventType resources matching the given criteria.
+                 * @method
+                 * @example
+                 baasicCalendarEventTypeService.find({
+                 pageNumber: 1,
+                 pageSize: 10,
+                 orderBy: '<field>',
+                 orderDirection: '<asc|desc>',
+                 search: '<search-phrase>',
+                 ids: '<identifiers>',
+                 from: '<from-date>',
+                 to: '<to-date>'
+                 })
+                 .success(function (collection) {
+                 // perform success action here
+                 })
+                 .error(function(response, status, headers, config) {
+                 // perform error handling here 
+                 });
+                 */
+                find: function (options) {
+                    return baasicApp.calendarModule.lookups.eventType.find(options);
+                },
+
+
+                /**
+                 * Returns a promise that is resolved once the get action has been completed. Success response returns an EventType resource matching the given criteria.
+                 * @method
+                 * @example
+                 baasicCalendarEventTypeService.get('<event-type-id>')
+                 .success(function (data) {
+                 // perform success action here
+                 })
+                 .error(function(response, status, headers, config) {
+                 // perform error handling here 
+                 });             
+                 */
+                get: function (id, options) {
+                    return baasicApp.calendarModule.lookups.eventType.get(id, options);
+                },
+
+
+                /**
+                 * Returns a promise that is resolved once the create EventType action has been performed. This action creates a new EventType resource.
+                 * @method
+                 * @example 
+                 baasicCalendarEventTypeService.create({
+                 abrv: '<abrv>',
+                 json: '<json>',
+                 name: '<name>'
+                 })
+                 .success(function (data) {
+                 // perform success action here
+                 })
+                 .error(function (response, status, headers, config) {
+                 // perform error handling here
+                 });
+                 */
+                create: function (data) {
+                    return baasicApp.calendarModule.lookups.eventType.create(data);
+                },
+
+
+                /**
+                 * Returns a promise that is resolved once the update EventType action has been performed. This action updates an EventType resource.
+                 * @method
+                 * @example
+                 eventType is a resource previously fetched using get action.
+                 eventType.name = '<name>';
+                 baasicCalendarEventTypeService.update(eventType)
+                 .success(function (data) {
+                 // perform success action here
+                 })
+                 .error(function (response, status, headers, config) {
+                 // perform error handling here
+                 });
+                 */
+                update: function (data) {
+                    return baasicApp.calendarModule.lookups.eventType.update(data);
+                },
+
+
+                /**
+                 * Returns a promise that is resolved once the remove EventType action has been performed. This action removes an EventType resource.
+                 * @method
+                 * @example
+                 eventType is a resource previously fetched using get action.
+                 baasicCalendarEventTypeService.remove(eventType)
+                 .success(funcation (data) {
+                 // perform success action here
+                 })
+                 .error(function (response, status, headers, config) {
+                 // perform error handling here
+                 });
+                 */
+                remove: function (data) {
+                    return baasicApp.calendarModule.lookups.eventType.remove(data);
+                },
+
+
+                /**
+                 * Returns a promise that is resolved once the purge EventTypes action has been performed. This action removes all EventType resources.
+                 * @method
+                 * @example
+                 baasicCalendarEventTypeService.purge( )
+                 .success(function (data) {
+                 // perform success action here
+                 })
+                 .error(function (response, status, headers, config) {
+                 // perform error handling here
+                 });
+                 */
+                purge: function () {
+                    return baasicApp.calendarModule.lookups.eventType.purge();
+                },
+
+
+                batch: {
+
+                    /**
+                     * Returns a promise that is resolved once the create EventTypes action has been performed. This action creates new EventType resources.
+                     * @method batch.create
+                     * @example 
+                     baasicCalendarEventTypeService.batch.create([{
+                     abrv: '<abrv>',
+                     json: '<json>',
+                     name: '<name>'      
+                     }])
+                     .success(function (data) {
+                     // perform success action here
+                     })
+                     .error(function (respose, status, headers, config) {
+                     // perform error handling here
+                     });
+                     */
+                    create: function (data) {
+                        return baasicApp.calendarModule.lookups.eventType.batch.create(data);
+                    },
+
+
+                    /**
+                     * Returns a promise that is resolved once the update EventTypes action has been performed. This action updates EventType resources.
+                     * @method batch.update
+                     * @example
+                     eventTypes are resources previously fetched using get action.
+                     baasicCalendarEventTypeService.batch.update(eventTypes)
+                     .success(function (data) {
+                     // perform success action here
+                     })
+                     .error(function (response, status, headers, config) {
+                     // perform error handling here
+                     });
+                     */
+                    update: function (data) {
+                        return baasicApp.calendarModule.lookups.eventType.batch.update(data);
+                    },
+
+
+                    /**
+                     * Returns a promise that is resolved once the delete EventTypes action has been performed. This action deletes EventType resources.
+                     * @method batch.remove
+                     * @example 
+                     baasicCalendarEventTypeService.batch.remove(eventTypeIds)
+                     .success(function (data) {
+                     // perform success action here
+                     })
+                     .error(function (response, status, headers, config) {
+                     // perform error handling here
+                     });
+                     */
+                    remove: function (ids) {
+                        return baasicApp.calendarModule.lookups.eventType.batch.remove(ids);
+                    },
+
+                    /**
+                     * Provides direct access to `routeService`.
+                     * @method batch.routeService
+                     * @example 
+                     baasicCalendarEventTypeService.batch.routeService.get(expandObject);
+                     */
+                    routeService: baasicApp.calendarModule.lookups.eventType.batch.routeDefinition
+                },
+
+                /**
+                 * Provides direct access to `routeService`.
+                 * @method
+                 * @example 
+                 baasicCalendarEventTypeService.routeService.get(expandObject);
+                 */
+                routeService: baasicApp.calendarModule.lookups.eventType.routeDefinition
+            };
+        }]);
+    }(angular, module));
+    /**
+     * @copyright (c) 2017 Mono Ltd
+     * @license MIT
+     * @author Mono Ltd
+     * @overview 
+     ***Notes:**
+     - Refer to the [Baasic REST API](http://dev.baasic.com/api/reference/home) for detailed information about available Baasic REST API end-points.
+     - All end-point objects are transformed by the associated route service.
+     */
+    /* exported module */
     /** 
      * @description The angular.module is a global place for creating, registering or retrieving modules. All modules should be registered in an application using this mechanism.  An angular module is a container for the different parts of your app - services, directives etc. In order to use `baasic.commerce` module functionality it must be added as a dependency to your app.
      * @copyright (c) 2017 Mono Ltd

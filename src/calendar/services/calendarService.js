@@ -5,7 +5,7 @@
  */
 (function (angular, module) {
     'use strict';
-    module.service('baasicCalendarRsvpService', ['baasicApp',
+    module.service('baasicCalendarService', ['baasicApp',
         function (baasicApps) {
             var baasicApp = baasicApps.get();
             return {
