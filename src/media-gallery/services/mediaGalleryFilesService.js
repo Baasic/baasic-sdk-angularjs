@@ -67,7 +67,7 @@ baasicMediaGalleryFilesService.remove(id)
   // perform error handling here
 });		
 				**/
-        remove: function (id) {
+        unlink: function (id) {
           return baasicApp.mediaGalleryModule.files.remove(id);
         },
 
@@ -105,7 +105,7 @@ baasicMediaGalleryFilesService.create(mediaGalleryEntry)
   // perform error handling here
 });
         **/
-        create: function (data) {
+        link: function (data) {
           return baasicApp.mediaGalleryModule.files.create(data);
         },       
 

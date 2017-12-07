@@ -6117,6 +6117,274 @@
      */
     /* globals module */
     /**
+     * @module baasicCommerceProductFilesService
+     * @description Baasic Files Service provides Baasic route templates which can be expanded to Baasic REST URIs. Various services can use Baasic Files Route Service to obtain needed routes while other routes will be obtained through HAL. By convention, all route services use the same function names as their corresponding services.
+     */
+    (function (angular, module, undefined) {
+        'use strict';
+        module.service('baasicCommerceProductFilesService', ['baasicApp', function (baasicApps) {
+            var baasicApp = baasicApps.get();
+            return {
+                /**
+                 * Returns a promise that is resolved once the find action has been performed. Success response returns a list of file resources matching the given criteria.
+                 * @method        
+                 * @example 
+                 baasicCommerceProductFilesService.find({
+                 pageNumber : 1,
+                 pageSize : 10,
+                 orderBy : '<field>',
+                 orderDirection : '<asc|desc>',
+                 search : '<search-phrase>'
+                 })
+                 .success(function (collection) {
+                 // perform success action here
+                 })
+                 .error(function (response, status, headers, config) {
+                 // perform error handling here
+                 });
+                 **/
+                find: function (options) {
+                    return baasicApp.commerceModule.files.find(options);
+                },
+
+                /**
+                 * Returns a promise that is resolved once the get action has been performed. Success response returns requested file resource.
+                 * @method        
+                 * @example 
+                 baasicCommerceProductFilesService.get('<file-id>')
+                 .success(function (data) {
+                 // perform success action here
+                 })
+                 .error(function (response, status, headers, config) {
+                 // perform error handling here
+                 });
+                 **/
+                get: function (id, options) {
+                    return baasicApp.commerceModule.files.get(id, options);
+                },
+
+                /**
+                 * Returns a promise that is resolved once the unlink action has been performed. This action will remove one or many file resources from the system if successfully completed. Specified file and all its accompanying derived resources will be removed from the system. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply baasicProductFilesRouteService route template. Here is an example of how a route can be obtained from HAL enabled objects:
+                 ```
+                 var params = baasicApiService.removeParams(fileEntry);
+                 var uri = params['model'].links('unlink').href;
+                 ```
+                 * @method        
+                 * @example 
+                 // fileEntry is a file resource previously fetched using get action. The following action will remove the original file resource and all accompanying derived file resources.
+                 baasicProductFilesRouteService.remove(fileEntry)
+                 .success(function (data) {
+                 // perform success action here
+                 })
+                 .error(function (response, status, headers, config) {
+                 // perform error handling here
+                 });
+                 **/
+                unlink: function (data, options) {
+                    return baasicApp.commerceModule.files.unlink(data, options);
+                },
+
+                /**
+                 * Returns a promise that is resolved once the update file action has been performed; this action will update a file resource if successfully completed. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicProductFilesRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
+                 ```
+                 var params = baasicApiService.updateParams(fileEntry);
+                 var uri = params['model'].links('put').href;
+                 ```
+                 * @method        
+                 * @example 
+                 // fileEntry is a file resource previously fetched using get action.
+                 fileEntry.description = '<description>';
+                 baasicCommerceProductFilesService.update(fileEntry)
+                 .success(function (data) {
+                 // perform success action here
+                 })
+                 .error(function (response, status, headers, config) {
+                 // perform error handling here
+                 });
+                 **/
+                update: function (data) {
+                    return baasicApp.commerceModule.files.update(data);
+                },
+
+                /**
+                 * Returns a promise that is resolved once the link action has been performed; this action links file resource from other modules into the Product Files module (For example: file resources from the Media Vault module can be linked directly into the Product Files module).
+                 * @method        
+                 * @example 
+                 baasicCommerceProductFilesService.link(fileObject)
+                 .success(function (data) {
+                 // perform success action here
+                 })
+                 .error(function (response, status, headers, config) {
+                 // perform error handling here
+                 });
+                 **/
+                link: function (data) {
+                    return baasicApp.commerceModule.files.link(data);
+                },
+
+                streams: {
+                    /**
+                     * Returns a promise that is resolved once the get action has been performed. Success response returns the file stream if successfully completed. If derived resource's format is passed, such as `width` and `height` for the image type of file resource, the operation will return a stream of the derived resource. Otherwise, stream of the original file resource will be retrieved.
+                     * @method streams.get        
+                     * @example 
+                     // Request the original file stream
+                     baasicCommerceProductFilesService.stream.get({id: '<file-id>'})
+                     .success(function (data) {
+                     // perform success action here
+                     })
+                     .error(function (response, status, headers, config) {
+                     // perform error handling here
+                     });
+                     // Request derived file stream
+                     baasicCommerceProductFilesService.stream.get({id: '<file-id>', width: <width>, height: <height>})
+                     .success(function (data) {
+                     // perform success action here
+                     })
+                     .error(function (response, status, headers, config) {
+                     // perform error handling here
+                     });
+                     **/
+                    get: function (data) {
+                        return baasicApp.commerceModule.files.streams.get(data);
+                    },
+
+                    /**
+                     * Returns a promise that is resolved once the get action has been performed. Success response returns the file stream as a blob. If derived resource's format is passed, such as `width` and `height` for the image type of file resource, the operation will return a blob of the derived file resource. Otherwise, blob of the original file resource will be retrieved. For more information on Blob objects please see [Blob Documentation](https://developer.mozilla.org/en-US/docs/Web/API/Blob).
+                     * @method streams.getBlob        
+                     * @example 
+                     // Request the original blob
+                     baasicCommerceProductFilesService.stream.getBlob('<file-id>')
+                     .success(function (data) {
+                     // perform success action here
+                     })
+                     .error(function (response, status, headers, config) {
+                     // perform error handling here
+                     });
+                     // Request derived blob
+                     baasicCommerceProductFilesService.stream.getBlob({id: '<file-id>', width: <width>, height: <height>})
+                     .success(function (data) {
+                     // perform success action here
+                     })
+                     .error(function (response, status, headers, config) {
+                     // perform error handling here
+                     });
+                     **/
+                    getBlob: function (data) {
+                        return baasicApp.commerceModule.files.streams.getBlob(data);
+                    },
+
+                    /**
+                     * Returns a promise that is resolved once the update file stream action has been performed; this action will replace the existing stream with a new one. Alternatively, if a derived stream is being updated it will either create a new derived stream or replace the existing one. In order to update a derived stream, format needs to be passed (For example: `width` and `height` for the image type of file stream data type).
+                     * @method streams.update
+                     * @example
+                     // Update original file stream
+                     baasicCommerceProductFilesService.streams.update('<file-id>', <file-stream>)
+                     .success(function (data) {
+                     // perform success action here
+                     })
+                     .error(function (response, status, headers, config) {
+                     // perform error handling here
+                     });
+                     // Update derived file stream
+                     baasicCommerceProductFilesService.streams.update({id: '<file-id>', width: <width>, height: <height>}, <file-stream>)
+                     .success(function (data) {
+                     // perform success action here
+                     })
+                     .error(function (response, status, headers, config) {
+                     // perform error handling here
+                     });
+                     **/
+                    update: function (data, stream) {
+                        return baasicApp.commerceModule.files.streams.update(data, stream);
+                    },
+
+                    /**
+                     * Returns a promise that is resolved once the create file stream action has been performed; this action will upload the specified blob. For more information on Blob objects please see [Blob Documentation](https://developer.mozilla.org/en-US/docs/Web/API/Blob).
+                     * @method streams.create
+                     * @example 
+                     baasicCommerceProductFilesService.streams.create('<file-id>', <blob>)
+                     .success(function (data) {
+                     // perform success action here
+                     })
+                     .error(function (response, status, headers, config) {
+                     // perform error handling here
+                     });
+                     **/
+                    create: function (data, stream) {
+                        return baasicApp.commerceModule.files.streams.create(data, stream);
+                    },
+                    routeService: baasicApp.commerceModule.files.streams.routeDefinition
+                },
+
+                batch: {
+                    /**
+                     * Returns a promise that is resolved once the unlink action has been performed. This action will remove file resources from the system if successfully completed. If derived resource's format is passed, such as `width` and `height` for the image type of file resource, the operation will remove just derived resource. Otherwise, specified file and all its accompanying derived resources will be removed from the system.
+                     * @method batch.unlink       
+                     * @example
+                     // Remove original file resources
+                     baasicCommerceProductFilesService.batch.unlink([{ id: '<file-id>' }])
+                     .success(function (data) {
+                     // perform success action here
+                     })
+                     .error(function (response, status, headers, config) {
+                     // perform error handling here
+                     });
+                     // Remove derived file resources
+                     baasicCommerceProductFilesService.batch.unlink([{ id: '<file-id>', fileFormat: { width: <width>, height: <height> } }])
+                     .success(function (data) {
+                     // perform success action here
+                     })
+                     .error(function (response, status, headers, config) {
+                     // perform error handling here
+                     });
+                     **/
+                    unlink: function (data) {
+                        return baasicApp.commerceModule.files.batch.unlink(data);
+                    },
+                    /**
+                     * Returns a promise that is resolved once the update action has been performed; this action updates specified file resources.
+                     * @method batch.update       
+                     * @example 
+                     baasicCommerceProductFilesService.batch.update(files)
+                     .success(function (data) {
+                     // perform success action here
+                     })
+                     .error(function (response, status, headers, config) {
+                     // perform error handling here
+                     });
+                     **/
+                    update: function (data) {
+                        return baasicApp.commerceModule.files.batch.update(data);
+                    },
+
+                    /**
+                     * Returns a promise that is resolved once the link action has been performed; this action links file resources from other modules into the Files module (For example: file resources from the Media Vault module can be linked directly into the Files module).
+                     * @method batch.link       
+                     * @example 
+                     baasicCommerceProductFilesService.batch.link(files)
+                     .success(function (data) {
+                     // perform success action here
+                     })
+                     .error(function (response, status, headers, config) {
+                     // perform error handling here
+                     });
+                     **/
+                    link: function (data) {
+                        return baasicApp.commerceModule.files.batch.link(data);
+                    }
+                }
+            };
+        }]);
+    }(angular, module));
+
+    /**
+     * @overview 
+     ***Notes:**
+     - Refer to the [Baasic REST API](http://dev.baasic.com/api/reference/home) for detailed information about available Baasic REST API end-points.
+     - All end-point objects are transformed by the associated route service.
+     */
+    /* globals module */
+    /**
      * @module baasicCommerceProductService
      * @description Baasic Commerce Product Service provides an easy way to consume Baasic Commerce REST API end-points. In order to obtain a needed routes `baasicCommerceProductService` uses `baasicCommerceProductRouteService`.
      */
@@ -6235,6 +6503,70 @@
         }]);
     }(angular, module));
 
+    /**
+     * @copyright (c) 2017 Mono Ltd
+     * @license MIT
+     * @author Mono Ltd
+     * @overview 
+     ***Notes:**
+     - Refer to the [Baasic REST API](http://dev.baasic.com/api/reference/home) for detailed information about available Baasic REST API end-points.
+     - All end-point objects are transformed by the associated route service.
+     */
+    /* globals module */
+    /**
+     * @module baasicCommerceProductSettingsService
+     * @description Baasic Commerce Product Settings Service provides an easy way to consume Baasic Commerce Product Settings REST API end-points. In order to obtain needed routes `baasicCommerceProductSettingsService` uses `baasicCommerceProductSettingsRouteService`.
+     */
+    (function (angular, module, undefined) {
+        'use strict';
+        module.service('baasicCommerceProductSettingsService', ['baasicApp', function (baasicApps) {
+            var baasicApp = baasicApps.get();
+            return {
+                /**
+                 * Returns a promise that is resolved once the get action has been performed. Success response returns the product settings.
+                 * @method        
+                 * @example 
+                 baasicCommerceProductSettingsService.get()
+                 .success(function (data) {
+                 // perform success action here
+                 })
+                 .error(function (response, status, headers, config) {
+                 // perform error handling here
+                 });
+                 **/
+                get: function (options) {
+                    return baasicApp.commerceModule.settings.get(options);
+                },
+                /**
+                 * Returns a promise that is resolved once the update product settings action has been performed; this action updates product settings. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicCommerceProductSettingsRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
+                 ```
+                 var params = baasicApiService.removeParams(productSettings);
+                 var uri = params['model'].links('put').href;
+                 ```
+                 * @method        
+                 * @example 
+                 // productSettings is a resource previously fetched using get action.
+                 productSettings.allowArchive = true;
+                 baasicCommerceProductSettingsService.update(productSettings)
+                 .success(function (data) {
+                 // perform success action here
+                 })
+                 .error(function (response, status, headers, config) {
+                 // perform error handling here
+                 });
+                 **/
+                update: function (data) {
+                    return baasicApp.commerceModule.settings.update(data);
+                },
+                /**
+                 * Provides direct access to `baasicCommerceProductSettingsRouteService`.
+                 * @method        
+                 * @example baasicCommerceProductSettingsService.routeService.get(expandObject);
+                 **/
+                routeService: baasicApp.commerceModule.settings.routeDefinition
+            };
+        }]);
+    }(angular, module));
     /**
      * @copyright (c) 2017 Mono Ltd
      * @license MIT
@@ -9245,6 +9577,516 @@
      */
     /* globals module */
     /**
+     * @module baasicMediaVaultService
+     * @description Baasic Media Vault Service provides Baasic route templates which can be expanded to Baasic REST URIs. Various services can use Baasic Media Vault Route Service to obtain needed routes while other routes will be obtained through HAL. By convention, all route services use the same function names as their corresponding services.
+     */
+    (function (angular, module, undefined) {
+        'use strict';
+        module.service('baasicMediaVaultService', ['baasicApp', function (baasicApps) {
+            var baasicApp = baasicApps.get();
+            return {
+                /**
+                 * Returns a promise that is resolved once the find action has been performed. Success response returns a list of media vault resources matching the given criteria.
+                 * @method        
+                 * @example 
+                 baasicMediaVaultService.find({
+                 pageNumber : 1,
+                 pageSize : 10,
+                 orderBy : '<field>',
+                 orderDirection : '<asc|desc>',
+                 search : '<search-phrase>'
+                 })
+                 .success(function (collection) {
+                 // perform success action here
+                 })
+                 .error(function (response, status, headers, config) {
+                 // perform error handling here
+                 });
+                 **/
+                find: function (options) {
+                    return baasicApp.mediaVaultModule.find(options);
+                },
+
+                /**
+                 * Returns a promise that is resolved once the get action has been performed. Success response returns requested media vault resource.
+                 * @method        
+                 * @example 
+                 baasicMediaVaultService.get('<media-vault-id>')
+                 .success(function (data) {
+                 // perform success action here
+                 })
+                 .error(function (response, status, headers, config) {
+                 // perform error handling here
+                 });
+                 **/
+                get: function (id, options) {
+                    return baasicApp.mediaVaultModule.get(id, options);
+                },
+
+                /**
+                 * Returns a promise that is resolved once the remove action has been performed. This action will remove one or many media vault resources from the system if successfully completed. If derived resource's format is passed, such as `width` and `height` for the image type of media vault resource, the operation will remove just derived resource. Otherwise, specified media vault and all its accompanying derived resources will be removed from the system. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply baasicMediaVaultRouteService route template. Here is an example of how a route can be obtained from HAL enabled objects:
+                 ```
+                 var params = baasicApiService.removeParams(mediaVaultEntry);
+                 var uri = params['model'].links('delete').href;
+                 ```
+                 * @method        
+                 * @example 
+                 // mediaVaultEntry is a media vault resource previously fetched using get action. The following action will remove the original media vault resource and all accompanying derived media vault resources.
+                 baasicMediaVaultService.remove(mediaVaultEntry)
+                 .success(function (data) {
+                 // perform success action here
+                 })
+                 .error(function (response, status, headers, config) {
+                 // perform error handling here
+                 });
+                 // mediaVaultEntry is a media vault resource previously fetched using get action. The following action will remove derived media vault resource only.
+                 baasicMediaVaultService.remove(mediaVaultEntry, {width: <width>, height: <height>})
+                 .success(function (data) {
+                 // perform success action here
+                 })
+                 .error(function (response, status, headers, config) {
+                 // perform error handling here
+                 });
+                 **/
+                remove: function (data, options) {
+                    return baasicApp.mediaVaultModule.remove(data, options);
+                },
+
+                /**
+                 * Returns a promise that is resolved once the update media vault action has been performed; this action will update a media vault resource if successfully completed. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicMediaVaultRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
+                 ```
+                 var params = baasicApiService.removeParams(mediaVaultEntry);
+                 var uri = params['model'].links('put').href;
+                 ```
+                 * @method        
+                 * @example 
+                 // mediaVaultEntry is a media vault resource previously fetched using get action.
+                 mediaVaultEntry.description = '<description>';
+                 baasicMediaVaultService.update(mediaVaultEntry)
+                 .success(function (data) {
+                 // perform success action here
+                 })
+                 .error(function (response, status, headers, config) {
+                 // perform error handling here
+                 });
+                 **/
+                update: function (data) {
+                    return baasicApp.mediaVaultModule.update(data);
+                },
+
+                streams: {
+                    /**
+                     * Returns a promise that is resolved once the get action has been performed. Success response returns the media vault stream if successfully completed. If derived resource's format is passed, such as `width` and `height` for the image type of media vault resource, the operation will return a stream of the derived resource. Otherwise, stream of the original media vault resource will be retrieved.
+                     * @method streams.get        
+                     * @example 
+                     // Request the original media vault stream
+                     baasicMediaVaultService.stream.get('<path>')
+                     .success(function (data) {
+                     // perform success action here
+                     })
+                     .error(function (response, status, headers, config) {
+                     // perform error handling here
+                     });
+                     // Request derived media vault stream
+                     baasicMediaVaultService.stream.get({id: '<path>', width: <width>, height: <height>})
+                     .success(function (data) {
+                     // perform success action here
+                     })
+                     .error(function (response, status, headers, config) {
+                     // perform error handling here
+                     });
+                     **/
+                    get: function (data) {
+                        return baasicApp.mediaVaultModule.streams.get(data);
+                    },
+
+                    /**
+                     * Returns a promise that is resolved once the get action has been performed. Success response returns the media vault stream as a blob. If derived resource's format is passed, such as `width` and `height` for the image type of media vault resource, the operation will return a blob of the derived media vault resource. Otherwise, blob of the original media vault resource will be retrieved. For more information on Blob objects please see [Blob Documentation](https://developer.mozilla.org/en-US/docs/Web/API/Blob).
+                     * @method streams.getBlob        
+                     * @example 
+                     // Request the original blob
+                     baasicMediaVaultService.stream.getBlob('<path>')
+                     .success(function (data) {
+                     // perform success action here
+                     })
+                     .error(function (response, status, headers, config) {
+                     // perform error handling here
+                     });
+                     // Request derived blob
+                     baasicMediaVaultService.stream.getBlob({id: '<path>', width: <width>, height: <height>})
+                     .success(function (data) {
+                     // perform success action here
+                     })
+                     .error(function (response, status, headers, config) {
+                     // perform error handling here
+                     });
+                     **/
+                    getBlob: function (data) {
+                        return baasicApp.mediaVaultModule.streams.getBlob(data);
+                    },
+
+                    /**
+                     * Returns a promise that is resolved once the update media vault stream action has been performed; this action will replace the existing stream with a new one. Alternatively, if a derived stream is being updated it will either create a new derived stream or replace the existing one. In order to update a derived stream, format needs to be passed (For example: `width` and `height` for the image type of media vault stream data type).
+                     * @method streams.update
+                     * @example
+                     // Update existing original media vault stream
+                     baasicMediaVaultService.streams.update('<path>', <media-vault-stream>)
+                     .success(function (data) {
+                     // perform success action here
+                     })
+                     .error(function (response, status, headers, config) {
+                     // perform error handling here
+                     });
+                     // Update derived media vault stream
+                     baasicMediaVaultService.streams.update({id: '<path>', width: <width>, height: <height>}, <media-vault-stream>)
+                     .success(function (data) {
+                     // perform success action here
+                     })
+                     .error(function (response, status, headers, config) {
+                     // perform error handling here
+                     });
+                     **/
+                    update: function (data, stream) {
+                        return baasicApp.mediaVaultModule.streams.update(data, streams);
+                    },
+
+                    /**
+                     * Returns a promise that is resolved once the create media vault stream action has been performed; this action will upload the specified blob. For more information on Blob objects please see [Blob Documentation](https://developer.mozilla.org/en-US/docs/Web/API/Blob).
+                     * @method streams.create
+                     * @example 
+                     baasicMediaVaultService.streams.create('<path>', <blob>)
+                     .success(function (data) {
+                     // perform success action here
+                     })
+                     .error(function (response, status, headers, config) {
+                     // perform error handling here
+                     });
+                     **/
+                    create: function (data, stream) {
+                        return baasicApp.mediaVaultModule.streams.create(data, stream);
+                    },
+                    routeService: baasicApp.mediaVaultModule.streams.routeDefinition
+                },
+
+                batch: {
+                    /**
+                     * Returns a promise that is resolved once the remove action has been performed. This action will remove media vault resources from the system if successfully completed. If derived resource's format is passed, such as `width` and `height` for the image type of media vault resource, the operation will remove just derived resource. Otherwise, specified media vault and all its accompanying derived resources will be removed from the system.
+                     * @method batch.remove       
+                     * @example
+                     // Remove original media vault resources
+                     baasicMediaVaultService.batch.remove([{ id: '<media-vault-id>' }])
+                     .success(function (data) {
+                     // perform success action here
+                     })
+                     .error(function (response, status, headers, config) {
+                     // perform error handling here
+                     });
+                     // Remove derived media vault resources
+                     baasicMediaVaultService.batch.remove([{ id: '<media-vault-id>', fileFormat: { width: <width>, height: <height> } }])
+                     .success(function (data) {
+                     // perform success action here
+                     })
+                     .error(function (response, status, headers, config) {
+                     // perform error handling here
+                     });
+                     **/
+                    remove: function (data) {
+                        return baasicApp.mediaVaultModule.batch.remove(data);
+                    },
+                    /**
+                     * Returns a promise that is resolved once the update action has been performed; this action updates specified media vault resources.
+                     * @method batch.update       
+                     * @example 
+                     baasicMediaVaultService.batch.update(files)
+                     .success(function (data) {
+                     // perform success action here
+                     })
+                     .error(function (response, status, headers, config) {
+                     // perform error handling here
+                     });
+                     **/
+                    update: function (data) {
+                        return baasicApp.mediaVaultModule.batch.update(data);
+                    },
+                    routeService: baasicApp.mediaVaultModule.batch.routeDefinition
+                },
+
+                settings: {
+                    /**
+                     * Returns a promise that is resolved once the get action has been performed. Success response returns media vault settings resource.
+                     * @method settings.get        
+                     * @example 
+                     baasicMediaVaultService.settings.get()
+                     .success(function (data) {
+                     // perform success action here
+                     })
+                     .error(function (response, status, headers, config) {
+                     // perform error handling here
+                     });
+                     **/
+                    get: function () {
+                        return baasicApp.mediaVaultModule.settings.get();
+                    },
+
+                    /**
+                     * Returns a promise that is resolved once the update action has been performed; this action updates the media vault settings resource.
+                     * @method settings.update       
+                     * @example 
+                     baasicMediaVaultService.settings.update(mediaVaultSettings)
+                     .success(function (data) {
+                     // perform success action here
+                     })
+                     .error(function (response, status, headers, config) {
+                     // perform error handling here
+                     });
+                     **/
+                    update: function (data) {
+                        return baasicApp.mediaVaultModule.settings.update(data);
+                    },
+                    routeService: baasicApp.mediaVaultModule.settings.routeDefinition
+                },
+
+                processingProviderSettings: {
+                    /**
+                     * Returns a promise that is resolved once the find action has been performed. Success response returns a list of media vault processing providers matching the given criteria.
+                     * @method        
+                     * @example 
+                     baasicMediaVaultService.processingProviderSettings.find({
+                     pageNumber : 1,
+                     pageSize : 10,
+                     orderBy : '<field>',
+                     orderDirection : '<asc|desc>',
+                     search : '<search-phrase>'
+                     })
+                     .success(function (collection) {
+                     // perform success action here
+                     })
+                     .error(function (response, status, headers, config) {
+                     // perform error handling here
+                     });
+                     **/
+                    find: function (options) {
+                        return baasicApp.mediaVaultModule.processingProviderSettings.find(options);
+                    },
+
+                    /**
+                     * Returns a promise that is resolved once the get action has been performed. Success response returns the media vault processing provider resource.
+                     * @method        
+                     * @example 
+                     baasicMediaVaultService.processingProviderSettings.get('<id>')
+                     .success(function (data) {
+                     // perform success action here
+                     })
+                     .error(function (response, status, headers, config) {
+                     // perform error handling here
+                     });
+                     **/
+                    get: function (id, options) {
+                        return baasicApp.mediaVaultModule.processingProviderSettings.get(id, options);
+                    },
+
+                    /**
+                     * Returns a promise that is resolved once the update action has been performed; this action updates a media vault processing provider setting resource. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicMediaVaultRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
+                     ```
+                     var params = baasicApiService.removeParams(processingProviderSetting);
+                     var uri = params['model'].links('put').href;
+                     ```
+                     * @method        
+                     * @example 
+                     // processingProviderSettings is a resource previously fetched using get action.
+                     processingProviderSettings.settings.faceDetection = true;
+                     baasicMediaVaultService.processingProviderSettings.update(processingProviderSetting)
+                     .success(function (data) {
+                     // perform success action here
+                     })
+                     .error(function (response, status, headers, config) {
+                     // perform error handling here
+                     });
+                     **/
+                    update: function (data) {
+                        return baasicApp.mediaVaultModule.processingProviderSettings.update(data);
+                    },
+                    routeService: baasicApp.mediaVaultModule.processingProviderSettings.routeDefinition
+                },
+                routeService: baasicApp.mediaVaultModule.routeDefinition
+            };
+        }]);
+    }(angular, module));
+
+    /**
+     * @overview 
+     ***Notes:**
+     - Refer to the [REST API documentation](http://dev.baasic.com/api/reference/home) for detailed information about available Baasic REST API end-points.
+     - All end-point objects are transformed by the associated route service.
+     */
+    /* globals module */
+    /** 
+     * @description The angular.module is a global place for creating, registering or retrieving modules. All modules should be registered in an application using this mechanism. An angular module is a container for the different parts of your app - services, directives etc. In order to use `baasic.keyValue` module functionality it must be added as a dependency to your app.
+     * @copyright (c) 2017 Mono Ltd
+     * @license MIT
+     * @author Mono Ltd
+     * @module baasic.keyValue
+     * @example
+     (function (Main) {
+     'use strict';
+     var dependencies = [
+     'baasic.api',
+     'baasic.membership',
+     'baasic.security',
+     'baasic.appSettings',
+     'baasic.article',
+     'baasic.dynamicResource',
+     'baasic.keyValue',
+     'baasic.valueSet'
+     ];
+     Main.module = angular.module('myApp.Main', dependencies);
+     }
+     (MyApp.Modules.Main = {})); 
+     */
+    var module = angular.module("baasic.keyValue", ["baasic.api"]); /* globals module */
+    module.config(["$provide", function config($provide) {}]);
+    /**
+     * @module baasicKeyValueService
+     * @description Baasic Key Value Service provides an easy way to consume Baasic Key Value REST API end-points. 
+     */
+    (function (angular, module, undefined) {
+        "use strict";
+        module.service("baasicKeyValueService", ["baasicApp", function (baasicApps) {
+            var baasicApp = baasicApps.get();
+            return {
+                /**
+                 * Returns a promise that is resolved once the find action has been performed. Success response returns a list of key value resources matching the given criteria.
+                 * @method        
+                 * @example 
+                 baasicKeyValueService.find({
+                 pageNumber : 1,
+                 pageSize : 10,
+                 orderBy : '<field>',
+                 orderDirection : '<asc|desc>',
+                 search : '<search-phrase>'
+                 })
+                 .success(function (collection) {
+                 // perform success action here
+                 })
+                 .error(function (response, status, headers, config) {
+                 // perform error handling here
+                 });
+                 **/
+                find: function (options) {
+                    return baasicApp.keyValueModule.find(options);
+                },
+                /**
+                 * Returns a promise that is resolved once the get action has been performed. Success response returns the specified key value resource.
+                 * @method        
+                 * @example 
+                 baasicKeyValueService.get('<key-value-id>')
+                 .success(function (data) {
+                 // perform success action here
+                 })
+                 .error(function (response, status, headers, config) {
+                 // perform error handling here
+                 });
+                 **/
+                get: function (id, options) {
+                    return baasicApp.keyValueModule.get(id, options);
+                },
+                /**
+                 * Returns a promise that is resolved once the create key value action has been performed; this action creates a new key value resource.
+                 * @method        
+                 * @example 
+                 baasicKeyValueService.create({
+                 key : '<key>',
+                 value : '<value>', 
+                 })
+                 .success(function (data) {
+                 // perform success action here
+                 })
+                 .error(function (response, status, headers, config) {
+                 // perform error handling here
+                 });
+                 **/
+                create: function (data) {
+                    return baasicApp.keyValueModule.create(data);
+                },
+                /**
+                 * Returns a promise that is resolved once the update key value action has been performed; this action updates a key value resource. 
+                 * @method        
+                 * @example 
+                 // keyValue is a resource previously fetched using get action.
+                 keyValue.value = '<new-value>';
+                 baasicKeyValueService.update(keyValue)
+                 .success(function (data) {
+                 // perform success action here
+                 })
+                 .error(function (response, status, headers, config) {
+                 // perform error handling here
+                 });
+                 **/
+                update: function (data) {
+                    return baasicApp.keyValueModule.update(data);
+                },
+                /**
+                 * Returns a promise that is resolved once the remove action has been performed. This action will remove a key value resource from the system if successfully completed. 
+                 * @method        
+                 * @example 
+                 // keyValue is a resource previously fetched using get action.
+                 baasicKeyValueService.remove(keyValue)
+                 .success(function (data) {
+                 // perform success action here
+                 })
+                 .error(function (response, status, headers, config) {
+                 // perform error handling here
+                 });
+                 **/
+                remove: function (data) {
+                    return baasicApp.keyValueModule.remove(data);
+                },
+                /**
+                 * Provides direct access to routeDefinition.
+                 * @method        
+                 * @example baasicKeyValueService.routeService.get('<id>', { embed:'<embeds>', fields: '<fields>' });
+                 **/
+                routeService: baasicApp.keyValueModule.routeDefinition
+            };
+        }]);
+    }(angular, module));
+    /**
+     * @copyright (c) 2017 Mono Ltd
+     * @license MIT
+     * @author Mono Ltd
+     * @overview 
+     ***Notes:**
+     - Refer to the [Baasic REST API](http://dev.baasic.com/api/reference/home) for detailed information about available Baasic REST API end-points.
+     - All end-point objects are transformed by the associated route service.
+     */
+    /* exported module */
+
+    /** 
+     * @description The angular.module is a global place for creating, registering or retrieving modules. All modules should be registered in an application using this mechanism. An angular module is a container for the different parts of your app - services, directives etc. In order to use `baasic.files` module functionality it must be added as a dependency to your app.
+     * @module baasic.mediaGallery
+     * @example
+     (function (Main) {
+     "use strict";
+     var dependencies = [
+     "baasic.api",
+     "baasic.membership",
+     "baasic.security",
+     "baasic.userProfile",
+     "baasic.files",
+     "baasic.mediaGallery",
+     "baasic.article",
+     "baasic.dynamicResource",
+     "baasic.keyValue",
+     "baasic.valueSet"
+     ];
+     Main.module = angular.module("myApp.Main", dependencies);
+     }
+     (MyApp.Modules.Main = {})); 
+     */
+    var module = angular.module('baasic.mediaGallery', ['baasic.api']);
+
+    /* globals module */
+    /**
      * @module baasicMediaGalleryFilesService
      * @description Baasic Media Gallery Files Service provides Baasic route templates which can be expanded to Baasic REST URIs. Various services can use Baasic Media Gallery Files Route Service to obtain needed routes while other routes will be obtained through HAL. By convention, all route services use the same function names as their corresponding services.
      */
@@ -9311,7 +10153,7 @@
                  // perform error handling here
                  });
                  **/
-                remove: function (id) {
+                unlink: function (id) {
                     return baasicApp.mediaGalleryModule.files.remove(id);
                 },
 
@@ -9349,7 +10191,7 @@
                  // perform error handling here
                  });
                  **/
-                create: function (data) {
+                link: function (data) {
                     return baasicApp.mediaGalleryModule.files.create(data);
                 },
 
@@ -9883,490 +10725,6 @@
      * @overview 
      ***Notes:**
      - Refer to the [REST API documentation](http://dev.baasic.com/api/reference/home) for detailed information about available Baasic REST API end-points.
-     - All end-point objects are transformed by the associated route service.
-     */
-    /* globals module */
-    /**
-     * @module baasicMediaVaultService
-     * @description Baasic Media Vault Service provides Baasic route templates which can be expanded to Baasic REST URIs. Various services can use Baasic Media Vault Route Service to obtain needed routes while other routes will be obtained through HAL. By convention, all route services use the same function names as their corresponding services.
-     */
-    (function (angular, module, undefined) {
-        'use strict';
-        module.service('baasicMediaVaultService', ['baasicApp', function (baasicApps) {
-            var baasicApp = baasicApps.get();
-            return {
-                /**
-                 * Returns a promise that is resolved once the find action has been performed. Success response returns a list of media vault resources matching the given criteria.
-                 * @method        
-                 * @example 
-                 baasicMediaVaultService.find({
-                 pageNumber : 1,
-                 pageSize : 10,
-                 orderBy : '<field>',
-                 orderDirection : '<asc|desc>',
-                 search : '<search-phrase>'
-                 })
-                 .success(function (collection) {
-                 // perform success action here
-                 })
-                 .error(function (response, status, headers, config) {
-                 // perform error handling here
-                 });
-                 **/
-                find: function (options) {
-                    return baasicApp.mediaVaultModule.find(options);
-                },
-
-                /**
-                 * Returns a promise that is resolved once the get action has been performed. Success response returns requested media vault resource.
-                 * @method        
-                 * @example 
-                 baasicMediaVaultService.get('<media-vault-id>')
-                 .success(function (data) {
-                 // perform success action here
-                 })
-                 .error(function (response, status, headers, config) {
-                 // perform error handling here
-                 });
-                 **/
-                get: function (id, options) {
-                    return baasicApp.mediaVaultModule.get(id, options);
-                },
-
-                /**
-                 * Returns a promise that is resolved once the remove action has been performed. This action will remove one or many media vault resources from the system if successfully completed. If derived resource's format is passed, such as `width` and `height` for the image type of media vault resource, the operation will remove just derived resource. Otherwise, specified media vault and all its accompanying derived resources will be removed from the system. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply baasicMediaVaultRouteService route template. Here is an example of how a route can be obtained from HAL enabled objects:
-                 ```
-                 var params = baasicApiService.removeParams(mediaVaultEntry);
-                 var uri = params['model'].links('delete').href;
-                 ```
-                 * @method        
-                 * @example 
-                 // mediaVaultEntry is a media vault resource previously fetched using get action. The following action will remove the original media vault resource and all accompanying derived media vault resources.
-                 baasicMediaVaultService.remove(mediaVaultEntry)
-                 .success(function (data) {
-                 // perform success action here
-                 })
-                 .error(function (response, status, headers, config) {
-                 // perform error handling here
-                 });
-                 // mediaVaultEntry is a media vault resource previously fetched using get action. The following action will remove derived media vault resource only.
-                 baasicMediaVaultService.remove(mediaVaultEntry, {width: <width>, height: <height>})
-                 .success(function (data) {
-                 // perform success action here
-                 })
-                 .error(function (response, status, headers, config) {
-                 // perform error handling here
-                 });
-                 **/
-                remove: function (data, options) {
-                    return baasicApp.mediaVaultModule.remove(data, options);
-                },
-
-                /**
-                 * Returns a promise that is resolved once the update media vault action has been performed; this action will update a media vault resource if successfully completed. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicMediaVaultRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
-                 ```
-                 var params = baasicApiService.removeParams(mediaVaultEntry);
-                 var uri = params['model'].links('put').href;
-                 ```
-                 * @method        
-                 * @example 
-                 // mediaVaultEntry is a media vault resource previously fetched using get action.
-                 mediaVaultEntry.description = '<description>';
-                 baasicMediaVaultService.update(mediaVaultEntry)
-                 .success(function (data) {
-                 // perform success action here
-                 })
-                 .error(function (response, status, headers, config) {
-                 // perform error handling here
-                 });
-                 **/
-                update: function (data) {
-                    return baasicApp.mediaVaultModule.update(data);
-                },
-
-                streams: {
-                    /**
-                     * Returns a promise that is resolved once the get action has been performed. Success response returns the media vault stream if successfully completed. If derived resource's format is passed, such as `width` and `height` for the image type of media vault resource, the operation will return a stream of the derived resource. Otherwise, stream of the original media vault resource will be retrieved.
-                     * @method streams.get        
-                     * @example 
-                     // Request the original media vault stream
-                     baasicMediaVaultService.stream.get('<path>')
-                     .success(function (data) {
-                     // perform success action here
-                     })
-                     .error(function (response, status, headers, config) {
-                     // perform error handling here
-                     });
-                     // Request derived media vault stream
-                     baasicMediaVaultService.stream.get({id: '<path>', width: <width>, height: <height>})
-                     .success(function (data) {
-                     // perform success action here
-                     })
-                     .error(function (response, status, headers, config) {
-                     // perform error handling here
-                     });
-                     **/
-                    get: function (data) {
-                        return baasicApp.mediaVaultModule.streams.get(data);
-                    },
-
-                    /**
-                     * Returns a promise that is resolved once the get action has been performed. Success response returns the media vault stream as a blob. If derived resource's format is passed, such as `width` and `height` for the image type of media vault resource, the operation will return a blob of the derived media vault resource. Otherwise, blob of the original media vault resource will be retrieved. For more information on Blob objects please see [Blob Documentation](https://developer.mozilla.org/en-US/docs/Web/API/Blob).
-                     * @method streams.getBlob        
-                     * @example 
-                     // Request the original blob
-                     baasicMediaVaultService.stream.getBlob('<path>')
-                     .success(function (data) {
-                     // perform success action here
-                     })
-                     .error(function (response, status, headers, config) {
-                     // perform error handling here
-                     });
-                     // Request derived blob
-                     baasicMediaVaultService.stream.getBlob({id: '<path>', width: <width>, height: <height>})
-                     .success(function (data) {
-                     // perform success action here
-                     })
-                     .error(function (response, status, headers, config) {
-                     // perform error handling here
-                     });
-                     **/
-                    getBlob: function (data) {
-                        return baasicApp.mediaVaultModule.streams.getBlob(data);
-                    },
-
-                    /**
-                     * Returns a promise that is resolved once the update media vault stream action has been performed; this action will replace the existing stream with a new one. Alternatively, if a derived stream is being updated it will either create a new derived stream or replace the existing one. In order to update a derived stream, format needs to be passed (For example: `width` and `height` for the image type of media vault stream data type).
-                     * @method streams.update
-                     * @example
-                     // Update existing original media vault stream
-                     baasicMediaVaultService.streams.update('<path>', <media-vault-stream>)
-                     .success(function (data) {
-                     // perform success action here
-                     })
-                     .error(function (response, status, headers, config) {
-                     // perform error handling here
-                     });
-                     // Update derived media vault stream
-                     baasicMediaVaultService.streams.update({id: '<path>', width: <width>, height: <height>}, <media-vault-stream>)
-                     .success(function (data) {
-                     // perform success action here
-                     })
-                     .error(function (response, status, headers, config) {
-                     // perform error handling here
-                     });
-                     **/
-                    update: function (data, stream) {
-                        return baasicApp.mediaVaultModule.streams.update(data, streams);
-                    },
-
-                    /**
-                     * Returns a promise that is resolved once the create media vault stream action has been performed; this action will upload the specified blob. For more information on Blob objects please see [Blob Documentation](https://developer.mozilla.org/en-US/docs/Web/API/Blob).
-                     * @method streams.create
-                     * @example 
-                     baasicMediaVaultService.streams.create('<path>', <blob>)
-                     .success(function (data) {
-                     // perform success action here
-                     })
-                     .error(function (response, status, headers, config) {
-                     // perform error handling here
-                     });
-                     **/
-                    create: function (data, stream) {
-                        return baasicApp.mediaVaultModule.streams.create(data, stream);
-                    },
-                    routeService: baasicApp.mediaVaultModule.streams.routeDefinition
-                },
-
-                batch: {
-                    /**
-                     * Returns a promise that is resolved once the remove action has been performed. This action will remove media vault resources from the system if successfully completed. If derived resource's format is passed, such as `width` and `height` for the image type of media vault resource, the operation will remove just derived resource. Otherwise, specified media vault and all its accompanying derived resources will be removed from the system.
-                     * @method batch.remove       
-                     * @example
-                     // Remove original media vault resources
-                     baasicMediaVaultService.batch.remove([{ id: '<media-vault-id>' }])
-                     .success(function (data) {
-                     // perform success action here
-                     })
-                     .error(function (response, status, headers, config) {
-                     // perform error handling here
-                     });
-                     // Remove derived media vault resources
-                     baasicMediaVaultService.batch.remove([{ id: '<media-vault-id>', fileFormat: { width: <width>, height: <height> } }])
-                     .success(function (data) {
-                     // perform success action here
-                     })
-                     .error(function (response, status, headers, config) {
-                     // perform error handling here
-                     });
-                     **/
-                    remove: function (data) {
-                        return baasicApp.mediaVaultModule.batch.remove(data);
-                    },
-                    /**
-                     * Returns a promise that is resolved once the update action has been performed; this action updates specified media vault resources.
-                     * @method batch.update       
-                     * @example 
-                     baasicMediaVaultService.batch.update(files)
-                     .success(function (data) {
-                     // perform success action here
-                     })
-                     .error(function (response, status, headers, config) {
-                     // perform error handling here
-                     });
-                     **/
-                    update: function (data) {
-                        return baasicApp.mediaVaultModule.batch.update(data);
-                    },
-                    routeService: baasicApp.mediaVaultModule.batch.routeDefinition
-                },
-
-                settings: {
-                    /**
-                     * Returns a promise that is resolved once the get action has been performed. Success response returns media vault settings resource.
-                     * @method settings.get        
-                     * @example 
-                     baasicMediaVaultService.settings.get()
-                     .success(function (data) {
-                     // perform success action here
-                     })
-                     .error(function (response, status, headers, config) {
-                     // perform error handling here
-                     });
-                     **/
-                    get: function () {
-                        return baasicApp.mediaVaultModule.settings.get();
-                    },
-
-                    /**
-                     * Returns a promise that is resolved once the update action has been performed; this action updates the media vault settings resource.
-                     * @method settings.update       
-                     * @example 
-                     baasicMediaVaultService.settings.update(mediaVaultSettings)
-                     .success(function (data) {
-                     // perform success action here
-                     })
-                     .error(function (response, status, headers, config) {
-                     // perform error handling here
-                     });
-                     **/
-                    update: function (data) {
-                        return baasicApp.mediaVaultModule.settings.update(data);
-                    },
-                    routeService: baasicApp.mediaVaultModule.settings.routeDefinition
-                },
-
-                processingProviderSettings: {
-                    /**
-                     * Returns a promise that is resolved once the find action has been performed. Success response returns a list of media vault processing providers matching the given criteria.
-                     * @method        
-                     * @example 
-                     baasicMediaVaultService.processingProviderSettings.find({
-                     pageNumber : 1,
-                     pageSize : 10,
-                     orderBy : '<field>',
-                     orderDirection : '<asc|desc>',
-                     search : '<search-phrase>'
-                     })
-                     .success(function (collection) {
-                     // perform success action here
-                     })
-                     .error(function (response, status, headers, config) {
-                     // perform error handling here
-                     });
-                     **/
-                    find: function (options) {
-                        return baasicApp.mediaVaultModule.processingProviderSettings.find(options);
-                    },
-
-                    /**
-                     * Returns a promise that is resolved once the get action has been performed. Success response returns the media vault processing provider resource.
-                     * @method        
-                     * @example 
-                     baasicMediaVaultService.processingProviderSettings.get('<id>')
-                     .success(function (data) {
-                     // perform success action here
-                     })
-                     .error(function (response, status, headers, config) {
-                     // perform error handling here
-                     });
-                     **/
-                    get: function (id, options) {
-                        return baasicApp.mediaVaultModule.processingProviderSettings.get(id, options);
-                    },
-
-                    /**
-                     * Returns a promise that is resolved once the update action has been performed; this action updates a media vault processing provider setting resource. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicMediaVaultRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
-                     ```
-                     var params = baasicApiService.removeParams(processingProviderSetting);
-                     var uri = params['model'].links('put').href;
-                     ```
-                     * @method        
-                     * @example 
-                     // processingProviderSettings is a resource previously fetched using get action.
-                     processingProviderSettings.settings.faceDetection = true;
-                     baasicMediaVaultService.processingProviderSettings.update(processingProviderSetting)
-                     .success(function (data) {
-                     // perform success action here
-                     })
-                     .error(function (response, status, headers, config) {
-                     // perform error handling here
-                     });
-                     **/
-                    update: function (data) {
-                        return baasicApp.mediaVaultModule.processingProviderSettings.update(data);
-                    },
-                    routeService: baasicApp.mediaVaultModule.processingProviderSettings.routeDefinition
-                },
-                routeService: baasicApp.mediaVaultModule.routeDefinition
-            };
-        }]);
-    }(angular, module));
-
-    /**
-     * @overview 
-     ***Notes:**
-     - Refer to the [REST API documentation](http://dev.baasic.com/api/reference/home) for detailed information about available Baasic REST API end-points.
-     - All end-point objects are transformed by the associated route service.
-     */
-    /* globals module */
-    /** 
-     * @description The angular.module is a global place for creating, registering or retrieving modules. All modules should be registered in an application using this mechanism. An angular module is a container for the different parts of your app - services, directives etc. In order to use `baasic.keyValue` module functionality it must be added as a dependency to your app.
-     * @copyright (c) 2017 Mono Ltd
-     * @license MIT
-     * @author Mono Ltd
-     * @module baasic.keyValue
-     * @example
-     (function (Main) {
-     'use strict';
-     var dependencies = [
-     'baasic.api',
-     'baasic.membership',
-     'baasic.security',
-     'baasic.appSettings',
-     'baasic.article',
-     'baasic.dynamicResource',
-     'baasic.keyValue',
-     'baasic.valueSet'
-     ];
-     Main.module = angular.module('myApp.Main', dependencies);
-     }
-     (MyApp.Modules.Main = {})); 
-     */
-    var module = angular.module("baasic.keyValue", ["baasic.api"]); /* globals module */
-    module.config(["$provide", function config($provide) {}]);
-    /**
-     * @module baasicKeyValueService
-     * @description Baasic Key Value Service provides an easy way to consume Baasic Key Value REST API end-points. 
-     */
-    (function (angular, module, undefined) {
-        "use strict";
-        module.service("baasicKeyValueService", ["baasicApp", function (baasicApps) {
-            var baasicApp = baasicApps.get();
-            return {
-                /**
-                 * Returns a promise that is resolved once the find action has been performed. Success response returns a list of key value resources matching the given criteria.
-                 * @method        
-                 * @example 
-                 baasicKeyValueService.find({
-                 pageNumber : 1,
-                 pageSize : 10,
-                 orderBy : '<field>',
-                 orderDirection : '<asc|desc>',
-                 search : '<search-phrase>'
-                 })
-                 .success(function (collection) {
-                 // perform success action here
-                 })
-                 .error(function (response, status, headers, config) {
-                 // perform error handling here
-                 });
-                 **/
-                find: function (options) {
-                    return baasicApp.keyValueModule.find(options);
-                },
-                /**
-                 * Returns a promise that is resolved once the get action has been performed. Success response returns the specified key value resource.
-                 * @method        
-                 * @example 
-                 baasicKeyValueService.get('<key-value-id>')
-                 .success(function (data) {
-                 // perform success action here
-                 })
-                 .error(function (response, status, headers, config) {
-                 // perform error handling here
-                 });
-                 **/
-                get: function (id, options) {
-                    return baasicApp.keyValueModule.get(id, options);
-                },
-                /**
-                 * Returns a promise that is resolved once the create key value action has been performed; this action creates a new key value resource.
-                 * @method        
-                 * @example 
-                 baasicKeyValueService.create({
-                 key : '<key>',
-                 value : '<value>', 
-                 })
-                 .success(function (data) {
-                 // perform success action here
-                 })
-                 .error(function (response, status, headers, config) {
-                 // perform error handling here
-                 });
-                 **/
-                create: function (data) {
-                    return baasicApp.keyValueModule.create(data);
-                },
-                /**
-                 * Returns a promise that is resolved once the update key value action has been performed; this action updates a key value resource. 
-                 * @method        
-                 * @example 
-                 // keyValue is a resource previously fetched using get action.
-                 keyValue.value = '<new-value>';
-                 baasicKeyValueService.update(keyValue)
-                 .success(function (data) {
-                 // perform success action here
-                 })
-                 .error(function (response, status, headers, config) {
-                 // perform error handling here
-                 });
-                 **/
-                update: function (data) {
-                    return baasicApp.keyValueModule.update(data);
-                },
-                /**
-                 * Returns a promise that is resolved once the remove action has been performed. This action will remove a key value resource from the system if successfully completed. 
-                 * @method        
-                 * @example 
-                 // keyValue is a resource previously fetched using get action.
-                 baasicKeyValueService.remove(keyValue)
-                 .success(function (data) {
-                 // perform success action here
-                 })
-                 .error(function (response, status, headers, config) {
-                 // perform error handling here
-                 });
-                 **/
-                remove: function (data) {
-                    return baasicApp.keyValueModule.remove(data);
-                },
-                /**
-                 * Provides direct access to routeDefinition.
-                 * @method        
-                 * @example baasicKeyValueService.routeService.get('<id>', { embed:'<embeds>', fields: '<fields>' });
-                 **/
-                routeService: baasicApp.keyValueModule.routeDefinition
-            };
-        }]);
-    }(angular, module));
-    /**
-     * @copyright (c) 2017 Mono Ltd
-     * @license MIT
-     * @author Mono Ltd
-     * @overview 
-     ***Notes:**
-     - Refer to the [Baasic REST API](http://dev.baasic.com/api/reference/home) for detailed information about available Baasic REST API end-points.
      - All end-point objects are transformed by the associated route service.
      */
     /* exported module */

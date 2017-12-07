@@ -19,9 +19,9 @@
 		"url": "https://github.com/baasic/baasic-sdk-angularjs.git"
 	},
 	"devDependencies": {
-		"gulp": ">3.4.0",
+		"baasic-javascript-docgen": "git://github.com/Baasic/baasic-javascript-docgen",
+		"gulp": "^3.9.1",
 		"gulp-beautify": "1.0.3",
-		"gulp-util": "3.0.8",
 		"gulp-concat": ">2.1.7",
 		"gulp-footer": "^1.0.4",
 		"gulp-header": "^1.1.1",
@@ -33,8 +33,8 @@
 		"gulp-rename": "1.2.0",
 		"gulp-replace": "0.4.0",
 		"gulp-uglify": ">0.0.21",
-		"jshint-stylish": "^1.0.0",
-		"baasic-javascript-docgen": "git://github.com/Baasic/baasic-javascript-docgen"
+		"gulp-util": "3.0.8",
+		"jshint-stylish": "^1.0.0"
 	},
 	"dependencies": {
 		"baasic-uritemplate": "Baasic/uritemplate-js",
