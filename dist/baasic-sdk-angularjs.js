@@ -1,6 +1,6 @@
 /*
- Baasic AngularJS SDK v2.0.1
- (c) 2014-2017 Mono Ltd.  http://baasic.com
+ Baasic AngularJS SDK v2.0.2-beta01
+ (c) 2014-2018 Mono Ltd.  http://baasic.com
  License: MIT
 */
 (function (angular, undefined) { /* exported module */
@@ -5637,6 +5637,264 @@
 
     /* globals module */
     /**
+     * @module baasicCommerceCouponService
+     * @description Baasic Commerce Coupon Service provides an easy way to consume Baasic Commerce REST API end-points. In order to obtain a needed routes `baasiccommerceCouponService` uses `baasiccommerceCouponRouteService`.
+     */
+    (function (angular, module, undefined) {
+        'use strict';
+        module.service('baasicCommerceCouponService', ['baasicApp', function (baasicApps) {
+            var baasicApp = baasicApps.get();
+            return {
+                /**
+                 * Returns a promise that is resolved once the find action has been performed. Success response returns a list of commerce resources matching the given criteria.
+                 * @method        
+                 * @example 
+                 baasicCommerceCouponService.find({
+                 pageNumber : 1,
+                 pageSize : 10,
+                 orderBy : '<field>',
+                 orderDirection : '<asc|desc>',
+                 search : '<search-phrase>'
+                 })
+                 .success(function (collection) {
+                 // perform success action here
+                 })
+                 .error(function (response, status, headers, config) {
+                 // perform error handling here
+                 });
+                 **/
+                find: function (options) {
+                    return baasicApp.commerceModule.coupons.find(options);
+                },
+                /**
+                 * Returns a promise that is resolved once the get action has been performed. Success response returns the commerce resource.
+                 * @method        
+                 * @example 
+                 baasicCommerceCouponService.get()
+                 .success(function (data) {
+                 // perform success action here
+                 })
+                 .error(function (response, status, headers, config) {
+                 // perform error handling here
+                 });
+                 **/
+                get: function (id, options) {
+                    return baasicApp.commerceModule.coupons.get(id, options);
+                },
+                /**
+                 * Returns a promise that is resolved once the create commerce action has been performed; this action creates a new commerce resource.
+                 * @method        
+                 * @example 
+                 baasicCommerceCouponService.create({
+                 name : '<product-name>',
+                 slug : '<slug>',
+                 shortDescription : '<short-description>',
+                 recurringCyclePeriodTypeId: '<recurring-cycle-period-type-id>'
+                 planId : '<plan-id>',
+                 price: 100,
+                 published: true
+                 })
+                 .success(function (data) {
+                 // perform success action here
+                 })
+                 .error(function (response, status, headers, config) {
+                 // perform error handling here
+                 });
+                 **/
+                create: function (data) {
+                    return baasicApp.commerceModule.coupons.create(data);
+                },
+                /**
+                 * Returns a promise that is resolved once the update commerce action has been performed; this action updates a commerce resource. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasiccommerceCouponRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
+                 ```
+                 var params = baasicApiService.removeParams(commerceCoupon);
+                 var uri = params['model'].links('put').href;
+                 ```
+                 * @method        
+                 * @example 
+                 // commerceCoupon is a resource previously fetched using get action.
+                 commerceCoupon.shortDescription : '<short-description>';
+                 baasiccommerceCouponService.update(commerceCoupon)
+                 .success(function (data) {
+                 // perform success action here
+                 })
+                 .error(function (response, status, headers, config) {
+                 // perform error handling here
+                 });
+                 **/
+                update: function (data) {
+                    return baasicApp.commerceModule.coupons.update(data);
+                },
+                /**
+                 * Returns a promise that is resolved once the remove action has been performed. This action will remove a commerce resource from the system if successfully completed. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasiccommerceCouponRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
+                 ```
+                 var params = baasicApiService.removeParams(commerceCoupon);
+                 var uri = params['model'].links('delete').href;
+                 ```
+                 * @method        
+                 * @example 
+                 // commerceCoupon is a resource previously fetched using get action.
+                 baasiccommerceCouponService.remove(commerceCoupon)
+                 .success(function (data) {
+                 // perform success action here
+                 })
+                 .error(function (response, status, headers, config) {
+                 // perform error handling here
+                 });
+                 **/
+                remove: function (data) {
+                    return baasicApp.commerceModule.coupons.remove(data);
+                },
+                /**
+                 * Provides direct access to `routeService`.
+                 * @method        
+                 * @example baasiccommerceCouponService.routeService.get(expandObject);
+                 **/
+                routeService: baasicApp.commerceModule.coupons.routeDefinition
+            };
+        }]);
+    }(angular, module));
+
+    /**
+     * @copyright (c) 2017 Mono Ltd
+     * @license MIT
+     * @author Mono Ltd
+     * @overview 
+     ***Notes:**
+     - Refer to the [Baasic REST API](http://dev.baasic.com/api/reference/home) for detailed information about available Baasic REST API end-points.
+     - All end-point objects are transformed by the associated route service.
+     */
+    /* globals module */
+    /**
+     * @module baasicCommerceCouponUseService
+     * @description Baasic Commerce Coupon Service provides an easy way to consume Baasic Commerce REST API end-points. In order to obtain a needed routes `baasicCommerceProductService` uses `baasicCommerceProductRouteService`.
+     */
+    (function (angular, module, undefined) {
+        'use strict';
+        module.service('baasicCommerceCouponUseService', ['baasicApp', function (baasicApps) {
+            var baasicApp = baasicApps.get();
+            return {
+                /**
+                 * Returns a promise that is resolved once the find action has been performed. Success response returns a list of commerce resources matching the given criteria.
+                 * @method        
+                 * @example 
+                 baasicCommerceCouponUseService.find({
+                 pageNumber : 1,
+                 pageSize : 10,
+                 orderBy : '<field>',
+                 orderDirection : '<asc|desc>',
+                 search : '<search-phrase>'
+                 })
+                 .success(function (collection) {
+                 // perform success action here
+                 })
+                 .error(function (response, status, headers, config) {
+                 // perform error handling here
+                 });
+                 **/
+                find: function (options) {
+                    return baasicApp.commerceModule.couponUses.find(options);
+                },
+                /**
+                 * Returns a promise that is resolved once the get action has been performed. Success response returns the commerce resource.
+                 * @method        
+                 * @example 
+                 baasicCommerceCouponUseService.get()
+                 .success(function (data) {
+                 // perform success action here
+                 })
+                 .error(function (response, status, headers, config) {
+                 // perform error handling here
+                 });
+                 **/
+                get: function (id, options) {
+                    return baasicApp.commerceModule.couponUses.get(id, options);
+                },
+                /**
+                 * Returns a promise that is resolved once the create commerce action has been performed; this action creates a new commerce resource.
+                 * @method        
+                 * @example 
+                 baasicCommerceCouponUseService.create({
+                 name : '<product-name>',
+                 slug : '<slug>',
+                 shortDescription : '<short-description>',
+                 recurringCyclePeriodTypeId: '<recurring-cycle-period-type-id>'
+                 planId : '<plan-id>',
+                 price: 100,
+                 published: true
+                 })
+                 .success(function (data) {
+                 // perform success action here
+                 })
+                 .error(function (response, status, headers, config) {
+                 // perform error handling here
+                 });
+                 **/
+                create: function (data) {
+                    return baasicApp.commerceModule.couponUses.create(data);
+                },
+                /**
+                 * Returns a promise that is resolved once the update commerce action has been performed; this action updates a commerce resource. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicCommerceProductRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
+                 ```
+                 var params = baasicApiService.removeParams(commerceCouponUse);
+                 var uri = params['model'].links('put').href;
+                 ```
+                 * @method        
+                 * @example 
+                 // commerceCouponUse is a resource previously fetched using get action.
+                 commerceCouponUse.shortDescription : '<short-description>';
+                 baasicCommerceCouponUseService.update(commerceCouponUse)
+                 .success(function (data) {
+                 // perform success action here
+                 })
+                 .error(function (response, status, headers, config) {
+                 // perform error handling here
+                 });
+                 **/
+                update: function (data) {
+                    return baasicApp.commerceModule.couponUses.update(data);
+                },
+                /**
+                 * Returns a promise that is resolved once the remove action has been performed. This action will remove a commerce resource from the system if successfully completed. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicCommerceProductRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
+                 ```
+                 var params = baasicApiService.removeParams(commerceCouponUse);
+                 var uri = params['model'].links('delete').href;
+                 ```
+                 * @method        
+                 * @example 
+                 // commerceCouponUse is a resource previously fetched using get action.
+                 baasicCommerceCouponUseService.remove(commerceCouponUse)
+                 .success(function (data) {
+                 // perform success action here
+                 })
+                 .error(function (response, status, headers, config) {
+                 // perform error handling here
+                 });
+                 **/
+                remove: function (data) {
+                    return baasicApp.commerceModule.couponUses.remove(data);
+                },
+                /**
+                 * Provides direct access to `routeService`.
+                 * @method        
+                 * @example baasicCommerceCouponUseService.routeService.get(expandObject);
+                 **/
+                routeService: baasicApp.commerceModule.couponUses.routeDefinition
+            };
+        }]);
+    }(angular, module));
+
+    /**
+     * @copyright (c) 2017 Mono Ltd
+     * @license MIT
+     * @author Mono Ltd
+     * @overview 
+     ***Notes:**
+     - Refer to the [Baasic REST API](http://dev.baasic.com/api/reference/home) for detailed information about available Baasic REST API end-points.
+     - All end-point objects are transformed by the associated route service.
+     */
+    /* globals module */
+    /**
      * @module baasicCommerceCustomerPaymentMethodService
      * @description Baasic Commerce CustomerPaymentMethod Service provides an easy way to consume Baasic Commerce REST API end-points. In order to obtain a needed routes `baasicCommerceCustomerPaymentMethodService` uses `baasicCommerceCustomerPaymentMethodRouteService`.
      */
@@ -7269,6 +7527,186 @@
      */
     /* globals module */
     /**
+     * @module baasicCommerceCouponTypeService
+     * @description Baasic Commerce CouponType Service provides an easy way to consume Baasic Commerce REST API end-points. In order to obtain a needed routes `baasicCommerceCouponTypeService` uses `baasicCommerceCouponTypeRouteService`.
+     */
+    (function (angular, module, undefined) {
+        'use strict';
+        module.service('baasicCommerceCouponTypeService', ['baasicApp', function (baasicApps) {
+            var baasicApp = baasicApps.get();
+            return {
+                /**
+                 * Returns a promise that is resolved once the find action has been performed. Success response returns a list of commerce resources matching the given criteria.
+                 * @method        
+                 * @example 
+                 baasicCommerceCouponTypeService.find({
+                 pageNumber : 1,
+                 pageSize : 10,
+                 orderBy : '<field>',
+                 orderDirection : '<asc|desc>',
+                 search : '<search-phrase>'
+                 })
+                 .success(function (collection) {
+                 // perform success action here
+                 })
+                 .error(function (response, status, headers, config) {
+                 // perform error handling here
+                 });
+                 **/
+                find: function (options) {
+                    return baasicApp.commerceModule.lookups.couponTypes.find(options);
+                },
+                /**
+                 * Returns a promise that is resolved once the get action has been performed. Success response returns the commerce resource.
+                 * @method        
+                 * @example 
+                 baasicCommerceCouponTypeService.get()
+                 .success(function (data) {
+                 // perform success action here
+                 })
+                 .error(function (response, status, headers, config) {
+                 // perform error handling here
+                 });
+                 **/
+                get: function (id, options) {
+                    return baasicApp.commerceModule.lookups.couponTypes.get(id, options);
+                },
+                /**
+                 * Returns a promise that is resolved once the create commerce action has been performed; this action creates a new commerce resource.
+                 * @method        
+                 * @example 
+                 baasicCommerceCouponTypeService.create({
+                 name : '<name>',
+                 abrv: '<abbreviation>',
+                 description: '<description>'
+                 })
+                 .success(function (data) {
+                 // perform success action here
+                 })
+                 .error(function (response, status, headers, config) {
+                 // perform error handling here
+                 });
+                 **/
+                create: function (data) {
+                    return baasicApp.commerceModule.lookups.couponTypes.create(data);
+                },
+                /**
+                 * Returns a promise that is resolved once the update commerce action has been performed; this action updates a commerce resource. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicCommerceCouponTypeRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
+                 ```
+                 var params = baasicApiService.removeParams(commerceCouponType);
+                 var uri = params['model'].links('put').href;
+                 ```
+                 * @method        
+                 * @example 
+                 // commerceCouponType is a resource previously fetched using get action.
+                 commerceCouponType.description = '<description>';
+                 baasicCommerceCouponTypeService.update(commerceCouponType)
+                 .success(function (data) {
+                 // perform success action here
+                 })
+                 .error(function (response, status, headers, config) {
+                 // perform error handling here
+                 });
+                 **/
+                update: function (data) {
+                    return baasicApp.commerceModule.lookups.couponTypes.update(data);
+                },
+                /**
+                 * Returns a promise that is resolved once the remove action has been performed. This action will remove a commerce resource from the system if successfully completed. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicCommerceCouponTypeRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
+                 ```
+                 var params = baasicApiService.removeParams(commerceCouponType);
+                 var uri = params['model'].links('delete').href;
+                 ```
+                 * @method        
+                 * @example 
+                 // commerceCouponType is a resource previously fetched using get action.
+                 baasicCommerceCouponTypeService.remove(commerceCouponType)
+                 .success(function (data) {
+                 // perform success action here
+                 })
+                 .error(function (response, status, headers, config) {
+                 // perform error handling here
+                 });
+                 **/
+                remove: function (data) {
+                    return baasicApp.commerceModule.lookups.couponTypes.remove(data);
+                },
+
+                batch: {
+                    /**
+                     * Returns a promise that is resolved once the create commerce action has been performed; this action creates a new commerce resources.
+                     * @method batch.create        
+                     * @example 
+                     baasicCommerceCouponTypeService.batch.create([{
+                     name : '<name>',
+                     abrv: '<abbreviation>',
+                     description: '<description>'
+                     }])
+                     .success(function (data) {
+                     // perform success action here
+                     })
+                     .error(function (response, status, headers, config) {
+                     // perform error handling here
+                     });
+                     **/
+                    create: function (data) {
+                        return baasicApp.commerceModule.lookups.couponTypes.batch.create(data);
+                    },
+
+                    /**
+                     * Returns a promise that is resolved once the remove commerce action has been performed. This action will remove commerce resources from the system if successfully completed. 
+                     * @method batch.remove       
+                     * @example 			 
+                     baasicCommerceCouponTypeService.batch.remove(commerceCouponTypeIds)
+                     .success(function (data) {
+                     // perform success action here
+                     })
+                     .error(function (response, status, headers, config) {
+                     // perform error handling here
+                     });		
+                     **/
+                    remove: function (ids) {
+                        return baasicApp.commerceModule.lookups.couponTypes.batch.remove(ids);
+                    },
+
+                    /**
+                     * Returns a promise that is resolved once the update commerce action has been performed; this action updates specified commerce resources.
+                     * @method batch.update       
+                     * @example 
+                     baasicCommerceCouponTypeService.batch.update(commerceCouponTypes)
+                     .success(function (data) {
+                     // perform success action here
+                     })
+                     .error(function (response, status, headers, config) {
+                     // perform error handling here
+                     });
+                     **/
+                    update: function (data) {
+                        return baasicApp.commerceModule.lookups.couponTypes.batch.update(data);
+                    }
+                },
+
+                /**
+                 * Provides direct access to `routeService`.
+                 * @method        
+                 * @example baasicCommerceCouponTypeService.routeService.get(expandObject);
+                 **/
+                routeService: baasicApp.commerceModule.lookups.couponTypes.routeDefinition
+            };
+        }]);
+    }(angular, module));
+
+    /**
+     * @copyright (c) 2017 Mono Ltd
+     * @license MIT
+     * @author Mono Ltd
+     * @overview 
+     ***Notes:**
+     - Refer to the [Baasic REST API](http://dev.baasic.com/api/reference/home) for detailed information about available Baasic REST API end-points.
+     - All end-point objects are transformed by the associated route service.
+     */
+    /* globals module */
+    /**
      * @module baasicCommerceInvoiceStatusService
      * @description Baasic Commerce Invoice Status Service provides an easy way to consume Baasic Commerce REST API end-points. In order to obtain a needed routes `baasicCommerceInvoiceStatusService` uses `baasicCommerceInvoiceStatusRouteService`.
      */
@@ -8211,6 +8649,7 @@
 
     module.config(['$provide', function config($provide) {
         // copied from http://stackoverflow.com/questions/3561493/is-there-a-regexp-escape-function-in-javascript
+
 
         function regExpEscape(s) {
             return s.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
@@ -13262,6 +13701,270 @@
      * @copyright (c) 2017 Mono Ltd
      * @license MIT
      * @author Mono Ltd
+     */
+    /* exported module */
+    /** 
+     * @description The angular.module is a global place for creating, registering or retrieving modules. All modules should be registered in an application using this mechanism.  An angular module is a container for the different parts of your app - services, directives etc. In order to use `baasic.shoppingCart` module functionality it must be added as a dependency to your app.
+     * @copyright (c) 2017 Mono Ltd
+     * @license MIT
+     * @author Mono Ltd
+     * @module baasic.shoppingCart
+     * @example
+     (function (Main) {
+     'use strict';
+     var dependencies = [
+     'baasic.api',
+     'baasic.membership',
+     'baasic.security',
+     'baasic.appSettings',
+     'baasic.shoppingCart',
+     'baasic.dynamicResource',
+     'baasic.keyValue',
+     'baasic.valueSet'
+     ];
+     Main.module = angular.module('myApp.Main', dependencies);
+     }
+     (MyApp.Modules.Main = {})); 
+     */
+    var module = angular.module('baasic.shoppingCart', ['baasic.api']);
+
+    /* globals module */
+    /**
+     * @module baasicShoppingCartItemService
+     * @description Baasic ShoppingCartItems Service provides an easy way to consume Baasic ShoppingCartItems REST API end-points. In order to obtain needed routes `baasicShoppingCartItemService` uses `baasicShoppingCartItemRouteService`.
+     */
+    (function (angular, module, undefined) {
+        'use strict';
+        module.service('baasicShoppingCartItemService', ['baasicApp', function (baasicApps) {
+            var baasicApp = baasicApps.get();
+            return {
+                /**
+                 * Returns a promise that is resolved once the create shopping cart item action has been performed, this action creates a new shopping cart itemresource.
+                 * @method        
+                 * @example 
+                 baasicShoppingCartItemService.create({
+                 productId : '<product-id>',
+                 quantity : '<quantity>',
+                 userId : '<user-id>',
+                 timeStamp : '<time-stamp>'
+                 })
+                 .success(function (data) {
+                 // perform success action here
+                 })
+                 .error(function (response, status, headers, config) {
+                 // perform error handling here
+                 });
+                 **/
+                create: function (data) {
+                    return baasicApp.shoppingCartModule.items.create(data);
+                },
+                /**
+                 * Returns a promise that is resolved once the create shopping cart item action has been performed, this action creates a new shopping cart itemresource.
+                 * @method        
+                 * @example 
+                 baasicShoppingCartItemService.createByUserIdAndProductId(<user-id>, <product-id>,{
+                 quantity : '<quantity>',
+                 timeStamp : '<time-stamp>'
+                 })
+                 .success(function (data) {
+                 // perform success action here
+                 })
+                 .error(function (response, status, headers, config) {
+                 // perform error handling here
+                 });
+                 **/
+                createByUserIdAndProductId: function (userId, productId, data) {
+                    return baasicApp.shoppingCartModule.items.create(userId, productId, data);
+                },
+                /**
+                 * Returns a promise that is resolved once the remove shopping cart item action has been performed. If the action is successfully completed, the shopping cart itemresource will be permanently removed from the system. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicShoppingCartItemRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
+                 ```
+                 var params = baasicApiService.removeParams(shoppingCartItem);
+                 var uri = params['model'].links('delete').href;
+                 ```
+                 * @method        
+                 * @example 
+                 // shopping cart item is a resource previously fetched using get action.
+                 baasicShoppingCartItemService.remove(shoppingCartItemId)
+                 .success(function (data) {
+                 // perform success action here
+                 })
+                 .error(function (response, status, headers, config) {
+                 // perform error handling here
+                 });
+                 **/
+                remove: function (id) {
+                    return baasicApp.shoppingCartModule.items.remove(id);
+                },
+                /**
+                 * Returns a promise that is resolved once the remove shopping cart item action has been performed. If the action is successfully completed, the shopping cart itemresource will be permanently removed from the system. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `baasicShoppingCartItemRouteService` route template. Here is an example of how a route can be obtained from HAL enabled objects:
+                 ```
+                 var params = baasicApiService.removeParams(shoppingCartItem);
+                 var uri = params['model'].links('delete').href;
+                 ```
+                 * @method        
+                 * @example 
+                 // shopping cart item is a resource previously fetched using get action.
+                 baasicShoppingCartItemService.removeByUserIdAndProductId(<userId>, <productId>)
+                 .success(function (data) {
+                 // perform success action here
+                 })
+                 .error(function (response, status, headers, config) {
+                 // perform error handling here
+                 });
+                 **/
+                removeByUserIdAndProductId: function (userId, productId) {
+                    return baasicApp.shoppingCartModule.items.removeByUserIdAndProductId(userid, productId);
+                },
+                /**
+                 * Returns a promise that is resolved once the purge items action has been performed. Please note that all shopping cart itemresources will be deleted from the system once the action is successfully completed and therefore it can only be executed by user assigned to account owner role. 
+                 * @method        
+                 * @example 	 
+                 baasicShoppingCartItemService.purge({})
+                 .success(function (data) {
+                 // perform success action here
+                 })
+                 .error(function (response, status, headers, config) {
+                 // perform error handling here
+                 });
+                 **/
+                purge: function () {
+                    return baasicApp.shoppingCartModule.items.purge();
+                },
+
+                batch: {
+                    /**
+                     * Returns a promise that is resolved once the remove action has been performed. This action will remove shopping cart item resources from the system if successfully completed. Specified shopping cart item and all its accompanying derived resources will be removed from the system.
+                     * @method batch.remove       
+                     * @example
+                     // Remove original shopping cart item resources
+                     baasicShoppingCartItemService.batch.remove([{ id: '<shopping-cart-item-id>' }])
+                     .success(function (data) {
+                     // perform success action here
+                     })
+                     .error(function (response, status, headers, config) {
+                     // perform error handling here
+                     });
+                     **/
+                    remove: function (data) {
+                        return baasicApp.shoppingCartModule.items.batch.remove(data);
+                    },
+                    /**
+                     * Returns a promise that is resolved once the update action has been performed; this action updates specified shopping cart item resources.
+                     * @method batch.update      
+                     * @example 
+                     baasicShoppingCartItemService.batch.update(files)
+                     .success(function (data) {
+                     // perform success action here
+                     })
+                     .error(function (response, status, headers, config) {
+                     // perform error handling here
+                     });
+                     **/
+                    update: function (data) {
+                        return baasicApp.shoppingCartModule.items.batch.update(data);
+                    },
+
+                    /**
+                     * Returns a promise that is resolved once the create action has been performed; this action creates specified shopping cart item resources.
+                     * @method batch.create       
+                     * @example 
+                     baasicShoppingCartItemService.batch.create(files)
+                     .success(function (data) {
+                     // perform success action here
+                     })
+                     .error(function (response, status, headers, config) {
+                     // perform error handling here
+                     });
+                     **/
+                    create: function (data) {
+                        return baasicApp.shoppingCartModule.items.batch.create(data);
+                    },
+                    routeService: baasicApp.shoppingCartModule.items.batch.routeDefinition
+                },
+                /**
+                 * Provides direct access to `baasicShoppingCartItemRouteService`.
+                 * @method        
+                 * @example baasicShoppingCartItemService.routeService.get(expandObject);
+                 **/
+                routeService: baasicApp.shoppingCartModule.items.routeDefinition
+            };
+        }]);
+    }(angular, module));
+    /**
+     * @copyright (c) 2017 Mono Ltd
+     * @license MIT
+     * @author Mono Ltd
+     * @overview 
+     ***Notes:**
+     - Refer to the [Baasic REST API](http://dev.baasic.com/api/reference/home) for detailed information about available Baasic REST API end-points.
+     - All end-point objects are transformed by the associated route service.
+     */
+    /* globals module */
+    /**
+     * @module baasicShoppingCartPaymentService
+     * @description Baasic ShoppingCartPayment Service provides an easy way to consume Baasic ShoppingCartItems REST API end-points. In order to obtain needed routes `baasicShoppingCartPaymentService` uses `baasicShoppingCartItemRouteService`.
+     */
+    (function (angular, module, undefined) {
+        'use strict';
+        module.service('baasicShoppingCartPaymentService', ['baasicApp', function (baasicApps) {
+            var baasicApp = baasicApps.get();
+            return {
+                /**
+                 * Returns a promise that is resolved once the shopping cart item summary calculation action has been performed, this action calculates the sum for all items in the shopping cart.
+                 * @method        
+                 * @example 
+                 baasicShoppingCartPaymentService.calculateSummary({
+                 customerId : '<customer-id>',
+                 systemName : '<system-name>',
+                 coupon : '<coupon>'
+                 })
+                 .success(function (data) {
+                 // perform success action here
+                 })
+                 .error(function (response, status, headers, config) {
+                 // perform error handling here
+                 });
+                 **/
+                calculateSummary: function (data) {
+                    return baasicApp.shoppingCartModule.payment.calculateSummary(data);
+                },
+                /**
+                 * Returns a promise that is resolved once the shopping cart item summary processing action has been performed, this action processes the items in the shopping cart and executes the payment.
+                 * @method        
+                 * @example 
+                 baasicShoppingCartPaymentService.processCart({
+                 customerId : '<customer-id>',
+                 systemName : '<system-name>',
+                 coupon : '<coupon>'
+                 })
+                 .success(function (data) {
+                 // perform success action here
+                 })
+                 .error(function (response, status, headers, config) {
+                 // perform error handling here
+                 });
+                 **/
+                processCart: function (data) {
+                    return baasicApp.shoppingCartModule.payment.processCart(data);
+                },
+                /**
+                 * Provides direct access to `baasicShoppingCartItemRouteService`.
+                 * @method        
+                 * @example baasicShoppingCartPaymentService.routeService.get(expandObject);
+                 **/
+                routeService: baasicApp.shoppingCartModule.payment.routeDefinition
+            };
+        }]);
+    }(angular, module));
+    /**
+     * @copyright (c) 2017 Mono Ltd
+     * @license MIT
+     * @author Mono Ltd
+     * @overview 
+     ***Notes:**
+     - Refer to the [Baasic REST API](http://dev.baasic.com/api/reference/home) for detailed information about available Baasic REST API end-points.
+     - All end-point objects are transformed by the associated route service.
      */
     /* exported module */
     /** 
