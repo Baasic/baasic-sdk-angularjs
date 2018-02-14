@@ -5,8 +5,8 @@
  */
 (function (angular, module, undefined) {
   'use strict';
-  module.service('baasicPermissionsService', ['baasicApiHttp', 'baasicApp', 'baasicAuthorizationService',
-    function (baasicApiHttp, baasicApps, authService) {
+  module.service('baasicPermissionsService', ['baasicApiHttp', 'baasicApp',
+    function (baasicApiHttp, baasicApps) {
       var baasicApp = baasicApps.get();
       return {
         /**

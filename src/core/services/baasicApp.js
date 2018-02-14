@@ -121,7 +121,7 @@
 							request: request
 						};
 					}, function (data) {
-						throw {
+						return {
 							headers: data.headers(),
 							data: data.data,
 							statusCode: data.status,
