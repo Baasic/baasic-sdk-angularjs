@@ -98,53 +98,39 @@
 
 				return promise;
 			},
-			request: function (request) {
-				var config = {
-					withCredentials: true,
-					method: request.method,
-					url: request.url.toString()
-				};
-				if (request.responseType) {
-					config.responseType = request.responseType;
-				}
+            request: function (request) {
+                return this.createPromise(function (resolve, reject) {
+                    var config = {
+                        withCredentials: true,
+                        method: request.method,
+                        url: request.url.toString()
+                    };
+                    if (request.responseType) {
+                        config.responseType = request.responseType;
+                    }
 
-				if (request.headers) config.headers = request.headers;
-				if (request.data) config.data = request.data;
+                    if (request.headers) config.headers = request.headers;
+                    if (request.data) config.data = request.data;
 
-				var promise = $http(config)
-					.then(function (value) {
-						return {
-							headers: value.headers(),
-							data: value.data,
-							statusCode: value.status,
-							statusText: value.statusText,
-							request: request
-						};
-					}, function (data) {
-						return {
-							headers: data.headers(),
-							data: data.data,
-							statusCode: data.status,
-							statusText: data.statusText,
-							request: request
-						};
-					});
-
-				promise.success = function (fn) {
-					promise.then(function (response) {
-						fn(response.data, response.statusCode, response.headers, request);
-					}, null);
-					return promise;
-				};
-
-				promise.error = function (fn) {
-					promise.then(null, function (response) {
-						fn(response.data, response.statusCode, response.headers, request);
-					});
-					return promise;
-				};
-
-				return promise;
+                    var promise = $http(config)
+                        .then(function (value) {
+                            resolve({
+                                headers: value.headers(),
+                                data: value.data,
+                                statusCode: value.status,
+                                statusText: value.statusText,
+                                request: request
+                            });
+                        }, function (data) {
+                            reject({
+                                headers: data.headers(),
+                                data: data.data,
+                                statusCode: data.status,
+                                statusText: data.statusText,
+                                request: request
+                            });
+                        });
+                });
 			}
 		};
 	}

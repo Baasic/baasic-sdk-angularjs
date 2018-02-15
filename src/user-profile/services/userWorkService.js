@@ -6,7 +6,8 @@
 (function (angular, module, undefined) {
   'use strict';
   module.service('baasicUserWorkService', ['baasicApp',
-    function (baasicApps) {
+      function (baasicApps) {
+          var baasicApp = baasicApps.get();
       return {
         /**
                  * Returns a promise that is resolved once the create user work action has been performed; this action creates a new user work resource.
