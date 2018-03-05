@@ -109,6 +109,31 @@ baasiccommerceCouponService.remove(commerceCoupon)
         remove: function (data) {
           return baasicApp.commerceModule.coupons.remove(data);
         },
+
+        /* Coupon uses per coupon Id */
+
+        /**
+                 * Returns a promise that is resolved once the find action has been performed. Success response returns a list of commerce resources matching the given criteria.
+                 * @method        
+                 * @example 
+baasicCommerceCouponService.findCouponUses(couponId, {
+  pageNumber : 1,
+  pageSize : 10,
+  orderBy : '<field>',
+  orderDirection : '<asc|desc>',
+  search : '<search-phrase>'
+})
+.success(function (collection) {
+  // perform success action here
+})
+.error(function (response, status, headers, config) {
+  // perform error handling here
+});    
+                 **/
+        findCouponUses: function (couponId, options) {
+          return baasicApp.commerceModule.coupons.findCouponUses(couponId, options);
+        },        
+
         /**
          * Provides direct access to `routeService`.
          * @method        
