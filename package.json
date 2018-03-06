@@ -1,7 +1,7 @@
 {
 	"name": "baasic-sdk-angularjs",
 	"description": "AngularJS SDK provides core functionality for building web and mobile applications on [Baasic](http://www.baasic.com/).",
-	"version": "2.0.3-beta01",
+	"version": "2.0.3-beta02",
 	"keywords": [
 		"Baasic",
 		"BaaS",
@@ -20,25 +20,25 @@
 	},
 	"devDependencies": {
 		"baasic-javascript-docgen": "git://github.com/Baasic/baasic-javascript-docgen",
-		"gulp": "^3.9.1",
+		"gulp": "3.9.1",
 		"gulp-beautify": "1.0.3",
-		"gulp-concat": ">2.1.7",
-		"gulp-footer": "^1.0.4",
-		"gulp-header": "^1.1.1",
-		"gulp-inject-version": "^1.0.1",
-		"gulp-jshint": "^1.9.0",
+		"gulp-concat": "2.1.7",
+		"gulp-footer": "1.0.4",
+		"gulp-header": "1.1.1",
+		"gulp-inject-version": "1.0.1",
+		"gulp-jshint": "1.9.0",
 		"gulp-load-plugins": "0.5.0",
 		"gulp-ngmin": "0.2.0",
 		"gulp-order": "1.1.1",
 		"gulp-rename": "1.2.0",
 		"gulp-replace": "0.4.0",
-		"gulp-uglify": ">0.0.21",
+		"gulp-uglify": "0.0.21",
 		"gulp-util": "3.0.8",
 		"jshint-stylish": "^1.0.0"
 	},
 	"dependencies": {
 		"baasic-uritemplate": "Baasic/uritemplate-js",
 		"baasic-angular-hal": "Baasic/angular-hal",
-		"baasic-sdk-javascript": "2.0.5-beta04"
+		"baasic-sdk-javascript": "2.0.5-beta05"
 	}
 }

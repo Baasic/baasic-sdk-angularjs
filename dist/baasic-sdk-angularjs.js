@@ -1,5 +1,5 @@
 /*
- Baasic AngularJS SDK v2.0.3-beta01
+ Baasic AngularJS SDK v2.0.3-beta02
  (c) 2014-2018 Mono Ltd.  http://baasic.com
  License: MIT
 */
@@ -5745,6 +5745,31 @@
                 remove: function (data) {
                     return baasicApp.commerceModule.coupons.remove(data);
                 },
+
+                /* Coupon uses per coupon Id */
+
+                /**
+                 * Returns a promise that is resolved once the find action has been performed. Success response returns a list of commerce resources matching the given criteria.
+                 * @method        
+                 * @example 
+                 baasicCommerceCouponService.findCouponUses(couponId, {
+                 pageNumber : 1,
+                 pageSize : 10,
+                 orderBy : '<field>',
+                 orderDirection : '<asc|desc>',
+                 search : '<search-phrase>'
+                 })
+                 .success(function (collection) {
+                 // perform success action here
+                 })
+                 .error(function (response, status, headers, config) {
+                 // perform error handling here
+                 });
+                 **/
+                findCouponUses: function (couponId, options) {
+                    return baasicApp.commerceModule.coupons.findCouponUses(couponId, options);
+                },
+
                 /**
                  * Provides direct access to `routeService`.
                  * @method        
@@ -9339,6 +9364,102 @@
                  **/
                 remove: function (schemaName, data, options) {
                     return baasicApp.dynamicResourceModule.remove(schemaName, data, options);
+                },
+                /**                  
+                 * Returns a promise that is resolved once the purge action has been performed. This action will remove all dynamic resources from the system if successfully completed. This route uses HAL enabled objects to obtain routes and therefore it doesn't apply `dynamicResourceRoute` route template. Here is an example of how a route can be obtained from HAL enabled objects: 
+                 * @method
+                 * @param data JSON object used to purge dynamic resources.                          
+                 * @example // dynamicResource is a resource previously fetched using get action.				 
+                 DynamicResourceService.purge('<schema-name>')
+                 .then(function (data) {   
+                 // perform success action here 
+                 },
+                 function (response, status, headers, config) {   
+                 // perform error handling here 
+                 });						
+                 **/
+                purge: function (schemaName) {
+                    return baasicApp.dynamicResourceModule.purge(schemaName);
+                },
+                batch: {
+                    /**
+                     * Returns a promise that is resolved once the create JSON object action has been performed; this action creates new JSON object resources.
+                     * @method
+                     * @param data JSON object objects that need to be inserted into the system.
+                     * @returns A promise that is resolved once the create JSON object action has been performed.
+                     * @example dynamicResourceBatchClient.create([{                    
+                     name: '<name>'
+                     }])
+                     .then(function (data) {
+                     // perform success action here
+                     },
+                     function (response, status, headers, config) {
+                     // perform error handling here
+                     });
+                     */
+                    create: function (data) {
+                        return baasicApp.dynamicResourceModule.batch.create(data);
+                    },
+
+                    /**
+                     * Returns a promise that is resolved once the update JSON object action has been performed; this action updates JSON object resources. 
+                     * @method
+                     * @param data JSON object objects used to update specified JSON object resources.
+                     * @returns A promise that is resolved once the update JSON object action has been performed.
+                     * @example JSON object are resources previously fetched using get action.
+                     dynamicResourceBatchClient.update([{                    
+                     id: '<id>',
+                     name: '<name>'
+                     }])
+                     .then(function (data) {
+                     // perform success action here
+                     },
+                     function (response, status, headers, config) {
+                     // perform error handling here
+                     });
+                     */
+                    update: function (data) {
+                        return baasicApp.dynamicResourceModule.batch.update(data);
+                    },
+
+                    /**
+                     * Returns a promise that is resolved once the patch JSON object action has been performed; this action patches JSON object resources. 
+                     * @method
+                     * @param data JSON object objects used to patch specified JSON object resources.
+                     * @returns A promise that is resolved once the patch JSON object action has been performed.
+                     * @example JSON object are resources previously fetched using get action.
+                     dynamicResourceBatchClient.patch([{                    
+                     id: '<id>',
+                     name: '<name>'
+                     }])
+                     .then(function (data) {
+                     // perform success action here
+                     },
+                     function (response, status, headers, config) {
+                     // perform error handling here
+                     });
+                     */
+                    patch: function (data) {
+                        return baasicApp.dynamicResourceModule.batch.patch(data);
+                    },
+
+                    /**
+                     * Returns a promise that is resolved once the remove action has been performed. This action will remove JSON object resources from the system if successfully completed.
+                     * @method
+                     * @param data JSON object Ids which uniquely identify JSON object resources to be deleted.
+                     * @returns A promise that is resolved once the remove action has been performed.
+                     * @example JSON object Ids are identifiers which uniquely identify JSON object resources.
+                     dynamicResourceBatchClient.remove(['<id1>', '<id2>']])
+                     .then(function (data) {
+                     // perform success action here
+                     },
+                     function (response, status, headers, config) {
+                     // perform error handling here
+                     });
+                     */
+                    remove: function (data) {
+                        return baasicApp.dynamicResourceModule.batch.remove(data);
+                    }
                 },
                 /**
                  * Provides direct access to `baasicDynamicResourceRouteService`.
